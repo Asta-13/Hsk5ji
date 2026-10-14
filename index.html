@@ -1,0 +1,1196 @@
+<!doctype html>
+<html lang="mn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>HSK бэлтгэл</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@700;900&family=Noto+Serif+SC:wght@600;900&family=Noto+Sans:wght@400;500;700&family=Noto+Sans+JP:wght@400;700&display=swap">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0}
+[hidden]{display:none!important}
+#p-today.needauth>*:not(#auth){display:none!important}
+/* Layout: one column, language picker on top, bottom tab bar. Tabs: Today / Words / Cards / Group / Me / Admin (owner only). */
+:root{
+  --bg:#EDF0F3; --surface:#FFFFFF; --fg:#131A24; --muted:#5B6675; --line:#D3D9E0;
+  --accent:#1F3F8F; --accent-soft:#DDE5F6; --seal:#C23B22; --ok:#2E7D4F; --bad:#B3402A; --on-accent:#FFFFFF;
+  --font-display:"Noto Serif","Noto Serif SC",Georgia,serif;
+  --font-han:"Noto Serif SC","Songti SC","STSong",serif;
+  --font-body:"Noto Sans","Noto Sans JP",system-ui,-apple-system,"Segoe UI","Hiragino Sans",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F141C; --surface:#18202C; --fg:#E7ECF3; --muted:#9AA6B6; --line:#2A3445;
+  --accent:#8FAAF0; --accent-soft:#223157; --seal:#E5654C; --ok:#5DBB86; --bad:#E98A74; --on-accent:#0F141C; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F141C; --surface:#18202C; --fg:#E7ECF3; --muted:#9AA6B6; --line:#2A3445;
+  --accent:#8FAAF0; --accent-soft:#223157; --seal:#E5654C; --ok:#5DBB86; --bad:#E98A74; --on-accent:#0F141C; color-scheme:dark}
+
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);line-height:1.6;
+  padding-block:14px 96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px;min-width:0}
+.pane{display:flex;flex-direction:column;gap:16px;min-width:0}
+.langbar{display:flex;justify-content:flex-end}
+.langbar select{width:auto;padding:6px 10px;font-size:.85rem;border-radius:20px}
+h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:1.3}
+h2{font-size:1.15rem;font-weight:900}
+.label{font-size:.72rem;letter-spacing:.1em;color:var(--muted);font-weight:700;text-transform:uppercase}
+.muted{color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.between{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.banner{background:var(--accent);color:var(--on-accent);border-radius:14px;padding:14px 16px;font-size:.93rem;overflow-wrap:anywhere;white-space:pre-line}
+.banner b{display:block;font-size:.72rem;letter-spacing:.1em;opacity:.8;margin-bottom:2px}
+.badge{display:inline-block;font-size:.72rem;font-weight:700;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:1px 8px;white-space:nowrap}
+.badge.warn{background:var(--seal);color:#fff}
+
+.hero{display:flex;gap:16px;align-items:center}
+.seal{flex:none;width:104px;height:104px;border-radius:12px;background:var(--seal);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(-3deg)}
+.seal b{font-family:var(--font-display);font-size:2.8rem;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
+.seal span{font-size:.7rem;letter-spacing:.12em}
+.seal.pop{animation:pop .7s ease}
+@keyframes pop{0%{transform:rotate(-3deg) scale(1)}35%{transform:rotate(4deg) scale(1.14)}100%{transform:rotate(-3deg) scale(1)}}
+.hero h1{font-size:1.35rem;font-weight:900}
+.hanzi{font-family:var(--font-han);color:var(--accent);font-weight:900}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{border:1px solid var(--line);border-radius:10px;padding:10px 6px;text-align:center;min-width:0}
+.stat b{display:block;font-family:var(--font-display);font-size:1.5rem;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.2}
+.stat span{font-size:.72rem;color:var(--muted)}
+.phase-now{background:var(--accent-soft);border-radius:10px;padding:12px 14px;font-size:.9rem}
+.phase-now b{display:block;font-size:1rem}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+
+.prog{display:flex;align-items:center;gap:14px}
+.ring{flex:none;width:64px;height:64px}
+.ring circle{fill:none;stroke-width:6}
+.ring .bg{stroke:var(--line)}
+.ring .fg{stroke:var(--ok);stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset .5s}
+.ring text{font-family:var(--font-body);font-size:15px;font-weight:700;fill:var(--fg);text-anchor:middle;dominant-baseline:central;font-variant-numeric:tabular-nums}
+ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.task{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;min-height:52px;transition:background .2s}
+.task input{width:22px;height:22px;accent-color:var(--ok);flex:none}
+.task .t{flex:1;min-width:0}
+.task .t b{display:block;font-size:.93rem}
+.task .t small{color:var(--muted)}
+.task .m{font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent);white-space:nowrap}
+.task:has(input:checked){background:var(--accent-soft)}
+.task:has(input:checked) .t b{text-decoration:line-through;color:var(--muted)}
+.task:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.8rem;font-weight:700;color:var(--muted)}
+input[type=text],input[type=password],input[type=number],input[type=date],textarea,select{font:inherit;font-size:1rem;font-weight:400;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-width:0;width:100%}
+textarea{min-height:110px;resize:vertical;line-height:1.5}
+input.han{font-family:var(--font-han);font-size:1.3rem}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{font:inherit}
+.btn{background:var(--accent);color:var(--on-accent);border:0;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer;min-height:46px}
+.btn.ghost{background:none;color:var(--accent);border:1px solid var(--line)}
+.btn.small{min-height:40px;padding:8px 14px;font-size:.82rem}
+.btn.danger{background:var(--bad);color:#fff}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.5}
+:is(button,input,textarea,select,summary):focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hint{font-size:.8rem;color:var(--muted)}
+code{font-family:var(--font-han);background:var(--bg);border-radius:4px;padding:1px 5px}
+details summary{cursor:pointer;font-weight:700;min-height:40px;display:flex;align-items:center}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:20px;padding:8px 14px;font-size:.85rem;cursor:pointer;min-height:44px}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:700}
+.chip small{opacity:.8;margin-left:4px;font-variant-numeric:tabular-nums}
+
+.day{display:flex;flex-direction:column;gap:6px}
+.day h3{font-size:.95rem;display:flex;justify-content:space-between;font-family:var(--font-body);font-weight:700}
+.w{display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.w .h{font-family:var(--font-han);font-size:1.4rem;font-weight:900;line-height:1.2}
+.w .p{font-size:.85rem;color:var(--accent)}
+.w .m{font-size:.9rem;overflow-wrap:anywhere;min-width:0}
+.w .x{background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;font-size:.75rem;padding:6px 10px;cursor:pointer;min-height:36px}
+.w .x.sure{background:var(--bad);border-color:var(--bad);color:#fff}
+.w .x.add{color:var(--accent)}
+.w .x.added{color:var(--ok);border-color:var(--ok)}
+.w.fresh{animation:fresh .9s ease}
+@keyframes fresh{from{background:var(--accent-soft)}to{background:transparent}}
+.empty{border:1px dashed var(--line);border-radius:12px;padding:22px 16px;text-align:center;color:var(--muted);font-size:.92rem}
+
+.deckbar{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.stage{perspective:1100px;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.cardx{position:relative;height:300px;transition:transform .2s ease,opacity .2s;cursor:pointer}
+.cardx.dragging{transition:none}
+.cardx.out-r{transform:translateX(120%) rotate(12deg);opacity:0}
+.cardx.out-l{transform:translateX(-120%) rotate(-12deg);opacity:0}
+.inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.3,.7,.3,1)}
+.cardx.flipped .inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--surface);border:1px solid var(--line);border-radius:18px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;text-align:center;overflow-y:auto}
+.face.back{transform:rotateY(180deg);background:var(--accent-soft)}
+.big{font-family:var(--font-han);font-size:4rem;font-weight:900;line-height:1.15;overflow-wrap:anywhere}
+.big.mn{font-family:var(--font-display);font-size:1.7rem}
+.pin{font-size:1.4rem;color:var(--accent);font-weight:500}
+.mean{font-size:1.25rem;font-weight:700;overflow-wrap:anywhere}
+.ex{font-family:var(--font-han);font-size:.95rem;color:var(--muted)}
+.tap{font-size:.75rem;color:var(--muted);position:absolute;bottom:12px}
+.spk{position:absolute;top:10px;right:10px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--accent);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.spk svg{width:20px;height:20px}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.answers .btn{background:var(--surface);border:2px solid var(--line);color:var(--fg)}
+.answers .no{border-color:var(--bad);color:var(--bad)}
+.answers .yes{border-color:var(--ok);color:var(--ok)}
+.answers[aria-disabled="true"]{opacity:.45;pointer-events:none}
+.sum{align-items:center;text-align:center;padding:28px 16px}
+.sum b{font-family:var(--font-display);font-size:2.2rem}
+
+.mem{display:grid;grid-template-columns:auto 1fr auto;gap:2px 12px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:12px;cursor:pointer;background:var(--surface);text-align:left;color:var(--fg);width:100%}
+.mem .rk{font-family:var(--font-display);font-weight:900;font-size:1.3rem;color:var(--muted);min-width:1.6em;text-align:center}
+.mem.me{border-color:var(--accent);background:var(--accent-soft)}
+.mem .nm{font-weight:700;overflow-wrap:anywhere;min-width:0}
+.mem .sm{font-size:.78rem;color:var(--muted)}
+.mem .num{font-family:var(--font-display);font-weight:900;font-size:1.4rem;font-variant-numeric:tabular-nums;text-align:right;line-height:1.1}
+.mem .num small{display:block;font-family:var(--font-body);font-weight:400;font-size:.68rem;color:var(--muted)}
+.adm{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.adm .nm{font-weight:700;overflow-wrap:anywhere}
+
+.tl{gap:0}
+.tl li{display:grid;grid-template-columns:96px 1fr;gap:14px;padding:12px 0;border-top:1px solid var(--line)}
+.tl li:first-child{border-top:0}
+.tl .d{font-variant-numeric:tabular-nums;font-size:.82rem;color:var(--muted);font-weight:700}
+.tl b{display:block}
+.tl small{color:var(--muted)}
+.tl li.now{background:var(--accent-soft);margin-inline:-10px;padding-inline:10px;border-radius:10px;border-top-color:transparent}
+.tl li.now .d{color:var(--accent)}
+.tl li.done .d,.tl li.done b{color:var(--muted)}
+.tl li.exam .d,.tl li.exam b{color:var(--seal)}
+.rev{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.rev div{border:1px solid var(--line);border-radius:10px;padding:10px 4px;text-align:center;min-width:0}
+.rev strong{display:block;font-size:1.05rem;font-variant-numeric:tabular-nums}
+.rev span{font-size:.75rem;color:var(--muted)}
+.note{font-size:.9rem;background:var(--accent-soft);border-radius:10px;padding:12px 14px}
+
+.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);
+  padding-top:6px;padding-bottom:calc(6px + env(safe-area-inset-bottom,0px));padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px));z-index:5}
+.tabs div{max-width:720px;margin:0 auto;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:4px}
+.tab{background:none;border:0;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border-radius:10px;font-size:.66rem;font-weight:700;cursor:pointer;min-height:52px;min-width:0}
+.tab span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tab svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tab[aria-selected="true"]{color:var(--accent);background:var(--accent-soft)}
+.tab:disabled{opacity:.4}
+.tab[hidden]{display:none}
+.toast{position:fixed;left:50%;transform:translate(-50%,20px);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:20px;font-size:.88rem;opacity:0;pointer-events:none;transition:.25s;z-index:9;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:420px){.hero{flex-direction:column;align-items:flex-start}.tl li{grid-template-columns:1fr;gap:2px}.grid2{grid-template-columns:1fr}.big{font-size:3.4rem}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="langbar"><select id="lang" aria-label="Language"><option value="mn">Монгол</option><option value="en">English</option><option value="ru">Русский</option><option value="ja">日本語</option></select></div>
+
+<!-- TODAY -->
+<div class="pane" id="p-today" role="tabpanel">
+  <div class="banner" id="notice" hidden><b data-i18n="noticeLbl"></b><span id="noticeTx"></span></div>
+
+  <div class="card" id="auth" hidden>
+    <h2 data-i18n="authTitle"></h2>
+    <div class="hint" data-i18n="authHint"></div>
+    <label class="f" for="auUser"><span data-i18n="loginName"></span><input id="auUser" type="text" autocapitalize="none" autocorrect="off" autocomplete="username" maxlength="20"></label>
+    <label class="f" for="auPass"><span data-i18n="password"></span><input id="auPass" type="password" autocomplete="current-password"></label>
+    <div class="row"><button class="btn" id="auIn" type="button" data-i18n="signIn"></button><button class="btn ghost" id="auUp" type="button" data-i18n="signUp"></button></div>
+    <div class="hint" data-i18n="authNote"></div>
+  </div>
+  <div class="card" id="onb" hidden>
+    <h2 data-i18n="obTitle"></h2>
+    <div class="hint" data-i18n="obHint"></div>
+    <label class="f" for="obNick"><span data-i18n="nick"></span><input id="obNick" type="text" maxlength="24" data-i18n-ph="obNickPh"></label>
+    <div><div class="label" style="margin-bottom:8px" data-i18n="level"></div><div class="chips" id="obLv"></div></div>
+    <div class="grid2">
+      <label class="f" for="obExam"><span data-i18n="examDate"></span><input id="obExam" type="date"></label>
+      <label class="f" for="obMin"><span data-i18n="dailyTime"></span><select id="obMin"></select></label>
+    </div>
+    <button class="btn" id="obSave" type="button" data-i18n="start"></button>
+    <div class="hint" id="obNote"></div>
+  </div>
+
+  <div class="card" id="heroCard">
+    <div class="hero">
+      <div class="seal" id="seal"><span data-i18n="sealA"></span><b id="days">—</b><span data-i18n="sealB"></span></div>
+      <div>
+        <div class="label" id="examLbl"></div>
+        <h1 id="lvTitle"></h1>
+        <div class="muted" id="sub" style="font-size:.9rem"></div>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="stToday">0</b><span data-i18n="stToday"></span></div>
+      <div class="stat"><b id="stTotal">0</b><span data-i18n="stTotal"></span></div>
+      <div class="stat"><b id="stStreak">0</b><span data-i18n="stStreak"></span></div>
+    </div>
+    <div>
+      <div class="between"><span class="hint" data-i18n="lvProgLbl"></span><span class="hint" id="lvProgTx"></span></div>
+      <div class="bar" style="margin-top:4px"><i id="lvProg"></i></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label" data-i18n="phaseLbl"></div>
+    <div class="phase-now" id="phaseNow"></div>
+  </div>
+
+  <div class="card">
+    <div class="between"><h2 data-i18n="todayPlan"></h2><span class="label" id="todayLabel"></span></div>
+    <div class="prog">
+      <svg class="ring" viewBox="0 0 64 64" aria-hidden="true"><circle class="bg" cx="32" cy="32" r="26"/><circle class="fg" id="ringFg" cx="32" cy="32" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"/><text x="32" y="33" id="ringTx">0%</text></svg>
+      <div><b id="doneTxt"></b><div class="hint" id="doneMsg"></div></div>
+    </div>
+    <ul id="tasks"></ul>
+    <button class="btn ghost small" id="reset" type="button" style="align-self:flex-start" data-i18n="resetChecks"></button>
+  </div>
+</div>
+
+<!-- WORDS -->
+<div class="pane" id="p-words" role="tabpanel" hidden>
+  <div class="card">
+    <h2 data-i18n="wTitle"></h2>
+    <form id="addForm" autocomplete="off" style="display:flex;flex-direction:column;gap:10px">
+      <div class="grid2">
+        <label class="f" for="fH"><span data-i18n="fHan"></span><input class="han" id="fH" type="text" lang="zh" placeholder="例如：参加"></label>
+        <label class="f" for="fP"><span data-i18n="fPin"></span><input id="fP" type="text" placeholder="can1jia1 → cānjiā"></label>
+      </div>
+      <label class="f" for="fM"><span data-i18n="fMean"></span><input id="fM" type="text" data-i18n-ph="fMeanPh"></label>
+      <label class="f" for="fE"><span data-i18n="fEx"></span><input id="fE" type="text" lang="zh" placeholder="我想参加比赛。"></label>
+      <div class="grid2">
+        <label class="f" for="fL"><span data-i18n="level"></span><select id="fL"></select></label>
+        <label class="f" for="fD"><span data-i18n="fDate"></span><input id="fD" type="date"></label>
+      </div>
+      <button class="btn" type="submit" data-i18n="addBtn"></button>
+      <div class="hint" data-i18n-html="pinHint"></div>
+    </form>
+  </div>
+  <div class="card">
+    <details>
+      <summary data-i18n="bulkSum"></summary>
+      <div style="display:flex;flex-direction:column;gap:10px;padding-top:6px">
+        <div class="hint" data-i18n-html="bulkHint"></div>
+        <textarea id="bulk" data-i18n-aria="bulkAria" data-i18n-ph="bulkPh" lang="zh"></textarea>
+        <button class="btn" id="bulkBtn" type="button" data-i18n="bulkBtn"></button>
+      </div>
+    </details>
+  </div>
+  <div class="card">
+    <div class="between"><h2 data-i18n="myWords"></h2><span class="hint" id="storeNote"></span></div>
+    <div class="chips" id="wlLv"></div>
+    <div id="wordList" style="display:flex;flex-direction:column;gap:16px"></div>
+  </div>
+</div>
+
+<!-- CARDS -->
+<div class="pane" id="p-cards" role="tabpanel" hidden>
+  <div class="card">
+    <div class="chips" id="modes" role="group" data-i18n-aria="modesLbl"></div>
+    <div class="grid2">
+      <label class="f" for="cLv"><span data-i18n="cLvLbl"></span><select id="cLv"></select></label>
+      <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap">
+        <button class="chip" id="dirBtn" type="button" aria-pressed="false"></button>
+        <button class="chip" id="shufBtn" type="button" aria-pressed="false" data-i18n="shuffle"></button>
+      </div>
+    </div>
+  </div>
+  <div id="deck" style="display:flex;flex-direction:column;gap:14px"></div>
+</div>
+
+<!-- GROUP -->
+<div class="pane" id="p-group" role="tabpanel" hidden>
+  <div id="gList" class="pane">
+    <div class="card">
+      <h2 data-i18n="gTitle"></h2>
+      <div class="chips" id="gLv"></div>
+      <div class="chips" id="gSort"></div>
+    </div>
+    <div id="members" style="display:flex;flex-direction:column;gap:8px"></div>
+  </div>
+  <div id="gDetail" class="pane" hidden></div>
+</div>
+
+<!-- ME -->
+<div class="pane" id="p-me" role="tabpanel" hidden>
+  <div class="card">
+    <h2 data-i18n="meTitle"></h2>
+    <label class="f" for="meNick"><span data-i18n="nick"></span><input id="meNick" type="text" maxlength="24"></label>
+    <div><div class="label" style="margin-bottom:8px" data-i18n="level"></div><div class="chips" id="meLv"></div></div>
+    <div class="grid2">
+      <label class="f" for="meExam"><span data-i18n="examDate"></span><input id="meExam" type="date"></label>
+      <label class="f" for="meMin"><span data-i18n="dailyTime"></span><select id="meMin"></select></label>
+    </div>
+    <div><div class="label" style="margin-bottom:8px" data-i18n="goalLbl"></div>
+      <div class="chips" id="goals">
+        <button class="chip" type="button" data-g="uni" aria-pressed="false" data-i18n="gUni"></button>
+        <button class="chip" type="button" data-g="job" aria-pressed="false" data-i18n="gJob"></button>
+        <button class="chip" type="button" data-g="skill" aria-pressed="false" data-i18n="gSkill"></button>
+        <button class="chip" type="button" data-g="fast" aria-pressed="false" data-i18n="gFast"></button>
+      </div></div>
+    <label class="f" for="meS" style="max-width:260px"><span data-i18n="prevScore"></span><input id="meS" type="number" inputmode="numeric" min="0" max="300" placeholder="/ 300"></label>
+    <div class="row"><button class="btn" id="meSave" type="button" data-i18n="save"></button><button class="btn ghost" id="meRestart" type="button" data-i18n="restart"></button></div>
+    <div class="note" id="advice"></div>
+  </div>
+  <div class="card" id="acct" hidden>
+    <h2 data-i18n="acctTitle"></h2>
+    <div class="muted" id="acctName"></div>
+    <button class="btn ghost small" id="signOut" type="button" style="align-self:flex-start" data-i18n="signOut"></button>
+    <details><summary data-i18n="techInfo"></summary><div style="display:flex;flex-direction:column;gap:8px"><div class="hint" data-i18n-html="adminSql"></div><code id="myId" style="word-break:break-all;display:block"></code></div></details>
+  </div>
+  <div class="card"><h2 data-i18n="roadmap"></h2><ul class="tl" id="tl"></ul></div>
+  <div class="card">
+    <h2 data-i18n="revTitle"></h2>
+    <div class="rev" id="rev"></div>
+    <div class="hint" data-i18n="revHint"></div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div class="pane" id="p-admin" role="tabpanel" hidden>
+  <div class="card">
+    <h2 data-i18n="admTitle"></h2>
+    <div class="stats">
+      <div class="stat"><b id="aMem">0</b><span data-i18n="aMem"></span></div>
+      <div class="stat"><b id="aAct">0</b><span data-i18n="aAct"></span></div>
+      <div class="stat"><b id="aWords">0</b><span data-i18n="aWords"></span></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2 data-i18n="noticeTitle"></h2>
+    <div class="hint" data-i18n="noticeHint"></div>
+    <textarea id="aNotice" data-i18n-aria="noticeTitle" data-i18n-ph="noticePh"></textarea>
+    <button class="btn" id="aNoticeSave" type="button" style="align-self:flex-start" data-i18n="noticeSave"></button>
+  </div>
+  <div class="card">
+    <h2 data-i18n="expTitle"></h2>
+    <div class="hint" data-i18n="expHint"></div>
+    <div class="row"><button class="btn" id="aExpM" type="button" data-i18n="expMem"></button><button class="btn" id="aExpW" type="button" data-i18n="expWords"></button></div>
+  </div>
+  <div class="card">
+    <h2 data-i18n="membersTitle"></h2>
+    <div id="aList" style="display:flex;flex-direction:column;gap:10px"></div>
+  </div>
+</div>
+
+</div>
+
+<nav class="tabs" data-i18n-aria="navLbl"><div role="tablist" id="tablist">
+  <button class="tab" role="tab" data-t="today" aria-selected="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 9.5"/></svg><span data-i18n="tabToday"></span></button>
+  <button class="tab" role="tab" data-t="words" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span data-i18n="tabWords"></span></button>
+  <button class="tab" role="tab" data-t="cards" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="2"/><path d="M8 3.5h8"/></svg><span data-i18n="tabCards"></span></button>
+  <button class="tab" role="tab" data-t="group" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.3"/><path d="M3.5 19c.6-3 2.6-4.5 5.5-4.5s4.9 1.5 5.5 4.5M15.5 14.7c2.4-.3 4.3.8 5 3.3"/></svg><span data-i18n="tabGroup"></span></button>
+  <button class="tab" role="tab" data-t="me" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.7-3.7 3.4-5.5 7-5.5s6.3 1.8 7 5.5"/></svg><span data-i18n="tabMe"></span></button>
+  <button class="tab" role="tab" data-t="admin" aria-selected="false" hidden><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg><span data-i18n="tabAdmin"></span></button>
+</div></nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var $ = function(i){return document.getElementById(i)};
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+
+  /* ---------- translations: [mn, en, ru, ja] ---------- */
+  var LI={mn:0,en:1,ru:2,ja:3};
+  var DICT={
+    noticeLbl:["АДМИНЫ МЭДЭГДЭЛ","ADMIN NOTICE","ОБЪЯВЛЕНИЕ АДМИНА","管理者からのお知らせ"],
+    obTitle:["Тавтай морил","Welcome","Добро пожаловать","ようこそ"],
+    obHint:["Эхлээд өөрийн мэдээллээ оруул. Нэр бусад суралцагчдад харагдана.","Enter your details first. Your nickname is visible to other learners.","Сначала введите свои данные. Ваш ник виден другим ученикам.","まずあなたの情報を入力してください。ニックネームは他の学習者にも表示されます。"],
+    nick:["Хоч / нэр","Nickname","Ник","ニックネーム"],
+    obNickPh:["Жишээ: Бямба","e.g. Sunny","Напр.: Солнышко","例：さくら"],
+    level:["HSK түвшин","HSK level","Уровень HSK","HSK級"],
+    examDate:["Шалгалтын огноо","Exam date","Дата экзамена","試験日"],
+    dailyTime:["Өдрийн цаг","Daily study time","Время в день","1日の勉強時間"],
+    minN:["{n} минут","{n} min","{n} мин","{n}分"],
+    start:["Эхлэх","Start","Начать","はじめる"],
+    obNoteDb:["Мэдээлэл таны бүртгэлд хадгалагдаж, бусад суралцагчдад харагдана.","Your data is saved to your account and visible to other learners.","Данные сохраняются в вашем аккаунте и видны другим ученикам.","データはアカウントに保存され、他の学習者にも表示されます。"],
+    obNoteLocal:["Мэдээлэл энэ төхөөрөмжид хадгалагдана.","Your data is saved on this device.","Данные сохраняются на этом устройстве.","データはこの端末に保存されます。"],
+    sealA:["ҮЛДЛЭЭ","LEFT","ОСТАЛОСЬ","あと"],
+    sealB:["ХОНОГ","DAYS","ДНЕЙ","日"],
+    levelWord:["{n}-р түвшин","Level {n}","уровень {n}","{n}級"],
+    examLblSet:["{d} шалгалт","Exam on {d}","Экзамен {d}","試験日 {d}"],
+    examLblNone:["Шалгалтын огноо оруулаагүй","No exam date set","Дата экзамена не указана","試験日が未設定"],
+    subMin:["Өдөрт {n} минут.","{n} minutes a day.","{n} минут в день.","1日{n}分。"],
+    subToday:["Өнөөдөр шалгалтын өдөр. Тайван байгаарай.","Exam day is today. Stay calm.","Сегодня экзамен. Не волнуйтесь.","今日は試験日です。落ち着いて。"],
+    subPast:["Шалгалтын өдөр өнгөрсөн.","The exam date has passed.","Дата экзамена прошла.","試験日は過ぎました。"],
+    subNoExam:["«Миний» хэсэгт шалгалтын огноогоо оруул.","Set your exam date in the Me tab.","Укажите дату экзамена во вкладке «Я».","「自分」タブで試験日を入力してください。"],
+    stToday:["өнөөдрийн үг","words today","слов сегодня","今日の単語"],
+    stTotal:["нийт үг","total words","всего слов","合計単語"],
+    stStreak:["өдрийн цуврал","day streak","дней подряд","連続日数"],
+    lvProgLbl:["Энэ түвшний шинэ үг","New words for this level","Новые слова этого уровня","この級の新出単語"],
+    phaseLbl:["Одоогийн үе шат","Current phase","Текущий этап","現在のフェーズ"],
+    phaseNoDate:["Огноо оруулбал үе шатууд гарна.","Set an exam date to see the phases.","Укажите дату экзамена, и появятся этапы.","試験日を入力するとフェーズが表示されます。"],
+    phaseStarts:["{d}-нээс эхэлнэ.","Starts on {d}.","Начнётся {d}.","{d}から始まります。"],
+    phaseOver:["Төлөвлөгөөний хугацаа дууссан.","The plan period has ended.","Период плана завершён.","計画の期間は終了しました。"],
+    todayPlan:["Өнөөдрийн хөтөлбөр","Today's plan","План на сегодня","今日のメニュー"],
+    resetChecks:["Өнөөдрийн тэмдэглэгээг арилгах","Clear today's checks","Сбросить отметки за сегодня","今日のチェックをリセット"],
+    minDone:["{a} / {b} мин","{a} / {b} min","{a} / {b} мин","{a} / {b}分"],
+    minUnit:["мин","min","мин","分"],
+    doneAll:["Өнөөдрийн хөтөлбөр биелэв. Сайн ажиллалаа!","Today's plan is done. Great work!","План на сегодня выполнен. Отлично!","今日のメニュー完了。お疲れさま！"],
+    doneSome:["Үргэлжлүүл.","Keep going.","Продолжайте.","その調子です。"],
+    doneNone:["Даалгавраа тэмдэглэ.","Tick off your tasks.","Отмечайте задания.","終わったらチェックしましょう。"],
+    tVocab:["HSK {n} үг","HSK {n} vocabulary","Слова HSK {n}","HSK{n}級の単語"],
+    tVocabS:["Шинэ үг + өчигдөр, 3, 7 хоногийн өмнөх үгээ давт","New words + review from yesterday, 3 and 7 days ago","Новые слова + повтор слов за вчера, 3 и 7 дней назад","新出単語＋昨日・3日前・7日前の復習"],
+    tListen:["Сонсгол","Listening","Аудирование","リスニング"],
+    tListenS:["Сонсоод ойлгоогүй хэсгээ тэмдэглэ","Note the parts you could not catch","Отмечайте непонятные места","聞き取れなかった所を書き出す"],
+    tRead:["Унших","Reading","Чтение","読解"],
+    tReadS:["Цаг хэмжээд нэг иж бүрдэл","One timed set","Один комплект на время","時間を測って1セット"],
+    tWrite:["Бичих","Writing","Письмо","作文"],
+    tWriteS:["Өгсөн үгээр богино өгүүлбэр зохио","Write short sentences with given words","Составьте короткие предложения с заданными словами","指定語で短文を書く"],
+    tReview:["Алдсан бодлогоо давтах","Review your mistakes","Разбор ошибок","間違いの復習"],
+    tReviewS:["Алдааны дэвтэр рүүгээ буц","Go back to your mistake notebook","Вернитесь к тетради с ошибками","誤答ノートに戻る"],
+    ph1:["Үг, үндсэн хэл зүй","Vocabulary & basic grammar","Слова и базовая грамматика","単語・基礎文法"],
+    ph1s:["Түгээмэл үгсийг цээжлэх","Memorize the most common words","Выучить частотные слова","頻出語彙を覚える"],
+    ph2:["Унших, сонсох","Reading & listening","Чтение и аудирование","読解・リスニング"],
+    ph2s:["Шалгалтын хэлбэрт дасах","Get used to the exam format","Привыкнуть к формату экзамена","問題形式に慣れる"],
+    ph3w:["Бичих, сорилын шалгалт","Writing & practice tests","Письмо и пробные тесты","作文・模擬試験"],
+    ph3n:["Сул тал, сорилын шалгалт","Weak points & practice tests","Слабые места и пробные тесты","苦手克服・模擬試験"],
+    ph3s:["Сул талаа засах","Work on your weak areas","Проработать слабые места","苦手分野を克服する"],
+    ph4:["Сорилын шалгалт, өмнөх жилийн даалгавар","Mock exams & past papers","Пробные экзамены и прошлые варианты","模擬試験・過去問"],
+    ph4s:["Тэнцэх босгоос дээш гарах","Get above the passing line","Выйти выше проходного балла","合格ラインを超える"],
+    ph5:["Бүгдийг давтах, эрүүл мэнд","Final review & rest","Итоговое повторение и отдых","総復習・体調管理"],
+    ph5s:["Шалгалтын өдөр хүчээ гаргах","Be at your best on exam day","Показать лучший результат на экзамене","本番で実力を発揮する"],
+    examTitle:["HSK {n} шалгалт","HSK {n} exam","Экзамен HSK {n}","HSK{n}級 本番"],
+    examSub:["Тэнцэхийн төлөө!","Go for the pass!","Вперёд к успеху!","合格を目指そう！"],
+    wTitle:["Өнөөдрийн үгээ оруул","Add today's words","Добавьте слова за сегодня","今日の単語を入力"],
+    fHan:["Хятад үсэг","Chinese characters","Иероглифы","漢字"],
+    fPin:["Пиньинь","Pinyin","Пиньинь","ピンイン"],
+    fMean:["Монгол утга","Meaning (your language)","Значение (на вашем языке)","意味（自分の言語）"],
+    fMeanPh:["оролцох","to take part","участвовать","参加する"],
+    fEx:["Жишээ өгүүлбэр (заавал биш)","Example sentence (optional)","Пример предложения (необязательно)","例文（任意）"],
+    fDate:["Огноо","Date","Дата","日付"],
+    addBtn:["Нэмэх","Add","Добавить","追加"],
+    pinHint:["Пиньинийг тоогоор бичиж болно: <code>ni3 hao3</code> нь автоматаар <code>nǐ hǎo</code> болно.","You can type pinyin with numbers: <code>ni3 hao3</code> becomes <code>nǐ hǎo</code> automatically.","Пиньинь можно вводить цифрами: <code>ni3 hao3</code> автоматически станет <code>nǐ hǎo</code>.","ピンインは数字でも入力できます：<code>ni3 hao3</code> は自動で <code>nǐ hǎo</code> になります。"],
+    bulkSum:["Олон үгийг нэг дор нэмэх","Add many words at once","Добавить много слов сразу","まとめて追加"],
+    bulkHint:["Мөр бүрд нэг үг. Хэлбэр: <code>汉字 | pinyin | утга | жишээ</code> (жишээ нь заавал биш). Дээрх түвшин, огноог ашиглана.","One word per line: <code>汉字 | pinyin | meaning | example</code> (example optional). Uses the level and date above.","Одно слово в строке: <code>汉字 | pinyin | значение | пример</code> (пример необязателен). Используются уровень и дата выше.","1行に1語：<code>汉字 | pinyin | 意味 | 例文</code>（例文は任意）。上の級と日付が使われます。"],
+    bulkPh:["参加 | can1jia1 | оролцох\n经验 | jing1yan4 | туршлага","参加 | can1jia1 | to take part\n经验 | jing1yan4 | experience","参加 | can1jia1 | участвовать\n经验 | jing1yan4 | опыт","参加 | can1jia1 | 参加する\n经验 | jing1yan4 | 経験"],
+    bulkAria:["Олон үг","Many words","Много слов","複数の単語"],
+    bulkBtn:["Бүгдийг нэмэх","Add all","Добавить все","すべて追加"],
+    myWords:["Миний үгс","My words","Мои слова","自分の単語"],
+    storeDb:["Бүртгэлд хадгалагдсан","Saved to your account","Сохранено в аккаунте","アカウントに保存済み"],
+    storeLocal:["Энэ төхөөрөмжид хадгалагдсан","Saved on this device","Сохранено на этом устройстве","この端末に保存済み"],
+    all:["Бүгд","All","Все","すべて"],
+    noWords:["Одоогоор үг алга.<br>Дээрх хэсэгт өнөөдөр цээжилсэн үгээ оруулбал флаш карт болно.","No words yet.<br>Add today's words above and they become flashcards.","Слов пока нет.<br>Добавьте слова выше, и они станут карточками.","まだ単語がありません。<br>上に今日覚えた単語を入れると、フラッシュカードになります。"],
+    todayTag:["өнөөдөр","today","сегодня","今日"],
+    nWords:["{n} үг","{n} words","слов: {n}","{n}語"],
+    del:["Устгах","Delete","Удалить","削除"],
+    delSure:["Тийм, устга","Yes, delete","Да, удалить","本当に削除"],
+    modesLbl:["Картын сонголт","Card set","Набор карточек","カードの種類"],
+    mToday:["Өнөөдрийн үгс","Today's words","Слова за сегодня","今日の単語"],
+    mDue:["Давтах цаг болсон","Due for review","Пора повторить","復習の時間"],
+    mAll:["Бүх үг","All words","Все слова","すべての単語"],
+    cLvLbl:["Түвшин","Level","Уровень","級"],
+    allLevels:["Бүх түвшин","All levels","Все уровни","すべての級"],
+    dirHan:["汉字 → утга","汉字 → meaning","汉字 → значение","汉字 → 意味"],
+    dirMean:["Утга → 汉字","Meaning → 汉字","Значение → 汉字","意味 → 汉字"],
+    shuffle:["Холих","Shuffle","Перемешать","シャッフル"],
+    flipLbl:["Картыг эргүүлэх","Flip the card","Перевернуть карточку","カードをめくる"],
+    tapHint:["Эргүүлэхийн тулд товш","Tap to flip","Нажмите, чтобы перевернуть","タップしてめくる"],
+    spkLbl:["Дуудлага сонсох","Listen to pronunciation","Послушать произношение","発音を聞く"],
+    known:["Мэдсэн","Knew it","Знаю","わかった"],
+    unknown:["Мэдээгүй","Didn't know","Не знаю","わからない"],
+    deckStat:["{a} мэдсэн · {b} мэдээгүй","{a} known · {b} missed","знал: {a} · не знал: {b}","正解 {a} · 不正解 {b}"],
+    swipeHint:["Баруун тийш шудрах = мэдсэн · зүүн тийш = мэдээгүй","Swipe right = knew it · left = didn't know","Свайп вправо = знаю · влево = не знаю","右にスワイプ＝わかった・左＝わからない"],
+    doneLbl:["Дууслаа","Finished","Готово","終了"],
+    sumLine:["{a} мэдсэн · {b} дахин давтана","{a} known · {b} to review again","знал: {a} · повторить: {b}","{a}語正解・{b}語は再復習"],
+    again:["Дахин эхлэх","Start again","Начать снова","もう一度"],
+    emptyDue:["Одоохондоо давтах үг алга. Сайн байна!","Nothing to review yet. Nice!","Пока нечего повторять. Отлично!","今は復習する単語がありません。いい調子！"],
+    emptyDeck:["Үг алга.<br>«Үг» хэсгээс нэмнэ үү.","No words.<br>Add some in the Words tab.","Слов нет.<br>Добавьте их во вкладке «Слова».","単語がありません。<br>「単語」タブで追加してください。"],
+    gTitle:["Суралцагчид","Learners","Ученики","学習者"],
+    sWeek:["7 хоногийн үг","Words this week","Слов за неделю","7日間の単語"],
+    sWords:["Нийт үг","Total words","Всего слов","合計単語"],
+    sStreak:["Цуврал","Streak","Серия","連続日数"],
+    capWeek:["7 хоногт","this week","за неделю","7日間"],
+    capAll:["нийт","total","всего","合計"],
+    capDays:["өдөр","days","дней","日"],
+    gEmptyDb:["Энэ түвшинд одоохондоо гишүүн алга.","No members at this level yet.","На этом уровне пока нет участников.","この級にはまだメンバーがいません。"],
+    gEmptyLocal:["Бүлгийн мэдээлэл харахын тулд бүртгэлээр нэвтэрч, бичих эрхтэй байх хэрэгтэй.","Sign in with an account that has write access to see the group.","Чтобы видеть группу, войдите в аккаунт с правом записи.","グループを見るには、書き込み権限のあるアカウントでログインしてください。"],
+    meTag:["(би)","(me)","(я)","(自分)"],
+    hiddenTag:["нуусан","hidden","скрыт","非表示"],
+    memSm:["{w} үг · {s} өдрийн цуврал · {a}","{w} words · {s}-day streak · {a}","слов: {w} · серия {s} дн. · {a}","{w}語・連続{s}日・{a}"],
+    agoToday:["өнөөдөр","today","сегодня","今日"],
+    agoN:["{n} хоногийн өмнө","{n} days ago","{n} дн. назад","{n}日前"],
+    agoNever:["байхгүй","never","нет","なし"],
+    back:["← Буцах","← Back","← Назад","← 戻る"],
+    member:["Гишүүн","Member","Участник","メンバー"],
+    detSub:["{w} үг · {s} өдрийн цуврал · сүүлд {a}","{w} words · {s}-day streak · last active {a}","слов: {w} · серия {s} дн. · активность: {a}","{w}語・連続{s}日・最終 {a}"],
+    examShort:[" · шалгалт {d}"," · exam {d}"," · экзамен {d}"," · 試験 {d}"],
+    loading:["Ачаалж байна…","Loading…","Загрузка…","読み込み中…"],
+    noMemberWords:["Энэ гишүүн үг оруулаагүй байна.","This member has no words yet.","У этого участника пока нет слов.","このメンバーはまだ単語を入れていません。"],
+    copyAll:["Энэ түвшний бүх үгийг хуулах","Copy all words of this level","Скопировать все слова этого уровня","この級の単語をすべてコピー"],
+    copy:["Хуулах","Copy","Копировать","コピー"],
+    copied:["Нэмсэн","Added","Добавлено","追加済み"],
+    meTitle:["Миний мэдээлэл","My profile","Мой профиль","プロフィール"],
+    goalLbl:["Зорилго","Goal","Цель","目標"],
+    gUni:["Хятадад сурах, тэтгэлэг","Study in China / scholarship","Учёба в Китае / стипендия","中国留学・奨学金"],
+    gJob:["Ажил, карьер","Work & career","Работа и карьера","仕事・キャリア"],
+    gSkill:["Хэлээ ахиулах","Improve my Chinese","Улучшить китайский","中国語を上達させる"],
+    gFast:["Хурдан тэнцэх","Pass quickly","Сдать быстрее","早く合格する"],
+    prevScore:["Өмнөх түвшний оноо","Score of previous level","Балл предыдущего уровня","前の級のスコア"],
+    save:["Хадгалах","Save","Сохранить","保存"],
+    restart:["Төлөвлөгөөг өнөөдрөөс эхлүүлэх","Restart plan from today","Начать план с сегодняшнего дня","今日から計画を再開"],
+    roadmap:["Замын зураглал","Roadmap","Дорожная карта","ロードマップ"],
+    roadNone:["Шалгалтын огноогоо оруулбал замын зураглал гарна.","Set your exam date to see the roadmap.","Укажите дату экзамена, чтобы увидеть дорожную карту.","試験日を入力するとロードマップが表示されます。"],
+    revTitle:["Өнөөдрийн үгийг давтах өдрүүд","When to review today's words","Когда повторять сегодняшние слова","今日の単語を復習する日"],
+    revTomorrow:["Маргааш","Tomorrow","Завтра","明日"],
+    rev3:["3 хоногийн дараа","In 3 days","Через 3 дня","3日後"],
+    rev7:["7 хоногийн дараа","In 7 days","Через 7 дней","7日後"],
+    revHint:["Шинэ үгийг маргааш, 3, 7 хоногийн дараа дахин үз. Флаш карт эдгээр өдрийг өөрөө тооцдог.","Review new words after 1, 3 and 7 days. The flashcards work out these dates for you.","Повторяйте новые слова через 1, 3 и 7 дней. Карточки сами считают эти даты.","新しい単語は翌日・3日後・7日後に見直しましょう。フラッシュカードが日付を自動で計算します。"],
+    advUni:["Их сургуульд орох бол бичих, унших хэсэгт илүү цаг гарга. Тэтгэлгийн босго сургууль бүрт өөр байдаг тул хүсэж буй сургуулийнхаа журмаас шаардлагатай оноог шалга.","For university admission, spend more time on writing and reading. Scholarship thresholds differ by school, so check the required score in your target school's rules.","Для поступления уделите больше времени письму и чтению. Проходные баллы на стипендию у каждого вуза свои, проверьте их в правилах нужного вуза.","大学進学が目的なら、作文と読解の時間を増やしましょう。奨学金の基準点は大学ごとに違うので、志望校の募集要項で確認してください。"],
+    advJob:["Ажилдаа хэрэглэх бол сонсголд арай их цаг гаргаж, ажил хэргийн үгсийг өдөр бүрийн үгэндээ нэм.","For work, give listening a bit more time and add business vocabulary to your daily words.","Для работы уделите чуть больше времени аудированию и добавляйте деловую лексику в ежедневные слова.","仕事で使うなら、リスニングの時間を少し増やし、ビジネス語彙を毎日の単語に混ぜましょう。"],
+    advSkill:["Ярианы чадвараа ахиулах бол бичсэн өгүүлбэрээ чангаар унш.","To improve speaking, read your written sentences aloud.","Чтобы улучшить разговорную речь, читайте написанные предложения вслух.","会話力を伸ばすには、書いた文を声に出して読みましょう。"],
+    advFast:["Хамгийн хурдан тэнцэх бол 3-р үеэс хойших сорилын шалгалтыг эрт эхлүүлж, сул талдаа цагаа төвлөрүүл.","To pass fastest, start mock exams earlier and focus your time on weak areas.","Чтобы сдать быстрее, раньше начните пробные экзамены и сосредоточьтесь на слабых местах.","最短で合格するなら、模擬試験を前倒しして苦手分野に時間を集中させましょう。"],
+    advHigh:["Өмнөх түвшний оноо өндөр байна. Үгийн үеийг богиносгоод сорилын шалгалт руу эрт орж болно.","Your previous score is high. You can shorten the vocabulary phase and move to mock exams earlier.","Прошлый балл высокий. Можно сократить этап слов и раньше перейти к пробным экзаменам.","前の級のスコアが高いので、単語フェーズを短くして早めに模擬試験へ進めます。"],
+    advMid:["Өмнөх түвшний суурь сайн байна. Төлөвлөгөөгөө дагаад яв.","Your base is solid. Follow the plan as it is.","База хорошая. Следуйте плану.","土台は十分です。計画どおりに進めましょう。"],
+    advLow:["Өмнөх түвшнээс дөнгөж тэнцсэн бол эхний 2 долоо хоногт үг, үндсэн хэл зүйг илүү гүнзгий хий.","If you only just passed the previous level, spend the first 2 weeks on vocabulary and basic grammar.","Если предыдущий уровень сдан впритык, первые 2 недели посвятите словам и базовой грамматике.","前の級がぎりぎりの合格なら、最初の2週間は単語と基礎文法を厚めに。"],
+    advNone:["Зорилго, оноогоо оруулбал энд зөвлөгөө гарна.","Add your goal and score to get tips here.","Укажите цель и балл, и здесь появятся советы.","目標とスコアを入力すると、ここにヒントが出ます。"],
+    admTitle:["Админ самбар","Admin panel","Панель администратора","管理パネル"],
+    aMem:["гишүүн","members","участников","メンバー"],
+    aAct:["7 хоногт идэвхтэй","active this week","активны за неделю","7日間のアクティブ"],
+    aWords:["нийт үг","total words","всего слов","合計単語"],
+    noticeTitle:["Мэдэгдэл","Notice","Объявление","お知らせ"],
+    noticeHint:["Бүх суралцагчийн «Өнөөдөр» хуудасны дээр харагдана.","Shown at the top of every learner's Today tab.","Показывается вверху вкладки «Сегодня» у всех учеников.","全員の「今日」タブの上に表示されます。"],
+    noticePh:["Жишээ: Ням гарагт 20:00 цагт хамтарсан давтлага.","e.g. Group review on Sunday at 20:00.","Напр.: общее повторение в воскресенье в 20:00.","例：日曜20:00にグループ復習会。"],
+    noticeSave:["Мэдэгдэл хадгалах","Save notice","Сохранить объявление","お知らせを保存"],
+    expTitle:["Өгөгдөл татах","Export data","Экспорт данных","データを書き出す"],
+    expHint:["CSV файлыг Google Sheets дээр «File → Import» гэж оруулна.","Import the CSV into Google Sheets with File → Import.","Импортируйте CSV в Google Таблицы через «Файл → Импорт».","CSVはGoogleスプレッドシートの「ファイル→インポート」で取り込みます。"],
+    expMem:["Гишүүд (CSV)","Members (CSV)","Участники (CSV)","メンバー (CSV)"],
+    expWords:["Бүх үг (CSV)","All words (CSV)","Все слова (CSV)","全単語 (CSV)"],
+    membersTitle:["Гишүүд","Members","Участники","メンバー"],
+    noName:["(нэргүй)","(no name)","(без имени)","(名前なし)"],
+    adminTag:["(админ)","(admin)","(админ)","(管理者)"],
+    admInfo:["{w} үг · сүүлд {a}","{w} words · last active {a}","слов: {w} · активность: {a}","{w}語・最終 {a}"],
+    hiddenSuffix:[" · нуусан"," · hidden"," · скрыт"," · 非表示"],
+    rename:["Нэр солих","Rename","Переименовать","名前を変更"],
+    nameLbl:["Нэр","Name","Имя","名前"],
+    viewWords:["Үгс үзэх","View words","Смотреть слова","単語を見る"],
+    hide:["Нуух","Hide","Скрыть","非表示にする"],
+    show:["Харуулах","Show","Показать","表示する"],
+    removeAcc:["Бүртгэл устгах","Delete account data","Удалить данные","データを削除"],
+    removeSure:["Тийм, бүгдийг устга","Yes, delete everything","Да, удалить всё","本当にすべて削除"],
+    admEmpty:["Одоохондоо гишүүн бүртгүүлээгүй байна.","No members have joined yet.","Участников пока нет.","まだ登録メンバーがいません。"],
+    lastActive:["Сүүлд идэвхтэй","Last active","Последняя активность","最終アクティブ"],
+    joined:["Бүртгүүлсэн","Joined","Дата регистрации","登録日"],
+    streakCol:["Цуврал (өдөр)","Streak (days)","Серия (дней)","連続日数"],
+    csvEx:["Жишээ","Example","Пример","例文"],
+    tabToday:["Өнөөдөр","Today","Сегодня","今日"],
+    tabWords:["Үг","Words","Слова","単語"],
+    tabCards:["Карт","Cards","Карточки","カード"],
+    tabGroup:["Бүлэг","Group","Группа","みんな"],
+    tabMe:["Миний","Me","Я","自分"],
+    tabAdmin:["Админ","Admin","Админ","管理"],
+    navLbl:["Цэс","Menu","Меню","メニュー"],
+    tNeedNick:["Хоч / нэрээ бичнэ үү.","Please enter a nickname.","Введите ник.","ニックネームを入力してください。"],
+    tNeedWord:["Хятад үсэг болон утгыг бөглөнө үү.","Please fill in the characters and the meaning.","Заполните иероглифы и значение.","漢字と意味を入力してください。"],
+    tAdded:["Үг нэмэгдлээ","Word added","Слово добавлено","単語を追加しました"],
+    tAddedN:["{n} үг нэмэгдлээ","{n} words added","Добавлено слов: {n}","{n}語を追加しました"],
+    tBadLines:["Мөр {l}: хэлбэр буруу байна.","Line {l}: wrong format.","Строка {l}: неверный формат.","{l}行目：形式が正しくありません。"],
+    tDeleted:["Устгагдлаа","Deleted","Удалено","削除しました"],
+    tCopied:["Миний үгэнд нэмэгдлээ","Added to my words","Добавлено в мои слова","自分の単語に追加しました"],
+    tCopiedN:["{n} үг хуулагдлаа","{n} words copied","Скопировано слов: {n}","{n}語をコピーしました"],
+    tSaved:["Хадгалагдлаа","Saved","Сохранено","保存しました"],
+    tRestart:["Төлөвлөгөө өнөөдрөөс эхэллээ","Plan restarted from today","План начат с сегодняшнего дня","今日から計画を始めました"],
+    tNoWrite:["Танд бичих эрх алга. Админаас «Contributor» эрх авна уу.","You do not have write access. Ask the admin for Contributor access.","У вас нет права записи. Попросите администратора выдать доступ Contributor.","書き込み権限がありません。管理者にContributor権限を頼んでください。"],
+    tSaveErr:["Хадгалах үед алдаа гарлаа.","Could not save.","Не удалось сохранить.","保存できませんでした。"],
+    tWelcome:["Тавтай морил, {n}!","Welcome, {n}!","Добро пожаловать, {n}!","ようこそ、{n}さん！"],
+    tNoticeSaved:["Мэдэгдэл хадгалагдлаа","Notice saved","Объявление сохранено","お知らせを保存しました"],
+    tRenamed:["Нэр солигдлоо","Name changed","Имя изменено","名前を変更しました"],
+    tAccDeleted:["Бүртгэл устгагдлаа","Account data deleted","Данные удалены","データを削除しました"],
+    tCollect:["Үгсийг цуглуулж байна…","Collecting words…","Сбор слов…","単語を集めています…"],
+    tCollectErr:["Үг татах үед алдаа гарлаа.","Could not collect words.","Не удалось собрать слова.","単語を取得できませんでした。"],
+    tFileSaved:["Файл хадгалагдлаа","File saved","Файл сохранён","ファイルを保存しました"],
+    tFileErr:["Файл хадгалж чадсангүй.","Could not save the file.","Не удалось сохранить файл.","ファイルを保存できませんでした。"],
+    tNoDl:["Татах боломж энэ харагдацад алга.","Downloads are not available here.","Скачивание здесь недоступно.","ここではダウンロードできません。"],
+    authTitle:["Нэвтрэх / Бүртгүүлэх","Sign in / Sign up","Вход / Регистрация","ログイン／新規登録"],
+    authHint:["Нэвтрэх нэр, нууц үгээр орно. Ингэснээр өгөгдөл ямар ч төхөөрөмж дээр хадгалагдана.","Use a login name and password. Your data then follows you to any device.","Вход по логину и паролю. Данные будут доступны на любом устройстве.","ログイン名とパスワードで入ります。どの端末でもデータが引き継がれます。"],
+    loginName:["Нэвтрэх нэр (латин үсэг, тоо)","Login name (letters, numbers)","Логин (латиница, цифры)","ログイン名（英数字）"],
+    password:["Нууц үг (6+ тэмдэгт)","Password (6+ characters)","Пароль (6+ символов)","パスワード（6文字以上）"],
+    signIn:["Нэвтрэх","Sign in","Войти","ログイン"],
+    signUp:["Бүртгүүлэх","Sign up","Зарегистрироваться","新規登録"],
+    signOut:["Гарах","Sign out","Выйти","ログアウト"],
+    authNote:["Нууц үгээ мартвал сэргээх боломжгүй. Тэмдэглэж аваарай.","Passwords cannot be recovered. Keep it somewhere safe.","Пароль восстановить нельзя. Запишите его.","パスワードは再発行できません。控えておいてください。"],
+    tAuthBad:["Нэвтрэх нэр 3-20 латин үсэг/тоо, нууц үг 6+ тэмдэгт байх ёстой.","Login name: 3–20 letters/numbers; password: 6+ characters.","Логин: 3–20 латинских букв/цифр; пароль: от 6 символов.","ログイン名は英数字3〜20文字、パスワードは6文字以上です。"],
+    tAuthErr:["Нэвтэрч чадсангүй: ","Could not sign in: ","Не удалось войти: ","ログインできません："],
+    tConnErr:["Сервертэй холбогдож чадсангүй.","Could not reach the server.","Нет связи с сервером.","サーバーに接続できません。"],
+    acctTitle:["Бүртгэл","Account","Аккаунт","アカウント"],
+    acctLogin:["Нэвтрэх нэр: {n}","Login name: {n}","Логин: {n}","ログイン名：{n}"],
+    techInfo:["Админд зориулсан мэдээлэл","Info for the admin","Для администратора","管理者向け情報"],
+    adminSql:["Өөрийгөө админ болгохын тулд Supabase-ийн SQL Editor дээр <code>insert into admins values ('ИД');</code> гэж ажиллуулна. ИД нь доорх код.","To become admin, run <code>insert into admins values ('ID');</code> in the Supabase SQL Editor. ID is the code below.","Чтобы стать админом, выполните в Supabase SQL Editor <code>insert into admins values ('ID');</code>. ID — код ниже.","管理者になるには、SupabaseのSQL Editorで <code>insert into admins values ('ID');</code> を実行します。IDは下のコードです。"],
+    tNoSpeak:["Дуудлага энэ төхөөрөмжид ажиллахгүй байна.","Pronunciation is not available on this device.","Произношение недоступно на этом устройстве.","この端末では発音を再生できません。"]
+  };
+  var lang='mn';
+  function T(k,v){
+    var a=DICT[k],s=a?(a[LI[lang]]||a[1]||k):k;
+    if(v)s=s.replace(/\{(\w+)\}/g,function(m,n){return v[n]!=null?v[n]:m});
+    return s;
+  }
+  function applyStatic(){
+    document.documentElement.lang={mn:'mn',en:'en',ru:'ru',ja:'ja'}[lang];
+    document.querySelectorAll('[data-i18n]').forEach(function(e){e.textContent=T(e.dataset.i18n)});
+    document.querySelectorAll('[data-i18n-html]').forEach(function(e){e.innerHTML=T(e.dataset.i18nHtml)});
+    document.querySelectorAll('[data-i18n-ph]').forEach(function(e){e.placeholder=T(e.dataset.i18nPh)});
+    document.querySelectorAll('[data-i18n-aria]').forEach(function(e){e.setAttribute('aria-label',T(e.dataset.i18nAria))});
+  }
+
+  var LEVELS=[1,2,3,4,5,6];
+  var NEWWORDS={1:150,2:150,3:300,4:600,5:1300,6:2500}; /* HSK 2.0 new words per level */
+  var INT=[1,3,7,14,30];
+  var DEFMIN={1:60,2:60,3:120,4:120,5:180,6:180};
+
+  var now=new Date(), today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  function fmt(d){return (d.getMonth()+1)+'/'+d.getDate()}
+  function iso(d){var m=d.getMonth()+1,x=d.getDate();return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(x<10?'0':'')+x}
+  function parseIso(s){var p=String(s).split('-');return new Date(+p[0],+p[1]-1,+p[2])}
+  function plus(d,n){var r=new Date(d);r.setDate(r.getDate()+n);return r}
+  var TODAY=iso(today);
+  function ago(s){if(!s)return T('agoNever');var n=Math.round((today-parseIso(s))/86400000);return n<=0?T('agoToday'):T('agoN',{n:n})}
+
+  /* ---------- state ---------- */
+  var S={profile:{},words:{},chk:{},act:{}};
+  var P={},CFG={notice:'',hidden:{}};
+  /* ===== SERVER CONFIG: paste your Supabase project URL and anon/publishable key ===== */
+  var SBCFG={url:'https://nyrhcrsylkhdkzahtgnl.supabase.co',key:'sb_publishable_nQd1gT78flu0FR9QmVLEAA_0Nb83DKP'};
+  var sb=null,uid=null,mode='local',isOwner=false,needAuth=false,authReady=false,loginName='';
+  function lget(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  function lset(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  function localLoad(){
+    try{var j=JSON.parse(lget('hsk-v3')||'null');if(j){S=Object.assign(S,j);return}}catch(e){}
+    try{var o=JSON.parse(lget('hsk5-v2')||'null');
+      if(o){Object.keys(o.words||{}).forEach(function(k){var w=o.words[k];w.l=5;S.words[k]=w});
+        S.chk=o.checks||{};S.profile.goal=(o.settings||{}).goal;S.profile.s4=(o.settings||{}).s4}}catch(e){}
+  }
+  function localSave(){lset('hsk-v3',JSON.stringify(S))}
+  var chain=Promise.resolve();
+  function q(fn){chain=chain.then(fn).catch(function(e){toast(T('tSaveErr'))})}
+  var toastT;
+  function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('on')},2600)}
+
+  function hasProfile(){return !!S.profile.nick&&!needAuth}
+  function lvOf(){return S.profile.level||5}
+  function cleanW(w){return {id:w.id,h:w.h,p:w.p,m:w.m,e:w.e||'',d:w.d,box:w.box||0,due:w.due}}
+  function wordsOfLv(l){var o={};Object.keys(S.words).forEach(function(k){if(S.words[k].l===l)o[k]=cleanW(S.words[k])});return o}
+  function wRow(w){return {id:w.id,uid:uid,l:w.l,h:w.h,p:w.p,m:w.m,e:w.e||'',d:w.d,box:w.box||0,due:w.due}}
+  function saveProfile(){
+    if(!sb||!uid)return false;
+    var r={id:uid,nick:S.profile.nick,data:Object.assign({},S.profile,{chk:S.chk,act:S.act}),updated_at:new Date().toISOString()};
+    P[uid]=Object.assign({},r.data);
+    q(async function(){var x=await sb.from('profiles').upsert(r);if(x.error)throw x.error});
+    return true;
+  }
+  function pPatch(patch){Object.assign(S.profile,patch);if(!saveProfile())localSave()}
+  function nPatch(key,date,val){S[key][date]=val;if(!saveProfile())localSave()}
+  function createProfile(){if(!saveProfile())localSave()}
+  function pWord(w){
+    if(!sb||!uid){localSave();return}
+    var r=wRow(w);q(async function(){var x=await sb.from('words').upsert(r);if(x.error)throw x.error});
+  }
+  function pDelWord(w){
+    if(!sb||!uid){localSave();return}
+    var id=w.id;q(async function(){var x=await sb.from('words').delete().eq('id',id).eq('uid',uid);if(x.error)throw x.error});
+  }
+  function syncSummary(date){
+    var ws=wordsArr(),lc={};
+    ws.forEach(function(w){lc[w.l]=(lc[w.l]||0)+1});
+    var cnt=ws.filter(function(w){return w.d===date}).length;
+    var a=S.act[date]||{};
+    pPatch({wc:ws.length,lc:lc,last:TODAY});
+    nPatch('act',date,{w:cnt,m:a.m||0});
+  }
+  function wordsArr(){return Object.keys(S.words).map(function(k){return S.words[k]})}
+
+  /* ---------- plan helpers ---------- */
+  function tasksFor(){
+    var lv=lvOf(),tot=S.profile.dailyMin||DEFMIN[lv];
+    var fr=lv>=3?[60,40,40,30,10]:[60,40,40,0,10],sum=fr.reduce(function(a,b){return a+b},0);
+    var mins=fr.map(function(f){return Math.round(tot*f/sum/5)*5});
+    mins[0]+=tot-mins.reduce(function(a,b){return a+b},0);
+    var ids=['vocab','listen','read','write','review'],K=['tVocab','tListen','tRead','tWrite','tReview'];
+    return ids.map(function(id,i){return {id:id,t:T(K[i],{n:lv}),s:T(K[i]+'S'),m:mins[i]}}).filter(function(t){return t.m>0});
+  }
+  function phasesFor(){
+    var ex=S.profile.exam;if(!ex)return [];
+    var st=parseIso(S.profile.start||TODAY),exd=parseIso(ex),T0=Math.round((exd-st)/86400000),lv=lvOf();
+    var N=[['ph1','ph1s'],['ph2','ph2s'],[lv>=3?'ph3w':'ph3n','ph3s'],['ph4','ph4s'],['ph5','ph5s']];
+    var W=[14,14,14,13,5],out=[],prev=0,cum=0;
+    if(T0>0)W.forEach(function(w,i){cum+=w;var e=Math.round(T0*cum/60);if(e>prev){out.push({a:plus(st,prev),b:plus(st,e-1),k:N[i]});prev=e}});
+    out.push({a:exd,b:exd,exam:true});
+    return out;
+  }
+  function phTitle(p){return p.exam?T('examTitle',{n:lvOf()}):T(p.k[0])}
+  function phSub(p){return p.exam?T('examSub'):T(p.k[1])}
+  function streakOf(act){
+    var d=new Date(today),on=function(x){var a=act&&act[iso(x)];return a&&(a.w>0||a.m>0)};
+    if(!on(d))d=plus(d,-1);var n=0;while(on(d)){n++;d=plus(d,-1)}return n;
+  }
+  function weekWords(act){var n=0;for(var i=0;i<7;i++){var a=act&&act[iso(plus(today,-i))];if(a)n+=a.w||0}return n}
+
+  /* ---------- tabs ---------- */
+  var tabs=document.querySelectorAll('.tab'),TABS=['today','words','cards','group','me','admin'];
+  function showTab(n){
+    if(!hasProfile()&&n!=='today')n='today';
+    TABS.forEach(function(k){$('p-'+k).hidden=k!==n});
+    tabs.forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===n?'true':'false')});
+    window.scrollTo(0,0);
+    if(n==='cards')renderModes();
+    if(n==='group'){renderGroup();refresh()}
+    if(n==='admin'){renderAdmin();refresh()}
+  }
+  tabs.forEach(function(b){b.addEventListener('click',function(){showTab(b.dataset.t)})});
+  function curTab(){var r='today';tabs.forEach(function(b){if(b.getAttribute('aria-selected')==='true')r=b.dataset.t});return r}
+
+  /* ---------- small helpers ---------- */
+  function lvChips(id,cur,withAll,counts){
+    var h=(withAll?'<button class="chip" type="button" data-l="0" aria-pressed="'+(cur===0)+'">'+T('all')+(counts?'<small>'+counts[0]+'</small>':'')+'</button>':'');
+    LEVELS.forEach(function(l){h+='<button class="chip" type="button" data-l="'+l+'" aria-pressed="'+(cur===l)+'">HSK '+l+(counts?'<small>'+(counts[l]||0)+'</small>':'')+'</button>'});
+    $(id).innerHTML=h;
+  }
+  function fillSelect(id,withAll,cur){
+    var h=withAll?'<option value="0">'+T('allLevels')+'</option>':'';
+    LEVELS.forEach(function(l){h+='<option value="'+l+'">HSK '+l+'</option>'});
+    $(id).innerHTML=h;$(id).value=String(cur);
+  }
+  function fillMin(id){
+    var el=$(id),cur=el.value||'180';
+    el.innerHTML=[60,90,120,180].map(function(m){return '<option value="'+m+'">'+T('minN',{n:m})+'</option>'}).join('');
+    el.value=cur;
+  }
+
+  /* ---------- onboarding ---------- */
+  var obLevel=5,obMinTouched=false;
+  function renderOnb(){
+    $('auth').hidden=!(needAuth&&authReady);$('p-today').classList.toggle('needauth',needAuth);
+    $('onb').hidden=hasProfile()||needAuth;
+    if(hasProfile())return;
+    lvChips('obLv',obLevel,false);
+    $('obNote').textContent=T(mode==='db'?'obNoteDb':'obNoteLocal');
+  }
+  $('obLv').addEventListener('click',function(e){var b=e.target.closest('[data-l]');if(!b)return;obLevel=+b.dataset.l;if(!obMinTouched)$('obMin').value=String(DEFMIN[obLevel]);lvChips('obLv',obLevel,false)});
+  $('obMin').addEventListener('change',function(){obMinTouched=true});
+  $('obSave').addEventListener('click',function(){
+    var nick=$('obNick').value.trim();
+    if(!nick){toast(T('tNeedNick'));return}
+    S.profile={nick:nick,level:obLevel,exam:$('obExam').value||'',dailyMin:+$('obMin').value,start:TODAY,created:TODAY,last:TODAY,wc:0,lc:{}};
+    createProfile();renderAll();renderTasks();showTab('today');toast(T('tWelcome',{n:nick}));
+  });
+
+  /* ---------- today ---------- */
+  function renderToday(){
+    var p=S.profile,lv=lvOf();
+    $('lvTitle').innerHTML='<span class="hanzi">HSK</span> '+esc(T('levelWord',{n:lv}));
+    if(p.exam){
+      var left=Math.round((parseIso(p.exam)-today)/86400000);
+      $('days').textContent=Math.max(left,0);$('examLbl').textContent=T('examLblSet',{d:p.exam.replace(/-/g,'.')});
+      $('sub').textContent=left>0?T('subMin',{n:p.dailyMin||DEFMIN[lv]}):(left===0?T('subToday'):T('subPast'));
+    }else{$('days').textContent='—';$('examLbl').textContent=T('examLblNone');$('sub').textContent=T('subNoExam')}
+    $('todayLabel').textContent=fmt(today);
+    var ps=phasesFor(),idx=-1;ps.forEach(function(x,i){if(today>=x.a&&today<=x.b)idx=i});
+    $('phaseNow').innerHTML=idx>=0?'<b>'+esc(phTitle(ps[idx]))+'</b>'+esc(phSub(ps[idx]))+' ('+fmt(ps[idx].a)+' – '+fmt(ps[idx].b)+')'
+      :esc(!ps.length?T('phaseNoDate'):(today<ps[0].a?T('phaseStarts',{d:fmt(ps[0].a)}):T('phaseOver')));
+    var ws=wordsArr(),mine=ws.filter(function(w){return w.l===lv}).length,tgt=NEWWORDS[lv];
+    $('stToday').textContent=ws.filter(function(w){return w.d===TODAY}).length;
+    $('stTotal').textContent=ws.length;$('stStreak').textContent=streakOf(S.act);
+    $('lvProgTx').textContent=mine+' / '+tgt;$('lvProg').style.width=Math.min(100,Math.round(mine/tgt*100))+'%';
+    var nt=CFG.notice&&CFG.notice.trim();$('notice').hidden=!nt;$('noticeTx').textContent=nt||'';
+  }
+  function checksToday(){return S.chk[TODAY]||{}}
+  function renderTasks(){
+    var Tk=tasksFor(),d=checksToday();
+    $('tasks').innerHTML=Tk.map(function(t){
+      return '<li><label class="task" for="c-'+t.id+'"><input type="checkbox" id="c-'+t.id+'"'+(d[t.id]?' checked':'')+'><span class="t"><b>'+esc(t.t)+'</b><small>'+esc(t.s)+'</small></span><span class="m">'+t.m+' '+T('minUnit')+'</span></label></li>';
+    }).join('');
+    Tk.forEach(function(t){$('c-'+t.id).addEventListener('change',function(e){
+      var day=Object.assign({},checksToday());day[t.id]=e.target.checked;
+      nPatch('chk',TODAY,day);
+      var mins=0;tasksFor().forEach(function(x){if(day[x.id])mins+=x.m});
+      nPatch('act',TODAY,{w:(S.act[TODAY]||{}).w||0,m:mins});pPatch({last:TODAY});
+      renderProgress();renderToday();
+      if(tasksFor().every(function(x){return day[x.id]})&&e.target.checked){var s=$('seal');s.classList.remove('pop');void s.offsetWidth;s.classList.add('pop')}
+    })});
+    renderProgress();
+  }
+  function renderProgress(){
+    var Tk=tasksFor(),d=checksToday(),sum=0,tot=0;Tk.forEach(function(t){tot+=t.m;if(d[t.id])sum+=t.m});
+    var p=tot?Math.round(sum/tot*100):0;
+    $('ringFg').style.strokeDashoffset=163.4*(1-p/100);$('ringTx').textContent=p+'%';
+    $('doneTxt').textContent=T('minDone',{a:sum,b:tot});
+    $('doneMsg').textContent=T(p===100?'doneAll':(p>0?'doneSome':'doneNone'));
+  }
+  $('reset').addEventListener('click',function(){nPatch('chk',TODAY,{});nPatch('act',TODAY,{w:(S.act[TODAY]||{}).w||0,m:0});renderTasks();renderToday()});
+
+  /* ---------- pinyin ---------- */
+  function toneMark(s){
+    return s.replace(/([a-züv:]+)([1-5])/gi,function(m,syl,t){
+      t=+t;syl=syl.replace(/u:|v/gi,'ü').toLowerCase();if(t===5)return syl;
+      var TT={a:'āáǎà',e:'ēéěè',i:'īíǐì',o:'ōóǒò',u:'ūúǔù','ü':'ǖǘǚǜ'},i=-1;
+      if(syl.indexOf('a')>-1)i=syl.indexOf('a');else if(syl.indexOf('e')>-1)i=syl.indexOf('e');
+      else if(syl.indexOf('ou')>-1)i=syl.indexOf('o');
+      else{var mm=syl.match(/[iouü](?![\s\S]*[iouü])/);i=mm?mm.index:-1}
+      if(i<0)return syl;return syl.slice(0,i)+TT[syl[i]][t-1]+syl.slice(i+1);
+    });
+  }
+
+  /* ---------- words ---------- */
+  var freshIds={},wlLv=0,sureId=null;
+  function addWord(h,p,m,e,d,l){
+    var id='w_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+    var w={id:id,l:l,h:h,p:toneMark(p),m:m,e:e||'',d:d,box:0,due:iso(plus(parseIso(d),1))};
+    S.words[id]=w;freshIds[id]=1;pWord(w);return w;
+  }
+  $('addForm').addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var h=$('fH').value.trim(),m=$('fM').value.trim();
+    if(!h||!m){toast(T('tNeedWord'));return}
+    var d=$('fD').value||TODAY;
+    addWord(h,$('fP').value.trim(),m,$('fE').value.trim(),d,+$('fL').value);
+    syncSummary(d);
+    $('fH').value='';$('fP').value='';$('fM').value='';$('fE').value='';$('fH').focus();
+    toast(T('tAdded'));renderAll();
+  });
+  $('bulkBtn').addEventListener('click',function(){
+    var lines=$('bulk').value.split('\n'),n=0,bad=[],d=$('fD').value||TODAY,l=+$('fL').value;
+    lines.forEach(function(ln,i){
+      if(!ln.trim())return;
+      var p=ln.split(/\s*[|\t]\s*/);
+      if(p.length<2||!p[0].trim()||!(p.length===2?p[1]:p[2]||'').trim()){bad.push(i+1);return}
+      if(p.length===2)addWord(p[0].trim(),'',p[1].trim(),'',d,l);
+      else addWord(p[0].trim(),p[1].trim(),p[2].trim(),(p[3]||'').trim(),d,l);
+      n++;
+    });
+    if(n)syncSummary(d);
+    if(bad.length)toast(T('tBadLines',{l:bad.join(', ')}));
+    if(n){$('bulk').value=bad.length?lines.filter(function(x,i){return bad.indexOf(i+1)>-1}).join('\n'):'';if(!bad.length)toast(T('tAddedN',{n:n}))}
+    renderAll();
+  });
+  function renderList(){
+    var ws=wordsArr(),c={0:ws.length};ws.forEach(function(w){c[w.l]=(c[w.l]||0)+1});
+    lvChips('wlLv',wlLv,true,c);
+    if(wlLv)ws=ws.filter(function(w){return w.l===wlLv});
+    if(!ws.length){$('wordList').innerHTML='<div class="empty">'+T('noWords')+'</div>';return}
+    var by={};ws.forEach(function(w){(by[w.d]=by[w.d]||[]).push(w)});
+    $('wordList').innerHTML=Object.keys(by).sort().reverse().map(function(d){
+      var arr=by[d].sort(function(a,b){return a.id<b.id?1:-1});
+      return '<div class="day"><h3><span>'+fmt(parseIso(d))+(d===TODAY?' · '+T('todayTag'):'')+'</span><span class="muted">'+T('nWords',{n:arr.length})+'</span></h3>'+
+        arr.map(function(w){
+          return '<div class="w'+(freshIds[w.id]?' fresh':'')+'"><span class="h" lang="zh">'+esc(w.h)+'</span><span><span class="p">'+esc(w.p)+'</span> <span class="badge">HSK '+w.l+'</span><br><span class="m">'+esc(w.m)+'</span></span>'+
+            '<button class="x'+(sureId===w.id?' sure':'')+'" type="button" data-del="'+w.id+'">'+T(sureId===w.id?'delSure':'del')+'</button></div>';
+        }).join('')+'</div>';
+    }).join('');
+    freshIds={};
+  }
+  $('wlLv').addEventListener('click',function(e){var b=e.target.closest('[data-l]');if(!b)return;wlLv=+b.dataset.l;renderList()});
+  $('wordList').addEventListener('click',function(e){
+    var b=e.target.closest('[data-del]');if(!b)return;var id=b.dataset.del;
+    if(sureId===id){var w=S.words[id];delete S.words[id];sureId=null;if(w){pDelWord(w);syncSummary(w.d)}renderAll();toast(T('tDeleted'))}
+    else{sureId=id;renderList();setTimeout(function(){if(sureId===id){sureId=null;renderList()}},3000)}
+  });
+
+  /* ---------- flashcards ---------- */
+  var F={mode:'today',lv:0,ids:[],i:0,flipped:false,dir:'zh',shuffle:false,ok:0,no:0,busy:false};
+  function ids(m){
+    var ws=wordsArr();if(F.lv)ws=ws.filter(function(w){return w.l===F.lv});
+    if(m==='today')ws=ws.filter(function(w){return w.d===TODAY});else if(m==='due')ws=ws.filter(function(w){return w.due<=TODAY});
+    ws.sort(function(a,b){return a.id<b.id?-1:1});return ws.map(function(w){return w.id});
+  }
+  function renderModes(){
+    var L={today:'mToday',due:'mDue',all:'mAll'};
+    $('modes').innerHTML=['today','due','all'].map(function(k){return '<button class="chip" type="button" data-m="'+k+'" aria-pressed="'+(F.mode===k)+'">'+T(L[k])+'<small>'+ids(k).length+'</small></button>'}).join('');
+    $('dirBtn').textContent=T(F.dir==='zh'?'dirHan':'dirMean');
+  }
+  $('modes').addEventListener('click',function(e){var b=e.target.closest('[data-m]');if(!b)return;F.mode=b.dataset.m;startDeck()});
+  $('cLv').addEventListener('change',function(){F.lv=+this.value;startDeck()});
+  $('dirBtn').addEventListener('click',function(){F.dir=F.dir==='zh'?'mn':'zh';this.setAttribute('aria-pressed',F.dir==='mn');startDeck()});
+  $('shufBtn').addEventListener('click',function(){F.shuffle=!F.shuffle;this.setAttribute('aria-pressed',F.shuffle);startDeck()});
+  function startDeck(){
+    F.ids=ids(F.mode);F.i=0;F.flipped=false;F.ok=0;F.no=0;F.busy=false;
+    if(F.shuffle)for(var i=F.ids.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=F.ids[i];F.ids[i]=F.ids[j];F.ids[j]=t}
+    renderModes();renderDeck();
+  }
+  var SPK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 010 7"/></svg>';
+  function renderDeck(){
+    var deck=$('deck');
+    if(!F.ids.length){deck.innerHTML='<div class="empty">'+T(F.mode==='due'?'emptyDue':'emptyDeck')+'</div>';return}
+    if(F.i>=F.ids.length){
+      deck.innerHTML='<div class="card sum"><div class="label">'+T('doneLbl')+'</div><b>'+F.ok+' / '+F.ids.length+'</b><div class="muted">'+T('sumLine',{a:F.ok,b:F.no})+'</div><button class="btn" id="again" type="button">'+T('again')+'</button></div>';
+      $('again').onclick=startDeck;return;
+    }
+    var w=S.words[F.ids[F.i]];if(!w){F.i++;renderDeck();return}
+    var zh=F.dir==='zh';
+    var front=zh?'<div class="big" lang="zh">'+esc(w.h)+'</div>':'<div class="big mn">'+esc(w.m)+'</div>';
+    var back=zh?'<div class="pin">'+esc(w.p)+'</div><div class="mean">'+esc(w.m)+'</div>'+(w.e?'<div class="ex" lang="zh">'+esc(w.e)+'</div>':'')
+      :'<div class="big" lang="zh">'+esc(w.h)+'</div><div class="pin">'+esc(w.p)+'</div>'+(w.e?'<div class="ex" lang="zh">'+esc(w.e)+'</div>':'');
+    var pct=Math.round(F.i/F.ids.length*100);
+    deck.innerHTML='<div class="deckbar"><span>'+(F.i+1)+' / '+F.ids.length+' · <span class="badge">HSK '+w.l+'</span></span><span>'+T('deckStat',{a:F.ok,b:F.no})+'</span></div>'+
+      '<div class="bar"><i style="width:'+pct+'%"></i></div>'+
+      '<div class="stage"><div class="cardx'+(F.flipped?' flipped':'')+'" id="cardx" tabindex="0" role="button" aria-label="'+esc(T('flipLbl'))+'"><div class="inner">'+
+      '<div class="face">'+front+(zh?'<button class="spk" type="button" data-spk aria-label="'+esc(T('spkLbl'))+'">'+SPK+'</button>':'')+'<span class="tap">'+T('tapHint')+'</span></div>'+
+      '<div class="face back">'+back+'<button class="spk" type="button" data-spk aria-label="'+esc(T('spkLbl'))+'">'+SPK+'</button></div></div></div></div>'+
+      '<div class="answers" id="answers" aria-disabled="'+(!F.flipped)+'"><button class="btn no" type="button" data-a="no">'+T('unknown')+'</button><button class="btn yes" type="button" data-a="yes">'+T('known')+'</button></div>'+
+      '<div class="hint" style="text-align:center">'+T('swipeHint')+'</div>';
+    bindCard();
+  }
+  function flip(){var c=$('cardx');if(!c)return;F.flipped=!F.flipped;c.classList.toggle('flipped',F.flipped);$('answers').setAttribute('aria-disabled',!F.flipped)}
+  function speak(){var w=S.words[F.ids[F.i]];if(!w)return;try{var u=new SpeechSynthesisUtterance(w.h);u.lang='zh-CN';u.rate=.85;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){toast(T('tNoSpeak'))}}
+  function answer(ok){
+    if(F.busy||!F.flipped)return;F.busy=true;
+    var w=S.words[F.ids[F.i]];
+    if(w){if(ok){w.box=Math.min((w.box||0)+1,4);w.due=iso(plus(today,INT[w.box]));F.ok++}else{w.box=0;w.due=iso(plus(today,1));F.no++}pWord(w)}
+    $('cardx').classList.add(ok?'out-r':'out-l');
+    setTimeout(function(){F.i++;F.flipped=false;F.busy=false;renderDeck();renderModes()},230);
+  }
+  function bindCard(){
+    var c=$('cardx'),x0=0,dx=0,down=false,moved=false;
+    c.addEventListener('click',function(e){if(e.target.closest('[data-spk]')){speak();return}if(!moved)flip()});
+    c.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();flip()}});
+    c.addEventListener('pointerdown',function(e){if(e.target.closest('[data-spk]'))return;down=true;moved=false;x0=e.clientX;dx=0;c.setPointerCapture&&c.setPointerCapture(e.pointerId)});
+    c.addEventListener('pointermove',function(e){if(!down||!F.flipped)return;dx=e.clientX-x0;if(Math.abs(dx)>8){moved=true;c.classList.add('dragging');c.style.transform='translateX('+dx+'px) rotate('+dx/18+'deg)'}});
+    function up(){if(!down)return;down=false;c.classList.remove('dragging');if(F.flipped&&Math.abs(dx)>90){c.style.transform='';answer(dx>0)}else c.style.transform='';setTimeout(function(){moved=false},0)}
+    c.addEventListener('pointerup',up);c.addEventListener('pointercancel',up);
+    $('answers').addEventListener('click',function(e){var b=e.target.closest('[data-a]');if(b)answer(b.dataset.a==='yes')});
+  }
+  document.addEventListener('keydown',function(e){
+    if(curTab()!=='cards'||/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||''))return;
+    if(e.key===' '){e.preventDefault();flip()}else if(e.key==='ArrowRight')answer(true);else if(e.key==='ArrowLeft')answer(false);
+  });
+
+  /* ---------- community ---------- */
+  var G={lv:0,sort:'week',view:null};
+  function members(){
+    var list=Object.keys(P).map(function(k){var p=P[k];return {id:k,p:p,week:weekWords(p.act),streak:streakOf(p.act),wc:p.wc||0}});
+    list=list.filter(function(m){return m.p.nick&&(isOwner||!CFG.hidden[m.id]||m.id===uid)});
+    if(G.lv)list=list.filter(function(m){return m.p.level===G.lv});
+    var key={week:'week',words:'wc',streak:'streak'}[G.sort];
+    list.sort(function(a,b){return b[key]-a[key]||b.wc-a.wc});return list;
+  }
+  function renderGroup(){
+    if(G.view){renderDetail();return}
+    $('gList').hidden=false;$('gDetail').hidden=true;
+    lvChips('gLv',G.lv,true);
+    $('gSort').innerHTML=[['week','sWeek'],['words','sWords'],['streak','sStreak']].map(function(s){return '<button class="chip" type="button" data-s="'+s[0]+'" aria-pressed="'+(G.sort===s[0])+'">'+T(s[1])+'</button>'}).join('');
+    var L=members();
+    if(!L.length){$('members').innerHTML='<div class="empty">'+T(mode==='db'?'gEmptyDb':'gEmptyLocal')+'</div>';return}
+    $('members').innerHTML=L.map(function(m,i){
+      var big=G.sort==='week'?m.week:G.sort==='words'?m.wc:m.streak,cap=T(G.sort==='week'?'capWeek':G.sort==='words'?'capAll':'capDays');
+      return '<button class="mem'+(m.id===uid?' me':'')+'" type="button" data-u="'+esc(m.id)+'"><span class="rk">'+(i+1)+'</span><span><span class="nm">'+esc(m.p.nick)+(m.id===uid?' '+T('meTag'):'')+'</span> <span class="badge">HSK '+(m.p.level||'?')+'</span>'+(CFG.hidden[m.id]?' <span class="badge warn">'+T('hiddenTag')+'</span>':'')+
+        '<br><span class="sm">'+esc(T('memSm',{w:m.wc,s:m.streak,a:ago(m.p.last)}))+'</span></span><span class="num">'+big+'<small>'+cap+'</small></span></button>';
+    }).join('');
+  }
+  $('gLv').addEventListener('click',function(e){var b=e.target.closest('[data-l]');if(!b)return;G.lv=+b.dataset.l;renderGroup()});
+  $('gSort').addEventListener('click',function(e){var b=e.target.closest('[data-s]');if(!b)return;G.sort=b.dataset.s;renderGroup()});
+  $('members').addEventListener('click',function(e){var b=e.target.closest('[data-u]');if(b)openMember(b.dataset.u)});
+  async function openMember(id){
+    G.view={id:id,lv:0,data:null,loading:true};renderGroup();
+    var data={};
+    try{
+      if(sb){var ws=await fetchAll(function(){return sb.from('words').select('*').eq('uid',id).order('id')});
+        ws.forEach(function(w){(data[w.l]=data[w.l]||{})[w.id]={id:w.id,h:w.h,p:w.p||'',m:w.m,e:w.e||'',d:w.d}})}
+    }catch(e){}
+    if(G.view&&G.view.id===id){G.view.data=data;G.view.loading=false;var first=Object.keys(data).sort()[0];G.view.lv=first?+first:0;renderGroup()}
+  }
+  function renderDetail(){
+    var v=G.view,p=P[v.id]||{};
+    $('gList').hidden=true;$('gDetail').hidden=false;
+    var h='<div class="card"><div class="row"><button class="btn ghost small" id="gBack" type="button">'+T('back')+'</button></div><div><h2>'+esc(p.nick||T('member'))+' <span class="badge">HSK '+(p.level||'?')+'</span></h2>'+
+      '<div class="hint">'+esc(T('detSub',{w:p.wc||0,s:streakOf(p.act),a:ago(p.last)}))+(p.exam?esc(T('examShort',{d:p.exam})):'')+'</div></div>';
+    if(v.loading)h+='<div class="hint">'+T('loading')+'</div></div>';
+    else{
+      var ks=Object.keys(v.data||{}).sort();
+      if(!ks.length)h+='<div class="empty">'+T('noMemberWords')+'</div></div>';
+      else{
+        h+='<div class="chips">'+ks.map(function(k){return '<button class="chip" type="button" data-vl="'+k+'" aria-pressed="'+(v.lv===+k)+'">HSK '+k+'<small>'+Object.keys(v.data[k]).length+'</small></button>'}).join('')+'</div>';
+        h+='<button class="btn small" id="gCopyAll" type="button" style="align-self:flex-start">'+T('copyAll')+'</button></div>';
+        var ws=v.data[v.lv]||{};
+        h+='<div style="display:flex;flex-direction:column;gap:8px">'+Object.keys(ws).map(function(k){var w=ws[k],on=has(w,v.lv);
+          return '<div class="w"><span class="h" lang="zh">'+esc(w.h)+'</span><span><span class="p">'+esc(w.p)+'</span><br><span class="m">'+esc(w.m)+'</span></span><button class="x add'+(on?' added':'')+'" type="button" data-cp="'+esc(k)+'">'+T(on?'copied':'copy')+'</button></div>'}).join('')+'</div>';
+      }
+    }
+    $('gDetail').innerHTML=h;
+  }
+  function has(w,l){return wordsArr().some(function(x){return x.l===l&&x.h===w.h})}
+  function copyWord(w,l){if(has(w,l)||!w.h||!w.m)return false;addWord(String(w.h).slice(0,40),String(w.p||''),String(w.m).slice(0,120),String(w.e||'').slice(0,200),TODAY,l);return true}
+  $('gDetail').addEventListener('click',function(e){
+    var v=G.view;if(!v)return;
+    if(e.target.closest('#gBack')){G.view=null;renderGroup();return}
+    var c=e.target.closest('[data-vl]');if(c){v.lv=+c.dataset.vl;renderDetail();return}
+    var cp=e.target.closest('[data-cp]');
+    if(cp&&hasProfile()){var w=(v.data[v.lv]||{})[cp.dataset.cp];if(w&&copyWord(w,v.lv)){syncSummary(TODAY);toast(T('tCopied'));renderAll();renderDetail()}return}
+    if(e.target.closest('#gCopyAll')&&hasProfile()){var n=0,ws=v.data[v.lv]||{};Object.keys(ws).forEach(function(k){if(copyWord(ws[k],v.lv))n++});if(n)syncSummary(TODAY);toast(T('tCopiedN',{n:n}));renderAll();renderDetail()}
+  });
+
+  /* ---------- me / plan ---------- */
+  var meLevel=5;
+  function advise(){
+    var parts=[],g=S.profile.goal,n=parseInt(S.profile.s4,10),A={uni:'advUni',job:'advJob',skill:'advSkill',fast:'advFast'};
+    if(g&&A[g])parts.push(T(A[g]));
+    if(!isNaN(n))parts.push(T(n>=240?'advHigh':(n>=200?'advMid':'advLow')));
+    $('advice').textContent=parts.length?parts.join(' '):T('advNone');
+  }
+  function renderMe(){
+    var p=S.profile;
+    $('acct').hidden=!(sb&&uid);$('acctName').textContent=T('acctLogin',{n:loginName});$('myId').textContent=uid||'';
+    if(document.activeElement!==$('meNick'))$('meNick').value=p.nick||'';
+    meLevel=p.level||5;lvChips('meLv',meLevel,false);
+    $('meExam').value=p.exam||'';$('meMin').value=String(p.dailyMin||DEFMIN[meLevel]);
+    if(document.activeElement!==$('meS'))$('meS').value=p.s4||'';
+    document.querySelectorAll('#goals .chip').forEach(function(c){c.setAttribute('aria-pressed',c.dataset.g===p.goal?'true':'false')});
+    advise();
+    var ps=phasesFor(),idx=-1;ps.forEach(function(x,i){if(today>=x.a&&today<=x.b)idx=i});
+    $('tl').innerHTML=ps.length?ps.map(function(x,i){
+      var cls=i===idx?'now':(x.b<today?'done':'');if(x.exam)cls+=' exam';
+      return '<li class="'+cls+'"><span class="d">'+(x.exam?fmt(x.a):fmt(x.a)+' – '+fmt(x.b))+'</span><span><b>'+esc(phTitle(x))+'</b><small>'+esc(phSub(x))+'</small></span></li>';
+    }).join(''):'<li><span class="muted">'+T('roadNone')+'</span></li>';
+    $('rev').innerHTML=[['revTomorrow',1],['rev3',3],['rev7',7]].map(function(r){return '<div><span>'+T(r[0])+'</span><strong>'+fmt(plus(today,r[1]))+'</strong></div>'}).join('');
+  }
+  $('meLv').addEventListener('click',function(e){var b=e.target.closest('[data-l]');if(!b)return;meLevel=+b.dataset.l;lvChips('meLv',meLevel,false);$('meMin').value=String(DEFMIN[meLevel])});
+  document.querySelectorAll('#goals .chip').forEach(function(c){c.addEventListener('click',function(){pPatch({goal:c.dataset.g});renderMe()})});
+  $('meSave').addEventListener('click',function(){
+    var nick=$('meNick').value.trim();if(!nick){toast(T('tNeedNick'));return}
+    pPatch({nick:nick,level:meLevel,exam:$('meExam').value||'',dailyMin:+$('meMin').value,s4:$('meS').value});
+    renderAll();renderTasks();toast(T('tSaved'));
+  });
+  $('meRestart').addEventListener('click',function(){pPatch({start:TODAY});renderAll();toast(T('tRestart'))});
+
+  /* ---------- admin ---------- */
+  var sureDel=null;
+  function renderAdmin(){
+    if(!isOwner)return;
+    var L=Object.keys(P).map(function(k){return {id:k,p:P[k]}});
+    $('aMem').textContent=L.length;
+    $('aAct').textContent=L.filter(function(m){return weekWords(m.p.act)>0||(m.p.last&&Math.round((today-parseIso(m.p.last))/86400000)<=7)}).length;
+    $('aWords').textContent=L.reduce(function(s,m){return s+(m.p.wc||0)},0);
+    if(document.activeElement!==$('aNotice'))$('aNotice').value=CFG.notice||'';
+    $('aList').innerHTML=L.length?L.sort(function(a,b){return (b.p.last||'')<(a.p.last||'')?-1:1}).map(function(m){
+      var hid=!!CFG.hidden[m.id];
+      return '<div class="adm"><div class="between"><span class="nm">'+esc(m.p.nick||T('noName'))+(m.id===uid?' '+T('adminTag'):'')+'</span><span class="badge">HSK '+(m.p.level||'?')+'</span></div>'+
+        '<div class="hint">'+esc(T('admInfo',{w:m.p.wc||0,a:ago(m.p.last)}))+(m.p.exam?esc(T('examShort',{d:m.p.exam})):'')+(hid?esc(T('hiddenSuffix')):'')+'</div>'+
+        '<div class="row"><input type="text" data-nick="'+esc(m.id)+'" value="'+esc(m.p.nick||'')+'" maxlength="24" aria-label="'+esc(T('nameLbl'))+'" style="flex:1;min-width:120px"><button class="btn ghost small" data-rn="'+esc(m.id)+'" type="button">'+T('rename')+'</button></div>'+
+        '<div class="row"><button class="btn ghost small" data-vw="'+esc(m.id)+'" type="button">'+T('viewWords')+'</button><button class="btn ghost small" data-hd="'+esc(m.id)+'" type="button">'+T(hid?'show':'hide')+'</button>'+
+        (m.id!==uid?'<button class="btn small'+(sureDel===m.id?' danger':' ghost')+'" data-rm="'+esc(m.id)+'" type="button">'+T(sureDel===m.id?'removeSure':'removeAcc')+'</button>':'')+'</div></div>';
+    }).join(''):'<div class="empty">'+T('admEmpty')+'</div>';
+  }
+  function saveNotice(){var n=CFG.notice;if(sb)q(async function(){var x=await sb.from('site').upsert({id:'cfg',notice:n});if(x.error)throw x.error})}
+  $('aNoticeSave').addEventListener('click',function(){CFG.notice=$('aNotice').value.trim();saveNotice();renderToday();toast(T('tNoticeSaved'))});
+  $('aList').addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b||!sb)return;
+    if(b.dataset.rn){var id=b.dataset.rn,inp=document.querySelector('[data-nick="'+id+'"]'),nm=inp.value.trim();if(!nm)return;
+      if(P[id])P[id].nick=nm;var d=Object.assign({},P[id]);
+      q(async function(){var x=await sb.from('profiles').update({nick:nm,data:d}).eq('id',id);if(x.error)throw x.error});toast(T('tRenamed'));renderAdmin()}
+    else if(b.dataset.hd){var id2=b.dataset.hd,h=!CFG.hidden[id2];if(h)CFG.hidden[id2]=1;else delete CFG.hidden[id2];
+      q(async function(){var x=await sb.from('profiles').update({hidden:h}).eq('id',id2);if(x.error)throw x.error});renderAdmin();renderGroup()}
+    else if(b.dataset.vw){showTab('group');openMember(b.dataset.vw)}
+    else if(b.dataset.rm){
+      var id3=b.dataset.rm;
+      if(sureDel===id3){sureDel=null;
+        q(async function(){var x=await sb.from('words').delete().eq('uid',id3);if(x.error)throw x.error;x=await sb.from('profiles').delete().eq('id',id3);if(x.error)throw x.error});
+        delete P[id3];toast(T('tAccDeleted'));renderAdmin()}
+      else{sureDel=id3;renderAdmin();setTimeout(function(){if(sureDel===id3){sureDel=null;renderAdmin()}},3500)}
+    }
+  });
+  function csv(rows){return '﻿'+rows.map(function(r){return r.map(function(c){c=String(c==null?'':c);return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c}).join(',')}).join('\n')}
+  function save(name,data){
+    try{var bl=new Blob([data],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download=name;document.body.appendChild(a);a.click();
+      setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},800);toast(T('tFileSaved'))}catch(e){toast(T('tFileErr'))}
+  }
+  $('aExpM').addEventListener('click',function(){
+    var rows=[[T('nameLbl'),T('level'),T('examDate'),T('stTotal'),T('lastActive'),T('joined'),T('streakCol')]];
+    Object.keys(P).forEach(function(k){var p=P[k];rows.push([p.nick,p.level,p.exam,p.wc||0,p.last,p.created,streakOf(p.act)])});
+    save('hsk-members-'+TODAY+'.csv',csv(rows));
+  });
+  $('aExpW').addEventListener('click',async function(){
+    var btn=this;btn.disabled=true;toast(T('tCollect'));
+    var rows=[[T('nameLbl'),T('level'),T('fHan'),T('fPin'),T('fMean'),T('csvEx'),T('fDate')]];
+    try{
+      var ws=await fetchAll(function(){return sb.from('words').select('*').order('id')});
+      ws.forEach(function(w){rows.push([(P[w.uid]||{}).nick,w.l,w.h,w.p,w.m,w.e,w.d])});
+      save('hsk-words-'+TODAY+'.csv',csv(rows));
+    }catch(e){toast(T('tCollectErr'))}
+    btn.disabled=false;
+  });
+
+  /* ---------- render all ---------- */
+  function renderAll(){
+    renderOnb();renderToday();renderList();renderMe();
+    $('storeNote').textContent=T(mode==='db'?'storeDb':'storeLocal');
+    fillSelect('fL',false,+($('fL').value||lvOf()));fillSelect('cLv',true,F.lv);
+    tabs.forEach(function(b){if(b.dataset.t==='admin')b.hidden=!isOwner;else b.disabled=!hasProfile()&&b.dataset.t!=='today'});
+    var t=curTab();
+    if(t==='cards')renderModes();if(t==='group')renderGroup();if(t==='admin')renderAdmin();
+  }
+  function setLang(l){
+    lang=l;lset('hsk-lang',l);$('lang').value=l;
+    applyStatic();fillMin('obMin');fillMin('meMin');
+    renderTasks();renderAll();renderModes();renderDeck();
+  }
+  $('lang').addEventListener('change',function(){setLang(this.value)});
+
+  $('fD').value=TODAY;
+  var saved=lget('hsk-lang');lang=(saved&&LI[saved]!=null)?saved:'mn';$('lang').value=lang;
+  localLoad();
+  needAuth=!!(SBCFG.url&&SBCFG.key&&window.supabase);
+  if(S.profile.nick&&!S.profile.start)S.profile.start=TODAY;
+  applyStatic();fillMin('obMin');fillMin('meMin');$('obMin').value='180';
+  fillSelect('fL',false,lvOf());fillSelect('cLv',true,0);
+  renderTasks();renderAll();startDeck();
+
+  /* ---------- server mode (Supabase) ---------- */
+  async function fetchAll(mk){var out=[],i=0;for(;;){var x=await mk().range(i,i+999);if(x.error)throw x.error;out=out.concat(x.data||[]);if(!x.data||x.data.length<1000)break;i+=1000}return out}
+  async function refresh(){
+    if(!sb||!uid)return;
+    try{
+      var rows=await fetchAll(function(){return sb.from('profiles').select('*').order('id')});
+      P={};CFG.hidden={};
+      rows.forEach(function(r){P[r.id]=Object.assign({},r.data||{},{nick:r.nick});if(r.hidden)CFG.hidden[r.id]=1});
+      var s=await sb.from('site').select('notice').eq('id','cfg').maybeSingle();
+      CFG.notice=(s.data&&s.data.notice)||'';
+      renderAll();
+    }catch(e){}
+  }
+  async function startSession(user){
+    uid=user.id;loginName=(user.email||'').split('@')[0];mode='db';needAuth=false;
+    var pr=await sb.from('profiles').select('*').eq('id',uid).maybeSingle();
+    if(pr.error)throw pr.error;
+    if(pr.data){
+      var d=Object.assign({},pr.data.data||{});
+      S={profile:d,words:{},chk:d.chk||{},act:d.act||{}};delete d.chk;delete d.act;d.nick=pr.data.nick||d.nick;
+      var ws=await fetchAll(function(){return sb.from('words').select('*').eq('uid',uid).order('id')});
+      ws.forEach(function(w){S.words[w.id]={id:w.id,l:w.l,h:w.h,p:w.p||'',m:w.m,e:w.e||'',d:w.d,box:w.box||0,due:w.due}});
+    }else if(S.profile.nick){
+      createProfile();
+      var all=wordsArr().map(wRow);
+      for(var k=0;k<all.length;k+=200){(function(ch){q(async function(){var x=await sb.from('words').upsert(ch);if(x.error)throw x.error})})(all.slice(k,k+200))}
+      lset('hsk-v3','');
+    }else{S={profile:{},words:{},chk:{},act:{}}}
+    var a=await sb.from('admins').select('uid').eq('uid',uid).maybeSingle();
+    isOwner=!!a.data;
+    await refresh();
+    renderTasks();renderAll();startDeck();showTab('today');
+  }
+  function emailOf(l){return l.toLowerCase()+'@hskapp.mn'}
+  async function doAuth(up){
+    var u=$('auUser').value.trim(),p=$('auPass').value;
+    if(!/^[A-Za-z0-9_]{3,20}$/.test(u)||p.length<6){toast(T('tAuthBad'));return}
+    if(!sb)return;
+    try{
+      var v={email:emailOf(u),password:p};
+      var r=up?await sb.auth.signUp(v):await sb.auth.signInWithPassword(v);
+      if(r.error){toast(T('tAuthErr')+r.error.message);return}
+      if(!r.data||!r.data.session){toast(T('tAuthErr')+'email confirmation is on');return}
+      await startSession(r.data.session.user);
+    }catch(e){toast(T('tConnErr'))}
+  }
+  $('auIn').addEventListener('click',function(){doAuth(false)});
+  $('auUp').addEventListener('click',function(){doAuth(true)});
+  $('signOut').addEventListener('click',async function(){try{await sb.auth.signOut()}catch(e){}location.reload()});
+  (async function(){
+    if(!SBCFG.url||!SBCFG.key||!window.supabase)return;
+    try{
+      sb=window.supabase.createClient(SBCFG.url,SBCFG.key);
+      var r=await sb.auth.getSession();
+      if(r.data&&r.data.session)await startSession(r.data.session.user);
+      else{authReady=true;renderAll()}
+    }catch(e){toast(T('tConnErr'));authReady=true;needAuth=!uid;renderAll()}
+  })();
+})();
+</script>
+</body>
+</html>
