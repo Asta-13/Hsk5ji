@@ -183,6 +183,24 @@ details summary{cursor:pointer;font-weight:700;min-height:40px;display:flex;alig
 
 @media (max-width:420px){.hero{flex-direction:column;align-items:flex-start}.tl li{grid-template-columns:1fr;gap:2px}.grid2{grid-template-columns:1fr}.big{font-size:3.4rem}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+input[type=search]{font:inherit;font-size:1rem;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 38px;min-width:0;width:100%;-webkit-appearance:none;appearance:none}
+input[type=search]:focus{outline:2px solid var(--accent);outline-offset:1px}
+.search{position:relative;display:flex;align-items:center}
+.search svg{position:absolute;left:12px;width:18px;height:18px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round}
+.sx{position:absolute;right:4px;background:none;border:0;color:var(--muted);font-size:1.5rem;width:40px;height:40px;cursor:pointer}
+mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding:0 1px;font-weight:700}
+.prog{height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--seal));transition:width .4s}
+.hero{background:linear-gradient(135deg,var(--accent-soft),var(--surface) 70%)}
+.list{display:flex;flex-direction:column;gap:8px}
+.list .w{background:var(--surface);animation:fi .25s ease both}
+.list .gm{display:flex;flex-direction:column;gap:4px;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:12px 14px;background:var(--surface);animation:fi .25s ease both}
+.list .gm .z{font-family:var(--font-han);font-size:1.05rem}
+.chk{display:flex;gap:8px;align-items:center;font-size:.85rem;color:var(--muted)}
+.pop{animation:pop .45s}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes pop{50%{transform:scale(1.3);background:var(--ok);color:#fff}}
 </style>
 </head>
 <body>
@@ -281,25 +299,36 @@ details summary{cursor:pointer;font-weight:700;min-height:40px;display:flex;alig
     </details>
   </div>
   <div class="card">
-    <h2 data-i18n="gmTitle"></h2>
-    <div class="hint" data-i18n="gmHint"></div>
-    <button class="btn small ghost" id="gmAdd" type="button" hidden>+ Шинэ</button>
-    <div class="chips" id="gmLv"></div>
-    <input id="gmQ" type="search" data-i18n-ph="hskSearch" autocomplete="off">
-    <div id="gmList" style="display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow:auto"></div>
-  </div>
-  <div class="card">
-    <h2 data-i18n="hskTitle"></h2>
-    <div class="hint" id="hskInfo"></div>
-    <div class="chips" id="hskLv"></div>
-    <input id="hskQ" type="search" data-i18n-ph="hskSearch" autocomplete="off">
-    <div id="hskList" style="display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow:auto"></div>
-  </div>
-  <div class="card">
     <div class="between"><h2 data-i18n="myWords"></h2><span class="hint" id="storeNote"></span></div>
+    <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="wlQ" type="search" data-i18n-ph="hskSearch" autocomplete="off" enterkeyhint="search"><button type="button" class="sx" data-clear="wlQ" aria-label="×" hidden>×</button></div>
     <div class="chips" id="wlLv"></div>
     <div id="wordList" style="display:flex;flex-direction:column;gap:16px"></div>
   </div>
+</div>
+
+<!-- HSK VOCAB -->
+<div class="pane" id="p-hsk" role="tabpanel" hidden>
+  <div class="card hero">
+    <h2 data-i18n="hskTitle"></h2>
+    <div class="between"><span class="hint" id="hskInfo"></span><span class="hint" id="hskCnt"></span></div>
+    <div class="prog"><i id="hskProg"></i></div>
+    <div class="chips" id="hskLv"></div>
+    <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="hskQ" type="search" data-i18n-ph="hskSearch" autocomplete="off" enterkeyhint="search"><button type="button" class="sx" data-clear="hskQ" aria-label="×" hidden>×</button></div>
+    <label class="chk"><input type="checkbox" id="hskOnly"><span data-i18n="hskOnly"></span></label>
+  </div>
+  <div id="hskList" class="list"></div>
+</div>
+
+<!-- GRAMMAR -->
+<div class="pane" id="p-gram" role="tabpanel" hidden>
+  <div class="card hero">
+    <div class="between"><h2 data-i18n="gmTitle"></h2><button class="btn small ghost" id="gmAdd" type="button" hidden>+ Шинэ</button></div>
+    <div class="hint" data-i18n="gmHint"></div>
+    <div class="chips" id="gmLv"></div>
+    <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="gmQ" type="search" data-i18n-ph="hskSearch" autocomplete="off" enterkeyhint="search"><button type="button" class="sx" data-clear="gmQ" aria-label="×" hidden>×</button></div>
+    <div class="hint" id="gmCnt"></div>
+  </div>
+  <div id="gmList" class="list"></div>
 </div>
 
 <!-- CARDS -->
@@ -397,6 +426,8 @@ details summary{cursor:pointer;font-weight:700;min-height:40px;display:flex;alig
 <nav class="tabs" data-i18n-aria="navLbl"><div role="tablist" id="tablist">
   <button class="tab" role="tab" data-t="today" aria-selected="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 9.5"/></svg><span data-i18n="tabToday"></span></button>
   <button class="tab" role="tab" data-t="words" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span data-i18n="tabWords"></span></button>
+  <button class="tab" role="tab" data-t="hsk" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 4h10a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M9 9h5"/></svg><span data-i18n="tabHsk"></span></button>
+  <button class="tab" role="tab" data-t="gram" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h9"/></svg><span data-i18n="tabGram"></span></button>
   <button class="tab" role="tab" data-t="cards" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="2"/><path d="M8 3.5h8"/></svg><span data-i18n="tabCards"></span></button>
   <button class="tab" role="tab" data-t="group" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.3"/><path d="M3.5 19c.6-3 2.6-4.5 5.5-4.5s4.9 1.5 5.5 4.5M15.5 14.7c2.4-.3 4.3.8 5 3.3"/></svg><span data-i18n="tabGroup"></span></button>
   <button class="tab" role="tab" data-t="me" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.7-3.7 3.4-5.5 7-5.5s6.3 1.8 7 5.5"/></svg><span data-i18n="tabMe"></span></button>
@@ -414,6 +445,11 @@ details summary{cursor:pointer;font-weight:700;min-height:40px;display:flex;alig
   var DICT={
     gmTitle:["Өгүүлбэрт хэрэглэх үг, бүтэц (жишээтэй)","Sentence words & patterns (with examples)"],
     gmHint:["难道, 听说, 受不了, 而是, 而且, 并且 гэх мэт холбоос, хэллэг","Connectors and set phrases like 难道, 听说, 而是, 并且"],
+    tabHsk:["HSK","HSK"],
+    tabGram:["Дүрэм","Rules"],
+    hskOnly:["Зөвхөн миний санд байхгүй","Only words not in my bank"],
+    hskProg:["Миний санд: {a} / {b}","In my bank: {a} / {b}"],
+    more:["Цааш үзэх","Show more"],
     hskTitle:["HSK үгсийн сан (монгол орчуулгатай)","HSK vocabulary (Mongolian)"],
     hskSearch:["Хайх: иероглиф, пиньинь, монгол утга","Search: hanzi, pinyin, meaning"],
     hskNoTr:["орчуулга удахгүй нэмэгдэнэ","translation coming soon"],
@@ -761,7 +797,7 @@ details summary{cursor:pointer;font-weight:700;min-height:40px;display:flex;alig
   function weekWords(act){var n=0;for(var i=0;i<7;i++){var a=act&&act[iso(plus(today,-i))];if(a)n+=a.w||0}return n}
 
   /* ---------- tabs ---------- */
-  var tabs=document.querySelectorAll('.tab'),TABS=['today','words','cards','group','me','admin'];
+  var tabs=document.querySelectorAll('.tab'),TABS=['today','words','hsk','gram','cards','group','me','admin'];
   function showTab(n){
     if(!hasProfile()&&n!=='today')n='today';
     TABS.forEach(function(k){$('p-'+k).hidden=k!==n});
@@ -936,6 +972,7 @@ details summary{cursor:pointer;font-weight:700;min-height:40px;display:flex;alig
     var ws=wordsArr(),c={0:ws.length};ws.forEach(function(w){c[w.l]=(c[w.l]||0)+1});
     lvChips('wlLv',wlLv,true,c);
     if(wlLv)ws=ws.filter(function(w){return w.l===wlLv});
+    if(wlQ){var nq=nz(wlQ);ws=ws.filter(function(w){return nz(w.h+' '+w.p+' '+w.m+' '+(w.e||'')).indexOf(nq)>-1})}
     if(!ws.length){$('wordList').innerHTML='<div class="empty">'+T('noWords')+'</div>';return}
     var by={};ws.forEach(function(w){(by[w.d]=by[w.d]||[]).push(w)});
     $('wordList').innerHTML=Object.keys(by).sort().reverse().map(function(d){
@@ -1185,29 +1222,40 @@ details summary{cursor:pointer;font-weight:700;min-height:40px;display:flex;alig
   function hM(h){return (HSKED[h]&&HSKED[h].m)||hskMn()[h]||''}
   function hP(h,d){return (HSKED[h]&&HSKED[h].p)||d||''}
   function hskMn(){if(!HSKMN){HSKMN={};HSKMN_RAW.split('|').forEach(function(s){var i=s.indexOf('=');if(i>0)HSKMN[s.slice(0,i)]=s.slice(i+1)})}return HSKMN}
+  function nz(t){return String(t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()}
+  function hl(t,q){t=String(t==null?'':t);var i=q?t.toLowerCase().indexOf(q.toLowerCase()):-1;return i<0?esc(t):esc(t.slice(0,i))+'<mark>'+esc(t.slice(i,i+q.length))+'</mark>'+esc(t.slice(i+q.length))}
+  var hLim=60,hOnly=false,hJust='',wlQ='';
   function renderHsk(){
     if(!$('hskList'))return;
     var have={};wordsArr().forEach(function(w){have[w.h]=1});
-    var c={};LEVELS.forEach(function(l){var n=0;(HSKRAW[l]||'').split(',').forEach(function(it){if(hM(it.split('|')[0]))n++});c[l]=n});
+    var c={};LEVELS.forEach(function(l){c[l]=(HSKRAW[l]||'').split(',').length});
     lvChips('hskLv',hLv,false,c);
-    var q=hQ.toLowerCase(),out=[],tot=0;
+    var q=nz(hQ),items=[],added=0,tot=0;
     (HSKRAW[hLv]||'').split(',').forEach(function(it){
-      var a=it.split('|'),m=hM(a[0]);a[1]=hP(a[0],a[1]);tot++;
-      if(q&&a[0].indexOf(q)<0&&String(a[1]||'').toLowerCase().indexOf(q)<0&&String(m||'').toLowerCase().indexOf(q)<0)return;
-      out.push('<div class="w"><span class="h" lang="zh">'+esc(a[0])+'</span><span><span class="p">'+esc(a[1]||'')+'</span><br><span class="m">'+(m?esc(m):'<span class="hint">'+T('hskNoTr')+'</span>')+'</span></span>'+
-        (isOwner?'<button class="btn small ghost" type="button" data-hedit="'+esc(a[0])+'">✎</button>':'')+(m?'<button class="btn small ghost" type="button" data-hadd="'+esc(a[0])+'"'+(have[a[0]]?' disabled':'')+'>'+(have[a[0]]?'✓':'+')+'</button>':'<span></span>')+'</div>');
+      var a=it.split('|'),h=a[0],p=hP(h,a[1]),m=hM(h);tot++;if(have[h])added++;
+      if(hOnly&&have[h])return;
+      if(q&&nz(h+' '+p+' '+m).indexOf(q)<0)return;
+      items.push({h:h,p:p,m:m,got:!!have[h]});
     });
-    $('hskInfo').textContent=T('hskCount',{a:c[hLv],b:tot});
-    $('hskList').innerHTML=out.join('')||'<div class="empty">'+T('noWords')+'</div>';
+    $('hskProg').style.width=(tot?Math.round(added*100/tot):0)+'%';
+    $('hskInfo').textContent=T('hskProg',{a:added,b:tot});
+    $('hskCnt').textContent=items.length+' / '+tot;
+    var h2=items.slice(0,hLim).map(function(x){
+      return '<div class="w"><span class="h" lang="zh">'+hl(x.h,hQ)+'</span><span><span class="p">'+esc(x.p)+'</span><br><span class="m">'+(x.m?hl(x.m,hQ):'<span class="hint">'+T('hskNoTr')+'</span>')+'</span></span><span>'+
+        (isOwner?'<button class="btn small ghost" type="button" data-hedit="'+esc(x.h)+'">✎</button> ':'')+
+        (x.m?'<button class="btn small ghost'+(hJust===x.h?' pop':'')+'" type="button" data-hadd="'+esc(x.h)+'"'+(x.got?' disabled':'')+'>'+(x.got?'✓':'+')+'</button>':'')+'</span></div>';
+    }).join('');
+    if(items.length>hLim)h2+='<button class="btn ghost" type="button" data-hmore="1">'+T('more')+' ('+(items.length-hLim)+')</button>';
+    $('hskList').innerHTML=h2||'<div class="empty">'+T('noWords')+'</div>';hJust='';
   }
   document.addEventListener('click',function(e){
-    var b=e.target.closest('#hskLv [data-l]');if(b){hLv=+b.dataset.l;renderHsk();return}
+    var b=e.target.closest('#hskLv [data-l]');if(b){hLv=+b.dataset.l;hLim=60;renderHsk();return}
     b=e.target.closest('[data-hedit]');
     if(b){editHsk(b.dataset.hedit);return}
     b=e.target.closest('[data-hadd]');if(!b||!hasProfile())return;
     var h=b.dataset.hadd,m=hM(h),hit=hskLookup(h);if(!m||!hit)return;
     if(wordsArr().some(function(w){return w.h===h})){toast(T('tDupMine'));return}
-    addWord(h,hP(h,hit.p),m,'',TODAY,hit.l);syncSummary(TODAY);toast(T('tAdded'));renderAll();
+    hJust=h;addWord(h,hP(h,hit.p),m,'',TODAY,hit.l);syncSummary(TODAY);toast(T('tAdded'));renderAll();
   });
   /* admin-only: fix pinyin / Mongolian meaning, saved to Supabase table hsk_edits */
   function editHsk(h){
@@ -1222,7 +1270,13 @@ details summary{cursor:pointer;font-weight:700;min-height:40px;display:flex;alig
       HSKED[h]={p:p,m:m};renderHsk();toast('✓');
     });
   }
-  $('hskQ').addEventListener('input',function(){hQ=this.value.trim();renderHsk()});
+  var hT=null;
+  $('hskQ').addEventListener('input',function(){var v=this.value.trim();clearTimeout(hT);hT=setTimeout(function(){hQ=v;hLim=60;renderHsk()},120)});
+  $('hskOnly').addEventListener('change',function(){hOnly=this.checked;hLim=60;renderHsk()});
+  $('wlQ').addEventListener('input',function(){wlQ=this.value.trim();renderList()});
+  document.addEventListener('click',function(e){if(e.target.closest('[data-hmore]')){hLim+=120;renderHsk()}});
+  document.addEventListener('input',function(e){var sx=e.target.parentNode&&e.target.parentNode.querySelector&&e.target.parentNode.querySelector('.sx');if(sx)sx.hidden=!e.target.value});
+  document.addEventListener('click',function(e){var b=e.target.closest('.sx');if(!b)return;var i=$(b.dataset.clear);i.value='';i.dispatchEvent(new Event('input',{bubbles:true}));b.hidden=true;i.focus()});
 
   /* ---------- sentence patterns / connectors ---------- */
   var GRAM_RAW="3|虽然……但是……|хэдий ... гэвч ...|虽然很累，但是我很高兴。|Хэдийгээр ядарсан ч би маш баяртай байна.\n3|因为……所以……|учир нь ... тиймээс ...|因为下雨，所以我没去。|Бороо орсон тул би явсангүй.\n3|如果……就……|хэрэв ... бол ...|如果你有时间，就来找我。|Хэрэв чамд зав байвал надтай уулзаарай.\n3|不但……而且……|зөвхөн ... биш бас ...|她不但聪明，而且努力。|Тэр зөвхөн ухаалаг биш, бас хичээнгүй.\n3|而且|мөн бас, түүнээс гадна|这个很好吃，而且很便宜。|Энэ амттай, бас хямд.\n3|或者|эсвэл (өгүүлбэрт)|我喝茶或者咖啡都可以。|Би цай эсвэл кофе аль нь ч болно.\n3|还是|эсвэл (асуултад)|你喝茶还是咖啡？|Чи цай уух уу, кофе уух уу?\n3|除了……以外|-аас гадна|除了他以外，大家都来了。|Түүнээс бусад нь бүгд ирсэн.\n3|一边……一边……|нэг талаас ... зэрэг ...|他一边走一边听音乐。|Тэр алхаж байгаад хөгжим сонсож байна.\n3|先……然后……|эхлээд ... дараа нь ...|我先吃饭，然后看书。|Би эхлээд хооллоод дараа нь ном уншина.\n3|把|-ыг (үйлдлийн тусагч бүтэц)|请把门关上。|Хаалгаа хаачихаарай.\n3|被|-д (үйлдэгдэх хэлбэр)|我的书被他拿走了。|Миний номыг тэр аваад явсан.\n3|比|-аас (харьцуулах)|今天比昨天冷。|Өнөөдөр өчигдрөөс хүйтэн.\n3|一……就……|... бол шууд ...|他一回家就睡觉。|Тэр гэртээ ирээд л унтдаг.\n3|只有……才……|зөвхөн ... байж л ...|只有努力，才能成功。|Зөвхөн хичээж байж л амжилтад хүрнэ.\n3|越……越……|улам ... улам ...|雨越下越大。|Бороо улам ширүүсэж байна.\n3|为了|-ын тулд|为了学汉语，他来中国。|Хятад хэл сурахын тулд тэр Хятадад ирсэн.\n3|关于|-ын тухай|我想了解关于中国的历史。|Би Хятадын түүхийн талаар мэдэхийг хүсч байна.\n4|并且|мөн, бас (үйл үг холбох)|他会说英语，并且说得很好。|Тэр англиар ярьдаг бөгөөд маш сайн ярьдаг.\n4|而是|харин (биш ... харин ...)|不是我不想去，而是没时间。|Би явахыг хүсэхгүй биш, харин цаг алга.\n4|难道|гэж үү? (эсэргүүцэх асуулт)|难道你不知道吗？|Чи мэдэхгүй гэж үү?\n4|听说|дуулснаар, сонссоноор|听说他明天回国。|Тэр маргааш эх орондоо буцна гэж дуулсан.\n4|受不了|тэвчихгүй|这里太热了，我受不了。|Энд хэтэрхий халуун, би тэвчихгүй байна.\n4|不管……都……|хамаагүй ... бүгд ...|不管天气怎么样，我都去。|Цаг агаар ямар байлаа ч би явна.\n4|无论……都……|ямар ч байсан ...|无论多难，我们都要完成。|Ямар хэцүү байсан ч бид дуусгана.\n4|即使……也……|ядаж л ... ч гэсэн|即使下雨，我也去。|Бороо орсон ч би явна.\n4|既然……就……|... болохоор тэгвэл ...|既然你累了，就休息吧。|Чи ядарсан болохоор амар.\n4|尽管……但是……|хэдийгээр ... гэвч ...|尽管很忙，他还是来了。|Завгүй ч гэсэн тэр ирсэн.\n4|不过|гэвч, гэхдээ|这个好，不过有点贵。|Энэ сайн, гэхдээ жаахан үнэтэй.\n4|否则|эс бөгөөс|快走，否则会迟到。|Хурдан яв, эс бөгөөс хоцорно.\n4|于是|тиймээс, тэгээд|天黑了，于是我们回家了。|Харанхуй болсон тул бид гэртээ харьсан.\n4|由于|-ын улмаас|由于下雪，飞机晚点了。|Цас орсны улмаас онгоц хоцорсон.\n4|对……来说|-д хувьд|对我来说，这很难。|Миний хувьд энэ хэцүү.\n4|来不及|амжихгүй|太晚了，来不及了。|Хэтэрхий оройтсон, амжихгүй.\n4|不得不|яах аргагүй, заавал|我不得不早起。|Би яах аргагүй эрт босох ёстой.\n5|宁可……也不……|... байсан ч ... хийхгүй|我宁可饿着，也不吃这个。|Би өлссөн ч үүнийг идэхгүй.\n5|与其……不如……|... гэхээсээ ... нь дээр|与其等，不如自己去。|Хүлээхээсээ өөрөө явсан нь дээр.\n5|何况|бүр ч, дээр нь|大人都累，何况孩子。|Томчууд ч ядардаг, хүүхдийн тухай хэлэх ч хэрэггүй.\n5|反而|харин эсрэгээр|他没生气，反而笑了。|Тэр уурлаагүй, харин инээсэн.\n5|甚至|бүр ... хүртэл|他忙得甚至忘了吃饭。|Тэр маш завгүй байснаас бүр хоолоо ч мартсан.\n5|毕竟|эцсийн эцэст|他毕竟是孩子。|Тэр эцсийн эцэст хүүхэд шүү дээ.\n5|未必|заавал биш|贵的未必好。|Үнэтэй нь заавал сайн биш.\n5|难怪|гайхах зүйлгүй|他病了，难怪没来。|Тэр өвдсөн байна, ирээгүй нь гайхах зүйл биш.\n5|何必|яах гэж|何必生气呢？|Яах гэж уурлаж байгаа юм бэ?\n5|偏偏|яг тэр үед (хүссэнээс эсрэгээр)|我想去，偏偏下雨了。|Би явах гэтэл бороо орчихлоо.\n5|以及|болон|桌子、椅子以及电脑。|Ширээ, сандал болон компьютер.\n5|一旦……就……|нэгэнт ... бол шууд ...|一旦决定，就不要后悔。|Нэгэнт шийдсэн бол битгий харамс.\n5|看来|харахад|看来要下雨了。|Харахад бороо орох нь.\n5|以为|андуурч бодох|我以为你在家。|Би чамайг гэртээ байна гэж бодсон.\n3|会|чадах, болно (ирээдүй)|明天会下雨。|Маргааш бороо орно.\n3|得|-аар (үйлийн байдал)|他跑得很快。|Тэр маш хурдан гүйдэг.\n3|着|үргэлжилж буй төлөв|门开着。|Хаалга онгорхой байна.\n3|过|-сан туршлагатай|我去过北京。|Би Бээжинд очиж байсан.\n3|了|үйл хийгдсэн|我吃了饭。|Би хоолоо идсэн.\n3|正在|яг одоо ... байна|他正在看书。|Тэр яг одоо ном уншиж байна.\n3|是……的|-сан юм (нөхцөл онцлох)|我是昨天来的。|Би өчигдөр ирсэн юм.\n3|从……到……|-аас ... хүртэл|从星期一到星期五。|Даваагаас баасан гараг хүртэл.\n3|离|-аас зайтай|学校离我家很近。|Сургууль манай гэрээс ойр.\n3|对|-д, -руу|他对我很好。|Тэр надад маш сайн.\n3|跟……一样|-тай адил|我跟你一样高。|Би чамтай адил өндөр.\n3|又……又……|... бас ...|这个又便宜又好。|Энэ хямд бас сайн.\n3|已经……了|аль хэдийн ...|他已经走了。|Тэр аль хэдийн явчихсан.\n3|刚|дөнгөж|我刚到家。|Би дөнгөж гэртээ ирлээ.\n4|不是……就是……|... биш бол ...|他不是看书就是睡觉。|Тэр ном уншихгүй бол унтдаг.\n4|既……又……|... бас ...|她既聪明又漂亮。|Тэр ухаалаг бас хөөрхөн.\n4|只要……就……|... л бол ...|只要努力，就会进步。|Хичээсэн л бол ахиц гарна.\n4|除非……才……|... байж л, ... биш л бол|除非你去，他才去。|Чи явж байж л тэр явна.\n4|一方面……一方面……|нэг талаас ... нөгөө талаас ...|一方面忙，一方面累。|Нэг талаас завгүй, нөгөө талаас ядарсан.\n4|通过|-аар дамжуулан|通过朋友，我找到了工作。|Найзаараа дамжуулан би ажил олсон.\n4|按照|-ын дагуу|请按照规定做。|Дүрмийн дагуу хийгээрэй.\n4|根据|-д үндэслэн|根据天气决定。|Цаг агаарт үндэслэн шийднэ.\n4|至于|-ын тухайд|至于价格，我们再谈。|Үнийн тухайд дахиад ярилцъя.\n4|看起来|харахад|他看起来很累。|Тэр маш ядарсан харагдаж байна.\n4|越来越|улам улам|天气越来越冷。|Цаг агаар улам улам хүйтэн болж байна.\n4|差点儿|бага зэрэг л дутуу, дөхөх|我差点儿迟到。|Би хоцрох дөхсөн.\n4|恐怕|эмээж байна, магадгүй|他恐怕不会来。|Тэр ирэхгүй байх гэж санаа зовж байна.\n4|据说|дуулснаар|据说这家店很好。|Энэ дэлгүүр сайн гэж дуулсан.\n5|无非|ердөө, зөвхөн|他无非想帮你。|Тэр ердөө чамд туслахыг хүссэн.\n5|固然|мэдээж ... боловч ...|价格固然重要，质量更重要。|Үнэ мэдээж чухал боловч чанар бүр ч чухал.\n5|从而|ингэснээр|他努力学习，从而取得好成绩。|Тэр сайн хичээснээр сайн дүн авсан.\n5|以至于|тэр хэмжээнд хүртэл|他太累了，以至于睡着了。|Тэр хэтэрхий ядарсан тул унтчихсан.\n5|总之|товчоор хэлбэл|总之，我们要努力。|Товчоор хэлбэл бид хичээх ёстой.\n5|尤其|тэр дундаа|我喜欢水果，尤其是苹果。|Би жимс, тэр дундаа алимд дуртай.\n5|至少|наад зах нь|至少要睡七个小时。|Наад зах нь долоон цаг унтах хэрэгтэй.\n5|大不了|муугаар бодоход|大不了重新开始。|Муугаар бодоход дахин эхэлнэ.\n5|不至于|тийм хэмжээнд хүрэхгүй|不至于这么严重。|Тийм ноцтой хэмжээнд хүрэхгүй.\n5|何尝|яагаад ... байх вэ (эсэргүүцэл)|我何尝不想去？|Би яагаад явмааргүй байх вэ?\n5|与其说……不如说……|... гэхээсээ ... гэвэл дээр|与其说他聪明，不如说他努力。|Түүнийг ухаантай гэхээсээ хичээнгүй гэвэл дээр.\n5|对于|-ын тухайд|对于这个问题，我没意见。|Энэ асуудлын тухайд надад санал алга.\n5|由此可见|үүнээс харахад|由此可见，他很努力。|Үүнээс харахад тэр маш хичээнгүй.\n5|一来……二来……|нэгдүгээрт ... хоёрдугаарт ...|一来便宜，二来方便。|Нэгдүгээрт хямд, хоёрдугаарт тохиромжтой.";
@@ -1261,17 +1315,19 @@ details summary{cursor:pointer;font-weight:700;min-height:40px;display:flex;alig
   });
   function renderGram(){
     if(!$('gmList'))return;
-    if(!GRAM)GRAM=GRAM_RAW.split('\n').map(function(r){var a=r.split('|');return {l:+a[0],k:a[1],m:a[2],z:a[3],t:a[4]}});
     var GL=gramList(),c={0:GL.length};GL.forEach(function(g){c[g.l]=(c[g.l]||0)+1});
     lvChips('gmLv',gLv,true,c);
-    var q=gQ.toLowerCase();
-    $('gmAdd').hidden=!isOwner;
-    $('gmList').innerHTML=GL.filter(function(g){return (!gLv||g.l===gLv)&&(!q||(g.k+g.m+g.z+g.t).toLowerCase().indexOf(q)>-1)}).map(function(g){
-      return '<div class="w" style="grid-template-columns:1fr"><span><b lang="zh" style="font-size:1.15rem">'+esc(g.k)+'</b> <span class="badge">HSK '+g.l+'</span><br><span class="m">'+esc(g.m)+'</span></span><span lang="zh">'+esc(g.z)+'</span><span class="hint">'+esc(g.t)+'</span>'+(isOwner?'<span><button class="btn small ghost" type="button" data-gedit="'+esc(g.k)+'">✎</button> <button class="btn small ghost" type="button" data-gdel="'+esc(g.k)+'">✕</button></span>':'')+'</div>';
+    var q=nz(gQ),out=GL.filter(function(g){return (!gLv||g.l===gLv)&&(!q||nz(g.k+' '+g.m+' '+g.z+' '+g.t).indexOf(q)>-1)});
+    $('gmAdd').hidden=!isOwner;$('gmCnt').textContent=out.length+' / '+GL.length;
+    $('gmList').innerHTML=out.map(function(g){
+      return '<div class="gm"><div class="between"><span><b lang="zh" style="font-size:1.2rem">'+hl(g.k,gQ)+'</b> <span class="badge">HSK '+g.l+'</span></span>'+
+        (isOwner?'<span><button class="btn small ghost" type="button" data-gedit="'+esc(g.k)+'">✎</button> <button class="btn small ghost" type="button" data-gdel="'+esc(g.k)+'">✕</button></span>':'')+'</div>'+
+        '<span class="m">'+hl(g.m,gQ)+'</span><span class="z" lang="zh">'+hl(g.z,gQ)+'</span><span class="hint">'+hl(g.t,gQ)+'</span></div>';
     }).join('')||'<div class="empty">'+T('noWords')+'</div>';
   }
   document.addEventListener('click',function(e){var b=e.target.closest('#gmLv [data-l]');if(b){gLv=+b.dataset.l;renderGram()}});
-  $('gmQ').addEventListener('input',function(){gQ=this.value.trim();renderGram()});
+  var gT=null;
+  $('gmQ').addEventListener('input',function(){var v=this.value.trim();clearTimeout(gT);gT=setTimeout(function(){gQ=v;renderGram()},120)});
   function renderAll(){
     renderOnb();renderToday();renderList();renderHsk();renderGram();renderMe();
     $('storeNote').textContent=T(mode==='db'?'storeDb':'storeLocal');
