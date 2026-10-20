@@ -201,6 +201,10 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
 .pop{animation:pop .45s}
 @keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @keyframes pop{50%{transform:scale(1.3);background:var(--ok);color:#fff}}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal[hidden]{display:none}
+.modal .card{max-width:340px;width:100%;max-height:92vh;overflow:auto}
+#wrBox{width:260px;height:260px;margin:0 auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;touch-action:none}
 </style>
 </head>
 <body>
@@ -210,6 +214,10 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
 <!-- TODAY -->
 <div class="pane" id="p-today" role="tabpanel">
   <div class="banner" id="notice" hidden><b data-i18n="noticeLbl"></b><span id="noticeTx"></span></div>
+  <div class="card hero" id="dayCard" hidden>
+    <div class="between"><span class="badge" data-i18n="dayWord"></span><button class="btn small" type="button" data-goplay="1" data-i18n="plGoBtn"></button></div>
+    <div id="dayBody"></div>
+  </div>
 
   <div class="card" id="auth" hidden>
     <h2 data-i18n="authTitle"></h2>
@@ -312,6 +320,29 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
   </div>
 </div>
 
+<!-- PLAY -->
+<div class="pane" id="p-play" role="tabpanel" hidden>
+  <div class="card hero">
+    <div class="between"><h2 data-i18n="playTitle"></h2><button class="btn small ghost" id="plBack" type="button" data-i18n="plBack"></button></div>
+    <div class="between"><b id="plLvl"></b><span class="hint" id="plStreak"></span></div>
+    <div class="prog"><i id="plXpBar"></i></div>
+    <div class="hint" id="plXp"></div>
+  </div>
+  <div class="card" id="plMenu">
+    <div class="hint" id="plRes"></div>
+    <button class="btn" type="button" data-game="mean" data-i18n="gMean"></button>
+    <button class="btn" type="button" data-game="listen" data-i18n="gListen"></button>
+    <button class="btn" type="button" data-game="build" data-i18n="gBuild"></button>
+  </div>
+  <div class="card" id="plGame" hidden>
+    <div class="between"><span class="badge" id="plQ"></span><span class="badge" id="plScore"></span></div>
+    <div id="plPrompt" style="text-align:center;font-family:var(--font-han);font-size:2.2rem;font-weight:900;min-height:56px"></div>
+    <div id="plBuilt" lang="zh" style="text-align:center;font-family:var(--font-han);font-size:1.4rem;min-height:34px"></div>
+    <div id="plOpts" class="list"></div>
+    <button class="btn ghost small" id="plQuit" type="button" data-i18n="plQuit"></button>
+  </div>
+</div>
+
 <!-- HSK VOCAB -->
 <div class="pane" id="p-hsk" role="tabpanel" hidden>
   <div class="card hero">
@@ -370,6 +401,7 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
   <div class="card">
     <h2 data-i18n="accTitle"></h2>
     <div class="hint" data-i18n="accHint"></div>
+    <div class="badge" id="acCur" style="align-self:flex-start;white-space:normal"></div>
     <label class="f" for="acMail"><span data-i18n="accEmail"></span><input id="acMail" type="text" inputmode="email" autocapitalize="none" autocomplete="email"></label>
     <button class="btn ghost" id="acMailBtn" type="button" data-i18n="accEmailBtn"></button>
     <label class="f" for="acPass"><span data-i18n="accPass"></span><input id="acPass" type="password" autocomplete="new-password"></label>
@@ -437,6 +469,14 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
 
 </div>
 
+<div class="modal" id="wrModal" hidden>
+  <div class="card">
+    <div class="between"><div class="row" id="wrChips"></div><button class="btn small ghost" id="wrClose" type="button" data-i18n="wrClose"></button></div>
+    <div id="wrBox"></div>
+    <div class="hint" id="wrMsg" style="text-align:center"></div>
+    <div class="row"><button class="btn ghost" id="wrAnim" type="button" data-i18n="wrAnim"></button><button class="btn" id="wrQuiz" type="button" data-i18n="wrQuiz"></button></div>
+  </div>
+</div>
 <nav class="tabs" data-i18n-aria="navLbl"><div role="tablist" id="tablist">
   <button class="tab" role="tab" data-t="today" aria-selected="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 9.5"/></svg><span data-i18n="tabToday"></span></button>
   <button class="tab" role="tab" data-t="words" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span data-i18n="tabWords"></span></button>
@@ -478,6 +518,25 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     accPassBtn:["Нууц үг солих","Change password"],
     accSent:["Баталгаажуулах холбоосыг шинэ имэйл рүү илгээлээ.","Confirmation link sent to the new email."],
     accHint:["Хуучин нэвтрэх нэрээр бүртгүүлсэн бол имэйлээ холбовол нууц үгээ сэргээх боломжтой болно.","If you signed up with a login name, link an email to enable password recovery."],
+    accCur:["Одоогийн имэйл: {e}","Current email: {e}"],
+    accNone:["Имэйл холбоогүй (хуучин нэр: {n}). Доор имэйлээ холбоно уу.","No email linked (old login: {n}). Link one below."],
+    speakErr:["Энэ төхөөрөмж хятад дуу хоолой дэмжихгүй байна","This device has no Chinese voice"],
+    playTitle:["Тоглоом ба оноо","Games & XP"],
+    gMean:["🎯 Утга тааруулах (10 асуулт)","🎯 Match the meaning (10 questions)"],
+    gListen:["🎧 Сонсоод таах","🎧 Listen and guess"],
+    gBuild:["🧩 Өгүүлбэр угсрах","🧩 Build the sentence"],
+    plQuit:["Гарах","Quit"],
+    plBack:["Буцах","Back"],
+    plRes:["Дүн: {a} / {b} зөв, +{x} XP","Result: {a} / {b} correct, +{x} XP"],
+    days:["өдөр","days"],
+    dayWord:["Өнөөдрийн үг","Word of the day"],
+    plGoBtn:["🎮 Тоглох","🎮 Play"],
+    wrAnim:["▶ Зураасны дараалал","▶ Stroke order"],
+    wrQuiz:["✍ Би зурна","✍ I will draw"],
+    wrErr:["Зураасны өгөгдөл ачаалж чадсангүй. Интернетээ шалгана уу.","Could not load stroke data. Check your connection."],
+    wrHint:["Хуруугаараа зураасыг дарааллаар нь зур.","Draw each stroke in order."],
+    wrDone:["Гайхалтай! +5 XP","Great! +5 XP"],
+    wrClose:["Хаах","Close"],
     hskTitle:["HSK үгсийн сан (монгол орчуулгатай)","HSK vocabulary (Mongolian)"],
     hskSearch:["Хайх: иероглиф, пиньинь, монгол утга","Search: hanzi, pinyin, meaning"],
     hskNoTr:["орчуулга удахгүй нэмэгдэнэ","translation coming soon"],
@@ -825,13 +884,14 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
   function weekWords(act){var n=0;for(var i=0;i<7;i++){var a=act&&act[iso(plus(today,-i))];if(a)n+=a.w||0}return n}
 
   /* ---------- tabs ---------- */
-  var tabs=document.querySelectorAll('.tab'),TABS=['today','words','hsk','gram','cards','group','me','admin'];
+  var tabs=document.querySelectorAll('.tab'),TABS=['today','words','hsk','gram','play','cards','group','me','admin'];
   function showTab(n){
     if(!hasProfile()&&n!=='today')n='today';
     TABS.forEach(function(k){$('p-'+k).hidden=k!==n});
     tabs.forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===n?'true':'false')});
     window.scrollTo(0,0);
     if(n==='cards')renderModes();
+    if(n==='play')renderPlay();
     if(n==='group'){renderGroup();refresh()}
     if(n==='admin'){renderAdmin();refresh()}
   }
@@ -1270,7 +1330,7 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     $('hskCnt').textContent=items.length+' / '+tot;
     var h2=items.slice(0,hLim).map(function(x){
       return '<div class="w"><span class="h" lang="zh">'+hl(x.h,hQ)+'</span><span><span class="p">'+esc(x.p)+'</span><br><span class="m">'+(x.m?hl(x.m,hQ):'<span class="hint">'+T('hskNoTr')+'</span>')+'</span></span><span>'+
-        (isOwner?'<button class="btn small ghost" type="button" data-hedit="'+esc(x.h)+'">✎</button> ':'')+
+        '<button class="btn small ghost" type="button" data-speak="'+esc(x.h)+'" aria-label="Audio">🔊</button> <button class="btn small ghost" type="button" data-write="'+esc(x.h)+'" aria-label="Write">✍</button> '+(isOwner?'<button class="btn small ghost" type="button" data-hedit="'+esc(x.h)+'">✎</button> ':'')+
         (x.m?'<button class="btn small ghost'+(hJust===x.h?' pop':'')+'" type="button" data-hadd="'+esc(x.h)+'"'+(x.got?' disabled':'')+'>'+(x.got?'✓':'+')+'</button>':'')+'</span></div>';
     }).join('');
     if(items.length>hLim)h2+='<button class="btn ghost" type="button" data-hmore="1">'+T('more')+' ('+(items.length-hLim)+')</button>';
@@ -1350,14 +1410,14 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     $('gmList').innerHTML=out.map(function(g){
       return '<div class="gm"><div class="between"><span><b lang="zh" style="font-size:1.2rem">'+hl(g.k,gQ)+'</b> <span class="badge">HSK '+g.l+'</span></span>'+
         (isOwner?'<span><button class="btn small ghost" type="button" data-gedit="'+esc(g.k)+'">✎</button> <button class="btn small ghost" type="button" data-gdel="'+esc(g.k)+'">✕</button></span>':'')+'</div>'+
-        '<span class="m">'+hl(g.m,gQ)+'</span><span class="z" lang="zh">'+hl(g.z,gQ)+'</span><span class="hint">'+hl(g.t,gQ)+'</span></div>';
+        '<span class="m">'+hl(g.m,gQ)+'</span><span class="z" lang="zh">'+hl(g.z,gQ)+' <button class="btn small ghost" type="button" data-speak="'+esc(g.z)+'" aria-label="Audio">🔊</button></span><span class="hint">'+hl(g.t,gQ)+'</span></div>';
     }).join('')||'<div class="empty">'+T('noWords')+'</div>';
   }
   document.addEventListener('click',function(e){var b=e.target.closest('#gmLv [data-l]');if(b){gLv=+b.dataset.l;renderGram()}});
   var gT=null;
   $('gmQ').addEventListener('input',function(){var v=this.value.trim();clearTimeout(gT);gT=setTimeout(function(){gQ=v;renderGram()},120)});
   function renderAll(){
-    renderOnb();renderToday();renderList();renderHsk();renderGram();renderMe();
+    renderOnb();renderToday();renderList();renderHsk();renderGram();renderPlay();renderMe();
     $('storeNote').textContent=T(mode==='db'?'storeDb':'storeLocal');
     fillSelect('fL',false,+($('fL').value||lvOf()));fillSelect('cLv',true,F.lv);
     tabs.forEach(function(b){if(b.dataset.t==='admin')b.hidden=!isOwner;else b.disabled=!hasProfile()&&b.dataset.t!=='today'});
@@ -1398,7 +1458,7 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     }catch(e){}
   }
   async function startSession(user){
-    uid=user.id;loginName=(user.email||'').split('@')[0];mode='db';needAuth=false;
+    uid=user.id;loginName=(user.email||'').split('@')[0];showEmail(user.email);mode='db';needAuth=false;
     var pr=await sb.from('profiles').select('*').eq('id',uid).maybeSingle();
     if(pr.error)throw pr.error;
     if(pr.data){
@@ -1418,6 +1478,125 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     renderTasks();renderAll();startDeck();showTab('today');
   }
   function emailOf(l){return l.toLowerCase()+'@hskapp.mn'}
+  function showEmail(e){var el=$('acCur');if(!el)return;var fake=!e||/@hskapp\.mn$/i.test(e);el.textContent=fake?T('accNone',{n:(e||'').split('@')[0]}):T('accCur',{e:e});el.style.color=fake?'var(--bad)':''}
+  function speak(t){
+    if(!window.speechSynthesis){toast(T('speakErr'));return}
+    var vs=speechSynthesis.getVoices(),v=vs.filter(function(x){return /^zh/i.test(x.lang)})[0];
+    if(vs.length&&!v){toast(T('speakErr'));return}
+    var u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=.85;if(v)u.voice=v;
+    speechSynthesis.cancel();speechSynthesis.speak(u);
+  }
+  document.addEventListener('click',function(e){var b=e.target.closest('[data-speak]');if(b)speak(b.dataset.speak)});
+  /* ---------- games, XP, streak, word of the day ---------- */
+  var G=null,DAYL=null;
+  function shuf(a){return a.slice().sort(function(){return Math.random()-.5})}
+  function mn(m){return String(m).split(/[,;(]/)[0].trim()}
+  function streakNow(){var p=S.profile||{},y=iso(new Date(today.getTime()-864e5));return p.sd===TODAY||p.sd===y?(p.streak||0):0}
+  function addXp(n){
+    var p=S.profile,y=iso(new Date(today.getTime()-864e5)),st=p.sd===TODAY?(p.streak||1):(p.sd===y?(p.streak||0)+1:1);
+    var patch={xp:(p.xp||0)+n,streak:st,sd:TODAY};Object.assign(p,patch);pPatch(patch);renderPlay();
+  }
+  function renderPlay(){
+    if(!$('plLvl'))return;
+    var ok=hasProfile();$('dayCard').hidden=!ok;if(!ok)return;
+    var p=S.profile||{},xp=p.xp||0,lv=Math.floor(Math.sqrt(xp/20))+1,b=20*(lv-1)*(lv-1),n=20*lv*lv;
+    $('plLvl').textContent='Lv '+lv;$('plXp').textContent=xp+' / '+n+' XP';
+    $('plXpBar').style.width=Math.round((xp-b)*100/(n-b))+'%';$('plStreak').textContent='🔥 '+streakNow()+' '+T('days');
+    if(!DAYL){DAYL=[];LEVELS.forEach(function(l){(HSKRAW[l]||'').split(',').forEach(function(it){var a=it.split('|');if(hM(a[0]))DAYL.push(a)})})}
+    if(DAYL.length){var a=DAYL[(Math.floor(today.getTime()/864e5)*7919)%DAYL.length];
+      $('dayBody').innerHTML='<div class="w" style="background:var(--surface)"><span class="h" lang="zh">'+esc(a[0])+'</span><span><span class="p">'+esc(hP(a[0],a[1]))+'</span><br><span class="m">'+esc(hM(a[0]))+'</span></span><span><button class="btn small ghost" type="button" data-speak="'+esc(a[0])+'">🔊</button> <button class="btn small ghost" type="button" data-write="'+esc(a[0])+'">✍</button></span></div>'}
+  }
+  function gPool(){
+    var o=[];wordsArr().forEach(function(w){if(w.m)o.push({h:w.h,p:w.p,m:w.m})});var mine=o.length;
+    [1,2,3].forEach(function(l){(HSKRAW[l]||'').split(',').forEach(function(it){var a=it.split('|'),m=hM(a[0]);if(m)o.push({h:a[0],p:hP(a[0],a[1]),m:m})})});
+    return {all:o,mine:o.slice(0,mine)};
+  }
+  function startGame(mode){
+    var P=gPool(),src;
+    if(mode==='build')src=shuf(gramList()).slice(0,5);else src=shuf(P.mine.length>=5?P.mine:P.all).slice(0,10);
+    if(!src.length)return;
+    G={mode:mode,src:src,i:0,ok:0,all:P.all};
+    $('plMenu').hidden=true;$('plGame').hidden=false;nextQ();
+  }
+  function endGame(){
+    var xp=G.ok*(G.mode==='build'?15:10)+(G.ok===G.src.length?10:0);addXp(xp);
+    $('plRes').textContent=T('plRes',{a:G.ok,b:G.src.length,x:xp});$('plGame').hidden=true;$('plMenu').hidden=false;G=null;
+  }
+  function nextQ(){
+    if(G.i>=G.src.length){endGame();return}
+    var q=G.src[G.i];$('plQ').textContent=(G.i+1)+' / '+G.src.length;$('plScore').textContent='✓ '+G.ok;
+    $('plBuilt').textContent='';$('plBuilt').style.color='';
+    if(G.mode==='build'){
+      var z=q.z.replace(/[，。？！、…,.?!]/g,'');G.ans=z;G.cur='';var ch=[];
+      for(var k=0;k<z.length;k+=2)ch.push(z.slice(k,k+2));
+      $('plPrompt').innerHTML='<span style="font-size:1rem;font-family:inherit;font-weight:700">'+esc(q.t)+'</span>';
+      $('plOpts').innerHTML=shuf(ch).map(function(c){return '<button class="btn ghost" type="button" data-chunk="'+esc(c)+'" lang="zh">'+esc(c)+'</button>'}).join('');
+      return;
+    }
+    var opts=[q];
+    while(opts.length<4){var r=G.all[Math.floor(Math.random()*G.all.length)];if(!opts.some(function(o){return o.h===r.h||mn(o.m)===mn(r.m)}))opts.push(r)}
+    opts=shuf(opts);G.q=q;
+    $('plPrompt').innerHTML=G.mode==='listen'?'<button class="btn" type="button" data-speak="'+esc(q.h)+'">🔊</button>':'<span lang="zh">'+esc(q.h)+'</span>';
+    if(G.mode==='listen')speak(q.h);
+    $('plOpts').innerHTML=opts.map(function(o){return '<button class="btn ghost" type="button" data-opt="'+esc(o.h)+'"'+(G.mode==='listen'?' lang="zh"':'')+'>'+esc(G.mode==='listen'?o.h:mn(o.m))+'</button>'}).join('');
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-goplay]');if(b){showTab('play');return}
+    b=e.target.closest('[data-game]');if(b){startGame(b.dataset.game);return}
+    if(e.target.closest('#plBack')){G=null;$('plGame').hidden=true;$('plMenu').hidden=false;showTab('today');return}
+    if(e.target.closest('#plQuit')){G=null;$('plGame').hidden=true;$('plMenu').hidden=false;return}
+    if(!G)return;
+    b=e.target.closest('[data-opt]');
+    if(b&&!G.lock){
+      G.lock=1;var ok=b.dataset.opt===G.q.h;b.style.background=ok?'var(--ok)':'var(--bad)';b.style.color='#fff';
+      if(!ok)document.querySelectorAll('#plOpts [data-opt]').forEach(function(x){if(x.dataset.opt===G.q.h){x.style.background='var(--ok)';x.style.color='#fff'}});
+      if(ok)G.ok++;
+      setTimeout(function(){if(!G)return;G.lock=0;G.i++;nextQ()},ok?500:1100);return;
+    }
+    b=e.target.closest('[data-chunk]');
+    if(b&&!b.disabled){
+      b.disabled=true;G.cur+=b.dataset.chunk;$('plBuilt').textContent=G.cur;
+      if(G.cur.length>=G.ans.length){
+        var ok2=G.cur===G.ans;if(ok2)G.ok++;
+        $('plBuilt').style.color=ok2?'var(--ok)':'var(--bad)';if(!ok2)$('plBuilt').textContent=G.cur+'  →  '+G.ans;
+        G.lock=1;setTimeout(function(){if(!G)return;G.lock=0;G.i++;nextQ()},ok2?700:1800);
+      }
+    }
+  });
+  $('plBack')&&0;
+  /* ---------- stroke order / writing practice (HanziWriter, loaded on demand) ---------- */
+  var WR=null,wrChars=[];
+  function loadHW(cb){
+    if(window.HanziWriter){cb();return}
+    var sc=document.createElement('script');sc.src='https://cdn.jsdelivr.net/npm/hanzi-writer@3.5.0/dist/hanzi-writer.min.js';
+    sc.onload=cb;sc.onerror=function(){toast(T('wrErr'))};document.head.appendChild(sc);
+  }
+  function cssv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||'#888'}
+  function openWriter(t){
+    wrChars=Array.from(t).filter(function(c){return /[\u4e00-\u9fff]/.test(c)});
+    if(!wrChars.length)return;
+    $('wrModal').hidden=false;loadHW(function(){showChar(0)});
+  }
+  function showChar(i){
+    $('wrChips').innerHTML=wrChars.length>1?wrChars.map(function(c,k){return '<button class="btn small'+(k===i?'':' ghost')+'" type="button" data-wrc="'+k+'" lang="zh">'+esc(c)+'</button>'}).join(''):'';
+    $('wrBox').innerHTML='';$('wrMsg').textContent='';
+    WR=HanziWriter.create('wrBox',wrChars[i],{width:260,height:260,padding:14,showOutline:true,strokeColor:cssv('--fg'),outlineColor:cssv('--line'),radicalColor:cssv('--seal'),highlightColor:cssv('--accent'),strokeAnimationSpeed:1,delayBetweenStrokes:250,onLoadCharDataError:function(){$('wrMsg').textContent=T('wrErr')}});
+    WR.animateCharacter();WR.cur=i;
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-write]');if(b){openWriter(b.dataset.write);return}
+    if(e.target.id==='wrModal'||e.target.closest('#wrClose')){$('wrModal').hidden=true;WR=null;return}
+    b=e.target.closest('[data-wrc]');if(b){showChar(+b.dataset.wrc);return}
+    if(!WR)return;
+    if(e.target.closest('#wrAnim')){WR.cancelQuiz();WR.animateCharacter();return}
+    if(e.target.closest('#wrQuiz')){
+      $('wrMsg').textContent=T('wrHint');
+      WR.quiz({onComplete:function(){
+        $('wrMsg').textContent=T('wrDone');if(hasProfile())addXp(5);
+        var n=WR.cur+1;if(n<wrChars.length)setTimeout(function(){if(WR)showChar(n)},900);
+      }});
+    }
+  });
   var EMRE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/,BASE=location.origin+location.pathname;
   async function doAuth(up){
     var u=$('auUser').value.trim(),p=$('auPass').value,isMail=u.indexOf('@')>-1;
