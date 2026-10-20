@@ -214,10 +214,16 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
   <div class="card" id="auth" hidden>
     <h2 data-i18n="authTitle"></h2>
     <div class="hint" data-i18n="authHint"></div>
-    <label class="f" for="auUser"><span data-i18n="loginName"></span><input id="auUser" type="text" autocapitalize="none" autocorrect="off" autocomplete="username" maxlength="20"></label>
+    <label class="f" for="auUser"><span data-i18n="loginName"></span><input id="auUser" type="text" inputmode="email" autocapitalize="none" autocorrect="off" autocomplete="username" maxlength="60"></label>
     <label class="f" for="auPass"><span data-i18n="password"></span><input id="auPass" type="password" autocomplete="current-password"></label>
     <div class="row"><button class="btn" id="auIn" type="button" data-i18n="signIn"></button><button class="btn ghost" id="auUp" type="button" data-i18n="signUp"></button></div>
+    <button class="btn ghost small" id="auForgot" type="button" style="align-self:flex-start" data-i18n="forgot"></button>
     <div class="hint" data-i18n="authNote"></div>
+  </div>
+  <div class="card hero" id="recov" hidden>
+    <h2 data-i18n="resetTitle"></h2>
+    <label class="f" for="rcPass"><span data-i18n="accPass"></span><input id="rcPass" type="password" autocomplete="new-password"></label>
+    <button class="btn" id="rcSave" type="button" data-i18n="resetSave"></button>
   </div>
   <div class="card" id="onb" hidden>
     <h2 data-i18n="obTitle"></h2>
@@ -362,6 +368,14 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
 <!-- ME -->
 <div class="pane" id="p-me" role="tabpanel" hidden>
   <div class="card">
+    <h2 data-i18n="accTitle"></h2>
+    <div class="hint" data-i18n="accHint"></div>
+    <label class="f" for="acMail"><span data-i18n="accEmail"></span><input id="acMail" type="text" inputmode="email" autocapitalize="none" autocomplete="email"></label>
+    <button class="btn ghost" id="acMailBtn" type="button" data-i18n="accEmailBtn"></button>
+    <label class="f" for="acPass"><span data-i18n="accPass"></span><input id="acPass" type="password" autocomplete="new-password"></label>
+    <button class="btn ghost" id="acPassBtn" type="button" data-i18n="accPassBtn"></button>
+  </div>
+  <div class="card">
     <h2 data-i18n="meTitle"></h2>
     <label class="f" for="meNick"><span data-i18n="nick"></span><input id="meNick" type="text" maxlength="24"></label>
     <div><div class="label" style="margin-bottom:8px" data-i18n="level"></div><div class="chips" id="meLv"></div></div>
@@ -450,6 +464,20 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     hskOnly:["Зөвхөн миний санд байхгүй","Only words not in my bank"],
     hskProg:["Миний санд: {a} / {b}","In my bank: {a} / {b}"],
     more:["Цааш үзэх","Show more"],
+    forgot:["Нууц үгээ мартсан уу?","Forgot password?"],
+    forgotSent:["Нууц үг сэргээх холбоосыг имэйлээр илгээлээ. Имэйлээ шалгаарай.","Reset link sent. Check your email."],
+    emailBad:["Зөв имэйл хаяг оруулна уу.","Enter a valid email address."],
+    confirmMail:["Бүртгэл үүслээ. Имэйлээ шалгаад холбоос дээр дарж баталгаажуулна уу.","Account created. Check your email and confirm it."],
+    resetTitle:["Шинэ нууц үг тохируулах","Set a new password"],
+    resetSave:["Хадгалах","Save"],
+    resetDone:["Нууц үг шинэчлэгдлээ","Password updated"],
+    accTitle:["Бүртгэлийн тохиргоо","Account settings"],
+    accEmail:["Имэйл холбох / солих","Link / change email"],
+    accEmailBtn:["Имэйл хадгалах","Save email"],
+    accPass:["Шинэ нууц үг (6+ тэмдэгт)","New password (6+ characters)"],
+    accPassBtn:["Нууц үг солих","Change password"],
+    accSent:["Баталгаажуулах холбоосыг шинэ имэйл рүү илгээлээ.","Confirmation link sent to the new email."],
+    accHint:["Хуучин нэвтрэх нэрээр бүртгүүлсэн бол имэйлээ холбовол нууц үгээ сэргээх боломжтой болно.","If you signed up with a login name, link an email to enable password recovery."],
     hskTitle:["HSK үгсийн сан (монгол орчуулгатай)","HSK vocabulary (Mongolian)"],
     hskSearch:["Хайх: иероглиф, пиньинь, монгол утга","Search: hanzi, pinyin, meaning"],
     hskNoTr:["орчуулга удахгүй нэмэгдэнэ","translation coming soon"],
@@ -663,14 +691,14 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     tFileErr:["Файл хадгалж чадсангүй.","Could not save the file.","Не удалось сохранить файл.","ファイルを保存できませんでした。"],
     tNoDl:["Татах боломж энэ харагдацад алга.","Downloads are not available here.","Скачивание здесь недоступно.","ここではダウンロードできません。"],
     authTitle:["Нэвтрэх / Бүртгүүлэх","Sign in / Sign up","Вход / Регистрация","ログイン／新規登録"],
-    authHint:["Нэвтрэх нэр, нууц үгээр орно. Ингэснээр өгөгдөл ямар ч төхөөрөмж дээр хадгалагдана.","Use a login name and password. Your data then follows you to any device.","Вход по логину и паролю. Данные будут доступны на любом устройстве.","ログイン名とパスワードで入ります。どの端末でもデータが引き継がれます。"],
-    loginName:["Нэвтрэх нэр (латин үсэг, тоо)","Login name (letters, numbers)","Логин (латиница, цифры)","ログイン名（英数字）"],
+    authHint:["Имэйл болон нууц үгээрээ нэвтэрнэ. Өгөгдөл чинь аль ч төхөөрөмж дээр дагалдана.","Sign in with your email and password. Your data follows you to any device."],
+    loginName:["Имэйл (хуучин хэрэглэгч бол нэвтрэх нэр)","Email (or old login name)"],
     password:["Нууц үг (6+ тэмдэгт)","Password (6+ characters)","Пароль (6+ символов)","パスワード（6文字以上）"],
     signIn:["Нэвтрэх","Sign in","Войти","ログイン"],
     signUp:["Бүртгүүлэх","Sign up","Зарегистрироваться","新規登録"],
     signOut:["Гарах","Sign out","Выйти","ログアウト"],
-    authNote:["Нууц үгээ мартвал сэргээх боломжгүй. Тэмдэглэж аваарай.","Passwords cannot be recovered. Keep it somewhere safe.","Пароль восстановить нельзя. Запишите его.","パスワードは再発行できません。控えておいてください。"],
-    tAuthBad:["Нэвтрэх нэр 3-20 латин үсэг/тоо, нууц үг 6+ тэмдэгт байх ёстой.","Login name: 3–20 letters/numbers; password: 6+ characters.","Логин: 3–20 латинских букв/цифр; пароль: от 6 символов.","ログイン名は英数字3〜20文字、パスワードは6文字以上です。"],
+    authNote:["Нууц үгээ мартвал «Нууц үгээ мартсан уу?» дарж имэйлээр сэргээнэ.","If you forget your password, use «Forgot password?» to reset it by email."],
+    tAuthBad:["Зөв имэйл (эсвэл 3-20 тэмдэгттэй нэр) болон 6+ тэмдэгттэй нууц үг оруулна уу.","Enter a valid email (or a 3-20 character name) and a 6+ character password."],
     tAuthErr:["Нэвтэрч чадсангүй: ","Could not sign in: ","Не удалось войти: ","ログインできません："],
     tConnErr:["Сервертэй холбогдож чадсангүй.","Could not reach the server.","Нет связи с сервером.","サーバーに接続できません。"],
     acctTitle:["Бүртгэл","Account","Аккаунт","アカウント"],
@@ -1390,25 +1418,46 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     renderTasks();renderAll();startDeck();showTab('today');
   }
   function emailOf(l){return l.toLowerCase()+'@hskapp.mn'}
+  var EMRE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/,BASE=location.origin+location.pathname;
   async function doAuth(up){
-    var u=$('auUser').value.trim(),p=$('auPass').value;
-    if(!/^[A-Za-z0-9_]{3,20}$/.test(u)||p.length<6){toast(T('tAuthBad'));return}
+    var u=$('auUser').value.trim(),p=$('auPass').value,isMail=u.indexOf('@')>-1;
+    if(up&&!EMRE.test(u)){toast(T('emailBad'));return}
+    if(isMail?!EMRE.test(u):!/^[A-Za-z0-9_]{3,20}$/.test(u)){toast(T('tAuthBad'));return}
+    if(p.length<6){toast(T('tAuthBad'));return}
     if(!sb)return;
     try{
-      var v={email:emailOf(u),password:p};
-      var r=up?await sb.auth.signUp(v):await sb.auth.signInWithPassword(v);
+      var v={email:isMail?u.toLowerCase():emailOf(u),password:p};
+      var r=up?await sb.auth.signUp(Object.assign({options:{emailRedirectTo:BASE}},v)):await sb.auth.signInWithPassword(v);
       if(r.error){toast(T('tAuthErr')+r.error.message);return}
-      if(!r.data||!r.data.session){toast(T('tAuthErr')+'email confirmation is on');return}
+      if(!r.data||!r.data.session){toast(T('confirmMail'));return}
       await startSession(r.data.session.user);
     }catch(e){toast(T('tConnErr'))}
   }
   $('auIn').addEventListener('click',function(){doAuth(false)});
   $('auUp').addEventListener('click',function(){doAuth(true)});
+  $('auForgot').addEventListener('click',async function(){
+    var u=$('auUser').value.trim().toLowerCase();
+    if(!EMRE.test(u)){toast(T('emailBad'));return}
+    if(!sb)return;
+    try{var r=await sb.auth.resetPasswordForEmail(u,{redirectTo:BASE});toast(r.error?T('tAuthErr')+r.error.message:T('forgotSent'))}catch(e){toast(T('tConnErr'))}
+  });
+  async function setPass(inp,done){
+    var p=$(inp).value;if(p.length<6){toast(T('tAuthBad'));return}
+    try{var r=await sb.auth.updateUser({password:p});if(r.error){toast(T('tAuthErr')+r.error.message);return}$(inp).value='';toast(T('resetDone'));if(done)done()}catch(e){toast(T('tConnErr'))}
+  }
+  $('rcSave').addEventListener('click',function(){setPass('rcPass',function(){$('recov').hidden=true})});
+  $('acPassBtn').addEventListener('click',function(){setPass('acPass')});
+  $('acMailBtn').addEventListener('click',async function(){
+    var m=$('acMail').value.trim().toLowerCase();
+    if(!EMRE.test(m)){toast(T('emailBad'));return}
+    try{var r=await sb.auth.updateUser({email:m},{emailRedirectTo:BASE});toast(r.error?T('tAuthErr')+r.error.message:T('accSent'))}catch(e){toast(T('tConnErr'))}
+  });
   $('signOut').addEventListener('click',async function(){try{await sb.auth.signOut()}catch(e){}location.reload()});
   (async function(){
     if(!SBCFG.url||!SBCFG.key||!window.supabase)return;
     try{
       sb=window.supabase.createClient(SBCFG.url,SBCFG.key);
+      sb.auth.onAuthStateChange(function(ev){if(ev==='PASSWORD_RECOVERY'){var c=$('recov');c.hidden=false;c.scrollIntoView({block:'center'})}});
       var r=await sb.auth.getSession();
       if(r.data&&r.data.session)await startSession(r.data.session.user);
       else{authReady=true;renderAll()}
