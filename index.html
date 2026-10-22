@@ -175,7 +175,28 @@ details summary{cursor:pointer;font-weight:700;min-height:40px;display:flex;alig
 .tab{background:none;border:0;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border-radius:10px;font-size:.66rem;font-weight:700;cursor:pointer;min-height:52px;min-width:0}
 .tab span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tab svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.tab[aria-selected="true"]{color:var(--accent);background:var(--accent-soft)}
+.tab[aria-selected="true"],.tab.on{color:var(--accent);background:var(--accent-soft)}
+
+.tab.mi{flex-direction:column;align-items:flex-start;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px;gap:4px;min-height:92px;color:var(--fg);font-size:.95rem}
+.tab.mi small{font-weight:500;font-size:.74rem;color:var(--muted);text-align:left;line-height:1.3}
+.tab.mi svg{color:var(--accent)}
+.tab.mi[aria-selected="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.msheet{position:fixed;inset:0;z-index:20}
+.msheet[hidden]{display:none}
+.mback{position:absolute;inset:0;background:rgba(0,0,0,.45);animation:mfade .2s}
+.mpanel{position:absolute;left:0;right:0;bottom:0;max-width:720px;margin:0 auto;background:var(--surface);border-radius:20px 20px 0 0;padding:10px 16px calc(18px + env(safe-area-inset-bottom,0px));animation:mup .22s ease-out}
+.mgrip{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 10px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.mgrid .tab.mi:last-child:nth-child(odd){grid-column:1/-1}
+@keyframes mup{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+@keyframes mfade{from{opacity:0}to{opacity:1}}
+.rcnt{font-size:.8rem;color:var(--muted);font-weight:700}
+.sugg{display:flex;gap:6px;flex-wrap:wrap}
+.sugg .chip{font-size:.8rem;padding:4px 10px}
+.search input[type=search]{transition:box-shadow .15s,border-color .15s}
+.search input[type=search]:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.stick{position:sticky;top:0;z-index:4;background:var(--surface)}
+.empty b{display:block;margin-bottom:4px}
 .tab:disabled{opacity:.4}
 .tab[hidden]{display:none}
 .toast{position:fixed;left:50%;transform:translate(-50%,20px);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:20px;font-size:.88rem;opacity:0;pointer-events:none;transition:.25s;z-index:9;max-width:90vw;text-align:center}
@@ -388,6 +409,7 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     <div class="between"><h2 data-i18n="gmTitle"></h2><button class="btn small ghost" id="gmAdd" type="button" hidden>+ Шинэ</button></div>
     <div class="hint" data-i18n="gmHint"></div>
     <div class="chips" id="gmLv"></div>
+    <div class="chips"><button class="chip" id="gmConn" type="button" aria-pressed="false" data-i18n="gmConn"></button></div>
     <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="gmQ" type="search" data-i18n-ph="hskSearch" autocomplete="off" enterkeyhint="search"><button type="button" class="sx" data-clear="gmQ" aria-label="×" hidden>×</button></div>
     <div class="hint" id="gmCnt"></div>
   </div>
@@ -516,14 +538,14 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
 </div>
 <nav class="tabs" data-i18n-aria="navLbl"><div role="tablist" id="tablist">
   <button class="tab" role="tab" data-t="today" aria-selected="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 9.5"/></svg><span data-i18n="tabToday"></span></button>
-  <button class="tab" role="tab" data-t="words" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span data-i18n="tabWords"></span></button>
-  <button class="tab" role="tab" data-t="hsk" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 4h10a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M9 9h5"/></svg><span data-i18n="tabHsk"></span></button>
-  <button class="tab" role="tab" data-t="gram" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h9"/></svg><span data-i18n="tabGram"></span></button>
-  <button class="tab" role="tab" data-t="cards" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="2"/><path d="M8 3.5h8"/></svg><span data-i18n="tabCards"></span></button>
+  <button class="tab" id="menuBtn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg><span data-i18n="tabMenu"></span></button>
   <button class="tab" role="tab" data-t="group" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.3"/><path d="M3.5 19c.6-3 2.6-4.5 5.5-4.5s4.9 1.5 5.5 4.5M15.5 14.7c2.4-.3 4.3.8 5 3.3"/></svg><span data-i18n="tabGroup"></span></button>
   <button class="tab" role="tab" data-t="me" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.7-3.7 3.4-5.5 7-5.5s6.3 1.8 7 5.5"/></svg><span data-i18n="tabMe"></span></button>
   <button class="tab" role="tab" data-t="admin" aria-selected="false" hidden><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg><span data-i18n="tabAdmin"></span></button>
 </div></nav>
+<div id="menuSheet" class="msheet" hidden><div class="mback" data-menuclose="1"></div>
+  <div class="mpanel" role="dialog" aria-modal="true" aria-labelledby="menuTtl"><div class="mgrip"></div><div class="between"><h3 id="menuTtl" data-i18n="menuTtl"></h3><button class="btn small ghost" type="button" data-menuclose="1" aria-label="×">×</button></div>
+  <div class="mgrid"><button class="tab mi" role="tab" data-t="words" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><b data-i18n="tabWords"></b><small data-i18n="mdWords"></small></button><button class="tab mi" role="tab" data-t="hsk" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 4h10a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M9 9h5"/></svg><b data-i18n="tabHsk"></b><small data-i18n="mdHsk"></small></button><button class="tab mi" role="tab" data-t="gram" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h9"/></svg><b data-i18n="tabGram"></b><small data-i18n="mdGram"></small></button><button class="tab mi" role="tab" data-t="cards" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="2"/><path d="M8 3.5h8"/></svg><b data-i18n="tabCards"></b><small data-i18n="mdCards"></small></button><button class="tab mi" role="tab" data-t="play" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></svg><b data-i18n="tabPlay"></b><small data-i18n="mdPlay"></small></button></div></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -535,6 +557,7 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
   var LI={mn:0,en:1,ru:2,ja:3};
   var DICT={
     gmTitle:["Өгүүлбэрт хэрэглэх үг, бүтэц (жишээтэй)","Sentence words & patterns (with examples)"],
+    gmConn:["Холбоос үгс 关联词语","Connectors 关联词语","Союзные слова 关联词语","つなぎ言葉 关联词语"],
     gmHint:["难道, 听说, 受不了, 而是, 而且, 并且 гэх мэт холбоос, хэллэг","Connectors and set phrases like 难道, 听说, 而是, 并且"],
     tabHsk:["HSK","HSK"],
     tabGram:["Дүрэм","Rules"],
@@ -786,6 +809,17 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     tabWords:["Үг","Words","Слова","単語"],
     tabCards:["Карт","Cards","Карточки","カード"],
     tabGroup:["Бүлэг","Group","Группа","みんな"],
+    tabMenu:["Цэс","Menu","Меню","メニュー"],
+    menuTtl:["Суралцах цэс","Study menu","Меню обучения","学習メニュー"],
+    tabPlay:["Тоглоом","Games","Игры","ゲーム"],
+    mdWords:["Өөрийн үг нэмэх","Add your words","Добавить слова","単語を追加"],
+    mdHsk:["HSK 1–6 үгийн сан","HSK 1–6 vocabulary","Словарь HSK 1–6","HSK1〜6語彙"],
+    mdGram:["Дүрэм, холбоос үг","Grammar & connectors","Грамматика и союзы","文法・接続"],
+    mdCards:["Флаш карт давтлага","Flashcard review","Повторение карточек","カード復習"],
+    mdPlay:["Тоглоом, шалгалт","Games & exam","Игры и экзамен","ゲームと模試"],
+    noRes:["Олдсонгүй","No results","Ничего не найдено","見つかりません"],
+    noResH:["Өөр бичлэгээр оролдоно уу (пиньинь, иероглиф, монгол үг). Зайгаар тусгаарлавал бүгдийг нь хайна.","Try another spelling (pinyin, hanzi, meaning). Separate words with spaces to match all.","Попробуйте иначе (пиньинь, иероглиф, значение). Слова через пробел ищутся все сразу.","別の書き方で試してください（拼音・漢字・意味）。スペースで区切ると全て一致を探します。"],
+    clearQ:["Хайлт цэвэрлэх","Clear search","Очистить","クリア"],
     tabMe:["Миний","Me","Я","自分"],
     tabAdmin:["Админ","Admin","Админ","管理"],
     navLbl:["Цэс","Menu","Меню","メニュー"],
@@ -962,11 +996,12 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
   function weekWords(act){var n=0;for(var i=0;i<7;i++){var a=act&&act[iso(plus(today,-i))];if(a)n+=a.w||0}return n}
 
   /* ---------- tabs ---------- */
-  var tabs=document.querySelectorAll('.tab'),TABS=['today','words','hsk','gram','play','cards','group','me','admin'];
+  var tabs=document.querySelectorAll('.tab[data-t]'),SUBT=['words','hsk','gram','cards','play'],TABS=['today','words','hsk','gram','play','cards','group','me','admin'];
   function showTab(n){
     if(!hasProfile()&&n!=='today')n='today';
     TABS.forEach(function(k){$('p-'+k).hidden=k!==n});
     tabs.forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===n?'true':'false')});
+    $('menuBtn').classList.toggle('on',SUBT.indexOf(n)>-1);closeMenu();
     window.scrollTo(0,0);
     if(n==='cards')renderModes();
     if(n==='play')renderPlay();
@@ -974,6 +1009,11 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     if(n==='admin'){renderAdmin();refresh()}
   }
   tabs.forEach(function(b){b.addEventListener('click',function(){showTab(b.dataset.t)})});
+  function openMenu(){if(!hasProfile()){showTab('today');return}$('menuSheet').hidden=false;$('menuBtn').setAttribute('aria-expanded','true');var a=document.querySelector('#menuSheet .tab[aria-selected="true"]')||document.querySelector('#menuSheet .tab');a&&a.focus()}
+  function closeMenu(){var m=$('menuSheet');if(m&&!m.hidden){m.hidden=true;$('menuBtn').setAttribute('aria-expanded','false')}}
+  $('menuBtn').addEventListener('click',function(){$('menuSheet').hidden?openMenu():closeMenu()});
+  document.addEventListener('click',function(e){if(e.target.closest('[data-menuclose]'))closeMenu()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMenu()});
   function curTab(){var r='today';tabs.forEach(function(b){if(b.getAttribute('aria-selected')==='true')r=b.dataset.t});return r}
 
   /* ---------- small helpers ---------- */
@@ -1138,14 +1178,14 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     var ws=wordsArr(),c={0:ws.length};ws.forEach(function(w){c[w.l]=(c[w.l]||0)+1});
     lvChips('wlLv',wlLv,true,c);
     if(wlLv)ws=ws.filter(function(w){return w.l===wlLv});
-    if(wlQ){var nq=nz(wlQ);ws=ws.filter(function(w){return nz(w.h+' '+w.p+' '+w.m+' '+(w.e||'')).indexOf(nq)>-1})}
-    if(!ws.length){$('wordList').innerHTML='<div class="empty">'+T('noWords')+'</div>';return}
+    if(wlQ){ws=ws.filter(function(w){return mq(w.h+' '+w.p+' '+w.m+' '+(w.e||''),wlQ)})}
+    if(!ws.length){$('wordList').innerHTML=wlQ?emptyRes(wlQ,'wlQ'):'<div class="empty">'+T('noWords')+'</div>';return}
     var by={};ws.forEach(function(w){(by[w.d]=by[w.d]||[]).push(w)});
     $('wordList').innerHTML=Object.keys(by).sort().reverse().map(function(d){
       var arr=by[d].sort(function(a,b){return a.id<b.id?1:-1});
       return '<div class="day"><h3><span>'+fmt(parseIso(d))+(d===TODAY?' · '+T('todayTag'):'')+'</span><span class="muted">'+T('nWords',{n:arr.length})+'</span></h3>'+
         arr.map(function(w){
-          return '<div class="w'+(freshIds[w.id]?' fresh':'')+'"><span class="h" lang="zh">'+esc(w.h)+'</span><span><span class="p">'+esc(w.p)+'</span> <span class="badge">HSK '+w.l+'</span><br><span class="m">'+esc(w.m)+'</span></span>'+
+          return '<div class="w'+(freshIds[w.id]?' fresh':'')+'"><span class="h" lang="zh">'+hl(w.h,wlQ)+'</span><span><span class="p">'+hl(w.p,wlQ)+'</span> <span class="badge">HSK '+w.l+'</span><br><span class="m">'+hl(w.m,wlQ)+'</span></span>'+
             '<button class="x'+(sureId===w.id?' sure':'')+'" type="button" data-del="'+w.id+'">'+T(sureId===w.id?'delSure':'del')+'</button></div>';
         }).join('')+'</div>';
     }).join('');
@@ -1389,18 +1429,26 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
   function hP(h,d){return (HSKED[h]&&HSKED[h].p)||d||''}
   function hskMn(){if(!HSKMN){HSKMN={};HSKMN_RAW.split('|').forEach(function(s){var i=s.indexOf('=');if(i>0)HSKMN[s.slice(0,i)]=s.slice(i+1)})}return HSKMN}
   function nz(t){return String(t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()}
-  function hl(t,q){t=String(t==null?'':t);var i=q?t.toLowerCase().indexOf(q.toLowerCase()):-1;return i<0?esc(t):esc(t.slice(0,i))+'<mark>'+esc(t.slice(i,i+q.length))+'</mark>'+esc(t.slice(i+q.length))}
+  function toks(q){return nz(q).split(/\s+/).filter(Boolean)}
+  /* every space-separated token must appear (pinyin also matches without spaces: canjia = cān jiā) */
+  function mq(hay,q){var ts=toks(q);if(!ts.length)return true;var a=nz(hay),b=a.replace(/\s+/g,'');return ts.every(function(x){return a.indexOf(x)>-1||b.indexOf(x)>-1})}
+  function emptyRes(q,id){return '<div class="empty"><b>'+T('noRes')+(q?' «'+esc(q)+'»':'')+'</b>'+T('noResH')+(q?'<br><button class="btn small ghost" type="button" data-clear="'+id+'" style="margin-top:10px">'+T('clearQ')+'</button>':'')+'</div>'}
+  function hl(t,q){t=String(t==null?'':t);var ts=String(q||'').toLowerCase().split(/\s+/).filter(Boolean);if(!ts.length)return esc(t);
+    var lo=t.toLowerCase(),out='',pos=0;
+    while(pos<t.length){var bi=-1,bl=0;ts.forEach(function(x){var i=lo.indexOf(x,pos);if(i>-1&&(bi<0||i<bi||(i===bi&&x.length>bl))){bi=i;bl=x.length}});
+      if(bi<0)break;out+=esc(t.slice(pos,bi))+'<mark>'+esc(t.slice(bi,bi+bl))+'</mark>';pos=bi+bl}
+    return out+esc(t.slice(pos))}
   var hLim=60,hOnly=false,hJust='',wlQ='';
   function renderHsk(){
     if(!$('hskList'))return;
     var have={};wordsArr().forEach(function(w){have[w.h]=1});
     var c={0:0};LEVELS.forEach(function(l){c[l]=(HSKRAW[l]||'').split(',').length;c[0]+=c[l]});
     lvChips('hskLv',hLv,true,c);
-    var q=nz(hQ),items=[],added=0,tot=0;
+    var q=hQ,items=[],added=0,tot=0;
     (hLv?[hLv]:LEVELS).forEach(function(lv){(HSKRAW[lv]||'').split(',').forEach(function(it){
       var a=it.split('|'),h=a[0],p=hP(h,a[1]),m=hM(h);tot++;if(have[h])added++;
       if(hOnly&&have[h])return;
-      if(q&&nz(h+' '+p+' '+m).indexOf(q)<0)return;
+      if(q&&!mq(h+' '+p+' '+m,hQ))return;
       items.push({h:h,p:p,m:m,l:lv,got:!!have[h]});
     })});
     $('hskProg').style.width=(tot?Math.round(added*100/tot):0)+'%';
@@ -1412,7 +1460,7 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
         (x.m?'<button class="btn small ghost'+(hJust===x.h?' pop':'')+'" type="button" data-hadd="'+esc(x.h)+'"'+(x.got?' disabled':'')+'>'+(x.got?'✓':'+')+'</button>':'')+'</span></div>';
     }).join('');
     if(items.length>hLim)h2+='<button class="btn ghost" type="button" data-hmore="1">'+T('more')+' ('+(items.length-hLim)+')</button>';
-    $('hskList').innerHTML=h2||'<div class="empty">'+T('noWords')+'</div>';hJust='';
+    $('hskList').innerHTML=h2||emptyRes(hQ,'hskQ');hJust='';
   }
   document.addEventListener('click',function(e){
     var b=e.target.closest('#hskLv [data-l]');if(b){hLv=+b.dataset.l;hLim=60;renderHsk();return}
@@ -1442,16 +1490,18 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
   $('wlQ').addEventListener('input',function(){wlQ=this.value.trim();renderList()});
   document.addEventListener('click',function(e){if(e.target.closest('[data-hmore]')){hLim+=120;renderHsk()}});
   document.addEventListener('input',function(e){var sx=e.target.parentNode&&e.target.parentNode.querySelector&&e.target.parentNode.querySelector('.sx');if(sx)sx.hidden=!e.target.value});
-  document.addEventListener('click',function(e){var b=e.target.closest('.sx');if(!b)return;var i=$(b.dataset.clear);i.value='';i.dispatchEvent(new Event('input',{bubbles:true}));b.hidden=true;i.focus()});
+  document.addEventListener('click',function(e){var b=e.target.closest('[data-clear]');if(!b)return;var i=$(b.dataset.clear);i.value='';i.dispatchEvent(new Event('input',{bubbles:true}));if(b.classList.contains('sx'))b.hidden=true;i.focus()});
 
   /* ---------- sentence patterns / connectors ---------- */
-  var GRAM_RAW="3|虽然……但是……|хэдий ... гэвч ...|虽然很累，但是我很高兴。|Хэдийгээр ядарсан ч би маш баяртай байна.\n3|因为……所以……|учир нь ... тиймээс ...|因为下雨，所以我没去。|Бороо орсон тул би явсангүй.\n3|如果……就……|хэрэв ... бол ...|如果你有时间，就来找我。|Хэрэв чамд зав байвал надтай уулзаарай.\n3|不但……而且……|зөвхөн ... биш бас ...|她不但聪明，而且努力。|Тэр зөвхөн ухаалаг биш, бас хичээнгүй.\n3|而且|мөн бас, түүнээс гадна|这个很好吃，而且很便宜。|Энэ амттай, бас хямд.\n3|或者|эсвэл (өгүүлбэрт)|我喝茶或者咖啡都可以。|Би цай эсвэл кофе аль нь ч болно.\n3|还是|эсвэл (асуултад)|你喝茶还是咖啡？|Чи цай уух уу, кофе уух уу?\n3|除了……以外|-аас гадна|除了他以外，大家都来了。|Түүнээс бусад нь бүгд ирсэн.\n3|一边……一边……|нэг талаас ... зэрэг ...|他一边走一边听音乐。|Тэр алхаж байгаад хөгжим сонсож байна.\n3|先……然后……|эхлээд ... дараа нь ...|我先吃饭，然后看书。|Би эхлээд хооллоод дараа нь ном уншина.\n3|把|-ыг (үйлдлийн тусагч бүтэц)|请把门关上。|Хаалгаа хаачихаарай.\n3|被|-д (үйлдэгдэх хэлбэр)|我的书被他拿走了。|Миний номыг тэр аваад явсан.\n3|比|-аас (харьцуулах)|今天比昨天冷。|Өнөөдөр өчигдрөөс хүйтэн.\n3|一……就……|... бол шууд ...|他一回家就睡觉。|Тэр гэртээ ирээд л унтдаг.\n3|只有……才……|зөвхөн ... байж л ...|只有努力，才能成功。|Зөвхөн хичээж байж л амжилтад хүрнэ.\n3|越……越……|улам ... улам ...|雨越下越大。|Бороо улам ширүүсэж байна.\n3|为了|-ын тулд|为了学汉语，他来中国。|Хятад хэл сурахын тулд тэр Хятадад ирсэн.\n3|关于|-ын тухай|我想了解关于中国的历史。|Би Хятадын түүхийн талаар мэдэхийг хүсч байна.\n4|并且|мөн, бас (үйл үг холбох)|他会说英语，并且说得很好。|Тэр англиар ярьдаг бөгөөд маш сайн ярьдаг.\n4|而是|харин (биш ... харин ...)|不是我不想去，而是没时间。|Би явахыг хүсэхгүй биш, харин цаг алга.\n4|难道|гэж үү? (эсэргүүцэх асуулт)|难道你不知道吗？|Чи мэдэхгүй гэж үү?\n4|听说|дуулснаар, сонссоноор|听说他明天回国。|Тэр маргааш эх орондоо буцна гэж дуулсан.\n4|受不了|тэвчихгүй|这里太热了，我受不了。|Энд хэтэрхий халуун, би тэвчихгүй байна.\n4|不管……都……|хамаагүй ... бүгд ...|不管天气怎么样，我都去。|Цаг агаар ямар байлаа ч би явна.\n4|无论……都……|ямар ч байсан ...|无论多难，我们都要完成。|Ямар хэцүү байсан ч бид дуусгана.\n4|即使……也……|ядаж л ... ч гэсэн|即使下雨，我也去。|Бороо орсон ч би явна.\n4|既然……就……|... болохоор тэгвэл ...|既然你累了，就休息吧。|Чи ядарсан болохоор амар.\n4|尽管……但是……|хэдийгээр ... гэвч ...|尽管很忙，他还是来了。|Завгүй ч гэсэн тэр ирсэн.\n4|不过|гэвч, гэхдээ|这个好，不过有点贵。|Энэ сайн, гэхдээ жаахан үнэтэй.\n4|否则|эс бөгөөс|快走，否则会迟到。|Хурдан яв, эс бөгөөс хоцорно.\n4|于是|тиймээс, тэгээд|天黑了，于是我们回家了。|Харанхуй болсон тул бид гэртээ харьсан.\n4|由于|-ын улмаас|由于下雪，飞机晚点了。|Цас орсны улмаас онгоц хоцорсон.\n4|对……来说|-д хувьд|对我来说，这很难。|Миний хувьд энэ хэцүү.\n4|来不及|амжихгүй|太晚了，来不及了。|Хэтэрхий оройтсон, амжихгүй.\n4|不得不|яах аргагүй, заавал|我不得不早起。|Би яах аргагүй эрт босох ёстой.\n5|宁可……也不……|... байсан ч ... хийхгүй|我宁可饿着，也不吃这个。|Би өлссөн ч үүнийг идэхгүй.\n5|与其……不如……|... гэхээсээ ... нь дээр|与其等，不如自己去。|Хүлээхээсээ өөрөө явсан нь дээр.\n5|何况|бүр ч, дээр нь|大人都累，何况孩子。|Томчууд ч ядардаг, хүүхдийн тухай хэлэх ч хэрэггүй.\n5|反而|харин эсрэгээр|他没生气，反而笑了。|Тэр уурлаагүй, харин инээсэн.\n5|甚至|бүр ... хүртэл|他忙得甚至忘了吃饭。|Тэр маш завгүй байснаас бүр хоолоо ч мартсан.\n5|毕竟|эцсийн эцэст|他毕竟是孩子。|Тэр эцсийн эцэст хүүхэд шүү дээ.\n5|未必|заавал биш|贵的未必好。|Үнэтэй нь заавал сайн биш.\n5|难怪|гайхах зүйлгүй|他病了，难怪没来。|Тэр өвдсөн байна, ирээгүй нь гайхах зүйл биш.\n5|何必|яах гэж|何必生气呢？|Яах гэж уурлаж байгаа юм бэ?\n5|偏偏|яг тэр үед (хүссэнээс эсрэгээр)|我想去，偏偏下雨了。|Би явах гэтэл бороо орчихлоо.\n5|以及|болон|桌子、椅子以及电脑。|Ширээ, сандал болон компьютер.\n5|一旦……就……|нэгэнт ... бол шууд ...|一旦决定，就不要后悔。|Нэгэнт шийдсэн бол битгий харамс.\n5|看来|харахад|看来要下雨了。|Харахад бороо орох нь.\n5|以为|андуурч бодох|我以为你在家。|Би чамайг гэртээ байна гэж бодсон.\n3|会|чадах, болно (ирээдүй)|明天会下雨。|Маргааш бороо орно.\n3|得|-аар (үйлийн байдал)|他跑得很快。|Тэр маш хурдан гүйдэг.\n3|着|үргэлжилж буй төлөв|门开着。|Хаалга онгорхой байна.\n3|过|-сан туршлагатай|我去过北京。|Би Бээжинд очиж байсан.\n3|了|үйл хийгдсэн|我吃了饭。|Би хоолоо идсэн.\n3|正在|яг одоо ... байна|他正在看书。|Тэр яг одоо ном уншиж байна.\n3|是……的|-сан юм (нөхцөл онцлох)|我是昨天来的。|Би өчигдөр ирсэн юм.\n3|从……到……|-аас ... хүртэл|从星期一到星期五。|Даваагаас баасан гараг хүртэл.\n3|离|-аас зайтай|学校离我家很近。|Сургууль манай гэрээс ойр.\n3|对|-д, -руу|他对我很好。|Тэр надад маш сайн.\n3|跟……一样|-тай адил|我跟你一样高。|Би чамтай адил өндөр.\n3|又……又……|... бас ...|这个又便宜又好。|Энэ хямд бас сайн.\n3|已经……了|аль хэдийн ...|他已经走了。|Тэр аль хэдийн явчихсан.\n3|刚|дөнгөж|我刚到家。|Би дөнгөж гэртээ ирлээ.\n4|不是……就是……|... биш бол ...|他不是看书就是睡觉。|Тэр ном уншихгүй бол унтдаг.\n4|既……又……|... бас ...|她既聪明又漂亮。|Тэр ухаалаг бас хөөрхөн.\n4|只要……就……|... л бол ...|只要努力，就会进步。|Хичээсэн л бол ахиц гарна.\n4|除非……才……|... байж л, ... биш л бол|除非你去，他才去。|Чи явж байж л тэр явна.\n4|一方面……一方面……|нэг талаас ... нөгөө талаас ...|一方面忙，一方面累。|Нэг талаас завгүй, нөгөө талаас ядарсан.\n4|通过|-аар дамжуулан|通过朋友，我找到了工作。|Найзаараа дамжуулан би ажил олсон.\n4|按照|-ын дагуу|请按照规定做。|Дүрмийн дагуу хийгээрэй.\n4|根据|-д үндэслэн|根据天气决定。|Цаг агаарт үндэслэн шийднэ.\n4|至于|-ын тухайд|至于价格，我们再谈。|Үнийн тухайд дахиад ярилцъя.\n4|看起来|харахад|他看起来很累。|Тэр маш ядарсан харагдаж байна.\n4|越来越|улам улам|天气越来越冷。|Цаг агаар улам улам хүйтэн болж байна.\n4|差点儿|бага зэрэг л дутуу, дөхөх|我差点儿迟到。|Би хоцрох дөхсөн.\n4|恐怕|эмээж байна, магадгүй|他恐怕不会来。|Тэр ирэхгүй байх гэж санаа зовж байна.\n4|据说|дуулснаар|据说这家店很好。|Энэ дэлгүүр сайн гэж дуулсан.\n5|无非|ердөө, зөвхөн|他无非想帮你。|Тэр ердөө чамд туслахыг хүссэн.\n5|固然|мэдээж ... боловч ...|价格固然重要，质量更重要。|Үнэ мэдээж чухал боловч чанар бүр ч чухал.\n5|从而|ингэснээр|他努力学习，从而取得好成绩。|Тэр сайн хичээснээр сайн дүн авсан.\n5|以至于|тэр хэмжээнд хүртэл|他太累了，以至于睡着了。|Тэр хэтэрхий ядарсан тул унтчихсан.\n5|总之|товчоор хэлбэл|总之，我们要努力。|Товчоор хэлбэл бид хичээх ёстой.\n5|尤其|тэр дундаа|我喜欢水果，尤其是苹果。|Би жимс, тэр дундаа алимд дуртай.\n5|至少|наад зах нь|至少要睡七个小时。|Наад зах нь долоон цаг унтах хэрэгтэй.\n5|大不了|муугаар бодоход|大不了重新开始。|Муугаар бодоход дахин эхэлнэ.\n5|不至于|тийм хэмжээнд хүрэхгүй|不至于这么严重。|Тийм ноцтой хэмжээнд хүрэхгүй.\n5|何尝|яагаад ... байх вэ (эсэргүүцэл)|我何尝不想去？|Би яагаад явмааргүй байх вэ?\n5|与其说……不如说……|... гэхээсээ ... гэвэл дээр|与其说他聪明，不如说他努力。|Түүнийг ухаантай гэхээсээ хичээнгүй гэвэл дээр.\n5|对于|-ын тухайд|对于这个问题，我没意见。|Энэ асуудлын тухайд надад санал алга.\n5|由此可见|үүнээс харахад|由此可见，他很努力。|Үүнээс харахад тэр маш хичээнгүй.\n5|一来……二来……|нэгдүгээрт ... хоёрдугаарт ...|一来便宜，二来方便。|Нэгдүгээрт хямд, хоёрдугаарт тохиромжтой.";
-  var GRAM=null,gLv=0,gQ='',GRAMED={};
+  var GRAM_RAW="3|虽然……但是……|хэдий ... гэвч ...|虽然很累，但是我很高兴。|Хэдийгээр ядарсан ч би маш баяртай байна.\n3|因为……所以……|учир нь ... тиймээс ...|因为下雨，所以我没去。|Бороо орсон тул би явсангүй.\n3|如果……就……|хэрэв ... бол ...|如果你有时间，就来找我。|Хэрэв чамд зав байвал надтай уулзаарай.\n3|不但……而且……|зөвхөн ... биш бас ...|她不但聪明，而且努力。|Тэр зөвхөн ухаалаг биш, бас хичээнгүй.\n3|而且|мөн бас, түүнээс гадна|这个很好吃，而且很便宜。|Энэ амттай, бас хямд.\n3|或者|эсвэл (өгүүлбэрт)|我喝茶或者咖啡都可以。|Би цай эсвэл кофе аль нь ч болно.\n3|还是|эсвэл (асуултад)|你喝茶还是咖啡？|Чи цай уух уу, кофе уух уу?\n3|除了……以外|-аас гадна|除了他以外，大家都来了。|Түүнээс бусад нь бүгд ирсэн.\n3|一边……一边……|нэг талаас ... зэрэг ...|他一边走一边听音乐。|Тэр алхаж байгаад хөгжим сонсож байна.\n3|先……然后……|эхлээд ... дараа нь ...|我先吃饭，然后看书。|Би эхлээд хооллоод дараа нь ном уншина.\n3|把|-ыг (үйлдлийн тусагч бүтэц)|请把门关上。|Хаалгаа хаачихаарай.\n3|被|-д (үйлдэгдэх хэлбэр)|我的书被他拿走了。|Миний номыг тэр аваад явсан.\n3|比|-аас (харьцуулах)|今天比昨天冷。|Өнөөдөр өчигдрөөс хүйтэн.\n3|一……就……|... бол шууд ...|他一回家就睡觉。|Тэр гэртээ ирээд л унтдаг.\n3|只有……才……|зөвхөн ... байж л ...|只有努力，才能成功。|Зөвхөн хичээж байж л амжилтад хүрнэ.\n3|越……越……|улам ... улам ...|雨越下越大。|Бороо улам ширүүсэж байна.\n3|为了|-ын тулд|为了学汉语，他来中国。|Хятад хэл сурахын тулд тэр Хятадад ирсэн.\n3|关于|-ын тухай|我想了解关于中国的历史。|Би Хятадын түүхийн талаар мэдэхийг хүсч байна.\n4|并且|мөн, бас (үйл үг холбох)|他会说英语，并且说得很好。|Тэр англиар ярьдаг бөгөөд маш сайн ярьдаг.\n4|而是|харин (биш ... харин ...)|不是我不想去，而是没时间。|Би явахыг хүсэхгүй биш, харин цаг алга.\n4|难道|гэж үү? (эсэргүүцэх асуулт)|难道你不知道吗？|Чи мэдэхгүй гэж үү?\n4|听说|дуулснаар, сонссоноор|听说他明天回国。|Тэр маргааш эх орондоо буцна гэж дуулсан.\n4|受不了|тэвчихгүй|这里太热了，我受不了。|Энд хэтэрхий халуун, би тэвчихгүй байна.\n4|不管……都……|хамаагүй ... бүгд ...|不管天气怎么样，我都去。|Цаг агаар ямар байлаа ч би явна.\n4|无论……都……|ямар ч байсан ...|无论多难，我们都要完成。|Ямар хэцүү байсан ч бид дуусгана.\n4|即使……也……|ядаж л ... ч гэсэн|即使下雨，我也去。|Бороо орсон ч би явна.\n4|既然……就……|... болохоор тэгвэл ...|既然你累了，就休息吧。|Чи ядарсан болохоор амар.\n4|尽管……但是……|хэдийгээр ... гэвч ...|尽管很忙，他还是来了。|Завгүй ч гэсэн тэр ирсэн.\n4|不过|гэвч, гэхдээ|这个好，不过有点贵。|Энэ сайн, гэхдээ жаахан үнэтэй.\n4|否则|эс бөгөөс|快走，否则会迟到。|Хурдан яв, эс бөгөөс хоцорно.\n4|于是|тиймээс, тэгээд|天黑了，于是我们回家了。|Харанхуй болсон тул бид гэртээ харьсан.\n4|由于|-ын улмаас|由于下雪，飞机晚点了。|Цас орсны улмаас онгоц хоцорсон.\n4|对……来说|-д хувьд|对我来说，这很难。|Миний хувьд энэ хэцүү.\n4|来不及|амжихгүй|太晚了，来不及了。|Хэтэрхий оройтсон, амжихгүй.\n4|不得不|яах аргагүй, заавал|我不得不早起。|Би яах аргагүй эрт босох ёстой.\n5|宁可……也不……|... байсан ч ... хийхгүй|我宁可饿着，也不吃这个。|Би өлссөн ч үүнийг идэхгүй.\n5|与其……不如……|... гэхээсээ ... нь дээр|与其等，不如自己去。|Хүлээхээсээ өөрөө явсан нь дээр.\n5|何况|бүр ч, дээр нь|大人都累，何况孩子。|Томчууд ч ядардаг, хүүхдийн тухай хэлэх ч хэрэггүй.\n5|反而|харин эсрэгээр|他没生气，反而笑了。|Тэр уурлаагүй, харин инээсэн.\n5|甚至|бүр ... хүртэл|他忙得甚至忘了吃饭。|Тэр маш завгүй байснаас бүр хоолоо ч мартсан.\n5|毕竟|эцсийн эцэст|他毕竟是孩子。|Тэр эцсийн эцэст хүүхэд шүү дээ.\n5|未必|заавал биш|贵的未必好。|Үнэтэй нь заавал сайн биш.\n5|难怪|гайхах зүйлгүй|他病了，难怪没来。|Тэр өвдсөн байна, ирээгүй нь гайхах зүйл биш.\n5|何必|яах гэж|何必生气呢？|Яах гэж уурлаж байгаа юм бэ?\n5|偏偏|яг тэр үед (хүссэнээс эсрэгээр)|我想去，偏偏下雨了。|Би явах гэтэл бороо орчихлоо.\n5|以及|болон|桌子、椅子以及电脑。|Ширээ, сандал болон компьютер.\n5|一旦……就……|нэгэнт ... бол шууд ...|一旦决定，就不要后悔。|Нэгэнт шийдсэн бол битгий харамс.\n5|看来|харахад|看来要下雨了。|Харахад бороо орох нь.\n5|以为|андуурч бодох|我以为你在家。|Би чамайг гэртээ байна гэж бодсон.\n3|会|чадах, болно (ирээдүй)|明天会下雨。|Маргааш бороо орно.\n3|得|-аар (үйлийн байдал)|他跑得很快。|Тэр маш хурдан гүйдэг.\n3|着|үргэлжилж буй төлөв|门开着。|Хаалга онгорхой байна.\n3|过|-сан туршлагатай|我去过北京。|Би Бээжинд очиж байсан.\n3|了|үйл хийгдсэн|我吃了饭。|Би хоолоо идсэн.\n3|正在|яг одоо ... байна|他正在看书。|Тэр яг одоо ном уншиж байна.\n3|是……的|-сан юм (нөхцөл онцлох)|我是昨天来的。|Би өчигдөр ирсэн юм.\n3|从……到……|-аас ... хүртэл|从星期一到星期五。|Даваагаас баасан гараг хүртэл.\n3|离|-аас зайтай|学校离我家很近。|Сургууль манай гэрээс ойр.\n3|对|-д, -руу|他对我很好。|Тэр надад маш сайн.\n3|跟……一样|-тай адил|我跟你一样高。|Би чамтай адил өндөр.\n3|又……又……|... бас ...|这个又便宜又好。|Энэ хямд бас сайн.\n3|已经……了|аль хэдийн ...|他已经走了。|Тэр аль хэдийн явчихсан.\n3|刚|дөнгөж|我刚到家。|Би дөнгөж гэртээ ирлээ.\n4|不是……就是……|... биш бол ...|他不是看书就是睡觉。|Тэр ном уншихгүй бол унтдаг.\n4|既……又……|... бас ...|她既聪明又漂亮。|Тэр ухаалаг бас хөөрхөн.\n4|只要……就……|... л бол ...|只要努力，就会进步。|Хичээсэн л бол ахиц гарна.\n4|除非……才……|... байж л, ... биш л бол|除非你去，他才去。|Чи явж байж л тэр явна.\n4|一方面……一方面……|нэг талаас ... нөгөө талаас ...|一方面忙，一方面累。|Нэг талаас завгүй, нөгөө талаас ядарсан.\n4|通过|-аар дамжуулан|通过朋友，我找到了工作。|Найзаараа дамжуулан би ажил олсон.\n4|按照|-ын дагуу|请按照规定做。|Дүрмийн дагуу хийгээрэй.\n4|根据|-д үндэслэн|根据天气决定。|Цаг агаарт үндэслэн шийднэ.\n4|至于|-ын тухайд|至于价格，我们再谈。|Үнийн тухайд дахиад ярилцъя.\n4|看起来|харахад|他看起来很累。|Тэр маш ядарсан харагдаж байна.\n4|越来越|улам улам|天气越来越冷。|Цаг агаар улам улам хүйтэн болж байна.\n4|差点儿|бага зэрэг л дутуу, дөхөх|我差点儿迟到。|Би хоцрох дөхсөн.\n4|恐怕|эмээж байна, магадгүй|他恐怕不会来。|Тэр ирэхгүй байх гэж санаа зовж байна.\n4|据说|дуулснаар|据说这家店很好。|Энэ дэлгүүр сайн гэж дуулсан.\n5|无非|ердөө, зөвхөн|他无非想帮你。|Тэр ердөө чамд туслахыг хүссэн.\n5|固然|мэдээж ... боловч ...|价格固然重要，质量更重要。|Үнэ мэдээж чухал боловч чанар бүр ч чухал.\n5|从而|ингэснээр|他努力学习，从而取得好成绩。|Тэр сайн хичээснээр сайн дүн авсан.\n5|以至于|тэр хэмжээнд хүртэл|他太累了，以至于睡着了。|Тэр хэтэрхий ядарсан тул унтчихсан.\n5|总之|товчоор хэлбэл|总之，我们要努力。|Товчоор хэлбэл бид хичээх ёстой.\n5|尤其|тэр дундаа|我喜欢水果，尤其是苹果。|Би жимс, тэр дундаа алимд дуртай.\n5|至少|наад зах нь|至少要睡七个小时。|Наад зах нь долоон цаг унтах хэрэгтэй.\n5|大不了|муугаар бодоход|大不了重新开始。|Муугаар бодоход дахин эхэлнэ.\n5|不至于|тийм хэмжээнд хүрэхгүй|不至于这么严重。|Тийм ноцтой хэмжээнд хүрэхгүй.\n5|何尝|яагаад ... байх вэ (эсэргүүцэл)|我何尝不想去？|Би яагаад явмааргүй байх вэ?\n5|与其说……不如说……|... гэхээсээ ... гэвэл дээр|与其说他聪明，不如说他努力。|Түүнийг ухаантай гэхээсээ хичээнгүй гэвэл дээр.\n5|对于|-ын тухайд|对于这个问题，我没意见。|Энэ асуудлын тухайд надад санал алга.\n5|由此可见|үүнээс харахад|由此可见，他很努力。|Үүнээс харахад тэр маш хичээнгүй.\n5|一来……二来……|нэгдүгээрт ... хоёрдугаарт ...|一来便宜，二来方便。|Нэгдүгээрт хямд, хоёрдугаарт тохиромжтой.\n2|所以|тиймээс, тэгэхээр|天气不好，所以我们不去了。|Цаг муу тул бид явахгүй боллоо.\n2|但是|гэвч, харин|我很想去，但是没有时间。|Би их явмаар байна, гэвч цаг алга.\n2|可是|гэвч, харин (ярианы)|他很聪明，可是不努力。|Тэр маш ухаантай ч хичээдэггүй.\n2|然后|дараа нь, тэгээд|我们先吃饭，然后看电影。|Бид эхлээд хооллоод, дараа нь кино үзнэ.\n3|因为|учир нь, ...-ын улмаас|我没去，因为我生病了。|Би өвдсөн учраас явсангүй.\n3|要是……就……|хэрэв ... бол ... (ярианы)|要是明天下雨，我们就不去了。|Хэрэв маргааш бороо орвол бид явахгүй.\n3|不仅……还……|зөвхөн ... биш бас ...|他不仅会说英语，还会说日语。|Тэр англиар ярьдаг төдийгүй бас япониар ярьдаг.\n3|接着|үүний дараа, цаашлаад|他先唱了一首歌，接着跳了一支舞。|Тэр эхлээд дуу дуулаад, дараа нь бүжиглэв.\n3|再……也……|хичнээн ... ч ...|天气再冷，我也要去跑步。|Цаг хичнээн хүйтэн ч би гүйх болно.\n4|首先……其次……最后……|нэгдүгээрт ... хоёрдугаарт ... эцэст нь ...|首先要努力，其次要坚持，最后才能成功。|Нэгдүгээрт хичээх, хоёрдугаарт тэвчих, эцэст нь амжилтад хүрнэ.\n4|因此|иймээс, ийм учраас|他每天练习，因此进步很快。|Тэр өдөр бүр дасгалждаг тул хурдан ахиж байна.\n4|因而|тиймээс, үүнээс болж (бичгийн)|他准备得很充分，因而顺利通过了考试。|Тэр сайн бэлдсэн тул шалгалтад амжилттай тэнцлээ.\n4|另外|мөн, түүнээс гадна|我买了苹果，另外还买了香蕉。|Би алим худалдаж авсан, мөн гадна гадил авсан.\n4|此外|үүнээс гадна, үүнээс бусад нь|这家店很便宜，此外服务也很好。|Энэ дэлгүүр маш хямд, үүнээс гадна үйлчилгээ нь ч сайн.\n4|比如|жишээлбэл, тухайлбал|我喜欢水果，比如苹果、香蕉。|Би жимс дуртай, жишээлбэл алим, гадил.\n4|例如|жишээ нь (бичгийн)|很多国家，例如中国和日本，都有春节。|Олон улс, жишээ нь Хятад, Япон улсад хаврын баяр тэмдэглэдэг.\n4|也就是说|өөрөөр хэлбэл|他是我爸爸的哥哥，也就是说，是我伯父。|Тэр аавын ах, өөрөөр хэлбэл миний эцгийн ах.\n4|同时|мөн зэрэгцээд, нэгэн зэрэг|他在工作，同时也在学习汉语。|Тэр ажиллаж байгаа бөгөөд зэрэгцээд хятад хэл сурч байна.\n4|只是|гагцхүү, зөвхөн ... л|这个办法很好，只是有点儿贵。|Энэ арга сайн, гагцхүү жаахан үнэтэй.\n4|不然|тэгэхгүй бол|快点儿走，不然就迟到了。|Хурдан яв, тэгэхгүй бол хоцрох болно.\n4|要不然|тэгэхгүй бол (ярианы)|多穿点儿，要不然会感冒的。|Өмсгөлөө зузаан өмс, тэгэхгүй бол ханиад хүрнэ.\n4|以便|...-ын тулд, дөхөм болгохын тулд|请留下电话，以便我们联系你。|Бид тантай холбогдохын тулд утсаа үлдээнэ үү.\n4|免得|... болохоос сэргийлж|早点儿睡，免得明天起不来。|Маргааш босож чадахгүй байхаас сэргийлж эрт унт.\n4|再说|түүнээс гадна, дээр нь|太晚了，再说我也累了。|Хэтэрхий оройтсон, дээр нь би ч ядарсан.\n4|哪怕……也……|... гэсэн ч, нэг ёсондоо ... ч гэсэн|哪怕只有一个人，我也要去。|Ганцхан хүн байсан ч би явна.\n4|就算……也……|... гэж үзсэн ч|就算你不同意，我也要去。|Чи зөвшөөрөхгүй гэсэн ч би явна.\n4|要么……要么……|ямар нэг нь ... эсвэл ...|周末要么看电影，要么去爬山。|Амралтын өдөр кино үзнэ, эсвэл уулан дээр гарна.\n4|一面……一面……|нэг талаас ... нөгөө талаас ... зэрэг|她一面走路，一面听音乐。|Тэр алхахдаа хөгжим сонсож байна.\n4|如果……的话|хэрэв ... бол (дүгнэлтийн хэлбэр)|如果你有空的话，请来我家玩儿。|Хэрэв чи завтай бол манайд зочлоорой.\n4|万一……就……|хэрэв санамсаргүй ... бол|万一下雨，我们就改天去。|Хэрэв бороо орвол бид өөр өдөр явна.\n4|非……不可|заавал ... байх ёстой|这件事非你去不可。|Энэ ажлыг чи заавал очих хэрэгтэй.\n4|不是……而是……|... биш харин ...|他不是不想去，而是没有时间。|Тэр явмааргүй биш, харин цаг байхгүй.\n4|连……也/都……|... ч гэсэн (хүртэл)|他忙得连饭也没吃。|Тэр завгүйдээ хоол хүртэл идсэнгүй.\n5|之所以……是因为……|... болсон нь ... учраас|他之所以成功，是因为他很努力。|Тэр амжилт олсон нь хичээнгүй байсан учраас.\n5|不光……还……|зөвхөн ... биш бас ... (ярианы)|他不光会唱歌，还会跳舞。|Тэр дуулаад зогсохгүй бүжиглэж ч чаддаг.\n5|倘若……就……|хэрэв ... бол ... (бичгийн)|倘若有困难，就请告诉我。|Хэрэв хүндрэл гарвал надад хэлээрэй.\n5|假如……就……|хэрэв ... бол (таамаглал)|假如我有一百万，就去环游世界。|Хэрэв надад сая байсан бол дэлхийг тойрон аялна.\n5|然而|гэвч, гэсэн хэдий ч (бичгийн)|他很努力，然而结果并不理想。|Тэр маш их хичээсэн ч үр дүн сайнгүй байлаа.\n5|况且|дээр нь, тэгээд ч|这件衣服很好看，况且价格也便宜。|Энэ хувцас үзэмжтэй, дээр нь үнэ нь ч хямд.\n5|结果|үр дүнд нь, эцэстээ|他没带伞，结果被雨淋湿了。|Тэр шүхэр аваагүй тул бороонд норчихлоо.\n5|与此同时|үүний зэрэгцээ|他在做饭，与此同时孩子在写作业。|Тэр хоол хийж байхад, үүний зэрэгцээ хүүхэд даалгавраа хийж байв.\n5|相反|эсрэгээрээ|他没有生气，相反，还笑了。|Тэр уурлаагүй, эсрэгээрээ инээмсэглэв.\n5|反之|урвуугаар нь, эс тэгвэл|努力就会成功，反之就会失败。|Хичээвэл амжилттай, эс тэгвэл бүтэлгүйтнэ.\n5|凡是……都……|... бүхэн ...|凡是来的人，我们都欢迎。|Ирсэн бүхнийг бид угтан авна.\n5|别说……连……也……|... битгий хэл ... ч гэсэн|他别说汉字，连拼音也不会。|Тэр иероглиф битгий хэл пиньинь ч мэдэхгүй.\n5|当……时|... үед, ... хэзээ|当我到家时，天已经黑了。|Би гэртээ ирэхэд аль хэдийн харанхуй болсон байв.\n6|综上所述|дээрхийг нэгтгэн дүгнэвэл|综上所述，这个计划是可行的。|Дээрхийг нэгтгэн дүгнэвэл энэ төлөвлөгөө хэрэгжих боломжтой.\n6|总而言之|товчхондоо, дүгнэхэд|总而言之，我们要努力学习。|Товчхондоо бид шаргуу суралцах хэрэгтэй.";
+  var GRAM=null,gLv=0,gQ='',gConn=false,GRAMED={};
+  var CONNW=',而且,或者,还是,并且,而是,不过,否则,于是,由于,何况,反而,毕竟,以及,固然,从而,以至于,总之,所以,但是,可是,然后,因此,因而,另外,此外,比如,例如,也就是说,同时,只是,不然,要不然,以便,免得,再说,然而,况且,结果,与此同时,相反,反之,接着,因为,';
+  function isConn(k){return k.indexOf('……')>-1||CONNW.indexOf(','+k+',')>-1||/[…]|连|非|当/.test(k)&&k.indexOf('……')>-1}
   function gramList(){
-    if(!GRAM)GRAM=GRAM_RAW.split('\n').map(function(r){var a=r.split('|');return {l:+a[0],k:a[1],m:a[2],z:a[3],t:a[4]}});
+    if(!GRAM)GRAM=GRAM_RAW.split('\n').map(function(r){var a=r.split('|');return {l:+a[0],k:a[1],m:a[2],z:a[3],t:a[4],c:isConn(a[1])}});
     var seen={},out=[];
-    GRAM.forEach(function(g){seen[g.k]=1;var o=GRAMED[g.k];if(o&&o.deleted)return;out.push(o?{l:o.l||g.l,k:g.k,m:o.m||g.m,z:o.z||g.z,t:o.t||g.t}:g)});
-    Object.keys(GRAMED).forEach(function(k){var o=GRAMED[k];if(!seen[k]&&!o.deleted)out.push({l:o.l,k:k,m:o.m,z:o.z,t:o.t})});
+    GRAM.forEach(function(g){seen[g.k]=1;var o=GRAMED[g.k];if(o&&o.deleted)return;out.push(o?{l:o.l||g.l,k:g.k,m:o.m||g.m,z:o.z||g.z,t:o.t||g.t,c:g.c}:g)});
+    Object.keys(GRAMED).forEach(function(k){var o=GRAMED[k];if(!seen[k]&&!o.deleted)out.push({l:o.l,k:k,m:o.m,z:o.z,t:o.t,c:isConn(k)})});
     return out;
   }
   /* admin-only: edit / add / delete patterns, saved to Supabase table gram_edits */
@@ -1483,22 +1533,23 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     if(!$('gmList'))return;
     var GL=gramList(),c={0:GL.length};GL.forEach(function(g){c[g.l]=(c[g.l]||0)+1});
     lvChips('gmLv',gLv,true,c);
-    var q=nz(gQ),out=GL.filter(function(g){return (!gLv||g.l===gLv)&&(!q||nz(g.k+' '+g.m+' '+g.z+' '+g.t).indexOf(q)>-1)});
+    var out=GL.filter(function(g){return (!gLv||g.l===gLv)&&(!gConn||g.c)&&mq(g.k+' '+g.m+' '+g.z+' '+g.t,gQ)});
     $('gmAdd').hidden=!isOwner;$('gmCnt').textContent=out.length+' / '+GL.length;
     $('gmList').innerHTML=out.map(function(g){
       return '<div class="gm"><div class="between"><span><b lang="zh" style="font-size:1.2rem">'+hl(g.k,gQ)+'</b> <span class="badge">HSK '+g.l+'</span></span>'+
         (isOwner?'<span><button class="btn small ghost" type="button" data-gedit="'+esc(g.k)+'">✎</button> <button class="btn small ghost" type="button" data-gdel="'+esc(g.k)+'">✕</button></span>':'')+'</div>'+
         '<span class="m">'+hl(g.m,gQ)+'</span><span class="z" lang="zh">'+hl(g.z,gQ)+' <button class="btn small ghost" type="button" data-speak="'+esc(g.z)+'" aria-label="Audio">🔊</button></span><span class="hint">'+hl(g.t,gQ)+'</span></div>';
-    }).join('')||'<div class="empty">'+T('noWords')+'</div>';
+    }).join('')||emptyRes(gQ,'gmQ');
   }
   document.addEventListener('click',function(e){var b=e.target.closest('#gmLv [data-l]');if(b){gLv=+b.dataset.l;renderGram()}});
   var gT=null;
+  $('gmConn').addEventListener('click',function(){gConn=!gConn;this.setAttribute('aria-pressed',gConn?'true':'false');renderGram()});
   $('gmQ').addEventListener('input',function(){var v=this.value.trim();clearTimeout(gT);gT=setTimeout(function(){gQ=v;renderGram()},120)});
   function renderAll(){
     renderOnb();renderToday();renderList();renderHsk();renderGram();renderPlay();renderCls();renderClasses();renderMe();
     $('storeNote').textContent=T(mode==='db'?'storeDb':'storeLocal');
     fillSelect('fL',false,+($('fL').value||lvOf()));fillSelect('cLv',true,F.lv);
-    tabs.forEach(function(b){if(b.dataset.t==='admin')b.hidden=!isOwner;else b.disabled=!hasProfile()&&b.dataset.t!=='today'});
+    tabs.forEach(function(b){if(b.dataset.t==='admin')b.hidden=!isOwner;else b.disabled=!hasProfile()&&b.dataset.t!=='today'});$('menuBtn').disabled=!hasProfile();
     var t=curTab();
     if(t==='cards')renderModes();if(t==='group')renderGroup();if(t==='admin')renderAdmin();
   }
@@ -1519,7 +1570,7 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
   renderTasks();renderAll();startDeck();
 
   /* ---------- server mode (Supabase) ---------- */
-  async function fetchAll(mk){var out=[],i=0;for(;;){var x=await mk().range(i,i+999);if(x.error)throw x.error;out=out.concat(x.data||[]);if(!x.data||x.data.length<1000)break;i+=1000}return out}
+  async function fetchAll(mk){var out=[],i=0,n=0;for(;;){var x=await mk().range(i,i+999);if(x.error)throw x.error;var d=x.data||[];out=out.concat(d);if(!d.length||++n>300)break;i+=d.length}return out}
   async function refresh(){
     if(!sb||!uid)return;
     try{
