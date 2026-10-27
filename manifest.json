@@ -1,0 +1,17 @@
+{
+  "name": "HSK бэлтгэл",
+  "short_name": "HSK",
+  "description": "HSK 1–6 шалгалтын бэлтгэл: үг, дүрэм, флаш карт, тоглоом",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1F3F8F",
+  "theme_color": "#1F3F8F",
+  "lang": "mn",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
