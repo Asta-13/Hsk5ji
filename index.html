@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>HSK бэлтгэл</title>
 <link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://inputtools.google.com" crossorigin>
+<link rel="dns-prefetch" href="https://inputtools.google.com">
 <meta name="theme-color" content="#1F3F8F">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -235,7 +237,17 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
 .modal .card{max-width:340px;width:100%;max-height:92vh;overflow:auto}
 #wrBox{width:260px;height:260px;margin:0 auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;touch-action:none}
 #hskQ{padding-right:88px}
-#hwCv{width:280px;height:280px;max-width:100%;margin:0 auto;display:block;background:var(--surface);border:1px solid var(--line);border-radius:12px;touch-action:none}
+#hwModal{padding:0;align-items:stretch;background:var(--bg)}
+#hwModal .card{max-width:none;width:100%;height:100%;max-height:none;border-radius:0;border:0;box-shadow:none;display:flex;flex-direction:column;gap:8px;overflow:hidden;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px))}
+#hwTop{display:flex;align-items:center;gap:8px}
+#hwTop #hwQ{flex:1;min-width:0;font-size:1.5rem;min-height:44px;line-height:44px;padding:0 12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+#hwCand{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;overflow-y:hidden;height:60px;flex:none;align-items:center;-webkit-overflow-scrolling:touch}
+#hwCand .btn{flex:none;min-width:52px;height:48px;padding:0 10px}
+#hwArea{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+#hwCv{display:block;background:var(--surface);border:1px solid var(--line);border-radius:14px;touch-action:none;
+  background-image:linear-gradient(var(--line),var(--line)),linear-gradient(var(--line),var(--line));background-size:1px 100%,100% 1px;background-position:center,center;background-repeat:no-repeat}
+#hwBar{display:flex;gap:8px;flex:none}
+#hwBar .btn{flex:1}
 .w{grid-template-columns:auto minmax(0,1fr) auto}
 .w>*{min-width:0}
 .w .h{overflow-wrap:anywhere}
@@ -538,11 +550,10 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
 <div class="modal" id="hwModal" hidden>
   <div class="card">
     <div class="between"><h2 data-i18n="hwTitle"></h2><button class="btn small" id="hwDone" type="button" data-i18n="hwDone"></button></div>
-    <div class="hint" data-i18n="hwHint"></div>
-    <div class="m" id="hwQ" lang="zh" style="font-size:1.4rem;min-height:30px"></div>
-    <canvas id="hwCv" width="280" height="280"></canvas>
-    <div class="row" id="hwCand" style="flex-wrap:wrap"></div>
-    <div class="row"><button class="btn ghost" id="hwUndo" type="button" data-i18n="hwUndo"></button><button class="btn ghost" id="hwClear" type="button" data-i18n="hwClear"></button></div>
+    <div id="hwTop"><div class="m" id="hwQ" lang="zh"></div><button class="btn ghost" id="hwBack" type="button" aria-label="⌫">⌫</button></div>
+    <div id="hwCand" role="listbox"></div>
+    <div id="hwArea"><canvas id="hwCv" width="280" height="280"></canvas></div>
+    <div id="hwBar"><button class="btn ghost" id="hwUndo" type="button" data-i18n="hwUndo"></button><button class="btn ghost" id="hwClear" type="button" data-i18n="hwClear"></button></div>
   </div>
 </div>
 <nav class="tabs" data-i18n-aria="navLbl"><div role="tablist" id="tablist">
@@ -1934,40 +1945,58 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     if(b&&confirm('?'))q(async function(){var r=await sb.from('tasks').delete().eq('id',b.dataset.tdel);if(r.error)throw r.error;refresh()});
   });
   /* ---------- search by handwriting (Google Input Tools recognition) ---------- */
-  var hwInk=[],hwCv=null,hwCx=null,hwDraw=false,hwT0=0,hwTm=null;
-  function hwPt(e){var r=hwCv.getBoundingClientRect();return [Math.round((e.clientX-r.left)*hwCv.width/r.width),Math.round((e.clientY-r.top)*hwCv.height/r.height),Math.round(performance.now()-hwT0)]}
+  var hwInk=[],hwCv=null,hwCx=null,hwDraw=false,hwT0=0,hwTm=null,hwK=1,hwSeq=0,hwAbort=null;
+  function hwPt(e){var r=hwCv.getBoundingClientRect();return [Math.round((e.clientX-r.left)*280/r.width),Math.round((e.clientY-r.top)*280/r.height),Math.round(performance.now()-hwT0)]}
+  function hwStyle(){hwCx.strokeStyle=cssv('--fg');hwCx.lineWidth=Math.max(4,hwCv.width/40);hwCx.lineCap='round';hwCx.lineJoin='round'}
   function hwRedraw(){
-    hwCx.clearRect(0,0,280,280);hwCx.strokeStyle=cssv('--fg');hwCx.lineWidth=5;hwCx.lineCap='round';hwCx.lineJoin='round';
-    hwInk.forEach(function(st){hwCx.beginPath();st[0].forEach(function(x,i){i?hwCx.lineTo(x,st[1][i]):hwCx.moveTo(x,st[1][i])});if(st[0].length===1)hwCx.lineTo(st[0][0]+.1,st[1][0]);hwCx.stroke()});
+    hwCx.clearRect(0,0,hwCv.width,hwCv.height);hwStyle();
+    hwInk.forEach(function(st){hwCx.beginPath();st[0].forEach(function(x,i){i?hwCx.lineTo(x*hwK,st[1][i]*hwK):hwCx.moveTo(x*hwK,st[1][i]*hwK)});if(st[0].length===1)hwCx.lineTo(st[0][0]*hwK+.1,st[1][0]*hwK);hwCx.stroke()});
   }
-  function hwReset(){hwInk=[];hwT0=performance.now();if(hwCx)hwRedraw();$('hwCand').innerHTML=''}
+  /* incremental: draw only the newest segment while the finger moves (fast, no flicker) */
+  function hwSeg(st){var n=st[0].length;if(n<2)return;hwCx.beginPath();hwCx.moveTo(st[0][n-2]*hwK,st[1][n-2]*hwK);hwCx.lineTo(st[0][n-1]*hwK,st[1][n-1]*hwK);hwCx.stroke()}
+  function hwSize(){
+    var ar=$('hwArea'),w=ar.clientWidth,h=ar.clientHeight,side=Math.max(160,Math.floor(Math.min(w,h))),dpr=Math.min(window.devicePixelRatio||1,3);
+    hwCv.style.width=hwCv.style.height=side+'px';hwCv.width=hwCv.height=Math.round(side*dpr);hwK=hwCv.width/280;hwRedraw();
+  }
+  function hwCandHint(){$('hwCand').innerHTML='<span class="hint" style="white-space:nowrap">'+esc(T('hwHint'))+'</span>'}
+  function hwReset(){hwInk=[];hwT0=performance.now();clearTimeout(hwTm);hwSeq++;if(hwAbort)hwAbort.abort();if(hwCx)hwRedraw();hwCandHint()}
+  function hwQset(){$('hwQ').textContent=$('hskQ').value}
   function hwOpen(){
-    $('hwModal').hidden=false;
+    $('hwModal').hidden=false;document.body.style.overflow='hidden';
     if(!hwCv){
       hwCv=$('hwCv');hwCx=hwCv.getContext('2d');
-      hwCv.addEventListener('pointerdown',function(e){e.preventDefault();hwCv.setPointerCapture(e.pointerId);hwDraw=true;clearTimeout(hwTm);var p=hwPt(e);hwInk.push([[p[0]],[p[1]],[p[2]]])});
-      hwCv.addEventListener('pointermove',function(e){if(!hwDraw)return;var p=hwPt(e),st=hwInk[hwInk.length-1];st[0].push(p[0]);st[1].push(p[1]);st[2].push(p[2]);hwRedraw()});
-      var end=function(){if(!hwDraw)return;hwDraw=false;hwRedraw();hwTm=setTimeout(hwRecog,350)};
+      hwCv.addEventListener('pointerdown',function(e){e.preventDefault();hwCv.setPointerCapture(e.pointerId);hwDraw=true;clearTimeout(hwTm);if(!hwInk.length)hwT0=performance.now();var p=hwPt(e);hwInk.push([[p[0]],[p[1]],[p[2]]]);hwStyle();hwCx.beginPath();hwCx.arc(p[0]*hwK,p[1]*hwK,hwCx.lineWidth/2,0,6.3);hwCx.fillStyle=cssv('--fg');hwCx.fill()});
+      hwCv.addEventListener('pointermove',function(e){if(!hwDraw)return;var ev=(e.getCoalescedEvents&&e.getCoalescedEvents())||[e];if(!ev.length)ev=[e];var st=hwInk[hwInk.length-1];ev.forEach(function(x){var p=hwPt(x);st[0].push(p[0]);st[1].push(p[1]);st[2].push(p[2]);hwSeg(st)})});
+      var end=function(){if(!hwDraw)return;hwDraw=false;hwTm=setTimeout(hwRecog,120)};
       hwCv.addEventListener('pointerup',end);hwCv.addEventListener('pointercancel',end);
+      window.addEventListener('resize',function(){if(!$('hwModal').hidden)hwSize()});
     }
-    hwReset();$('hwQ').textContent=$('hskQ').value;
+    hwSize();hwReset();hwQset();
   }
+  function hwClose(){$('hwModal').hidden=true;document.body.style.overflow=''}
   async function hwRecog(){
     if(!hwInk.length)return;
+    var my=++hwSeq;if(hwAbort)hwAbort.abort();hwAbort=window.AbortController?new AbortController():null;
+    var to=setTimeout(function(){hwAbort&&hwAbort.abort()},6000);
     try{
-      var r=await fetch('https://inputtools.google.com/request?ime=handwriting&app=mobilesearch&cs=1&oe=UTF-8',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({options:'enable_pre_space',requests:[{writing_guide:{writing_area_width:280,writing_area_height:280},ink:hwInk,language:'zh_CN'}]})});
-      var j=await r.json(),c=(j&&j[0]==='SUCCESS'&&j[1]&&j[1][0]&&j[1][0][1])||[];
-      $('hwCand').innerHTML=c.slice(0,12).map(function(x){return '<button class="btn ghost" type="button" data-hwpick="'+esc(x)+'" lang="zh" style="font-size:1.4rem">'+esc(x)+'</button>'}).join('');
-    }catch(x){$('hwCand').textContent=T('hwErr')}
+      var r=await fetch('https://inputtools.google.com/request?ime=handwriting&app=mobilesearch&cs=1&oe=UTF-8',{method:'POST',headers:{'Content-Type':'application/json'},signal:hwAbort?hwAbort.signal:undefined,body:JSON.stringify({options:'enable_pre_space',requests:[{writing_guide:{writing_area_width:280,writing_area_height:280},ink:hwInk,language:'zh_CN'}]})});
+      var j=await r.json();if(my!==hwSeq)return;
+      var c=(j&&j[0]==='SUCCESS'&&j[1]&&j[1][0]&&j[1][0][1])||[];
+      $('hwCand').innerHTML=c.slice(0,16).map(function(x){return '<button class="btn ghost" type="button" data-hwpick="'+esc(x)+'" lang="zh" style="font-size:1.6rem">'+esc(x)+'</button>'}).join('')||'<span class="hint">—</span>';
+      $('hwCand').scrollLeft=0;
+    }catch(x){if(my!==hwSeq)return;if(x&&x.name==='AbortError'){hwCandHint();return}$('hwCand').innerHTML='<span class="hint" style="white-space:nowrap">'+esc(T('hwErr'))+'</span>'}
+    finally{clearTimeout(to)}
   }
   document.addEventListener('click',function(e){
     if(e.target.closest('#hwOpen')){hwOpen();return}
-    if(e.target.closest('#hwDone')||e.target.id==='hwModal'){$('hwModal').hidden=true;return}
+    if(e.target.closest('#hwDone')){hwClose();return}
     if(e.target.closest('#hwClear')){hwReset();return}
-    if(e.target.closest('#hwUndo')){hwInk.pop();hwRedraw();clearTimeout(hwTm);if(hwInk.length)hwRecog();else $('hwCand').innerHTML='';return}
+    if(e.target.closest('#hwBack')){var i=$('hskQ');i.value=Array.from(i.value).slice(0,-1).join('');i.dispatchEvent(new Event('input',{bubbles:true}));hwQset();return}
+    if(e.target.closest('#hwUndo')){hwInk.pop();hwRedraw();clearTimeout(hwTm);if(hwInk.length)hwRecog();else{hwSeq++;hwCandHint()}return}
     var b=e.target.closest('[data-hwpick]');
-    if(b){var i=$('hskQ');i.value+=b.dataset.hwpick;i.dispatchEvent(new Event('input',{bubbles:true}));$('hwQ').textContent=i.value;hwReset()}
+    if(b){var i2=$('hskQ');i2.value+=b.dataset.hwpick;i2.dispatchEvent(new Event('input',{bubbles:true}));hwQset();hwReset()}
   });
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('hwModal').hidden)hwClose()});
   var EMRE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/,BASE=location.origin+location.pathname;
   async function doAuth(up){
     var u=$('auUser').value.trim(),p=$('auPass').value,isMail=u.indexOf('@')>-1;
