@@ -207,6 +207,7 @@ details summary{cursor:pointer;font-weight:700;min-height:40px;display:flex;alig
 .search input[type=search]:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 .stick{position:sticky;top:0;z-index:4;background:var(--surface)}
 .empty b{display:block;margin-bottom:4px}
+.star{color:var(--seal)}
 .tab:disabled{opacity:.4}
 .tab[hidden]{display:none}
 .toast{position:fixed;left:50%;transform:translate(-50%,20px);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:20px;font-size:.88rem;opacity:0;pointer-events:none;transition:.25s;z-index:9;max-width:90vw;text-align:center}
@@ -272,6 +273,7 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
   <div class="card" id="auth" hidden>
     <h2 data-i18n="authTitle"></h2>
     <div class="hint" data-i18n="authHint"></div>
+    <div class="note" data-i18n="authSteps"></div>
     <label class="f" for="auUser"><span data-i18n="loginName"></span><input id="auUser" type="text" inputmode="email" autocapitalize="none" autocorrect="off" autocomplete="username" maxlength="60"></label>
     <label class="f" for="auPass"><span data-i18n="password"></span><input id="auPass" type="password" autocomplete="current-password"></label>
     <div class="row"><button class="btn" id="auIn" type="button" data-i18n="signIn"></button><button class="btn ghost" id="auUp" type="button" data-i18n="signUp"></button></div>
@@ -285,6 +287,7 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
   </div>
   <div class="card" id="onb" hidden>
     <h2 data-i18n="obTitle"></h2>
+    <div class="note" id="obStep" data-i18n="obStep" style="border-left:4px solid var(--seal);font-weight:700"></div>
     <div class="hint" data-i18n="obHint"></div>
     <label class="f" for="obNick"><span data-i18n="nick"></span><input id="obNick" type="text" maxlength="24" data-i18n-ph="obNickPh"></label>
     <div><div class="label" style="margin-bottom:8px" data-i18n="level"></div><div class="chips" id="obLv"></div></div>
@@ -303,6 +306,7 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
         <div class="label" id="examLbl"></div>
         <h1 id="lvTitle"></h1>
         <div class="muted" id="sub" style="font-size:.9rem"></div>
+        <div class="hint" id="planLine"></div>
       </div>
     </div>
     <div class="stats">
@@ -420,6 +424,7 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     <div class="chips" id="hskLv"></div>
     <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="hskQ" type="search" data-i18n-ph="hskSearch" autocomplete="off" enterkeyhint="search"><button type="button" class="sx" data-clear="hskQ" aria-label="×" hidden>×</button><button type="button" class="sx" id="hwOpen" style="right:44px" aria-label="Draw">✍</button></div>
     <label class="chk"><input type="checkbox" id="hskOnly"><span data-i18n="hskOnly"></span></label>
+    <div class="row" style="flex-wrap:wrap"><button class="chip" type="button" data-playq="#hskList" data-i18n="lsPlay"></button><button class="chip" type="button" data-slow="1" aria-pressed="false" data-i18n="lsSlow"></button></div>
   </div>
   <div id="hskList" class="list"></div>
 </div>
@@ -435,6 +440,20 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     <div class="hint" id="gmCnt"></div>
   </div>
   <div id="gmList" class="list"></div>
+</div>
+
+<!-- MY LISTS -->
+<div class="pane" id="p-list" role="tabpanel" hidden>
+  <div class="card hero">
+    <h2 data-i18n="lsTitle"></h2>
+    <div class="chips" id="lsTabs" role="group"></div>
+    <div class="row" style="flex-wrap:wrap">
+      <button class="btn" id="lsPractice" type="button" data-i18n="lsPractice"></button>
+      <button class="btn ghost" type="button" data-playq="#lsList" data-i18n="lsPlay"></button>
+      <button class="chip" type="button" data-slow="1" aria-pressed="false" data-i18n="lsSlow"></button>
+    </div>
+  </div>
+  <div id="lsList" class="list"></div>
 </div>
 
 <!-- CARDS -->
@@ -565,7 +584,7 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
 </div></nav>
 <div id="menuSheet" class="msheet" hidden><div class="mback" data-menuclose="1"></div>
   <div class="mpanel" role="dialog" aria-modal="true" aria-labelledby="menuTtl"><div class="mgrip"></div><div class="between"><h3 id="menuTtl" data-i18n="menuTtl"></h3><button class="btn small ghost" type="button" data-menuclose="1" aria-label="×">×</button></div>
-  <div class="mgrid"><button class="tab mi" role="tab" data-t="words" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><b data-i18n="tabWords"></b><small data-i18n="mdWords"></small></button><button class="tab mi" role="tab" data-t="hsk" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 4h10a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M9 9h5"/></svg><b data-i18n="tabHsk"></b><small data-i18n="mdHsk"></small></button><button class="tab mi" role="tab" data-t="gram" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h9"/></svg><b data-i18n="tabGram"></b><small data-i18n="mdGram"></small></button><button class="tab mi" role="tab" data-t="cards" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="2"/><path d="M8 3.5h8"/></svg><b data-i18n="tabCards"></b><small data-i18n="mdCards"></small></button><button class="tab mi" role="tab" data-t="play" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></svg><b data-i18n="tabPlay"></b><small data-i18n="mdPlay"></small></button></div></div></div>
+  <div class="mgrid"><button class="tab mi" role="tab" data-t="list" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.8 6.8 19.6l1-5.8L3.5 9.7l5.9-.9z"/></svg><b data-i18n="tabList"></b><small data-i18n="mdList"></small></button><button class="tab mi" role="tab" data-t="words" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><b data-i18n="tabWords"></b><small data-i18n="mdWords"></small></button><button class="tab mi" role="tab" data-t="hsk" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 4h10a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M9 9h5"/></svg><b data-i18n="tabHsk"></b><small data-i18n="mdHsk"></small></button><button class="tab mi" role="tab" data-t="gram" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h9"/></svg><b data-i18n="tabGram"></b><small data-i18n="mdGram"></small></button><button class="tab mi" role="tab" data-t="cards" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="2"/><path d="M8 3.5h8"/></svg><b data-i18n="tabCards"></b><small data-i18n="mdCards"></small></button><button class="tab mi" role="tab" data-t="play" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></svg><b data-i18n="tabPlay"></b><small data-i18n="mdPlay"></small></button></div></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -611,6 +630,22 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     days:["өдөр","days"],
     dayWord:["Өнөөдрийн үг","Word of the day"],
     plGoBtn:["🎮 Тоглох","🎮 Play"],
+    tabList:["Миний жагсаалт","My lists"],
+    mdList:["Алдсан үг, ⭐ дуртай","Mistakes & ⭐ favorites"],
+    lsTitle:["Миний жагсаалт","My lists"],
+    lsMiss:["Алдсан","Mistakes"],
+    lsFav:["⭐ Дуртай","⭐ Favorites"],
+    lsPractice:["🎯 Давтах","🎯 Practice"],
+    lsPlay:["▶ Сонсох","▶ Listen"],
+    lsStop:["⏹ Зогсоох","⏹ Stop"],
+    lsSlow:["🐢 Удаан","🐢 Slow"],
+    lsEmptyMiss:["Алдсан үг одоогоор алга. Тоглоом, шалгалтад буруу хариулсан үгс энд автоматаар нэмэгдэнэ. Хоёр удаа дараалан зөв хариулбал жагсаалтаас гарна.","No mistakes yet. Words you miss in games and tests are added here automatically. Two correct answers in a row remove a word."],
+    lsEmptyFav:["Дуртай үг алга. HSK хэсгээс ☆ дарж нэмнэ.","No favorites yet. Tap ☆ in the HSK list to add."],
+    lsNeedProfile:["Эхлээд профайлаа үүсгэнэ үү.","Create your profile first."],
+    planLine:["{d} хоног үлдсэн · өдөрт ~{n} шинэ үг хийвэл {lv}-н {t} үгэнд хүрнэ (өнөөдөр {k}/{n})","{d} days left · about {n} new words a day to reach {t} words of HSK {lv} (today {k}/{n})"],
+    planDone:["HSK {lv}-н үгсээ бүгдийг нэмсэн байна ✓ Одоо давтлага хийгээрэй.","All HSK {lv} words added ✓ Now focus on review."],
+    obStep:["Алхам 2/2: Нэрээ бичээд доорх «Эхлэх» товчийг заавал дараарай. Үгүй бол бүртгэл идэвхжихгүй.","Step 2/2: enter a nickname and press «Start» below, or your account stays inactive."],
+    authSteps:["① Имэйл, нууц үгээ бичээд «Бүртгүүлэх» дар → ② дараагийн дэлгэц дээр нэрээ бичээд «Эхлэх» дар.","① Enter email + password and tap «Sign up» → ② on the next screen enter a nickname and tap «Start»."],
     wrAnim:["▶ Зураасны дараалал","▶ Stroke order"],
     wrQuiz:["✍ Би зурна","✍ I will draw"],
     wrErr:["Зураасны өгөгдөл ачаалж чадсангүй. Интернетээ шалгана уу.","Could not load stroke data. Check your connection."],
@@ -1020,7 +1055,7 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
   function weekWords(act){var n=0;for(var i=0;i<7;i++){var a=act&&act[iso(plus(today,-i))];if(a)n+=a.w||0}return n}
 
   /* ---------- tabs ---------- */
-  var tabs=document.querySelectorAll('.tab[data-t]'),SUBT=['words','hsk','gram','cards','play'],TABS=['today','words','hsk','gram','play','cards','group','me','admin'];
+  var tabs=document.querySelectorAll('.tab[data-t]'),SUBT=['words','hsk','gram','cards','play','list'],TABS=['today','words','hsk','gram','play','cards','list','group','me','admin'];
   function showTab(n){
     if(!hasProfile()&&n!=='today')n='today';
     TABS.forEach(function(k){$('p-'+k).hidden=k!==n});
@@ -1028,6 +1063,7 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     $('menuBtn').classList.toggle('on',SUBT.indexOf(n)>-1);closeMenu();
     window.scrollTo(0,0);
     if(n==='cards')renderModes();
+    if(n==='list')renderLs();
     if(n==='play')renderPlay();
     if(n==='group'){renderGroup();refresh()}
     if(n==='admin'){renderAdmin();refresh()}
@@ -1059,18 +1095,20 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
 
   /* ---------- onboarding ---------- */
   var obLevel=5,obMinTouched=false;
+  var obFocused=false;
   function renderOnb(){
     $('auth').hidden=!(needAuth&&authReady);$('p-today').classList.toggle('needauth',needAuth);
     $('onb').hidden=hasProfile()||needAuth;
     if(hasProfile())return;
     lvChips('obLv',obLevel,false);
+    if(mode==='db'&&uid&&!obFocused){obFocused=true;setTimeout(function(){try{$('onb').scrollIntoView({block:'start'});$('obNick').focus({preventScroll:true})}catch(e){}},300)}
     $('obNote').textContent=T(mode==='db'?'obNoteDb':'obNoteLocal');
   }
   $('obLv').addEventListener('click',function(e){var b=e.target.closest('[data-l]');if(!b)return;obLevel=+b.dataset.l;if(!obMinTouched)$('obMin').value=String(DEFMIN[obLevel]);lvChips('obLv',obLevel,false)});
   $('obMin').addEventListener('change',function(){obMinTouched=true});
   $('obSave').addEventListener('click',function(){
     var nick=$('obNick').value.trim();
-    if(!nick){toast(T('tNeedNick'));return}
+    if(!nick){toast(T('tNeedNick'));$('obNick').focus();$('obNick').style.outline='2px solid var(--bad)';return}
     S.profile={nick:nick,level:obLevel,exam:$('obExam').value||'',dailyMin:+$('obMin').value,start:TODAY,created:TODAY,last:TODAY,wc:0,lc:{}};
     createProfile();renderAll();renderTasks();showTab('today');toast(T('tWelcome',{n:nick}));
   });
@@ -1084,6 +1122,12 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
       $('days').textContent=Math.max(left,0);$('examLbl').textContent=T('examLblSet',{d:p.exam.replace(/-/g,'.')});
       $('sub').textContent=left>0?T('subMin',{n:p.dailyMin||DEFMIN[lv]}):(left===0?T('subToday'):T('subPast'));
     }else{$('days').textContent='—';$('examLbl').textContent=T('examLblNone');$('sub').textContent=T('subNoExam')}
+    var pl=$('planLine');pl.textContent='';
+    if(p.exam&&hasProfile()){
+      var dl=Math.round((parseIso(p.exam)-today)/86400000),mineN=wordsArr().filter(function(w){return w.l===lv}).length,tg=NEWWORDS[lv],need=Math.max(0,tg-mineN);
+      if(need===0)pl.textContent=T('planDone',{lv:lv});
+      else if(dl>0){var per=Math.ceil(need/dl),td=wordsArr().filter(function(w){return w.d===TODAY}).length;pl.textContent=T('planLine',{d:dl,n:per,t:tg,lv:lv,k:td})}
+    }
     $('todayLabel').textContent=fmt(today);
     var ps=phasesFor(),idx=-1;ps.forEach(function(x,i){if(today>=x.a&&today<=x.b)idx=i});
     $('phaseNow').innerHTML=idx>=0?'<b>'+esc(phTitle(ps[idx]))+'</b>'+esc(phSub(ps[idx]))+' ('+fmt(ps[idx].a)+' – '+fmt(ps[idx].b)+')'
@@ -1267,7 +1311,7 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     bindCard();
   }
   function flip(){var c=$('cardx');if(!c)return;F.flipped=!F.flipped;c.classList.toggle('flipped',F.flipped);$('answers').setAttribute('aria-disabled',!F.flipped)}
-  function speak(){var w=S.words[F.ids[F.i]];if(!w)return;try{var u=new SpeechSynthesisUtterance(w.h);u.lang='zh-CN';u.rate=.85;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){toast(T('tNoSpeak'))}}
+  function speak(){var w=S.words[F.ids[F.i]];if(!w)return;try{var u=new SpeechSynthesisUtterance(w.h);u.lang='zh-CN';u.rate=spRate();speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){toast(T('tNoSpeak'))}}
   function answer(ok){
     if(F.busy||!F.flipped)return;F.busy=true;
     var w=S.words[F.ids[F.i]];
@@ -1493,7 +1537,7 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     $('hskCnt').textContent=items.length+' / '+tot;
     var h2=items.slice(0,hLim).map(function(x){
       return '<div class="w"><span class="h" lang="zh">'+hl(x.h,hQ)+'</span><span><span class="p">'+esc(x.p)+'</span>'+(hLv&&!x.o?'':' <span class="badge">HSK '+x.l+(x.o?' · '+x.o:'')+'</span>')+'<br><span class="m">'+(x.m?hl(x.m,hQ):'<span class="hint">'+T('hskNoTr')+'</span>')+'</span></span><span>'+
-        '<button class="btn small ghost" type="button" data-speak="'+esc(x.h)+'" aria-label="Audio">🔊</button> <button class="btn small ghost" type="button" data-write="'+esc(x.h)+'" aria-label="Write">✍</button> '+(isOwner?'<button class="btn small ghost" type="button" data-hedit="'+esc(x.h)+'">✎</button> ':'')+
+        '<button class="btn small ghost" type="button" data-speak="'+esc(x.h)+'" aria-label="Audio">🔊</button> <button class="btn small ghost star" type="button" data-fav="'+esc(x.h)+'" aria-pressed="'+(isFav(x.h)?'true':'false')+'" aria-label="Favorite">'+(isFav(x.h)?'★':'☆')+'</button> <button class="btn small ghost" type="button" data-write="'+esc(x.h)+'" aria-label="Write">✍</button> '+(isOwner?'<button class="btn small ghost" type="button" data-hedit="'+esc(x.h)+'">✎</button> ':'')+
         (x.m?'<button class="btn small ghost'+(hJust===x.h?' pop':'')+'" type="button" data-hadd="'+esc(x.h)+'"'+(x.got?' disabled':'')+'>'+(x.got?'✓':'+')+'</button>':'')+'</span></div>';
     }).join('');
     if(items.length>hLim)h2+='<button class="btn ghost" type="button" data-hmore="1">'+T('more')+' ('+(items.length-hLim)+')</button>';
@@ -1586,7 +1630,7 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
   $('gmConn').addEventListener('click',function(){gConn=!gConn;this.setAttribute('aria-pressed',gConn?'true':'false');renderGram()});
   $('gmQ').addEventListener('input',function(){var v=this.value.trim();clearTimeout(gT);gT=setTimeout(function(){gQ=v;renderGram()},120)});
   function renderAll(){
-    renderOnb();renderToday();renderList();renderHsk();renderGram();renderPlay();renderCls();renderClasses();renderMe();
+    renderOnb();renderToday();renderList();renderHsk();renderGram();renderPlay();renderLs();renderCls();renderClasses();renderMe();
     $('storeNote').textContent=T(mode==='db'?'storeDb':'storeLocal');
     fillSelect('fL',false,+($('fL').value||lvOf()));fillSelect('cLv',true,F.lv);
     tabs.forEach(function(b){if(b.dataset.t==='admin')b.hidden=!isOwner;else b.disabled=!hasProfile()&&b.dataset.t!=='today'});$('menuBtn').disabled=!hasProfile();
@@ -1650,14 +1694,76 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
   }
   function emailOf(l){return l.toLowerCase()+'@hskapp.mn'}
   function showEmail(e){var el=$('acCur');if(!el)return;var fake=!e||/@hskapp\.mn$/i.test(e);el.textContent=fake?T('accNone',{n:(e||'').split('@')[0]}):T('accCur',{e:e});el.style.color=fake?'var(--bad)':''}
-  function speak(t){
+  function speak(t,cb){
     if(!window.speechSynthesis){toast(T('speakErr'));return}
     var vs=speechSynthesis.getVoices(),v=vs.filter(function(x){return /^zh/i.test(x.lang)})[0];
     if(vs.length&&!v){toast(T('speakErr'));return}
-    var u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=.85;if(v)u.voice=v;
+    var u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=spRate();if(v)u.voice=v;
+    if(cb){u.onend=cb;u.onerror=cb}
     speechSynthesis.cancel();speechSynthesis.speak(u);
   }
+  function spRate(){return lget('hsk-rate')==='slow'?.55:.85}
+  function slowSync(){var on=lget('hsk-rate')==='slow';document.querySelectorAll('[data-slow]').forEach(function(b){b.setAttribute('aria-pressed',on?'true':'false')})}
+  var PQ=null;
+  function pqStop(){PQ=null;try{speechSynthesis.cancel()}catch(e){}document.querySelectorAll('[data-playq]').forEach(function(b){b.textContent=T('lsPlay')})}
+  function pqPlay(sel,btn){
+    if(PQ){pqStop();return}
+    var list=Array.prototype.slice.call(document.querySelectorAll(sel+' [data-speak]')).slice(0,25).map(function(b){return b.dataset.speak});
+    if(!list.length)return;
+    var my=PQ={i:0};btn.textContent=T('lsStop');
+    (function step(){if(PQ!==my)return;if(my.i>=list.length){pqStop();return}
+      speak(list[my.i++],function(){setTimeout(step,700)})})();
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-slow]');if(b){lset('hsk-rate',lget('hsk-rate')==='slow'?'normal':'slow');slowSync();return}
+    b=e.target.closest('[data-playq]');if(b)pqPlay(b.dataset.playq,b)
+  });
   document.addEventListener('click',function(e){var b=e.target.closest('[data-speak]');if(b)speak(b.dataset.speak)});
+  /* ---------- mistakes + favorites (saved in the profile) ---------- */
+  var missDirty=false;
+  function missMap(){if(!S.profile.miss)S.profile.miss={};return S.profile.miss}
+  function favMap(){if(!S.profile.fav)S.profile.fav={};return S.profile.fav}
+  function isFav(h){return !!(S.profile.fav&&S.profile.fav[h])}
+  function missAdd(w){
+    if(!hasProfile()||!w||!w.h)return;var m=missMap(),o=m[w.h]||{n:0};
+    m[w.h]={p:w.p||o.p||'',m:w.m||o.m||'',n:(o.n||0)+1,ok:0,t:TODAY};missDirty=true;
+    var ks=Object.keys(m);if(ks.length>300){ks.sort(function(a,b){return String(m[a].t).localeCompare(String(m[b].t))});delete m[ks[0]]}
+  }
+  function missOk(h){
+    if(!hasProfile()||!S.profile.miss||!S.profile.miss[h])return;var o=S.profile.miss[h];o.ok=(o.ok||0)+1;
+    if(o.ok>=2)delete S.profile.miss[h];missDirty=true;
+  }
+  function missFlush(){if(missDirty){missDirty=false;pPatch({miss:S.profile.miss||{},fav:S.profile.fav||{}})}}
+  function favToggle(h){
+    if(!hasProfile()){toast(T('lsNeedProfile'));return}
+    var f=favMap();if(f[h])delete f[h];else{var hit=hskLookup(h);f[h]={p:hP(h,hit&&hit.p),m:hM(h),t:TODAY}}
+    pPatch({fav:f});renderHsk();renderLs();
+  }
+  var lsTab='miss';
+  function renderLs(){
+    if(!$('lsList'))return;
+    var ms=missMap(),fs=favMap(),mk=Object.keys(ms),fk=Object.keys(fs);
+    $('lsTabs').innerHTML='<button class="chip" type="button" data-lst="miss" aria-pressed="'+(lsTab==='miss')+'">'+esc(T('lsMiss'))+'<small>'+mk.length+'</small></button><button class="chip" type="button" data-lst="fav" aria-pressed="'+(lsTab==='fav')+'">'+esc(T('lsFav'))+'<small>'+fk.length+'</small></button>';
+    var ks=lsTab==='miss'?mk:fk,mp=lsTab==='miss'?ms:fs;
+    ks.sort(function(a,b){return String(mp[b].t).localeCompare(String(mp[a].t))});
+    $('lsList').innerHTML=ks.map(function(h){var x=mp[h],m=hM(h)||x.m;
+      return '<div class="w"><span class="h" lang="zh">'+esc(h)+'</span><span><span class="p">'+esc(x.p||'')+'</span>'+(lsTab==='miss'&&x.n>1?' <span class="badge">×'+x.n+'</span>':'')+'<br><span class="m">'+esc(m)+'</span></span><span>'+
+        '<button class="btn small ghost" type="button" data-speak="'+esc(h)+'" aria-label="Audio">🔊</button> '+
+        (lsTab==='fav'?'<button class="btn small ghost star" type="button" data-fav="'+esc(h)+'" aria-label="Favorite">★</button>':'<button class="btn small ghost" type="button" data-missdel="'+esc(h)+'" aria-label="Remove">✕</button>')+'</span></div>'
+    }).join('')||'<div class="empty">'+esc(T(lsTab==='miss'?'lsEmptyMiss':'lsEmptyFav'))+'</div>';
+    $('lsPractice').hidden=!ks.length;
+    slowSync();
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-lst]');if(b){lsTab=b.dataset.lst;renderLs();return}
+    b=e.target.closest('[data-missdel]');if(b){delete missMap()[b.dataset.missdel];missDirty=true;missFlush();renderLs();return}
+    b=e.target.closest('[data-fav]');if(b){favToggle(b.dataset.fav);return}
+    if(e.target.closest('#lsPractice')){
+      var mp=lsTab==='miss'?missMap():favMap(),ks=Object.keys(mp);if(!ks.length)return;
+      var src=ks.map(function(h){return {h:h,p:mp[h].p||'',m:hM(h)||mp[h].m||''}}).filter(function(x){return x.m});
+      if(!src.length)return;showTab('play');startGame('mean',src,'list');
+    }
+  });
   /* ---------- games, XP, streak, word of the day ---------- */
   var GM=null,DAYL=null;
   function shuf(a){return a.slice().sort(function(){return Math.random()-.5})}
@@ -1685,16 +1791,17 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     [1,2,3].forEach(function(l){(HR()[l]||'').split(',').forEach(function(it){var a=it.split('|'),m=hM(a[0]);if(m)o.push({h:a[0],p:hP(a[0],a[1]),m:m})})});
     return {all:o,mine:o.slice(0,mine)};
   }
-  function startGame(mode){
+  function startGame(mode,custom,back){
     var P=gPool(),src;
-    if(mode==='build')src=shuf(gramList()).slice(0,5);else src=shuf(P.mine.length>=5?P.mine:P.all).slice(0,10);
+    if(custom)src=shuf(custom).slice(0,10);
+    else if(mode==='build')src=shuf(gramList()).slice(0,5);else src=shuf(P.mine.length>=5?P.mine:P.all).slice(0,10);
     if(!src.length)return;
-    GM={mode:mode,src:src,i:0,ok:0,all:P.all};
+    GM={mode:mode,src:src,i:0,ok:0,all:P.all,back:back||''};
     $('plMenu').hidden=true;$('plGame').hidden=false;nextQ();
   }
   function endGame(){
     var xp=GM.ok*(GM.mode==='build'?15:10)+(GM.ok===GM.src.length?10:0);addXp(xp);if(GM.task)taskResult(GM.task,GM.ok,GM.src.length);
-    $('plRes').textContent=T('plRes',{a:GM.ok,b:GM.src.length,x:xp});$('plGame').hidden=true;$('plMenu').hidden=false;GM=null;
+    $('plRes').textContent=T('plRes',{a:GM.ok,b:GM.src.length,x:xp});$('plGame').hidden=true;$('plMenu').hidden=false;var bk=GM.back;GM=null;missFlush();if(bk){showTab(bk);toast($('plRes').textContent)}
   }
   function nextQ(){
     if(GM.i>=GM.src.length){endGame();return}
@@ -1724,7 +1831,7 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     if(b&&!GM.lock){
       GM.lock=1;var ok=b.dataset.opt===GM.q.h;b.style.background=ok?'var(--ok)':'var(--bad)';b.style.color='#fff';
       if(!ok)document.querySelectorAll('#plOpts [data-opt]').forEach(function(x){if(x.dataset.opt===GM.q.h){x.style.background='var(--ok)';x.style.color='#fff'}});
-      if(ok)GM.ok++;
+      if(ok){GM.ok++;missOk(GM.q.h)}else missAdd(GM.q);
       setTimeout(function(){if(!GM)return;GM.lock=0;GM.i++;nextQ()},ok?500:1100);return;
     }
     b=e.target.closest('[data-chunk]');
@@ -1783,7 +1890,8 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     var n=EX.qs.length,ok=EX.qs.filter(exRight).length,sec=Math.round((Date.now()-EX.t0)/1000),pct=Math.round(ok*100/n);
     EX.ok=ok;EX.sec=sec;
     var hist=((S.profile&&S.profile.ex)||[]).slice(-29).concat([{d:TODAY,lv:EX.lv,n:n,ok:ok,s:sec}]);
-    pPatch({ex:hist});var xp=ok*5;addXp(xp);
+    EX.qs.forEach(function(q){if(exRight(q))missOk(q.w.h);else missAdd(q.w)});
+    pPatch({ex:hist,miss:S.profile.miss||{}});missDirty=false;var xp=ok*5;addXp(xp);
     exResult(pct,xp);
   }
   function exResult(pct,xp){
