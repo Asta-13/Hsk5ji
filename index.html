@@ -296,6 +296,8 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     <div id="dayBody"></div>
   </div>
   <div class="card" id="taskCard" hidden></div>
+  <div class="card" id="dueCard" hidden><button class="btn" type="button" id="dueBtn" hidden></button> <button class="btn" type="button" id="missDueBtn" hidden></button></div>
+  <div class="card" id="instCard" hidden><button class="btn" type="button" id="instBtn" data-i18n="instBtn"></button><div class="hint" data-i18n="instHint"></div></div>
   <div class="card" id="lrnCard" hidden><button class="btn" type="button" data-golearn="1" data-i18n="lrnCard"></button></div>
 
   <div class="card" id="auth" hidden>
@@ -583,6 +585,11 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     </div>
   </div>
   <div class="card">
+    <h2 data-i18n="admTop"></h2>
+    <div class="hint" data-i18n="admTopHint"></div>
+    <div id="aTop" class="list"></div>
+  </div>
+  <div class="card">
     <h2 data-i18n="noticeTitle"></h2>
     <div class="hint" data-i18n="noticeHint"></div>
     <textarea id="aNotice" data-i18n-aria="noticeTitle" data-i18n-ph="noticePh"></textarea>
@@ -638,119 +645,128 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
   /* ---------- translations: [mn, en, ru, ja] ---------- */
   var LI={mn:0,en:1,ru:2,ja:3};
   var DICT={
-    gmTitle:["Өгүүлбэрт хэрэглэх үг, бүтэц (жишээтэй)","Sentence words & patterns (with examples)"],
+    gmTitle:["Өгүүлбэрт хэрэглэх үг, бүтэц (жишээтэй)","Sentence words & patterns (with examples)","Слова и конструкции для предложений (с примерами)","文に使う語句と文型（例文つき）"],
     gmConn:["Холбоос үгс 关联词语","Connectors 关联词语","Союзные слова 关联词语","つなぎ言葉 关联词语"],
-    gmHint:["难道, 听说, 受不了, 而是, 而且, 并且 гэх мэт холбоос, хэллэг","Connectors and set phrases like 难道, 听说, 而是, 并且"],
-    tabHsk:["HSK","HSK"],
-    tabGram:["Дүрэм","Rules"],
-    hskOnly:["Зөвхөн миний санд байхгүй","Only words not in my bank"],
-    hskProg:["Миний санд: {a} / {b}","In my bank: {a} / {b}"],
-    more:["Цааш үзэх","Show more"],
-    forgot:["Нууц үгээ мартсан уу?","Forgot password?"],
-    forgotSent:["Нууц үг сэргээх холбоосыг имэйлээр илгээлээ. Имэйлээ шалгаарай.","Reset link sent. Check your email."],
-    emailBad:["Зөв имэйл хаяг оруулна уу.","Enter a valid email address."],
-    confirmMail:["Бүртгэл үүслээ. Имэйлээ шалгаад холбоос дээр дарж баталгаажуулна уу.","Account created. Check your email and confirm it."],
-    resetTitle:["Шинэ нууц үг тохируулах","Set a new password"],
-    resetSave:["Хадгалах","Save"],
-    resetDone:["Нууц үг шинэчлэгдлээ","Password updated"],
-    accTitle:["Бүртгэлийн тохиргоо","Account settings"],
-    accEmail:["Имэйл холбох / солих","Link / change email"],
-    accEmailBtn:["Имэйл хадгалах","Save email"],
-    accPass:["Шинэ нууц үг (6+ тэмдэгт)","New password (6+ characters)"],
-    accPassBtn:["Нууц үг солих","Change password"],
-    accSent:["Баталгаажуулах холбоосыг шинэ имэйл рүү илгээлээ.","Confirmation link sent to the new email."],
-    accHint:["Хуучин нэвтрэх нэрээр бүртгүүлсэн бол имэйлээ холбовол нууц үгээ сэргээх боломжтой болно.","If you signed up with a login name, link an email to enable password recovery."],
-    accCur:["Одоогийн имэйл: {e}","Current email: {e}"],
-    accNone:["Имэйл холбоогүй (хуучин нэр: {n}). Доор имэйлээ холбоно уу.","No email linked (old login: {n}). Link one below."],
-    speakErr:["Энэ төхөөрөмж хятад дуу хоолой дэмжихгүй байна","This device has no Chinese voice"],
-    playTitle:["Тоглоом ба оноо","Games & XP"],
-    gMean:["🎯 Утга тааруулах (10 асуулт)","🎯 Match the meaning (10 questions)"],
-    gListen:["🎧 Сонсоод таах","🎧 Listen and guess"],
-    gBuild:["🧩 Өгүүлбэр угсрах","🧩 Build the sentence"],
-    plQuit:["Гарах","Quit"],
-    plBack:["Буцах","Back"],
-    plRes:["Дүн: {a} / {b} зөв, +{x} XP","Result: {a} / {b} correct, +{x} XP"],
-    days:["өдөр","days"],
-    dayWord:["Өнөөдрийн үг","Word of the day"],
-    plGoBtn:["🎮 Тоглох","🎮 Play"],
-    tabList:["Миний жагсаалт","My lists"],
-    mdList:["Алдсан үг, ⭐ дуртай","Mistakes & ⭐ favorites"],
-    lsTitle:["Миний жагсаалт","My lists"],
-    lsMiss:["Алдсан","Mistakes"],
-    lsFav:["⭐ Дуртай","⭐ Favorites"],
-    lsPractice:["🎯 Давтах","🎯 Practice"],
-    lsPlay:["▶ Сонсох","▶ Listen"],
-    lsStop:["⏹ Зогсоох","⏹ Stop"],
-    lsSlow:["🐢 Удаан","🐢 Slow"],
-    lsEmptyMiss:["Алдсан үг одоогоор алга. Тоглоом, шалгалтад буруу хариулсан үгс энд автоматаар нэмэгдэнэ. Хоёр удаа дараалан зөв хариулбал жагсаалтаас гарна.","No mistakes yet. Words you miss in games and tests are added here automatically. Two correct answers in a row remove a word."],
-    lsEmptyFav:["Дуртай үг алга. HSK хэсгээс ☆ дарж нэмнэ.","No favorites yet. Tap ☆ in the HSK list to add."],
-    lsNeedProfile:["Эхлээд профайлаа үүсгэнэ үү.","Create your profile first."],
-    planLine:["{d} хоног үлдсэн · өдөрт ~{n} шинэ үг хийвэл {lv}-н {t} үгэнд хүрнэ (өнөөдөр {k}/{n})","{d} days left · about {n} new words a day to reach {t} words of HSK {lv} (today {k}/{n})"],
-    planDone:["HSK {lv}-н үгсээ бүгдийг нэмсэн байна ✓ Одоо давтлага хийгээрэй.","All HSK {lv} words added ✓ Now focus on review."],
-    obStep:["Алхам 2/2: Нэрээ бичээд доорх «Эхлэх» товчийг заавал дараарай. Үгүй бол бүртгэл идэвхжихгүй.","Step 2/2: enter a nickname and press «Start» below, or your account stays inactive."],
-    authSteps:["① Имэйл, нууц үгээ бичээд «Бүртгүүлэх» дар → ② дараагийн дэлгэц дээр нэрээ бичээд «Эхлэх» дар.","① Enter email + password and tap «Sign up» → ② on the next screen enter a nickname and tap «Start»."],
-    wrAnim:["▶ Зураасны дараалал","▶ Stroke order"],
-    wrQuiz:["✍ Би зурна","✍ I will draw"],
-    wrErr:["Зураасны өгөгдөл ачаалж чадсангүй. Интернетээ шалгана уу.","Could not load stroke data. Check your connection."],
-    wrHint:["Хуруугаараа зураасыг дарааллаар нь зур.","Draw each stroke in order."],
-    wrDone:["Гайхалтай! +5 XP","Great! +5 XP"],
-    wrClose:["Хаах","Close"],
-    sXp:["7 хоногийн XP","XP this week"],
-    capXp:["XP","XP"],
-    pwaInstall:["📲 Утсандаа суулгах","📲 Install on this device"],
-    pwaHint:["iPhone: Share → «Add to Home Screen». Android: хөтчийн цэснээс «Install app».","iPhone: Share → «Add to Home Screen». Android: browser menu → «Install app»."],
-    clsTitle:["Анги ба даалгавар","Classes & tasks"],
-    clName:["Ангийн нэр","Class name"],
-    clCode:["Код","Code"],
-    clStud:["сурагч","students"],
-    tNew:["Даалгавар нэмэх","Add task"],
-    myTasks:["Миний даалгавар","My tasks"],
-    joinPh:["Багшийн өгсөн ангийн код","Class code from your teacher"],
-    joinBtn:["Нэгдэх","Join"],
-    tStart:["Эхлэх","Start"],
-    tFinish:["Дууслаа","Done"],
-    tDone:["Даалгавар биелэв! +{x} XP","Task done! +{x} XP"],
-    tFail:["80%-аас дээш зөв хариулж байж биелнэ","You need 80%+ correct"],
-    tNoCls:["Ангид нэгдээгүй байна. Багшийнхаа кодыг оруулна уу.","Not in a class yet. Enter your teacher's code."],
-    tWords:["Тестэд хангалттай үг алга","Not enough words for the test"],
-    hwTitle:["Иероглифыг зураад хайх","Search by drawing"],
-    hwClear:["Арилгах","Clear"],
-    hwUndo:["↶ Буцаах","↶ Undo"],
-    hwDone:["Болсон","Done"],
-    hwErr:["Таних үйлчилгээнд холбогдож чадсангүй. Интернетээ шалгана уу.","Could not reach the recognition service."],
-    hwHint:["Иероглифыг хуруугаараа зураад, доороос зөвийг нь сонго.","Draw a character, then pick the right one below."],
-    lrnPy:["🔤 Пиньиний хүснэгт","🔤 Pinyin chart"],
-    lrnCyr:["Кирилл дуудлага","Cyrillic hint"],
-    pyTone:["4 тон ба хөнгөн тон","The 4 tones + neutral"],
-    pyInit:["Эхлэх дуу (声母)","Initials (声母)"],
-    pyFin:["Төгсгөл дуу (韵母)","Finals (韵母)"],
-    pyHint:["Дарахад дуу гарна. Кирилл бичлэг нь ойролцоо (Палладиус), жинхэнэ дуудлагыг 🔊-оор сонсож давтана.","Tap to hear it. Cyrillic is approximate (Palladius style); trust the audio."],
-    lrnQuiz:["📝 Шалгалт өгөх","📝 Take the quiz"],
-    lqRes:["Дүн: {a} / {b} зөв","Score: {a} / {b} correct"],
-    lqPass:["Тэнцлээ ✓ Хичээл дууслаа (+10 XP)","Passed ✓ Lesson done (+10 XP)"],
-    lqFail:["Дахин нэг үзээд оролдоорой.","Review the lesson and try again."],
-    lqAgain:["Дахин өгөх","Try again"],
-    lqQ1:["Энэ юу гэсэн үг вэ?","What does this mean?"],
-    lqQ2:["Аль нь зөв хятад вэ?","Which is the Chinese?"],
-    lrnCmp:["🇲🇳 Монгол хэлтэй харьцуулалт","🇲🇳 Mongolian vs Chinese"],
-    lrnTone:["🎧 Тон шалгах","🎧 Tone ear-test"],
-    tnHint:["Дууг сонсоод аль үг гэдгийг сонго. Тонгоо андуурвал утга өөрчлөгддөг.","Listen and pick the word you heard. A wrong tone changes the meaning."],
-    tnStart:["Эхлэх","Start"],
-    tnListen:["🔊 Сонсох","🔊 Listen"],
-    tnRes:["Дүн: {a} / {b} зөв (+{x} XP)","Score: {a} / {b} correct (+{x} XP)"],
-    tnAgain:["Дахин тоглох","Play again"],
-    lrnCard:["🌱 Анхан шат (хятад хэл мэдэхгүй бол эндээс эхэл)","🌱 Beginner start (begin here if you know no Chinese)"],
-    lrnTitle:["🌱 Анхан шат","🌱 Beginner start"],
-    lrnSub:["Хятад хэл огт мэдэхгүй хүнд: тон, дуудлага, тоо, мэндчилгээ, зураас. Дууссаны дараа HSK 1 руу шилжинэ.","For absolute beginners: tones, sounds, numbers, greetings, strokes. Then move on to HSK 1."],
-    lrnDone:["Хичээл дууслаа ✓ (+10 XP)","Lesson done ✓ (+10 XP)"],
-    lrnGo:["HSK 1 рүү шилжих →","Go to HSK 1 →"],
-    lrnProg:["Дууссан: {a} / {b}","Done: {a} / {b}"],
-    lrnL0:["Анхан шат (HSK 1)","Beginner (HSK 1)"],
-    lrnDaily:["Өдөр тутмын хэллэг","Everyday phrases"],
-    hskTitle:["HSK үгсийн сан (монгол орчуулгатай)","HSK vocabulary (Mongolian)"],
-    hskSearch:["Хайх: иероглиф, пиньинь, монгол утга","Search: hanzi, pinyin, meaning"],
-    hskNoTr:["орчуулга удахгүй нэмэгдэнэ","translation coming soon"],
-    hskCount:["Орчуулгатай: {a} / {b} үг","Translated: {a} / {b} words"],
+    gmHint:["难道, 听说, 受不了, 而是, 而且, 并且 гэх мэт холбоос, хэллэг","Connectors and set phrases like 难道, 听说, 而是, 并且","Союзы и устойчивые выражения, такие как 难道, 听说, 受不了, 而是, 而且, 并且","难道, 听说, 受不了, 而是, 而且, 并且 などの接続詞・慣用表現"],
+    tabHsk:["HSK","HSK","HSK","HSK"],
+    tabGram:["Дүрэм","Rules","Правила","文法"],
+    hskOnly:["Зөвхөн миний санд байхгүй","Only words not in my bank","Только слова, которых нет в моём словаре","マイ単語帳にない単語のみ"],
+    hskProg:["Миний санд: {a} / {b}","In my bank: {a} / {b}","В моём словаре: {a} / {b}","マイ単語帳：{a} / {b}"],
+    more:["Цааш үзэх","Show more","Показать ещё","もっと見る"],
+    forgot:["Нууц үгээ мартсан уу?","Forgot password?","Забыли пароль?","パスワードをお忘れですか？"],
+    forgotSent:["Нууц үг сэргээх холбоосыг имэйлээр илгээлээ. Имэйлээ шалгаарай.","Reset link sent. Check your email.","Ссылка для сброса пароля отправлена на почту. Проверьте email.","パスワード再設定のリンクをメールで送信しました。メールをご確認ください。"],
+    emailBad:["Зөв имэйл хаяг оруулна уу.","Enter a valid email address.","Введите корректный адрес email.","正しいメールアドレスを入力してください。"],
+    confirmMail:["Бүртгэл үүслээ. Имэйлээ шалгаад холбоос дээр дарж баталгаажуулна уу.","Account created. Check your email and confirm it.","Аккаунт создан. Проверьте почту и подтвердите регистрацию по ссылке.","アカウントを作成しました。メールを確認し、リンクをクリックして認証してください。"],
+    resetTitle:["Шинэ нууц үг тохируулах","Set a new password","Установка нового пароля","新しいパスワードを設定"],
+    resetSave:["Хадгалах","Save","Сохранить","保存"],
+    resetDone:["Нууц үг шинэчлэгдлээ","Password updated","Пароль обновлён","パスワードを更新しました"],
+    accTitle:["Бүртгэлийн тохиргоо","Account settings","Настройки аккаунта","アカウント設定"],
+    accEmail:["Имэйл холбох / солих","Link / change email","Привязать / изменить email","メールの登録・変更"],
+    accEmailBtn:["Имэйл хадгалах","Save email","Сохранить email","メールを保存"],
+    accPass:["Шинэ нууц үг (6+ тэмдэгт)","New password (6+ characters)","Новый пароль (6+ символов)","新しいパスワード（6文字以上）"],
+    accPassBtn:["Нууц үг солих","Change password","Сменить пароль","パスワードを変更"],
+    accSent:["Баталгаажуулах холбоосыг шинэ имэйл рүү илгээлээ.","Confirmation link sent to the new email.","Ссылка для подтверждения отправлена на новый email.","確認リンクを新しいメールアドレスに送信しました。"],
+    accHint:["Хуучин нэвтрэх нэрээр бүртгүүлсэн бол имэйлээ холбовол нууц үгээ сэргээх боломжтой болно.","If you signed up with a login name, link an email to enable password recovery.","Если вы регистрировались по логину, привяжите email, чтобы можно было восстановить пароль.","ログイン名で登録した場合は、メールを登録するとパスワードを再設定できます。"],
+    accCur:["Одоогийн имэйл: {e}","Current email: {e}","Текущий email: {e}","現在のメール：{e}"],
+    accNone:["Имэйл холбоогүй (хуучин нэр: {n}). Доор имэйлээ холбоно уу.","No email linked (old login: {n}). Link one below.","Email не привязан (прежний логин: {n}). Привяжите его ниже.","メール未登録（以前のログイン名：{n}）。下でメールを登録してください。"],
+    speakErr:["Энэ төхөөрөмж хятад дуу хоолой дэмжихгүй байна","This device has no Chinese voice","Это устройство не поддерживает китайский голос","この端末は中国語の音声に対応していません"],
+    playTitle:["Тоглоом ба оноо","Games & XP","Игры и XP","ゲームとXP"],
+    gMean:["🎯 Утга тааруулах (10 асуулт)","🎯 Match the meaning (10 questions)","🎯 Подбери значение (10 вопросов)","🎯 意味を選ぼう（10問）"],
+    gListen:["🎧 Сонсоод таах","🎧 Listen and guess","🎧 Слушай и угадывай","🎧 聞いて当てよう"],
+    gBuild:["🧩 Өгүүлбэр угсрах","🧩 Build the sentence","🧩 Составь предложение","🧩 文を組み立てよう"],
+    plQuit:["Гарах","Quit","Выйти","終了"],
+    plBack:["Буцах","Back","Назад","戻る"],
+    plRes:["Дүн: {a} / {b} зөв, +{x} XP","Result: {a} / {b} correct, +{x} XP","Итог: {a} / {b} верно, +{x} XP","結果：{a} / {b} 正解、+{x} XP"],
+    days:["өдөр","days","дн.","日"],
+    dayWord:["Өнөөдрийн үг","Word of the day","Слово дня","今日の単語"],
+    plGoBtn:["🎮 Тоглох","🎮 Play","🎮 Играть","🎮 プレイ"],
+    tabList:["Миний жагсаалт","My lists","Мои списки","マイリスト"],
+    mdList:["Алдсан үг, ⭐ дуртай","Mistakes & ⭐ favorites","Ошибки, ⭐ избранное","間違えた単語、⭐ お気に入り"],
+    lsTitle:["Миний жагсаалт","My lists","Мои списки","マイリスト"],
+    lsMiss:["Алдсан","Mistakes","Ошибки","間違い"],
+    lsFav:["⭐ Дуртай","⭐ Favorites","⭐ Избранное","⭐ お気に入り"],
+    lsPractice:["🎯 Давтах","🎯 Practice","🎯 Повторить","🎯 復習"],
+    lsPlay:["▶ Сонсох","▶ Listen","▶ Слушать","▶ 聞く"],
+    lsStop:["⏹ Зогсоох","⏹ Stop","⏹ Стоп","⏹ 停止"],
+    lsSlow:["🐢 Удаан","🐢 Slow","🐢 Медленно","🐢 ゆっくり"],
+    lsEmptyMiss:["Алдсан үг одоогоор алга. Тоглоом, шалгалтад буруу хариулсан үгс энд автоматаар нэмэгдэнэ. Хоёр удаа дараалан зөв хариулбал жагсаалтаас гарна.","No mistakes yet. Words you miss in games and tests are added here automatically. Two correct answers in a row remove a word.","Ошибок пока нет. Слова, в которых вы ошибётесь в играх и тестах, автоматически появятся здесь. После двух правильных ответов подряд слово исчезает из списка.","間違えた単語はまだありません。ゲームやテストで間違えた単語は自動的にここに追加されます。2回連続で正解するとリストから消えます。"],
+    lsEmptyFav:["Дуртай үг алга. HSK хэсгээс ☆ дарж нэмнэ.","No favorites yet. Tap ☆ in the HSK list to add.","Избранных слов нет. Нажмите ☆ в разделе HSK, чтобы добавить.","お気に入りの単語はまだありません。HSKの一覧で☆をタップして追加できます。"],
+    lsNeedProfile:["Эхлээд профайлаа үүсгэнэ үү.","Create your profile first.","Сначала создайте профиль.","まずプロフィールを作成してください。"],
+    planLine:["{d} хоног үлдсэн · өдөрт ~{n} шинэ үг хийвэл {lv}-н {t} үгэнд хүрнэ (өнөөдөр {k}/{n})","{d} days left · about {n} new words a day to reach {t} words of HSK {lv} (today {k}/{n})","Осталось дней: {d} · добавляя ~{n} новых слов в день, вы дойдёте до {t} слов HSK {lv} (сегодня {k}/{n})","残り{d}日 · 1日約{n}語ずつ追加すると、HSK {lv}の{t}語に到達します（今日 {k}/{n}）"],
+    planDone:["HSK {lv}-н үгсээ бүгдийг нэмсэн байна ✓ Одоо давтлага хийгээрэй.","All HSK {lv} words added ✓ Now focus on review.","Все слова HSK {lv} добавлены ✓ Теперь займитесь повторением.","HSK {lv}の単語をすべて追加しました ✓ 今は復習に集中しましょう。"],
+    obStep:["Алхам 2/2: Нэрээ бичээд доорх «Эхлэх» товчийг заавал дараарай. Үгүй бол бүртгэл идэвхжихгүй.","Step 2/2: enter a nickname and press «Start» below, or your account stays inactive.","Шаг 2/2: введите имя и обязательно нажмите кнопку «Начать» ниже. Иначе аккаунт не активируется.","ステップ2/2：ニックネームを入力し、下の「スタート」ボタンを必ず押してください。押さないとアカウントが有効になりません。"],
+    authSteps:["① Имэйл, нууц үгээ бичээд «Бүртгүүлэх» дар → ② дараагийн дэлгэц дээр нэрээ бичээд «Эхлэх» дар.","① Enter email + password and tap «Sign up» → ② on the next screen enter a nickname and tap «Start».","① Введите email и пароль и нажмите «Регистрация» → ② на следующем экране введите имя и нажмите «Начать».","① メールとパスワードを入力して「新規登録」をタップ → ② 次の画面でニックネームを入力して「スタート」をタップ。"],
+    wrAnim:["▶ Зураасны дараалал","▶ Stroke order","▶ Порядок черт","▶ 筆順"],
+    wrQuiz:["✍ Би зурна","✍ I will draw","✍ Я напишу","✍ 自分で書く"],
+    wrErr:["Зураасны өгөгдөл ачаалж чадсангүй. Интернетээ шалгана уу.","Could not load stroke data. Check your connection.","Не удалось загрузить данные о чертах. Проверьте интернет.","筆画データを読み込めませんでした。接続を確認してください。"],
+    wrHint:["Хуруугаараа зураасыг дарааллаар нь зур.","Draw each stroke in order.","Рисуйте пальцем черты по порядку.","指で筆順どおりに書いてください。"],
+    wrDone:["Гайхалтай! +5 XP","Great! +5 XP","Отлично! +5 XP","すばらしい！+5 XP"],
+    wrClose:["Хаах","Close","Закрыть","閉じる"],
+    sXp:["7 хоногийн XP","XP this week","XP за 7 дней","7日間のXP"],
+    capXp:["XP","XP","XP","XP"],
+    pwaInstall:["📲 Утсандаа суулгах","📲 Install on this device","📲 Установить на телефон","📲 スマホにインストール"],
+    pwaHint:["iPhone: Share → «Add to Home Screen». Android: хөтчийн цэснээс «Install app».","iPhone: Share → «Add to Home Screen». Android: browser menu → «Install app».","iPhone: Share → «Add to Home Screen». Android: меню браузера → «Install app».","iPhone: Share → «Add to Home Screen». Android: ブラウザのメニュー → «Install app»."],
+    clsTitle:["Анги ба даалгавар","Classes & tasks","Классы и задания","クラスと課題"],
+    clName:["Ангийн нэр","Class name","Название класса","クラス名"],
+    clCode:["Код","Code","Код","コード"],
+    clStud:["сурагч","students","учеников","生徒"],
+    tNew:["Даалгавар нэмэх","Add task","Добавить задание","課題を追加"],
+    myTasks:["Миний даалгавар","My tasks","Мои задания","自分の課題"],
+    joinPh:["Багшийн өгсөн ангийн код","Class code from your teacher","Код класса от учителя","先生からのクラスコード"],
+    joinBtn:["Нэгдэх","Join","Войти","参加する"],
+    tStart:["Эхлэх","Start","Начать","開始"],
+    tFinish:["Дууслаа","Done","Готово","完了"],
+    tDone:["Даалгавар биелэв! +{x} XP","Task done! +{x} XP","Задание выполнено! +{x} XP","課題完了！ +{x} XP"],
+    tFail:["80%-аас дээш зөв хариулж байж биелнэ","You need 80%+ correct","Нужно более 80% правильных ответов","80%以上の正解が必要です"],
+    tNoCls:["Ангид нэгдээгүй байна. Багшийнхаа кодыг оруулна уу.","Not in a class yet. Enter your teacher's code.","Вы ещё не в классе. Введите код учителя.","まだクラスに参加していません。先生のコードを入力してください。"],
+    tWords:["Тестэд хангалттай үг алга","Not enough words for the test","Недостаточно слов для теста","テストに必要な単語が足りません"],
+    hwTitle:["Иероглифыг зураад хайх","Search by drawing","Поиск по рисунку иероглифа","文字を描いて検索"],
+    hwClear:["Арилгах","Clear","Стереть","消去"],
+    hwUndo:["↶ Буцаах","↶ Undo","↶ Отменить","↶ 元に戻す"],
+    hwDone:["Болсон","Done","Готово","完了"],
+    hwErr:["Таних үйлчилгээнд холбогдож чадсангүй. Интернетээ шалгана уу.","Could not reach the recognition service.","Не удалось подключиться к сервису распознавания. Проверьте интернет.","認識サービスに接続できませんでした。ネット接続を確認してください。"],
+    hwHint:["Иероглифыг хуруугаараа зураад, доороос зөвийг нь сонго.","Draw a character, then pick the right one below.","Нарисуйте иероглиф пальцем и выберите верный вариант ниже.","指で文字を描き、下から正しいものを選んでください。"],
+    lrnPy:["🔤 Пиньиний хүснэгт","🔤 Pinyin chart","🔤 Таблица пиньинь","🔤 ピンイン表"],
+    lrnCyr:["Кирилл дуудлага","Cyrillic hint","Подсказка кириллицей","キリル文字の読み"],
+    pyTone:["4 тон ба хөнгөн тон","The 4 tones + neutral","4 тона и нейтральный тон","4つの声調と軽声"],
+    pyInit:["Эхлэх дуу (声母)","Initials (声母)","Инициали (声母)","声母（子音）"],
+    pyFin:["Төгсгөл дуу (韵母)","Finals (韵母)","Финали (韵母)","韵母（母音）"],
+    pyHint:["Дарахад дуу гарна. Кирилл бичлэг нь ойролцоо (Палладиус), жинхэнэ дуудлагыг 🔊-оор сонсож давтана.","Tap to hear it. Cyrillic is approximate (Palladius style); trust the audio.","Нажмите, чтобы услышать. Кириллица приблизительна (по Палладию); ориентируйтесь на 🔊 и повторяйте.","タップすると音が出ます。キリル表記は近似（パラディウス式）です。実際の発音は🔊で聞いて繰り返してください。"],
+    lrnQuiz:["📝 Шалгалт өгөх","📝 Take the quiz","📝 Пройти тест","📝 テストを受ける"],
+    lqRes:["Дүн: {a} / {b} зөв","Score: {a} / {b} correct","Результат: {a} / {b} верно","結果：{a} / {b} 正解"],
+    lqPass:["Тэнцлээ ✓ Хичээл дууслаа (+10 XP)","Passed ✓ Lesson done (+10 XP)","Сдано ✓ Урок завершён (+10 XP)","合格 ✓ レッスン完了（+10 XP）"],
+    lqFail:["Дахин нэг үзээд оролдоорой.","Review the lesson and try again.","Повторите урок и попробуйте ещё раз.","レッスンを復習してもう一度挑戦しましょう。"],
+    lqAgain:["Дахин өгөх","Try again","Пройти снова","もう一度受ける"],
+    lqQ1:["Энэ юу гэсэн үг вэ?","What does this mean?","Что это значит?","これはどういう意味ですか？"],
+    lqQ2:["Аль нь зөв хятад вэ?","Which is the Chinese?","Какой вариант китайский?","正しい中国語はどれですか？"],
+    lrnCmp:["🇲🇳 Монгол хэлтэй харьцуулалт","🇲🇳 Mongolian vs Chinese","🇲🇳 Сравнение с монгольским","🇲🇳 モンゴル語との比較"],
+    lrnTone:["🎧 Тон шалгах","🎧 Tone ear-test","🎧 Тест на тоны","🎧 声調聞き取りテスト"],
+    tnHint:["Дууг сонсоод аль үг гэдгийг сонго. Тонгоо андуурвал утга өөрчлөгддөг.","Listen and pick the word you heard. A wrong tone changes the meaning.","Послушайте и выберите услышанное слово. Неверный тон меняет значение.","音を聞いて、聞こえた単語を選んでください。声調を間違えると意味が変わります。"],
+    tnStart:["Эхлэх","Start","Начать","開始"],
+    tnListen:["🔊 Сонсох","🔊 Listen","🔊 Слушать","🔊 聞く"],
+    tnRes:["Дүн: {a} / {b} зөв (+{x} XP)","Score: {a} / {b} correct (+{x} XP)","Результат: {a} / {b} верно (+{x} XP)","結果：{a} / {b} 正解（+{x} XP）"],
+    tnAgain:["Дахин тоглох","Play again","Играть снова","もう一度遊ぶ"],
+    admTop:["🎯 Хамгийн их алддаг үгс","🎯 Most-missed words","🎯 Самые частые ошибки","🎯 よく間違える単語"],
+    admTopHint:["Бүх сурагчийн «Алдсан үгс»-ийг нэгтгэв. Ангид юуг дахин тайлбарлахаа эндээс мэднэ.","Combined from every student's mistakes list. Shows what to re-teach.","Объединены списки ошибок всех учеников. Здесь видно, что стоит повторить с классом.","全生徒の「間違えた単語」を集計。授業で再説明すべき点がわかります。"],
+    admTopEmpty:["Одоохондоо алдсан үг бүртгэгдээгүй байна.","No mistakes recorded yet.","Ошибок пока не зафиксировано.","間違いはまだ記録されていません。"],
+    admTopRow:["{k} сурагч алдсан · нийт {n} удаа","{k} students · {n} misses in total","Ошибались учеников: {k} · всего раз: {n}","間違えた生徒 {k} 人 · 合計 {n} 回"],
+    dueBtn:["🔁 Өнөөдрийн давтлага: {n} үг","🔁 Review today: {n} words","🔁 Повторение на сегодня: {n} слов","🔁 今日の復習：{n} 語"],
+    missDueBtn:["🎯 Алдсан үг давтах: {n}","🎯 Review mistakes: {n}","🎯 Повторить ошибки: {n}","🎯 間違えた語を復習：{n}"],
+    admMiss:[" · алдсан: {n}"," · missed: {n}"," · ошибок: {n}"," · 間違い：{n}"],
+    instBtn:["📲 Утсандаа апп болгож суулгах","📲 Install as an app","📲 Установить как приложение","📲 アプリとしてインストール"],
+    instHint:["Нүүр дэлгэцэнд дүрс гарч, бүтэн дэлгэцээр нээгдэнэ.","Adds an icon to your home screen and opens full screen.","Значок появится на главном экране, приложение откроется на весь экран.","ホーム画面にアイコンが追加され、全画面で開きます。"],
+    lrnCard:["🌱 Анхан шат (хятад хэл мэдэхгүй бол эндээс эхэл)","🌱 Beginner start (begin here if you know no Chinese)","🌱 Начальный уровень (начните здесь, если не знаете китайский)","🌱 初級スタート（中国語が全くわからない人はここから）"],
+    lrnTitle:["🌱 Анхан шат","🌱 Beginner start","🌱 Начальный уровень","🌱 初級スタート"],
+    lrnSub:["Хятад хэл огт мэдэхгүй хүнд: тон, дуудлага, тоо, мэндчилгээ, зураас. Дууссаны дараа HSK 1 руу шилжинэ.","For absolute beginners: tones, sounds, numbers, greetings, strokes. Then move on to HSK 1.","Для тех, кто совсем не знает китайский: тоны, произношение, числа, приветствия, черты. Затем переходите к HSK 1.","中国語が全くの初心者向け：声調、発音、数字、あいさつ、筆画。終わったらHSK 1へ進みます。"],
+    lrnDone:["Хичээл дууслаа ✓ (+10 XP)","Lesson done ✓ (+10 XP)","Урок завершён ✓ (+10 XP)","レッスン完了 ✓（+10 XP）"],
+    lrnGo:["HSK 1 рүү шилжих →","Go to HSK 1 →","Перейти к HSK 1 →","HSK 1へ進む →"],
+    lrnProg:["Дууссан: {a} / {b}","Done: {a} / {b}","Пройдено: {a} / {b}","完了：{a} / {b}"],
+    lrnL0:["Анхан шат (HSK 1)","Beginner (HSK 1)","Начальный уровень (HSK 1)","初級（HSK 1）"],
+    lrnDaily:["Өдөр тутмын хэллэг","Everyday phrases","Повседневные фразы","日常フレーズ"],
+    hskTitle:["HSK үгсийн сан (монгол орчуулгатай)","HSK vocabulary (Mongolian)","Словарь HSK (с монгольским переводом)","HSK単語（モンゴル語訳付き）"],
+    hskSearch:["Хайх: иероглиф, пиньинь, монгол утга","Search: hanzi, pinyin, meaning","Поиск: иероглиф, пиньинь, значение","検索：漢字、ピンイン、意味"],
+    hskNoTr:["орчуулга удахгүй нэмэгдэнэ","translation coming soon","перевод скоро появится","翻訳は近日追加予定"],
+    hskCount:["Орчуулгатай: {a} / {b} үг","Translated: {a} / {b} words","С переводом: {a} / {b} слов","翻訳あり：{a} / {b} 語"],
     noticeLbl:["АДМИНЫ МЭДЭГДЭЛ","ADMIN NOTICE","ОБЪЯВЛЕНИЕ АДМИНА","管理者からのお知らせ"],
     obTitle:["Тавтай морил","Welcome","Добро пожаловать","ようこそ"],
     obHint:["Эхлээд өөрийн мэдээллээ оруул. Нэр бусад суралцагчдад харагдана.","Enter your details first. Your nickname is visible to other learners.","Сначала введите свои данные. Ваш ник виден другим ученикам.","まずあなたの情報を入力してください。ニックネームは他の学習者にも表示されます。"],
@@ -971,14 +987,14 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     tFileErr:["Файл хадгалж чадсангүй.","Could not save the file.","Не удалось сохранить файл.","ファイルを保存できませんでした。"],
     tNoDl:["Татах боломж энэ харагдацад алга.","Downloads are not available here.","Скачивание здесь недоступно.","ここではダウンロードできません。"],
     authTitle:["Нэвтрэх / Бүртгүүлэх","Sign in / Sign up","Вход / Регистрация","ログイン／新規登録"],
-    authHint:["Имэйл болон нууц үгээрээ нэвтэрнэ. Өгөгдөл чинь аль ч төхөөрөмж дээр дагалдана.","Sign in with your email and password. Your data follows you to any device."],
-    loginName:["Имэйл (хуучин хэрэглэгч бол нэвтрэх нэр)","Email (or old login name)"],
+    authHint:["Имэйл болон нууц үгээрээ нэвтэрнэ. Өгөгдөл чинь аль ч төхөөрөмж дээр дагалдана.","Sign in with your email and password. Your data follows you to any device.","Входите по email и паролю. Ваши данные будут доступны на любом устройстве.","メールアドレスとパスワードでログインします。データはどの端末でも引き継がれます。"],
+    loginName:["Имэйл (хуучин хэрэглэгч бол нэвтрэх нэр)","Email (or old login name)","Email (или прежний логин)","メールアドレス（または旧ログイン名）"],
     password:["Нууц үг (6+ тэмдэгт)","Password (6+ characters)","Пароль (6+ символов)","パスワード（6文字以上）"],
     signIn:["Нэвтрэх","Sign in","Войти","ログイン"],
     signUp:["Бүртгүүлэх","Sign up","Зарегистрироваться","新規登録"],
     signOut:["Гарах","Sign out","Выйти","ログアウト"],
-    authNote:["Нууц үгээ мартвал «Нууц үгээ мартсан уу?» дарж имэйлээр сэргээнэ.","If you forget your password, use «Forgot password?» to reset it by email."],
-    tAuthBad:["Зөв имэйл (эсвэл 3-20 тэмдэгттэй нэр) болон 6+ тэмдэгттэй нууц үг оруулна уу.","Enter a valid email (or a 3-20 character name) and a 6+ character password."],
+    authNote:["Нууц үгээ мартвал «Нууц үгээ мартсан уу?» дарж имэйлээр сэргээнэ.","If you forget your password, use «Forgot password?» to reset it by email.","Если забыли пароль, нажмите «Забыли пароль?», и мы вышлем ссылку для сброса на email.","パスワードを忘れた場合は「パスワードをお忘れですか？」を押すと、メールで再設定できます。"],
+    tAuthBad:["Зөв имэйл (эсвэл 3-20 тэмдэгттэй нэр) болон 6+ тэмдэгттэй нууц үг оруулна уу.","Enter a valid email (or a 3-20 character name) and a 6+ character password.","Введите корректный email (или имя из 3–20 символов) и пароль от 6 символов.","有効なメールアドレス（または3〜20文字の名前）と6文字以上のパスワードを入力してください。"],
     tAuthErr:["Нэвтэрч чадсангүй: ","Could not sign in: ","Не удалось войти: ","ログインできません："],
     tConnErr:["Сервертэй холбогдож чадсангүй.","Could not reach the server.","Нет связи с сервером.","サーバーに接続できません。"],
     acctTitle:["Бүртгэл","Account","Аккаунт","アカウント"],
@@ -1199,6 +1215,10 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
       if(need===0)pl.textContent=T('planDone',{lv:lv});
       else if(dl>0){var per=Math.ceil(need/dl),td=wordsArr().filter(function(w){return w.d===TODAY}).length;pl.textContent=T('planLine',{d:dl,n:per,t:tg,lv:lv,k:td})}
     }
+    var dueN=hasProfile()?wordsArr().filter(function(w){return w.due&&w.due<=TODAY}).length:0;
+    var mdN=hasProfile()?missDue().length:0;
+    $('dueCard').hidden=!(dueN||mdN);$('dueBtn').hidden=!dueN;$('missDueBtn').hidden=!mdN;
+    if(dueN)$('dueBtn').textContent=T('dueBtn',{n:dueN});if(mdN)$('missDueBtn').textContent=T('missDueBtn',{n:mdN});
     $('todayLabel').textContent=fmt(today);
     var ps=phasesFor(),idx=-1;ps.forEach(function(x,i){if(today>=x.a&&today<=x.b)idx=i});
     $('phaseNow').innerHTML=idx>=0?'<b>'+esc(phTitle(ps[idx]))+'</b>'+esc(phSub(ps[idx]))+' ('+fmt(ps[idx].a)+' – '+fmt(ps[idx].b)+')'
@@ -1511,10 +1531,14 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     $('aAct').textContent=L.filter(function(m){return weekWords(m.p.act)>0||(m.p.last&&Math.round((today-parseIso(m.p.last))/86400000)<=7)}).length;
     $('aWords').textContent=L.reduce(function(s,m){return s+(m.p.wc||0)},0);
     if(document.activeElement!==$('aNotice'))$('aNotice').value=CFG.notice||'';
+    var agg={};
+    L.forEach(function(m){var ms=m.p.miss||{};Object.keys(ms).forEach(function(h){var a=agg[h]||(agg[h]={h:h,k:0,n:0,p:ms[h].p||'',m:ms[h].m||''});a.k++;a.n+=ms[h].n||1})});
+    var top=Object.keys(agg).map(function(h){return agg[h]}).sort(function(a,b){return b.k-a.k||b.n-a.n}).slice(0,15);
+    $('aTop').innerHTML=top.length?top.map(function(x){return '<div class="w"><span class="h" lang="zh">'+esc(x.h)+'</span><span><span class="p">'+esc(x.p)+'</span><br><span class="m">'+esc(hMn(x.h)||x.m)+'</span><br><span class="hint">'+esc(T('admTopRow',{k:x.k,n:x.n}))+'</span></span><span><button class="btn small ghost" type="button" data-speak="'+esc(x.h)+'" aria-label="Audio">🔊</button></span></div>'}).join(''):'<div class="empty">'+esc(T('admTopEmpty'))+'</div>';
     $('aList').innerHTML=L.length?L.sort(function(a,b){return (b.p.last||'')<(a.p.last||'')?-1:1}).map(function(m){
       var hid=!!CFG.hidden[m.id];
       return '<div class="adm"><div class="between"><span class="nm">'+esc(m.p.nick||T('noName'))+(m.id===uid?' '+T('adminTag'):'')+'</span><span class="badge">HSK '+(m.p.level||'?')+'</span></div>'+
-        '<div class="hint">'+esc(T('admInfo',{w:m.p.wc||0,a:ago(m.p.last)}))+(m.p.exam?esc(T('examShort',{d:m.p.exam})):'')+(hid?esc(T('hiddenSuffix')):'')+'</div>'+
+        '<div class="hint">'+esc(T('admInfo',{w:m.p.wc||0,a:ago(m.p.last)}))+(m.p.exam?esc(T('examShort',{d:m.p.exam})):'')+(m.p.miss&&Object.keys(m.p.miss).length?esc(T('admMiss',{n:Object.keys(m.p.miss).length})):'')+(hid?esc(T('hiddenSuffix')):'')+'</div>'+
         '<div class="row"><input type="text" data-nick="'+esc(m.id)+'" value="'+esc(m.p.nick||'')+'" maxlength="24" aria-label="'+esc(T('nameLbl'))+'" style="flex:1;min-width:120px"><button class="btn ghost small" data-rn="'+esc(m.id)+'" type="button">'+T('rename')+'</button></div>'+
         '<div class="row"><button class="btn ghost small" data-vw="'+esc(m.id)+'" type="button">'+T('viewWords')+'</button><button class="btn ghost small" data-hd="'+esc(m.id)+'" type="button">'+T(hid?'show':'hide')+'</button>'+
         (m.id!==uid?'<button class="btn small'+(sureDel===m.id?' danger':' ghost')+'" data-rm="'+esc(m.id)+'" type="button">'+T(sureDel===m.id?'removeSure':'removeAcc')+'</button>':'')+'</div></div>';
@@ -1796,17 +1820,19 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
   document.addEventListener('click',function(e){var b=e.target.closest('[data-speak]');if(b)speak(b.dataset.speak)});
   /* ---------- mistakes + favorites (saved in the profile) ---------- */
   var missDirty=false;
+  function addD(n){var d=new Date();d.setDate(d.getDate()+n);return iso(d)}
+  function missDue(){var m=(S.profile&&S.profile.miss)||{};return Object.keys(m).filter(function(h){return !m[h].nx||m[h].nx<=TODAY})}
   function missMap(){if(!S.profile.miss)S.profile.miss={};return S.profile.miss}
   function favMap(){if(!S.profile.fav)S.profile.fav={};return S.profile.fav}
   function isFav(h){return !!(S.profile.fav&&S.profile.fav[h])}
   function missAdd(w){
     if(!hasProfile()||!w||!w.h)return;var m=missMap(),o=m[w.h]||{n:0};
-    m[w.h]={p:w.p||o.p||'',m:w.m||o.m||'',n:(o.n||0)+1,ok:0,t:TODAY};missDirty=true;
+    m[w.h]={p:w.p||o.p||'',m:w.m||o.m||'',n:(o.n||0)+1,ok:0,t:TODAY,nx:addD(1)};missDirty=true;
     var ks=Object.keys(m);if(ks.length>300){ks.sort(function(a,b){return String(m[a].t).localeCompare(String(m[b].t))});delete m[ks[0]]}
   }
   function missOk(h){
     if(!hasProfile()||!S.profile.miss||!S.profile.miss[h])return;var o=S.profile.miss[h];o.ok=(o.ok||0)+1;
-    if(o.ok>=2)delete S.profile.miss[h];missDirty=true;
+    if(o.ok>=2)delete S.profile.miss[h];else o.nx=addD(3);missDirty=true;
   }
   function missFlush(){if(missDirty){missDirty=false;pPatch({miss:S.profile.miss||{},fav:S.profile.fav||{}})}}
   function favToggle(h){
@@ -2399,6 +2425,14 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
     if(e.target.closest('#lrnBack')){showTab('today');return}
     if(e.target.closest('[data-gohsk]')){hLv=1;hLim=60;showTab('hsk');renderHsk()}
   });
+  $('missDueBtn').addEventListener('click',function(){
+    var mp=missMap(),src=missDue().map(function(h){return {h:h,p:mp[h].p||'',m:hM(h)||mp[h].m||''}}).filter(function(x){return x.m});
+    if(src.length){showTab('play');startGame('mean',src,'today')}});
+  $('dueBtn').addEventListener('click',function(){F.mode='due';F.lv=0;showTab('cards');startDeck()});
+  var instEv=null;
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();instEv=e;var c=$('instCard');if(c)c.hidden=false});
+  window.addEventListener('appinstalled',function(){instEv=null;var c=$('instCard');if(c)c.hidden=true});
+  $('instBtn').addEventListener('click',function(){if(!instEv)return;instEv.prompt();instEv.userChoice.then(function(){instEv=null;$('instCard').hidden=true}).catch(function(){})});
   var EMRE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/,BASE=location.origin+location.pathname;
   async function doAuth(up){
     var u=$('auUser').value.trim(),p=$('auPass').value,isMail=u.indexOf('@')>-1;
