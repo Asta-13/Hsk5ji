@@ -36,7 +36,7 @@ jobs:
           ARGS=""
           if [ -n "$WORD" ]; then ARGS="$ARGS --word $WORD"; fi
           if [ -n "$LEVEL" ]; then ARGS="$ARGS --level $LEVEL"; fi
-          python3 reel/make_reel.py $ARGS
+          python3 Reel/make_reel.py $ARGS
       - name: Save to reels folder
         run: |
           git config user.name "reel-bot"
