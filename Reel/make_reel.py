@@ -9,7 +9,9 @@ import argparse, asyncio, datetime, json, os, re, subprocess, sys, wave, tempfil
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, 'reels')
+OUT = os.environ.get('REEL_OUT') or os.path.join(ROOT, 'reels')
+HERE = os.path.dirname(os.path.abspath(__file__))
+KEEP = 100
 W, H = 1080, 1920
 SITE = 'asta-13.github.io/Hsk5ji'
 ZH_VOICE = os.environ.get('ZH_VOICE', 'zh-CN-XiaoxiaoNeural')   # өөр: zh-CN-XiaoyiNeural, zh-CN-YunxiNeural
@@ -46,7 +48,7 @@ def js_string(src, name):
     return json.loads('"' + m.group(1) + '"')
 
 def examples():
-    try: return json.load(open(os.path.join(ROOT, 'reel', 'examples.json'), encoding='utf8'))
+    try: return json.load(open(os.path.join(HERE, 'examples.json'), encoding='utf8'))
     except Exception: return {}
 
 def sent_pinyin(z):
@@ -211,6 +213,25 @@ def render(kind, lv, w, ex, wavs, gap, tmp, n):
                     '-af', 'apad', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-ar', '44100', '-shortest', mp4], check=True)
     return mp4
 
+HOOKS = [
+    '🇨🇳 Энэ үгийг мэдэх үү?',
+    '📚 Өнөөдөр нэг үг сурцгаая!',
+    '🤔 Хятадаар хэрхэн хэлэх вэ?',
+    '💡 Өдөр бүр 1 үг = жилд 365 үг!',
+    '🔥 HSK шалгалтад заавал таардаг үг!',
+    '👀 Үүнийг санаж аваарай!',
+]
+TAGS = ['#HSK', '#хятадхэл', '#хятадхэлсурах', '#хятад', '#mongolia', '#монгол', '#chinese', '#learnchinese', '#mandarin', '#中文', '#汉语']
+
+def make_caption(han, py, mn, lv, ex, ex_py, num):
+    k = (num if num is not None else datetime.date.today().toordinal()) % len(HOOKS)
+    lines = [HOOKS[k], '', f'📌 {han}  [{py}]', f'🇲🇳 {mn}', f'🎓 HSK {lv}']
+    if ex:
+        lines += ['', '🗣 Жишээ:', ex[0]] + ([ex_py] if ex_py else []) + [ex[1]]
+    lines += ['', '💾 Хадгалаад дараа давтаарай', '❤️ Таалагдвал like дарж, найздаа илгээгээрэй', '➕ Өдөр бүр шинэ үг — дагаж аваарай!', '',
+              f'👉 Үнэгүй сурах сайт: {SITE}', '', f'{TAGS[0]} #HSK{lv} ' + ' '.join(TAGS[1:])]
+    return '\n'.join(lines)
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--level', type=int); ap.add_argument('--word'); ap.add_argument('--silent', action='store_true')
@@ -234,12 +255,11 @@ def main():
         tag = f'{num + 1:04d}' if num is not None else datetime.datetime.now().strftime('manual-%Y%m%d-%H%M%S')
         out = os.path.join(OUT, f'reel-{tag}.mp4')
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c', 'copy', out], check=True)
-    cap = (f'📚 Өдрийн үг: {han} ({py}) — {mn}\n' + (f'\n🗣 Жишээ: {ex[0]}\n{ex[1]}\n' if ex else '') +
-           f'\nHSK {lv} · Хятад хэлийг хамт сурцгаая! 🇨🇳\n👉 {SITE}\n\n#HSK #HSK{lv} #хятадхэл #хятад #хятадхэлсурах #mongolia #chinese #learnchinese')
+    cap = make_caption(han, py, mn, lv, ex, ex_py, num)
     open(out[:-4] + '.txt', 'w', encoding='utf8').write(cap)
     if num is not None and not a.silent:
         json.dump({'next': num + 1}, open(STATE, 'w'))
-        keep = sorted(f[:-4] for f in os.listdir(OUT) if f.startswith('reel-') and f.endswith('.mp4'))[:-60]
+        keep = sorted(f[:-4] for f in os.listdir(OUT) if f.startswith('reel-') and f.endswith('.mp4'))[:-KEEP]
         for k in keep:
             for ext in ('.mp4', '.txt'):
                 try: os.remove(os.path.join(OUT, k + ext))
