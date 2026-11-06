@@ -13,6 +13,12 @@ on:
       level:
         description: 'HSK level 1-6 (optional)'
         required: false
+      mn_voice:
+        description: 'Mongolian voice (optional): mn-MN-YesuiNeural or mn-MN-BataaNeural'
+        required: false
+      mn_rate:
+        description: 'Mongolian speed (optional, e.g. -12% or +0%)'
+        required: false
 
 permissions:
   contents: write
@@ -36,6 +42,8 @@ jobs:
           TZ: Asia/Ulaanbaatar
           WORD: ${{ github.event.inputs.word }}
           LEVEL: ${{ github.event.inputs.level }}
+          MN_VOICE: ${{ github.event.inputs.mn_voice }}
+          MN_RATE: ${{ github.event.inputs.mn_rate }}
           REEL_OUT: ${{ github.workspace }}/reels-out
         run: |
           ARGS=""
