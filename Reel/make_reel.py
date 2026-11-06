@@ -15,7 +15,9 @@ KEEP = 100
 W, H = 1080, 1920
 SITE = 'asta-13.github.io/Hsk5ji'
 ZH_VOICE = os.environ.get('ZH_VOICE', 'zh-CN-XiaoxiaoNeural')   # өөр: zh-CN-XiaoyiNeural, zh-CN-YunxiNeural
-MN_VOICE = os.environ.get('MN_VOICE', 'mn-MN-YesuiNeural')       # эрэгтэй: mn-MN-BataaNeural
+MN_VOICE = os.environ.get('MN_VOICE') or 'mn-MN-YesuiNeural'      # эрэгтэй: mn-MN-BataaNeural
+MN_RATE = os.environ.get('MN_RATE') or '-8%'      # монгол хоолойн хурд (жишээ -12%, +0%)
+MN_PITCH = os.environ.get('MN_PITCH') or '+0Hz'   # өнгө (жишээ -3Hz, +3Hz)
 
 FONT_CANDS = [
     '/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc',
@@ -119,7 +121,8 @@ def silence(path, sec):
 
 async def tts_async(text, voice, rate, path):
     import edge_tts
-    await edge_tts.Communicate(text, voice, rate=rate).save(path)
+    pitch = MN_PITCH if voice.startswith('mn-') else '+0Hz'
+    await edge_tts.Communicate(text, voice, rate=rate, pitch=pitch).save(path)
 
 TTS_FAIL = []
 def say(text, voice, rate, tmp, idx, silent):
@@ -247,8 +250,8 @@ def main():
         c = lambda t, v, r, i: say(t, v, r, tmp, i, a.silent)
         zs, zn = c(han, ZH_VOICE, '-30%', 1), c(han, ZH_VOICE, '+0%', 2)
         scenes = [render('word', lv, w, ex, [zs, zn], 0.5, tmp, 0)]
-        scenes.append(render('meaning', lv, w, ex, [c('Утга нь: ' + mn.split(',')[0].split('(')[0].strip(), MN_VOICE, '+0%', 3)], 0, tmp, 1))
-        if ex: scenes.append(render('example', lv, w, ex, [c(ex[0], ZH_VOICE, '-25%', 4), c(ex[0], ZH_VOICE, '+0%', 5), c('Орчуулбал: ' + ex[1], MN_VOICE, '+0%', 6)], 0.5, tmp, 2))
+        scenes.append(render('meaning', lv, w, ex, [c('Утга нь... ' + mn.replace(',', ', ').replace('(', ', ').replace(')', '').strip() + '.', MN_VOICE, MN_RATE, 3)], 0, tmp, 1))
+        if ex: scenes.append(render('example', lv, w, ex, [c(ex[0], ZH_VOICE, '-25%', 4), c(ex[0], ZH_VOICE, '+0%', 5), c('Орчуулбал... ' + ex[1], MN_VOICE, MN_RATE, 6)], 0.5, tmp, 2))
         scenes.append(render('repeat', lv, w, ex, [zn, zs, zn], 0.6, tmp, 3))
         lst = os.path.join(tmp, 'list.txt')
         open(lst, 'w').write(''.join(f"file '{s}'\n" for s in scenes))
