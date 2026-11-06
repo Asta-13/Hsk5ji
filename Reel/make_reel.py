@@ -12,8 +12,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, 'reels')
 W, H = 1080, 1920
 SITE = 'asta-13.github.io/Hsk5ji'
-ZH_VOICE = 'zh-CN-XiaoxiaoNeural'
-MN_VOICE = 'mn-MN-YesuiNeural'
+ZH_VOICE = os.environ.get('ZH_VOICE', 'zh-CN-XiaoxiaoNeural')   # өөр: zh-CN-XiaoyiNeural, zh-CN-YunxiNeural
+MN_VOICE = os.environ.get('MN_VOICE', 'mn-MN-YesuiNeural')       # эрэгтэй: mn-MN-BataaNeural
 
 FONT_CANDS = [
     '/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc',
@@ -44,6 +44,16 @@ def cfont(size):
 def js_string(src, name):
     m = re.search(name + r'="((?:[^"\\]|\\.)*)"', src)
     return json.loads('"' + m.group(1) + '"')
+
+def examples():
+    try: return json.load(open(os.path.join(ROOT, 'reel', 'examples.json'), encoding='utf8'))
+    except Exception: return {}
+
+def sent_pinyin(z):
+    try:
+        from pypinyin import pinyin, Style
+        return ' '.join(x[0] for x in pinyin(z, style=Style.TONE) if x[0].isalpha())
+    except Exception: return ''
 
 def load():
     src = open(os.path.join(ROOT, 'index.html'), encoding='utf8').read()
@@ -161,7 +171,9 @@ def footer(d):
 
 def hanzi_size(t): return 420 if len(t) == 1 else 300 if len(t) == 2 else 200 if len(t) == 3 else 150 if len(t) == 4 else 120
 
+EX_PY = ''
 def scene_img(kind, lv, w, ex, path):
+    ex_py = EX_PY
     im, d = bg(); header(d, lv); han, py, mn = w
     hs = hanzi_size(han)
     if kind == 'word':
@@ -179,7 +191,11 @@ def scene_img(kind, lv, w, ex, path):
         f = font(100); L = wrap(d, ex[0], f, W - 240)[:4]; y = 600
         for l in L:
             center(d, l, y, f, '#0f172a'); y += 135
-        f2 = cfont(50); L2 = wrap(d, ex[1], f2, W - 240)[:4]; y = max(y + 50, 1050)
+        if ex_py:
+            fp = cfont(40)
+            for l in wrap(d, ex_py, fp, W - 240)[:2]:
+                center(d, l, y + 10, fp, '#2563eb'); y += 56
+        f2 = cfont(50); L2 = wrap(d, ex[1], f2, W - 240)[:4]; y = max(y + 60, 1050)
         for l in L2:
             center(d, l, y, f2, '#475569'); y += 90
     else:  # repeat
@@ -199,16 +215,19 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--level', type=int); ap.add_argument('--word'); ap.add_argument('--silent', action='store_true')
     a = ap.parse_args()
+    global EX_PY
     words, gram = load(); lv, w, num = pick(words, a.level, a.word)
     han, py, mn = w; print('Үг:', han, py, mn, '(HSK', lv, ')', '#' + str(num + 1) if num is not None else '')
-    ex = next(((z, t) for z, t in gram if han in z and z != han), None)
+    exs = examples()
+    ex = tuple(exs[han]) if han in exs else next(((z, t) for z, t in gram if han in z and z != han), None)
+    ex_py = EX_PY = sent_pinyin(ex[0]) if ex else ''
     os.makedirs(OUT, exist_ok=True)
     with tempfile.TemporaryDirectory() as tmp:
         c = lambda t, v, r, i: say(t, v, r, tmp, i, a.silent)
-        zs, zn = c(han, ZH_VOICE, '-35%', 1), c(han, ZH_VOICE, '+0%', 2)
+        zs, zn = c(han, ZH_VOICE, '-30%', 1), c(han, ZH_VOICE, '+0%', 2)
         scenes = [render('word', lv, w, ex, [zs, zn], 0.5, tmp, 0)]
         scenes.append(render('meaning', lv, w, ex, [c('Утга нь: ' + mn.split(',')[0].split('(')[0].strip(), MN_VOICE, '+0%', 3)], 0, tmp, 1))
-        if ex: scenes.append(render('example', lv, w, ex, [c(ex[0], ZH_VOICE, '-10%', 4)], 0, tmp, 2))
+        if ex: scenes.append(render('example', lv, w, ex, [c(ex[0], ZH_VOICE, '-25%', 4), c(ex[0], ZH_VOICE, '+0%', 5), c('Орчуулбал: ' + ex[1], MN_VOICE, '+0%', 6)], 0.5, tmp, 2))
         scenes.append(render('repeat', lv, w, ex, [zn, zs, zn], 0.6, tmp, 3))
         lst = os.path.join(tmp, 'list.txt')
         open(lst, 'w').write(''.join(f"file '{s}'\n" for s in scenes))
