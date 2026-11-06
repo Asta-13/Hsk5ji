@@ -1,0 +1,52 @@
+name: Daily reel
+
+concurrency: reel
+
+on:
+  schedule:
+    - cron: '0 22,4,10,16 * * *'
+  workflow_dispatch:
+    inputs:
+      word:
+        description: 'Specific word (optional, e.g. 爱)'
+        required: false
+      level:
+        description: 'HSK level 1-6 (optional)'
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  reel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install tools
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y ffmpeg fonts-noto-cjk fonts-dejavu-core
+          pip install edge-tts pillow
+      - name: Make reel
+        env:
+          TZ: Asia/Ulaanbaatar
+          WORD: ${{ github.event.inputs.word }}
+          LEVEL: ${{ github.event.inputs.level }}
+        run: |
+          ARGS=""
+          if [ -n "$WORD" ]; then ARGS="$ARGS --word $WORD"; fi
+          if [ -n "$LEVEL" ]; then ARGS="$ARGS --level $LEVEL"; fi
+          python3 reel/make_reel.py $ARGS
+      - name: Save to reels folder
+        run: |
+          git config user.name "reel-bot"
+          git config user.email "reel-bot@users.noreply.github.com"
+          git add reels
+          git commit -m "Daily reel" || echo "No changes"
+          git pull --rebase
+          git push
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reel
+          path: reels/*.mp4
+          retention-days: 14
