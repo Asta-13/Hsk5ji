@@ -1,0 +1,52 @@
+name: Daily scene
+
+concurrency:
+  group: reel
+  cancel-in-progress: false
+
+on:
+  schedule:
+    - cron: '47 1,6,11 * * *'
+  workflow_dispatch:
+    inputs:
+      index:
+        description: 'Scene number 0-39 (optional)'
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  scene:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install tools
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y ffmpeg fonts-noto-cjk fonts-dejavu-core
+          pip install edge-tts pillow pypinyin
+      - name: Get reels branch
+        run: |
+          git clone --branch reels --depth 1 "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" reels-out || mkdir reels-out
+          rm -rf reels-out/.git
+      - name: Make scene
+        env:
+          INDEX: ${{ github.event.inputs.index }}
+          REEL_OUT: ${{ github.workspace }}/reels-out
+        run: |
+          ARGS=""
+          if [ -n "$INDEX" ]; then ARGS="--index $INDEX"; fi
+          SCRIPT=$(find . -iname make_scene.py -not -path './reels-out/*' | head -1)
+          cd "$(dirname "$SCRIPT")" && python3 make_scene.py $ARGS
+      - name: Publish to reels branch
+        working-directory: reels-out
+        run: |
+          git init -b reels
+          git config user.name "reel-bot"
+          git config user.email "reel-bot@users.noreply.github.com"
+          git add -A
+          git commit -m "Scenes"
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}"
+          git push -f origin reels
