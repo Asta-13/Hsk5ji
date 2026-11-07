@@ -122,7 +122,7 @@ def silence(path, sec):
 async def tts_async(text, voice, rate, path):
     import edge_tts
     pitch = MN_PITCH if voice.startswith('mn-') else '+0Hz'
-    await edge_tts.Communicate(text, voice, rate=rate, pitch=pitch).save(path)
+    await asyncio.wait_for(edge_tts.Communicate(text, voice, rate=rate, pitch=pitch).save(path), timeout=40)
 
 TTS_FAIL = []
 def say(text, voice, rate, tmp, idx, silent):
@@ -237,9 +237,19 @@ def make_caption(han, py, mn, lv, ex, ex_py, num):
 
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument('--min-gap', type=int, default=0, help='сүүлийн видеоноос N минут болоогүй бол алгасна')
     ap.add_argument('--level', type=int); ap.add_argument('--word'); ap.add_argument('--silent', action='store_true')
     a = ap.parse_args()
     global EX_PY
+    if a.min_gap:
+        try: last = json.load(open(STATE)).get('last', 0)
+        except Exception: last = 0
+        import time
+        if time.time() - last < a.min_gap * 60:
+            print('Алгасав: сүүлийн видеоноос', round((time.time() - last) / 60), 'минут болсон')
+            go = os.environ.get('GITHUB_OUTPUT')
+            if go: open(go, 'a').write('skipped=true\n')
+            return
     words, gram = load(); lv, w, num = pick(words, a.level, a.word)
     han, py, mn = w; print('Үг:', han, py, mn, '(HSK', lv, ')', '#' + str(num + 1) if num is not None else '')
     exs = examples()
@@ -261,7 +271,8 @@ def main():
     cap = make_caption(han, py, mn, lv, ex, ex_py, num)
     open(out[:-4] + '.txt', 'w', encoding='utf8').write(cap)
     if num is not None and not a.silent:
-        json.dump({'next': num + 1}, open(STATE, 'w'))
+        import time
+        json.dump({'next': num + 1, 'last': int(time.time())}, open(STATE, 'w'))
         keep = sorted(f[:-4] for f in os.listdir(OUT) if f.startswith('reel-') and f.endswith('.mp4'))[:-KEEP]
         for k in keep:
             for ext in ('.mp4', '.txt'):
