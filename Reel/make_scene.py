@@ -100,7 +100,7 @@ def stick(d, cx, feet, who, speaking, t):
 
 def frame(sc, upto, path, t=0, th='home'):
     im, d = bg(); set_bg(d, th)
-    center(d, 'КИНОНЫ ХАРИЛЦАЛАГА', 95, cfont(52), '#93c5fd')
+    center(d, 'КИНОНЫ ХАРИЛЦАН ЯРИА', 95, cfont(52), '#93c5fd')
     f = cfont(44); hk = f"HSK {sc['level']}"; w = d.textlength(hk, font=f)
     d.rounded_rectangle([(W - w) / 2 - 30, 170, (W + w) / 2 + 30, 240], 35, fill='#facc15'); d.text(((W - w) / 2, 177), hk, font=f, fill='#1e293b')
     center(d, sc['title_zh'], 275, font(76), 'white')
@@ -146,11 +146,11 @@ def frame(sc, upto, path, t=0, th='home'):
 def card(sc, kind, path):
     im, d = bg()
     if kind == 'hook':
-        center(d, '🎬'.replace('🎬', 'КИНОНЫ ХАРИЛЦАЛАГА'), 330, cfont(56), '#93c5fd')
+        center(d, '🎬'.replace('🎬', 'КИНОНЫ ХАРИЛЦАН ЯРИА'), 330, cfont(56), '#93c5fd')
         center(d, f"HSK {sc['level']}", 440, cfont(60), '#facc15')
         for i, l in enumerate(wrap(d, sc['title_zh'], font(120), W - 160)[:2]): center(d, l, 640 + i * 150, font(120), 'white')
         for i, l in enumerate(wrap(d, sc['title_mn'], cfont(56), W - 200)[:2]): center(d, l, 1000 + i * 80, cfont(56), '#fde68a')
-        center(d, 'Хэчнээн үгийг нь ойлгох вэ? 👀'.replace(' 👀', ''), 1350, cfont(52), '#bfdbfe')
+        center(d, 'Хэдийг нь ойлгох вэ?', 1250, cfont(52), '#bfdbfe')
     else:
         center(d, 'ДАХИН САНА', 200, cfont(64), '#93c5fd')
         y = 340
