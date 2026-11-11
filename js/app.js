@@ -770,7 +770,7 @@ var DATA=window.DATA;
       return '<div class="day"><h3><span>'+fmt(parseIso(d))+(d===TODAY?' · '+T('todayTag'):'')+'</span><span class="muted">'+T('nWords',{n:arr.length})+'</span></h3>'+
         arr.map(function(w){
           return '<div class="w'+(freshIds[w.id]?' fresh':'')+'"><span class="h" lang="zh">'+hl(w.h,wlQ)+'</span><span><span class="p">'+hl(w.p,wlQ)+'</span> <span class="badge">HSK '+w.l+'</span><br><span class="m">'+hl(w.m,wlQ)+'</span></span>'+
-            '<button class="x'+(sureId===w.id?' sure':'')+'" type="button" data-del="'+w.id+'">'+T(sureId===w.id?'delSure':'del')+'</button></div>';
+            '<button class="x'+(sureId===w.id?' sure':'')+'" type="button" data-del="'+esc(w.id)+'">'+T(sureId===w.id?'delSure':'del')+'</button></div>';
         }).join('')+'</div>';
     }).join('');
     freshIds={};
@@ -961,7 +961,7 @@ var DATA=window.DATA;
       var ks=Object.keys(v.data||{}).sort();
       if(!ks.length)h+='<div class="empty">'+T('noMemberWords')+'</div></div>';
       else{
-        h+='<div class="chips">'+ks.map(function(k){return '<button class="chip" type="button" data-vl="'+k+'" aria-pressed="'+(v.lv===+k)+'">HSK '+k+'<small>'+Object.keys(v.data[k]).length+'</small></button>'}).join('')+'</div>';
+        h+='<div class="chips">'+ks.map(function(k){return '<button class="chip" type="button" data-vl="'+esc(k)+'" aria-pressed="'+(v.lv===+k)+'">HSK '+k+'<small>'+Object.keys(v.data[k]).length+'</small></button>'}).join('')+'</div>';
         h+='<button class="btn small" id="gCopyAll" type="button" style="align-self:flex-start">'+T('copyAll')+'</button></div>';
         var ws=v.data[v.lv]||{};
         h+='<div style="display:flex;flex-direction:column;gap:8px">'+Object.keys(ws).map(function(k){var w=ws[k],on=has(w,v.lv);
@@ -1585,7 +1585,7 @@ var DATA=window.DATA;
   var WR=null,wrChars=[];
   function loadHW(cb){
     if(window.HanziWriter){cb();return}
-    var sc=document.createElement('script');sc.src='https://cdn.jsdelivr.net/npm/hanzi-writer@3.5.0/dist/hanzi-writer.min.js';
+    var sc=document.createElement('script');sc.src='js/vendor/hanzi-writer.min.js';
     sc.onload=cb;sc.onerror=function(){toast(T('wrErr'))};document.head.appendChild(sc);
   }
   function cssv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||'#888'}
@@ -2037,7 +2037,7 @@ var DATA=window.DATA;
     var u=$('auUser').value.trim(),p=$('auPass').value,isMail=u.indexOf('@')>-1;
     if(up&&!EMRE.test(u)){toast(T('emailBad'));return}
     if(isMail?!EMRE.test(u):!/^[A-Za-z0-9_]{3,20}$/.test(u)){toast(T('tAuthBad'));return}
-    if(p.length<6){toast(T('tAuthBad'));return}
+    if(p.length<8){toast(T('tAuthBad'));return}
     if(!sb)return;
     try{
       var v={email:isMail?u.toLowerCase():emailOf(u),password:p};
@@ -2056,7 +2056,7 @@ var DATA=window.DATA;
     try{var r=await sb.auth.resetPasswordForEmail(u,{redirectTo:BASE});toast(r.error?T('tAuthErr')+r.error.message:T('forgotSent'))}catch(e){toast(T('tConnErr'))}
   });
   async function setPass(inp,done){
-    var p=$(inp).value;if(p.length<6){toast(T('tAuthBad'));return}
+    var p=$(inp).value;if(p.length<8){toast(T('tAuthBad'));return}
     try{var r=await sb.auth.updateUser({password:p});if(r.error){toast(T('tAuthErr')+r.error.message);return}$(inp).value='';toast(T('resetDone'));if(done)done()}catch(e){toast(T('tConnErr'))}
   }
   $('rcSave').addEventListener('click',function(){setPass('rcPass',function(){$('recov').hidden=true})});

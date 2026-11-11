@@ -12,7 +12,7 @@
     GRAMI18N:'data/grammar-translations.json',
     CI18N:'data/course-translations.json'
   };
-  var SUPABASE='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js';
+  var SUPABASE='js/vendor/supabase.min.js';   /* өөрийн репод хадгалсан (CDN-д найдахгүй) */
   var DATA=window.DATA={};
   window.HSKI18N_RAW={}; window.GRAMI18N={}; window.__i18nReady=false;
 
@@ -57,9 +57,15 @@
   function fail(e){
     failed=true;
     var b=$('boot');if(!b)return;
-    b.innerHTML='<div class="bt">Ачаалж чадсангүй.<br><small>'+String(e&&e.message||e)+
-      '</small><br><small>(file:// биш, сервер / GitHub Pages дээр нээнэ үү)</small></div>'+
-      '<button onclick="location.reload()">Дахин оролдох</button>'}
+    b.textContent='';
+    var bt=document.createElement('div');bt.className='bt';
+    bt.appendChild(document.createTextNode('Ачаалж чадсангүй.'));bt.appendChild(document.createElement('br'));
+    var sm=document.createElement('small');sm.textContent=String(e&&e.message||e);bt.appendChild(sm);
+    bt.appendChild(document.createElement('br'));
+    var s2=document.createElement('small');s2.textContent='(file:// биш, сервер / GitHub Pages дээр нээнэ үү)';bt.appendChild(s2);
+    var btn=document.createElement('button');btn.type='button';btn.textContent='Дахин оролдох';
+    btn.addEventListener('click',function(){location.reload()});
+    b.appendChild(bt);b.appendChild(btn)}
 
   var saved=null;try{saved=localStorage.getItem('hsk-lang')}catch(e){}
   var needI18N=saved==='en'||saved==='ru'||saved==='ja';
@@ -75,8 +81,8 @@
     window.HSKRAW=DATA.HSKRAW;window.HSKRAW3=DATA.HSKRAW3;   /* апп эдгээрийг глобалаар уншдаг */
     window.addEventListener('error',function(ev){            /* эхлэхэд унавал хоосон биш, алдааг харуулна */
       if(!booted)fail(ev.error||ev.message)});
-    var s=document.createElement('script');
-    s.text=r[1]+'\n//# sourceURL=js/app.js';
+    var s=document.createElement('script');      /* CSP-д 'unsafe-inline' хэрэггүй болгохын тулд src-ээр ачаална */
+    s.src='js/app.js';s.onerror=function(){fail(new Error('js/app.js ачаалагдсангүй'))};
     document.body.appendChild(s);
     var b=$('bootBar');if(b)b.style.width='100%';
     setTimeout(function(){if(!failed)window.__bootDone()},12000);   /* аюулгүйн хугацаа */
