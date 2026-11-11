@@ -6,47 +6,97 @@ concurrency:
 
 on:
   schedule:
-    - cron: '47 1,6,11 * * *'
+    # Өмнө нь өдөрт 3 удаа л (UTC 01:47, 06:47, 11:47) оролддог байсан тул GitHub нэгийг алгасахад шууд дутдаг байсан.
+    # Одоо 1–13 UTC цагт 30 минут тутамд оролдож, gap (230 мин) нь өдөрт ~3-4 scene-д хязгаарлана.
+    - cron: '17,47 1-13 * * *'
   workflow_dispatch:
     inputs:
       index:
         description: 'Scene number 0-39 (optional)'
         required: false
+      auto:
+        description: 'true бол автомат горим (gap шалгана)'
+        required: false
+        default: 'false'
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   scene:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: write
+    env:
+      MIN_GAP_MIN: '230'
     steps:
-      - uses: actions/checkout@v4
-      - name: Install tools
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y ffmpeg fonts-noto-cjk fonts-dejavu-core
-          pip install edge-tts pillow pypinyin
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
       - name: Get reels branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
         run: |
-          git clone --branch reels --depth 1 "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" reels-out || mkdir reels-out
-          rm -rf reels-out/.git
+          set -euo pipefail
+          rm -rf reels-out
+          URL="https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git"
+          if git ls-remote --exit-code --heads "$URL" reels >/dev/null 2>&1; then
+            git clone -q --branch reels --depth 1 "$URL" reels-out
+            rm -rf reels-out/.git
+          else
+            mkdir reels-out
+          fi
+
+      - name: Early gap check
+        id: gap
+        env:
+          EVENT: ${{ github.event_name }}
+          AUTO: ${{ github.event.inputs.auto }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT" = "schedule" ] || [ "$AUTO" = "true" ]; then
+            python3 Reel/gap_check.py reels-out/scene-state.json "$MIN_GAP_MIN"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install tools
+        if: steps.gap.outputs.skip != 'true'
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends ffmpeg fonts-noto-cjk fonts-dejavu-core
+          pip install -q -r Reel/requirements.txt
+
       - name: Make scene
+        if: steps.gap.outputs.skip != 'true'
         env:
           INDEX: ${{ github.event.inputs.index }}
           REEL_OUT: ${{ github.workspace }}/reels-out
         run: |
-          ARGS=""
-          if [ -n "$INDEX" ]; then ARGS="--index $INDEX"; fi
-          SCRIPT=$(find . -iname make_scene.py -not -path './reels-out/*' | head -1)
-          cd "$(dirname "$SCRIPT")" && python3 make_scene.py $ARGS
+          set -euo pipefail
+          args=()
+          if [ -n "$INDEX" ]; then
+            [[ "$INDEX" =~ ^[0-9]{1,3}$ ]] || { echo "::error::index тоо байх ёстой"; exit 1; }
+            args+=(--index "$INDEX")
+          fi
+          cd Reel
+          python3 make_scene.py "${args[@]}"
+
       - name: Publish to reels branch
+        if: steps.gap.outputs.skip != 'true'
         working-directory: reels-out
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
         run: |
-          git init -b reels
+          set -euo pipefail
+          git init -q -b reels
           git config user.name "reel-bot"
           git config user.email "reel-bot@users.noreply.github.com"
           git add -A
-          git commit -m "Scenes"
-          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}"
-          git push -f origin reels
+          git commit -q -m "Scenes"
+          git push -q --force "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" HEAD:refs/heads/reels
