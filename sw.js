@@ -1,14 +1,23 @@
-/* HSK app service worker: network-first for the page (updates arrive at once), cache fallback when offline.
-   Supabase API calls are never cached. Bump VER to force a refresh of old caches. */
-var VER='hsk-v2',CORE=['./','./index.html','./manifest.json','./icon-192.png','./icon-512.png',
-  './css/style.css','./js/loader.js','./js/app.js','./js/sw-register.js','./data/course-lessons.json','./data/course-translations.json','./data/examples.json','./data/grammar-translations.json','./data/grammar.json','./data/hsk-mongolian.json','./data/hsk-translations.json','./data/hsk-words-a.json','./data/hsk-words-b.json','./data/radicals.json','./data/scenarios.json'];
+/* HSK app service worker: stale-while-revalidate.
+   Кэшээс шууд нээгдэнэ (хурдан), ард нь шинэчлэлийг татна → шинэ хувилбар дараагийн нээлтээр гарна.
+   Supabase API дуудлагыг хэзээ ч кэшлэхгүй. Бүх зүйлийг шууд шинэчлэхийг хүсвэл VER-ийг нэмж өгнө. */
+var VER='hsk-v3',CORE=['./','./index.html','./manifest.json','./icon-192.png','./icon-512.png',
+  './css/style.css','./js/loader.js','./js/app.js','./js/sw-register.js','./data/hsk-words-a.json','./data/hsk-words-b.json','./data/hsk-mongolian.json','./data/grammar.json','./data/course-lessons.json','./data/examples.json','./data/scenarios.json','./data/radicals.json'];
 self.addEventListener('install',function(e){e.waitUntil(caches.open(VER).then(function(c){return c.addAll(CORE)}).then(function(){return self.skipWaiting()}))});
 self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==VER}).map(function(k){return caches.delete(k)}))}).then(function(){return self.clients.claim()}))});
 self.addEventListener('fetch',function(e){
   var r=e.request,u=new URL(r.url);
   if(r.method!=='GET'||u.hostname.indexOf('supabase.co')>-1)return;
-  e.respondWith(fetch(r).then(function(res){
-    if(res&&(res.ok||res.type==='opaque')){var cp=res.clone();caches.open(VER).then(function(c){c.put(r,cp)})}
-    return res;
-  }).catch(function(){return caches.match(r).then(function(m){return m||(r.mode==='navigate'?caches.match('./index.html'):undefined)})}));
+  e.respondWith(caches.open(VER).then(function(c){
+    return c.match(r).then(function(m){
+      var net=fetch(r).then(function(res){
+        if(res&&(res.status===200||res.type==='opaque')){c.put(r,res.clone()).catch(function(){})}
+        return res;
+      }).catch(function(){
+        return m||(r.mode==='navigate'?c.match('./index.html'):undefined);
+      });
+      if(m){e.waitUntil(net.catch(function(){}));return m}
+      return net;
+    });
+  }));
 });
