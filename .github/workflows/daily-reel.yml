@@ -1,12 +1,17 @@
 name: Daily reel
 
+# reel болон scene нэг группт: зэрэг ажиллаж `reels` салбарыг бие биенийхээ дээр дарж бичихгүй.
+# cancel-in-progress: false — өмнө нь ажиллаж буй видеог шинэ trigger таслахгүй.
 concurrency:
   group: reel
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 on:
   schedule:
-    - cron: '17 22-23,0-17 * * *'
+    # GitHub нь `schedule`-ийг ачаалал ихтэй үед алгасдаг/хойшлуулдаг (цагт 1 гэж бичсэн ч өдөрт 3-4 л ажилласан).
+    # Иймд цаг бүрт 4 удаа оролдоно; хэт олон гарвал эхний алхамд байгаа gap-шалгалт (~10 сек) алгасна.
+    # UTC 22:00–17:59 = Улаанбаатар 06:00–01:59. Минутыг :00-аас зориудаар холдуулсан (тэр үед ачаалал хамгийн их).
+    - cron: '7,22,37,52 22-23,0-17 * * *'
   workflow_dispatch:
     inputs:
       word:
@@ -21,49 +26,107 @@ on:
       mn_rate:
         description: 'Mongolian speed (optional, e.g. -12% or +0%)'
         required: false
+      auto:
+        description: 'true бол автомат горим (gap шалгана). Гадны цагийн trigger (cron-job.org) үүнийг ашиглана'
+        required: false
+        default: 'false'
 
+# Анхдагч эрх: зөвхөн унших. Бичих эрхийг доорх job-д л өгнө.
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   reel:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: write   # зөвхөн `reels` салбар руу push хийхэд
+    env:
+      MIN_GAP_MIN: '50'          # хоёр видеоны хоорондох доод хугацаа (минут) → өдөрт ~20 хүртэл
+      TZ: Asia/Ulaanbaatar
     steps:
-      - uses: actions/checkout@v4
-      - name: Install tools
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y ffmpeg fonts-noto-cjk fonts-dejavu-core
-          pip install edge-tts pillow pypinyin
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
       - name: Get reels branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
         run: |
-          git clone --branch reels --depth 1 "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" reels-out || mkdir reels-out
-          rm -rf reels-out/.git
+          set -euo pipefail
+          rm -rf reels-out
+          URL="https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git"
+          if git ls-remote --exit-code --heads "$URL" reels >/dev/null 2>&1; then
+            git clone -q --branch reels --depth 1 "$URL" reels-out
+            rm -rf reels-out/.git
+          else
+            mkdir reels-out
+          fi
+
+      - name: Early gap check
+        id: gap
+        env:
+          EVENT: ${{ github.event_name }}
+          AUTO: ${{ github.event.inputs.auto }}
+        run: |
+          set -euo pipefail
+          # schedule болон auto=true үед л gap шалгана. Гараар (Run workflow) дарвал үргэлж үүсгэнэ.
+          if [ "$EVENT" = "schedule" ] || [ "$AUTO" = "true" ]; then
+            python3 Reel/gap_check.py reels-out/state.json "$MIN_GAP_MIN"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install tools
+        if: steps.gap.outputs.skip != 'true'
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends ffmpeg fonts-noto-cjk fonts-dejavu-core
+          pip install -q -r Reel/requirements.txt
+
       - name: Make reel
         id: make
+        if: steps.gap.outputs.skip != 'true'
         env:
-          TZ: Asia/Ulaanbaatar
+          EVENT: ${{ github.event_name }}
+          AUTO: ${{ github.event.inputs.auto }}
           WORD: ${{ github.event.inputs.word }}
           LEVEL: ${{ github.event.inputs.level }}
           MN_VOICE: ${{ github.event.inputs.mn_voice }}
           MN_RATE: ${{ github.event.inputs.mn_rate }}
           REEL_OUT: ${{ github.workspace }}/reels-out
         run: |
-          ARGS=""
-          if [ -n "$WORD" ]; then ARGS="$ARGS --word $WORD"; fi
-          if [ -n "$LEVEL" ]; then ARGS="$ARGS --level $LEVEL"; fi
-          if [ "${{ github.event_name }}" = "schedule" ]; then ARGS="$ARGS --min-gap 100"; fi
-          SCRIPT=$(find . -iname make_reel.py -not -path './reels-out/*' | head -1)
-          python3 "$SCRIPT" $ARGS
+          set -euo pipefail
+          # Оролтыг шалгана: shell/argument injection-оос сэргийлнэ.
+          args=()
+          if [ -n "$WORD" ]; then
+            [[ "$WORD" =~ ^[^[:space:]-][^[:space:]]{0,5}$ ]] || { echo "::error::word буруу"; exit 1; }
+            args+=(--word "$WORD")
+          fi
+          if [ -n "$LEVEL" ]; then
+            [[ "$LEVEL" =~ ^[1-6]$ ]] || { echo "::error::level 1-6 байх ёстой"; exit 1; }
+            args+=(--level "$LEVEL")
+          fi
+          case "$MN_VOICE" in ''|mn-MN-YesuiNeural|mn-MN-BataaNeural) ;; *) echo "::error::mn_voice буруу"; exit 1;; esac
+          [[ -z "$MN_RATE" || "$MN_RATE" =~ ^[+-][0-9]{1,2}%$ ]] || { echo "::error::mn_rate буруу (жишээ -12%)"; exit 1; }
+          if [ "$EVENT" = "schedule" ] || [ "$AUTO" = "true" ]; then
+            args+=(--min-gap "$MIN_GAP_MIN")
+          fi
+          python3 Reel/make_reel.py "${args[@]}"
+
       - name: Publish to reels branch
-        if: steps.make.outputs.skipped != 'true'
+        if: steps.gap.outputs.skip != 'true' && steps.make.outputs.skipped != 'true'
         working-directory: reels-out
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
         run: |
-          git init -b reels
+          set -euo pipefail
+          git init -q -b reels
           git config user.name "reel-bot"
           git config user.email "reel-bot@users.noreply.github.com"
           git add -A
-          git commit -m "Reels"
-          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}"
-          git push -f origin reels
+          git commit -q -m "Reels"
+          git push -q --force "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" HEAD:refs/heads/reels
