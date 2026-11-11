@@ -265,3 +265,5 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
 .w .m,.w .p,.gm .m,.gm .z,.gm .hint{display:inline-block;max-width:100%;overflow-wrap:anywhere;word-break:break-word}
 .list .w>span:last-child{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;max-width:104px}
 .gm{overflow-wrap:anywhere;min-width:0}
+
+#hwRes{flex:none;max-height:34vh;overflow:auto;-webkit-overflow-scrolling:touch}#hwRes[hidden]{display:none}#hwRes .w{padding:8px 4px}
