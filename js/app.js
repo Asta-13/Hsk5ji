@@ -1228,7 +1228,9 @@ var DATA=window.DATA;
     var t=curTab();
     if(t==='cards')renderModes();if(t==='group')renderGroup();if(t==='admin')renderAdmin();
   }
+  window.__applyI18N=function(){CI18N=DATA.CI18N||null;HSKI=null};
   function setLang(l){
+    if(l!=='mn'&&!window.__i18nReady&&window.loadI18N){toast('Ачаалж байна…');window.loadI18N(function(){setLang(l)});return}
     lang=l;lset('hsk-lang',l);$('lang').value=l;
     applyStatic();fillMin('obMin');fillMin('meMin');
     renderTasks();renderAll();renderModes();renderDeck();
@@ -1709,7 +1711,7 @@ var DATA=window.DATA;
   });
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('hwModal').hidden)hwClose()});
   /* ---------- beginner course ---------- */
-  CI18N=DATA.CI18N;
+  CI18N=DATA.CI18N||null;
   LESSONS=DATA.LESSONS,lrnOpen=-1;
   function lrnDoneArr(){return (S.profile&&S.profile.lrn)||[]}
   /* ---------- pinyin -> Cyrillic (Palladius-style, approximate) ---------- */
@@ -2075,5 +2077,5 @@ var DATA=window.DATA;
       if(r.data&&r.data.session)await startSession(r.data.session.user);
       else{authReady=true;renderAll()}
     }catch(e){toast(T('tConnErr'));authReady=true;needAuth=!uid;renderAll()}
-  })();
+  })().then(function(){window.__bootDone&&window.__bootDone()},function(){window.__bootDone&&window.__bootDone()});
 })();
