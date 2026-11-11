@@ -44,7 +44,7 @@
     <div id="dayBody"></div>
   </div>
   <div class="card" id="taskCard" hidden></div>
-  <div class="card" id="dueCard" hidden><button class="btn" type="button" id="dueBtn" hidden></button> <button class="btn" type="button" id="missDueBtn" hidden></button></div>
+  <div class="card" id="dueCard" hidden><button class="btn" type="button" id="dueBtn" hidden></button> <button class="btn" type="button" id="missDueBtn" hidden></button> <button class="btn" type="button" id="srsBtn" hidden></button></div>
   <div class="card" id="instCard" hidden><button class="btn" type="button" id="instBtn" data-i18n="instBtn"></button><div class="hint" data-i18n="instHint"></div></div>
   <div class="card" id="lrnCard" hidden><button class="btn" type="button" data-golearn="1" data-i18n="lrnCard"></button></div>
 
@@ -182,8 +182,11 @@
     <div class="hint" id="plRes"></div>
     <button class="btn" type="button" data-game="mean" data-i18n="gMean"></button>
     <button class="btn" type="button" data-game="listen" data-i18n="gListen"></button>
+    <button class="btn" type="button" data-game="speak" data-i18n="gSpeak"></button>
+    <button class="btn" type="button" data-game="write" data-i18n="gWrite"></button>
     <button class="btn" type="button" data-game="build" data-i18n="gBuild"></button>
     <button class="btn" type="button" data-game="sprint" data-i18n="gSprint"></button>
+    <button class="chip" type="button" id="fxTog" aria-pressed="true" data-i18n="fxTog"></button>
     <button class="btn" type="button" data-exam="open" data-i18n="exBtn"></button>
   </div>
   <div class="card" id="plGame" hidden>
@@ -195,7 +198,8 @@
   </div>
   <div class="card" id="exSetup" hidden>
     <h2 data-i18n="exTitle"></h2>
-    <div class="hint" data-i18n="exHint"></div>
+    <div class="hint" id="exHintT" data-i18n="exHint"></div>
+    <div><div class="label" style="margin-bottom:8px" data-i18n="exKind"></div><div class="chips" id="exMode"></div></div>
     <div><div class="label" style="margin-bottom:8px" data-i18n="exLevel"></div><div class="chips" id="exLv"></div></div>
     <div><div class="label" style="margin-bottom:8px" data-i18n="exCount"></div><div class="chips" id="exN"></div></div>
     <div class="row"><button class="btn" type="button" data-exam="start" data-i18n="exStart"></button><button class="btn ghost" type="button" data-exam="menu" data-i18n="plBack"></button></div>
