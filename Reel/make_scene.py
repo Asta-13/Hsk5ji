@@ -1,14 +1,28 @@
 #!/usr/bin/env python3
 """Киноны хэв маягийн богино харилцан яриа (reel, 9:16 mp4). scenes.json доторх 40 өөрийн зохиосон яриаг дарааллаар нь хийнэ.
 Хэрэглээ: python3 reel/make_scene.py [--index N] [--silent] [--min-gap МИНУТ]"""
-import argparse, json, os, subprocess, sys, tempfile, time
+import argparse, json, os, struct, subprocess, sys, tempfile, time, wave
 from PIL import Image, ImageDraw
 import make_reel as M
 from make_reel import W, H, cfont, font, bg, center, wrap, say, join, probe, silence, SITE
 
 OUT = M.OUT
 STATE = os.path.join(OUT, 'scene-state.json')
-VOICE = {'A': 'zh-CN-XiaoxiaoNeural', 'B': 'zh-CN-YunxiNeural'}
+PAIRS = [('zh-CN-XiaoxiaoNeural', 'zh-CN-YunxiNeural'), ('zh-CN-XiaoyiNeural', 'zh-CN-YunjianNeural'), ('zh-CN-XiaoxiaoNeural', 'zh-CN-YunyangNeural')]
+FPS = 10   # дүрсний давтамж (амны хөдөлгөөн дуутай таарна)
+
+def envelope(path, fps=FPS):
+    """Дууны хүч (0..1) кадр тус бүрээр → амны нээлтийг дуутай тааруулна (lip-sync)."""
+    try:
+        w = wave.open(path); n, sr, ch = w.getnframes(), w.getframerate(), w.getnchannels()
+        raw = w.readframes(n); data = struct.unpack('<%dh' % (len(raw) // 2), raw)[::ch]
+    except Exception: return []
+    step = max(1, sr // fps); out = []
+    for i in range(0, len(data), step):
+        seg = data[i:i + step]
+        out.append((sum(x * x for x in seg) / max(1, len(seg))) ** 0.5)
+    m = max(out) if out else 1
+    return [min(1.0, v / (m * 0.6)) if m > 0 else 0 for v in out]
 COL = {'A': '#f472b6', 'B': '#38bdf8'}
 
 
@@ -69,9 +83,9 @@ def set_bg(d, th):
         rect(120, 960, 360, 1180, '#bfdbfe', 14); d.line([(240, 960), (240, 1180)], fill='white', width=8)
         rect(640, 1250, 1010, 1420, '#a78bfa', 36); rect(640, 1180, 1010, 1290, '#8b5cf6', 36)
 
-def stick(d, cx, feet, who, speaking, t):
+def stick(d, cx, feet, who, speaking, t, mo=0.0):
     col = '#f472b6' if who == 'A' else '#38bdf8'
-    bob = (6 if t % 2 else 0) if speaking else 0
+    bob = (6 if (t // 2) % 2 else 0) if speaking and mo > 0.15 else 0
     top = feet - 330 - bob
     hy = top + 48
     lw = 15; ink = '#0f172a'
@@ -83,14 +97,18 @@ def stick(d, cx, feet, who, speaking, t):
     sh = hy + 80
     d.line([(cx, sh), (cx - 60, sh + 90)], fill=col, width=lw)
     if speaking:
-        up = -70 if t % 2 else -30
+        up = -70 if (t // 3) % 2 else -30
         d.line([(cx, sh), (cx + 70, sh + up)], fill=col, width=lw)
     else:
         d.line([(cx, sh), (cx + 60, sh + 90)], fill=col, width=lw)
     # head
     d.ellipse([cx - 48, hy - 48, cx + 48, hy + 48], fill='#fef3c7', outline=ink, width=6)
-    d.ellipse([cx - 22, hy - 12, cx - 10, hy], fill=ink); d.ellipse([cx + 10, hy - 12, cx + 22, hy], fill=ink)
-    if speaking and t % 2: d.ellipse([cx - 14, hy + 14, cx + 14, hy + 38], fill='#be123c')
+    if t % 37 == 5:  # цой цохилт
+        d.line([cx - 24, hy - 6, cx - 8, hy - 6], fill=ink, width=5); d.line([cx + 8, hy - 6, cx + 24, hy - 6], fill=ink, width=5)
+    else:
+        d.ellipse([cx - 22, hy - 12, cx - 10, hy], fill=ink); d.ellipse([cx + 10, hy - 12, cx + 22, hy], fill=ink)
+    if speaking and mo > 0.12:
+        r = int(8 + 18 * mo); d.ellipse([cx - 10 - r // 2, hy + 14, cx + 10 + r // 2, hy + 14 + r + 6], fill='#be123c')
     else: d.arc([cx - 20, hy + 8, cx + 20, hy + 34], 20, 160, fill=ink, width=5)
     if who == 'A':  # ponytail + bow
         d.ellipse([cx + 36, hy - 40, cx + 80, hy + 10], fill='#7c2d12'); d.pieslice([cx - 48, hy - 50, cx + 48, hy + 30], 180, 360, fill='#7c2d12')
@@ -98,7 +116,7 @@ def stick(d, cx, feet, who, speaking, t):
     else:  # cap
         d.pieslice([cx - 50, hy - 56, cx + 50, hy + 24], 180, 360, fill='#0369a1'); d.rectangle([cx - 52, hy - 22, cx + 70, hy - 14], fill='#0369a1')
 
-def frame(sc, upto, path, t=0, th='home'):
+def frame(sc, upto, path, t=0, th='home', mo=0.0):
     im, d = bg(); set_bg(d, th)
     center(d, 'КИНОНЫ ХАРИЛЦАН ЯРИА', 95, cfont(52), '#93c5fd')
     f = cfont(44); hk = f"HSK {sc['level']}"; w = d.textlength(hk, font=f)
@@ -133,7 +151,7 @@ def frame(sc, upto, path, t=0, th='home'):
     for l in ml: d.text((120, yy), l, font=fm, fill='#475569'); yy += 66
     # дүрүүд
     FEET = 1600; xs = {'A': 290, 'B': 790}
-    for w2 in ('A', 'B'): stick(d, xs[w2], FEET, w2, w2 == who, t)
+    for w2 in ('A', 'B'): stick(d, xs[w2], FEET, w2, w2 == who, t, mo if w2 == who else 0)
     if y + hh < 1230:
         cxs = xs[who]; d.polygon([(cxs - 30, y + hh - 4), (cxs + 30, y + hh - 4), (cxs, min(y + hh + 70, 1240))], fill='white')
     # ахиц
@@ -167,6 +185,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--index', type=int); ap.add_argument('--silent', action='store_true'); ap.add_argument('--min-gap', type=int, default=0)
     a = ap.parse_args()
+    M.start_watchdog()
     try: st = json.load(open(STATE))
     except Exception: st = {}
     if a.min_gap and time.time() - st.get('last', 0) < a.min_gap * 60:
@@ -176,6 +195,7 @@ def main():
     S = json.load(open(os.path.join(M.HERE, 'scenes.json'), encoding='utf8'))
     num = a.index if a.index is not None else st.get('next', 0)
     sc = S[num % len(S)]; th = theme_of(sc, num)
+    VOICE = dict(zip('AB', PAIRS[num % len(PAIRS)]))
     os.makedirs(OUT, exist_ok=True)
     with tempfile.TemporaryDirectory() as tmp:
         segs = []
@@ -184,23 +204,27 @@ def main():
             mp4 = os.path.join(tmp, kind + '.mp4')
             subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-loop', '1', '-framerate', '30', '-i', img, '-i', aud, '-t', '2.2', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-ar', '44100', '-shortest', mp4], check=True)
             segs.append(mp4)
+        # Эхлээд бүх дууг үүсгэнэ: сервис доголдвол зураг зурахаас өмнө түргэн зогсоно.
+        wavs = [say(zh, VOICE[who], '-6%', tmp, i, a.silent) for i, (who, zh, mn) in enumerate(sc['lines'])]
+        if M.TTS_FAIL and not a.silent: sys.exit('Дуу үүсгэж чадсангүй: ' + ', '.join(M.TTS_FAIL))
         for i, (who, zh, mn) in enumerate(sc['lines']):
-            w1 = say(zh, VOICE[who], '-5%', tmp, i, a.silent)
-            pause = os.path.join(tmp, f'p{i}.wav'); silence(pause, 0.5)
+            w1 = wavs[i]; env = envelope(w1)
+            pause = os.path.join(tmp, f'p{i}.wav'); silence(pause, 0.45 if i < len(sc['lines']) - 1 else 0.8)
             aud = os.path.join(tmp, f'a{i}.wav'); join([w1, pause], 0, aud)
-            dur = probe(aud); nf = max(2, int(dur * 4))
+            dur = probe(aud); nf = max(2, int(dur * FPS))
             fd = os.path.join(tmp, f'fr{i}'); os.makedirs(fd)
-            for t in range(nf): frame(sc, i, os.path.join(fd, f'f{t:03d}.png'), t, th)
+            for t in range(nf): frame(sc, i, os.path.join(fd, f'f{t:03d}.png'), t, th, env[t] if t < len(env) else 0)
             mp4 = os.path.join(tmp, f's{i}.mp4')
-            subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', '4', '-i', os.path.join(fd, 'f%03d.png'), '-i', aud, '-r', '30',
-                            '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-ar', '44100', '-shortest', mp4], check=True)
+            subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', str(FPS), '-i', os.path.join(fd, 'f%03d.png'), '-i', aud, '-r', '30',
+                            '-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-ar', '44100', '-shortest', mp4], check=True)
             segs.append(mp4)
+            for f in os.listdir(fd): os.remove(os.path.join(fd, f))
         img = os.path.join(tmp, 'end.png'); card(sc, 'end', img); aud = os.path.join(tmp, 'end.wav'); silence(aud, 5.0); mp4 = os.path.join(tmp, 'end.mp4')
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-loop', '1', '-framerate', '30', '-i', img, '-i', aud, '-t', '5', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-ar', '44100', '-shortest', mp4], check=True)
         segs.append(mp4)
         lst = os.path.join(tmp, 'l.txt'); open(lst, 'w').write(''.join(f"file '{s}'\n" for s in segs))
         out = os.path.join(OUT, f'scene-{num % len(S) + 1:04d}.mp4')
-        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c', 'copy', out], check=True)
+        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c:v', 'copy', '-af', M.LOUDNORM, '-c:a', 'aac', '-b:a', '160k', '-ar', '44100', '-movflags', '+faststart', out], check=True)
     zh_all = '\n'.join(f'{w}: {z}' for w, z, m in sc['lines'])
     mn_all = '\n'.join(f'{w}: {m}' for w, z, m in sc['lines'])
     cap = (f"🎬 {sc['title_zh']} — {sc['title_mn']}\n🎓 HSK {sc['level']}\n\n{zh_all}\n\n🇲🇳 Орчуулга:\n{mn_all}\n\n"

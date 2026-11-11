@@ -5,8 +5,14 @@
 Хэрэглээ: python3 reel/make_reel.py [--level N] [--word 爱] [--silent]
 Өдөрт 4 удаа ажиллана; HSK 1-ээс эхлэн үгсийг дарааллаар нь авна (reels/state.json дээр байр тэмдэглэнэ).
 """
-import argparse, asyncio, datetime, json, os, re, subprocess, sys, wave, tempfile
+import argparse, asyncio, datetime, faulthandler, json, os, re, subprocess, sys, time, wave, tempfile
 from PIL import Image, ImageDraw, ImageFont
+
+def start_watchdog(sec=None):
+    """Ямар нэг юм гацвал (сүлжээ, ffmpeg) 15 минут чимээгүй хүлээхийн оронд N секундын дараа
+    бүх thread-ийн байрлалыг лог руу хэвлэж, процессыг зогсооно → алдаа хаана гацсан нь Actions-ийн логоос харагдана."""
+    sec = int(sec or os.environ.get('WATCHDOG_SEC') or 540)
+    faulthandler.dump_traceback_later(sec, exit=True)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.environ.get('REEL_OUT') or os.path.join(ROOT, 'reels')
@@ -60,15 +66,21 @@ def sent_pinyin(z):
     except Exception: return ''
 
 def load():
-    src = open(os.path.join(ROOT, 'index.html'), encoding='utf8').read()
-    m = re.search(r'var HSKRAW=(\{.*?\});', src, re.S)
-    raw = json.loads(m.group(1))
+    """Өгөгдлийг data/*.json-оос уншина (шинэ бүтэц); байхгүй бол хуучин index.html-ээс."""
+    D = os.path.join(ROOT, 'data')
+    if os.path.exists(os.path.join(D, 'hsk-words-a.json')):
+        rd = lambda f: json.load(open(os.path.join(D, f), encoding='utf8'))
+        raw, mn_raw, gram_raw = rd('hsk-words-a.json'), rd('hsk-mongolian.json'), rd('grammar.json')
+    else:
+        src = open(os.path.join(ROOT, 'index.html'), encoding='utf8').read()
+        raw = json.loads(re.search(r'var HSKRAW=(\{.*?\});', src, re.S).group(1))
+        mn_raw, gram_raw = js_string(src, 'HSKMN_RAW'), js_string(src, 'GRAM_RAW')
     mn = {}
-    for it in js_string(src, 'HSKMN_RAW').split('|'):
+    for it in mn_raw.split('|'):
         if '=' in it:
             k, v = it.split('=', 1); mn[k] = v
     gram = []
-    for line in js_string(src, 'GRAM_RAW').split('\n'):
+    for line in gram_raw.split('\n'):
         a = line.split('|')
         if len(a) >= 5: gram.append((a[3], a[4]))
     words = {}
@@ -119,20 +131,44 @@ def silence(path, sec):
         w.setnchannels(1); w.setsampwidth(2); w.setframerate(24000)
         w.writeframes(b'\x00\x00' * int(24000 * sec))
 
+LOUDNORM = 'loudnorm=I=-15:TP=-1.5:LRA=9'   # Instagram/TikTok-д тохирсон дууны түвшин
+TTS_TIMEOUT = 25      # нэг оролдлогын дээд хугацаа (сек). Богино өгүүлбэр ихэвчлэн 1-3 сек.
+FEMALE = ('Xiaoxiao', 'Xiaoyi')
+
 async def tts_async(text, voice, rate, path):
     import edge_tts
     pitch = MN_PITCH if voice.startswith('mn-') else '+0Hz'
-    await asyncio.wait_for(edge_tts.Communicate(text, voice, rate=rate, pitch=pitch).save(path), timeout=40)
+    await asyncio.wait_for(edge_tts.Communicate(text, voice, rate=rate, pitch=pitch).save(path), timeout=TTS_TIMEOUT)
+
+def alt_voice(voice):
+    """Сүүлийн оролдлогод ижил хүйсийн өөр хоолой хэрэглэнэ (нэг хоолой түр доголдож болдог)."""
+    if voice.startswith('mn-'):
+        return 'mn-MN-BataaNeural' if 'Yesui' in voice else 'mn-MN-YesuiNeural'
+    fem = any(f in voice for f in FEMALE)
+    base = 'zh-CN-XiaoxiaoNeural' if fem else 'zh-CN-YunxiNeural'
+    if voice == base: base = 'zh-CN-XiaoyiNeural' if fem else 'zh-CN-YunjianNeural'
+    return base
 
 TTS_FAIL = []
+TTS_DEAD = False      # нэг өгүүлбэр бүх оролдлогоор бүтэлгүйтвэл (сервис унасан) үлдсэнийг оролдохгүй, түргэн алдаатай дуусна
 def say(text, voice, rate, tmp, idx, silent):
+    global TTS_DEAD
     wav = os.path.join(tmp, f'c{idx}.wav')
-    if not silent:
+    if not silent and not TTS_DEAD:
         mp3 = os.path.join(tmp, f'c{idx}.mp3')
-        try:
-            asyncio.run(tts_async(text, voice, rate, mp3)); to_wav(mp3, wav); return wav
-        except Exception as e:
-            print('TTS алдаа (' + text[:12] + '):', e); TTS_FAIL.append(text)
+        plan = [(voice, 0), (voice, 2), (alt_voice(voice), 4)]
+        for n, (v, wait) in enumerate(plan, 1):
+            time.sleep(wait)
+            try:
+                asyncio.run(tts_async(text, v, rate, mp3))
+                if os.path.getsize(mp3) < 800: raise RuntimeError('аудио хэт жижиг')
+                to_wav(mp3, wav)
+                if probe(wav) < 0.25: raise RuntimeError('аудио хоосон')
+                if n > 1: print(f'TTS {n}-р оролдлогоор бүтлээ ({v})', flush=True)
+                return wav
+            except Exception as e:
+                print(f'TTS алдаа {n}/{len(plan)} [{v}] "{text[:12]}": {type(e).__name__}: {e}', flush=True)
+        TTS_FAIL.append(text); TTS_DEAD = True
     silence(wav, max(1.2, len(text) * 0.25)); return wav
 
 def join(wavs, gap, dst):
@@ -156,12 +192,18 @@ def center(d, text, y, f, fill='white'):
     w = d.textlength(text, font=f); d.text(((W - w) / 2, y), text, font=f, fill=fill)
 
 def wrap(d, text, f, maxw):
+    """Хятад үсгийг тэмдэгтээр, кирилл/латин үгийг үгийн зааг дээр таслана (үг дундаа тасрахгүй)."""
     lines, cur = [], ''
-    for ch in text:
-        if d.textlength(cur + ch, font=f) > maxw and cur:
-            lines.append(cur); cur = ch
-        else: cur += ch
-    if cur: lines.append(cur)
+    toks = re.findall(r'[A-Za-z\u0400-\u04FF0-9\u0300-\u036F\u0101-\u017F\u00E0-\u00FC\'’\-.,!?:;()…“”"/%+=]+\s*|\s+|.', text)
+    for tk in toks:
+        if d.textlength((cur + tk).rstrip(), font=f) > maxw and cur:
+            lines.append(cur.rstrip()); cur = tk.lstrip()
+            while d.textlength(cur.rstrip(), font=f) > maxw and len(cur) > 1:   # маш урт үг
+                k = len(cur) - 1
+                while k > 1 and d.textlength(cur[:k], font=f) > maxw: k -= 1
+                lines.append(cur[:k]); cur = cur[k:]
+        else: cur += tk
+    if cur.strip(): lines.append(cur.rstrip())
     return lines
 
 def header(d, lv):
@@ -240,11 +282,11 @@ def main():
     ap.add_argument('--min-gap', type=int, default=0, help='сүүлийн видеоноос N минут болоогүй бол алгасна')
     ap.add_argument('--level', type=int); ap.add_argument('--word'); ap.add_argument('--silent', action='store_true')
     a = ap.parse_args()
+    start_watchdog()
     global EX_PY
     if a.min_gap:
         try: last = json.load(open(STATE)).get('last', 0)
         except Exception: last = 0
-        import time
         if time.time() - last < a.min_gap * 60:
             print('Алгасав: сүүлийн видеоноос', round((time.time() - last) / 60), 'минут болсон')
             go = os.environ.get('GITHUB_OUTPUT')
@@ -258,20 +300,25 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     with tempfile.TemporaryDirectory() as tmp:
         c = lambda t, v, r, i: say(t, v, r, tmp, i, a.silent)
+        # Эхлээд бүх дууг үүсгээд, алдаа гарвал зураг/видео зурахаас өмнө түргэн зогсоно.
         zs, zn = c(han, ZH_VOICE, '-30%', 1), c(han, ZH_VOICE, '+0%', 2)
+        a_mean = c('Утга нь... ' + mn.replace(',', ', ').replace('(', ', ').replace(')', '').strip() + '.', MN_VOICE, MN_RATE, 3)
+        a_ex = [c(ex[0], ZH_VOICE, '-25%', 4), c(ex[0], ZH_VOICE, '+0%', 5), c('Орчуулбал... ' + ex[1], MN_VOICE, MN_RATE, 6)] if ex else None
+        if TTS_FAIL: sys.exit('Дуу үүсгэж чадсангүй: ' + ', '.join(TTS_FAIL))
         scenes = [render('word', lv, w, ex, [zs, zn], 0.5, tmp, 0)]
-        scenes.append(render('meaning', lv, w, ex, [c('Утга нь... ' + mn.replace(',', ', ').replace('(', ', ').replace(')', '').strip() + '.', MN_VOICE, MN_RATE, 3)], 0, tmp, 1))
-        if ex: scenes.append(render('example', lv, w, ex, [c(ex[0], ZH_VOICE, '-25%', 4), c(ex[0], ZH_VOICE, '+0%', 5), c('Орчуулбал... ' + ex[1], MN_VOICE, MN_RATE, 6)], 0.5, tmp, 2))
+        scenes.append(render('meaning', lv, w, ex, [a_mean], 0, tmp, 1))
+        if ex: scenes.append(render('example', lv, w, ex, a_ex, 0.5, tmp, 2))
         scenes.append(render('repeat', lv, w, ex, [zn, zs, zn], 0.6, tmp, 3))
         lst = os.path.join(tmp, 'list.txt')
         open(lst, 'w').write(''.join(f"file '{s}'\n" for s in scenes))
         tag = f'{num + 1:04d}' if num is not None else datetime.datetime.now().strftime('manual-%Y%m%d-%H%M%S')
         out = os.path.join(OUT, f'reel-{tag}.mp4')
-        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c', 'copy', out], check=True)
+        # Дууг нэг түвшинд (хэт чимээгүй/чанга биш) болгоно; видеог дахин кодлохгүй.
+        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c:v', 'copy', '-af', LOUDNORM,
+                        '-c:a', 'aac', '-b:a', '160k', '-ar', '44100', '-movflags', '+faststart', out], check=True)
     cap = make_caption(han, py, mn, lv, ex, ex_py, num)
     open(out[:-4] + '.txt', 'w', encoding='utf8').write(cap)
     if num is not None and not a.silent:
-        import time
         json.dump({'next': num + 1, 'last': int(time.time())}, open(STATE, 'w'))
         keep = sorted(f[:-4] for f in os.listdir(OUT) if f.startswith('reel-') and f.endswith('.mp4'))[:-KEEP]
         for k in keep:
