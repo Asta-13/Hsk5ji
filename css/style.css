@@ -52,7 +52,7 @@ h2{font-size:1.15rem;font-weight:900}
 .bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden}
 .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
 
-.prog{display:flex;align-items:center;gap:14px}
+.prog-ring{display:flex;align-items:center;gap:14px}
 .ring{flex:none;width:64px;height:64px}
 .ring circle{fill:none;stroke-width:6}
 .ring .bg{stroke:var(--line)}
@@ -125,7 +125,7 @@ details summary{cursor:pointer;font-weight:700;min-height:40px;display:flex;alig
 .spk{position:absolute;top:10px;right:10px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--accent);display:flex;align-items:center;justify-content:center;cursor:pointer}
 .spk svg{width:20px;height:20px}
 .answers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.prog{display:flex;align-items:flex-end;gap:6px;height:120px;padding-top:6px}.prog div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;font-size:.7rem}.prog i{display:block;width:100%;background:var(--ok);border-radius:4px 4px 0 0;min-height:2px}.prog span{opacity:.7;margin-top:3px}.prog b{font-size:.72rem;margin-bottom:2px}
+.progchart{display:flex;align-items:flex-end;gap:6px;height:120px;padding-top:6px}.progchart div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;font-size:.7rem}.progchart i{display:block;width:100%;background:var(--ok);border-radius:4px 4px 0 0;min-height:2px}.prog span{opacity:.7;margin-top:3px}.prog b{font-size:.72rem;margin-bottom:2px}
 #decBox .lq{width:100%}#decBox .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 #p-cards>.card{padding:12px;gap:8px}#p-cards .chip{padding:6px 11px;font-size:.84rem}#p-cards .grid2{gap:8px}
 .sim{font-size:.78rem;opacity:.8;margin-top:8px;line-height:1.5;text-align:center}.sim small{font-size:.72rem}
