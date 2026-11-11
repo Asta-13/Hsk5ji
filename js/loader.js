@@ -53,7 +53,9 @@
     var b=$('boot');if(!b)return;
     b.classList.add('hide');setTimeout(function(){b.parentNode&&b.parentNode.removeChild(b)},350)};
 
+  var failed=false;
   function fail(e){
+    failed=true;
     var b=$('boot');if(!b)return;
     b.innerHTML='<div class="bt">Ачаалж чадсангүй.<br><small>'+String(e&&e.message||e)+
       '</small><br><small>(file:// биш, сервер / GitHub Pages дээр нээнэ үү)</small></div>'+
@@ -70,10 +72,13 @@
   if(needI18N)jobs.push(track(loadSet(I18N).then(exposeI18N)));
 
   Promise.all(jobs).then(function(r){
+    window.HSKRAW=DATA.HSKRAW;window.HSKRAW3=DATA.HSKRAW3;   /* апп эдгээрийг глобалаар уншдаг */
+    window.addEventListener('error',function(ev){            /* эхлэхэд унавал хоосон биш, алдааг харуулна */
+      if(!booted)fail(ev.error||ev.message)});
     var s=document.createElement('script');
     s.text=r[1]+'\n//# sourceURL=js/app.js';
     document.body.appendChild(s);
     var b=$('bootBar');if(b)b.style.width='100%';
-    setTimeout(window.__bootDone,12000);   /* аюулгүйн хугацаа */
+    setTimeout(function(){if(!failed)window.__bootDone()},12000);   /* аюулгүйн хугацаа */
   }).catch(fail);
 })();
