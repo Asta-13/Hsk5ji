@@ -17,6 +17,39 @@ def short(mn):
     t = re.sub(r'\s*\(.*?\)', '', t).strip() or mn
     return t[:38]
 
+TONES = {'a': 'āáǎà', 'e': 'ēéěè', 'i': 'īíǐì', 'o': 'ōóǒò', 'u': 'ūúǔù', 'ü': 'ǖǘǚǜ'}
+MARK = {c: (v, n + 1) for v, cs in TONES.items() for n, c in enumerate(cs)}
+def split_syl(sy):
+    """'bà' → ('ba', 4); тэмдэггүй (хөнгөн тон) → (syl, 0)"""
+    base, tone = '', 0
+    for ch in sy:
+        if ch in MARK: v, t = MARK[ch]; base += v; tone = t
+        else: base += ch
+    return base, tone
+def put_tone(base, tone):
+    if not tone: return base
+    low = base.lower()
+    for v in ('a', 'e'):
+        i = low.find(v)
+        if i >= 0: return base[:i] + TONES[v][tone - 1] + base[i + 1:]
+    i = low.find('ou')
+    if i >= 0: return base[:i] + TONES['o'][tone - 1] + base[i + 1:]
+    for i in range(len(base) - 1, -1, -1):
+        if low[i] in TONES: return base[:i] + TONES[low[i]][tone - 1] + base[i + 1:]
+    return base
+def tone_variants(py, rng, n=2):
+    """Зөв пиньин дээрх нэг үеийн тоныг өөрчилж төөрүүлэх хувилбар (тон нь хамгийн хэцүү хэсэг)."""
+    syl = py.split()
+    idxs = [i for i, x in enumerate(syl) if split_syl(x)[1]]
+    out, tries = [], 0
+    while len(out) < n and idxs and tries < 40:
+        tries += 1
+        i = rng.choice(idxs); base, t = split_syl(syl[i])
+        nt = rng.choice([x for x in (1, 2, 3, 4) if x != t])
+        v = syl[:]; v[i] = put_tone(base, nt); v = ' '.join(v)
+        if v != py and v not in out: out.append(v)
+    return out
+
 def build(words, num_learned, idx, forced=None):
     seq = M.ordered(words)
     if forced:
@@ -26,17 +59,22 @@ def build(words, num_learned, idx, forced=None):
     else:
         lv, w = seq[idx % max(1, min(num_learned, len(seq)))] if num_learned else seq[idx % len(seq)]
     rng = random.Random(idx * 7919 + 13)
+    mode = 'pinyin' if idx % 3 != 2 else 'meaning'      # 3-аас 2 нь дуудлага (тон), 1 нь утга
+    if mode == 'pinyin':
+        wr = tone_variants(w[1], rng)
+        if len(wr) == 2:
+            labels = [w[1]] + wr; rng.shuffle(labels); return lv, w, labels, labels.index(w[1]), mode
     pool = [x[1] for x in seq if x[0] == lv and x[1][0] != w[0] and short(x[1][2]) != short(w[2])]
     if len(pool) < 2: pool = [x[1] for x in seq if x[1][0] != w[0] and short(x[1][2]) != short(w[2])]
     seen, wrong = {short(w[2])}, []
     rng.shuffle(pool)
-    for p in pool:
-        if short(p[2]) not in seen: seen.add(short(p[2])); wrong.append(p)
+    for pp in pool:
+        if short(pp[2]) not in seen: seen.add(short(pp[2])); wrong.append(pp)
         if len(wrong) == 2: break
     opts = [w] + wrong; rng.shuffle(opts)
-    return lv, w, opts, opts.index(w)
+    return lv, w, [short(o[2]) for o in opts], opts.index(w), 'meaning'
 
-def frame(path, lv, w, opts, correct, state, count=None):
+def frame(path, lv, w, opts, correct, state, count=None, mode='meaning'):
     """state: 'q' (асуулт) | 'a' (хариулт)"""
     im, d = bg()
     center(d, 'ШАЛГАЛТ', 100, cfont(56), '#93c5fd')
@@ -44,8 +82,8 @@ def frame(path, lv, w, opts, correct, state, count=None):
     d.rounded_rectangle([(W - tw) / 2 - 34, 185, (W + tw) / 2 + 34, 255], 35, fill='#facc15'); d.text(((W - tw) / 2, 192), t, font=f, fill='#1e293b')
     hf = font(230 if len(w[0]) <= 2 else 170 if len(w[0]) <= 4 else 120)
     center(d, w[0], 330, hf, 'white')
-    if state == 'a': center(d, w[1], 640, cfont(66), '#fde68a')   # пиньин зөвхөн хариулт үед гарна
-    center(d, 'Утга нь юу вэ?', 760, cfont(58), '#bfdbfe')
+    if state == 'a': center(d, w[1] if mode == 'meaning' else short(w[2]), 640, cfont(66), '#fde68a')   # утга: пиньин, дуудлага: монгол утга
+    center(d, 'Утга нь юу вэ?' if mode == 'meaning' else 'Аль дуудлага зөв вэ?', 760, cfont(58), '#bfdbfe')
     y = 880
     for i, o in enumerate(opts):
         ok = (i == correct); show_ok = state == 'a' and ok; dim = state == 'a' and not ok
@@ -53,7 +91,7 @@ def frame(path, lv, w, opts, correct, state, count=None):
         d.rounded_rectangle([70, y, W - 70, y + 190], 44, fill=fill, outline=('#bbf7d0' if show_ok else COLS[i]), width=10)
         d.ellipse([105, y + 45, 205, y + 145], fill=COLS[i] if not dim else '#475569')
         lf = cfont(66); lw = d.textlength(LET[i], font=lf); d.text((155 - lw / 2, y + 52), LET[i], font=lf, fill='#0f172a')
-        fm = cfont(50); lines = wrap(d, short(o[2]), fm, W - 400)[:2]
+        fm = cfont(58 if mode == 'pinyin' else 50); lines = wrap(d, o, fm, W - 400)[:2]
         ty = y + 95 - len(lines) * 32
         for l in lines: d.text((240, ty), l, font=fm, fill='white' if (show_ok or dim) else '#0f172a'); ty += 64
         y += 220
@@ -62,7 +100,7 @@ def frame(path, lv, w, opts, correct, state, count=None):
         d.ellipse([cx - r, cy - r, cx + r, cy + r], fill='#facc15')
         cf = cfont(110); cw = d.textlength(str(count), font=cf); d.text((cx - cw / 2, cy - 68), str(count), font=cf, fill='#1e293b')
     elif state == 'q':
-        center(d, 'Сонсоод хариулаарай', 1610, cfont(54), '#facc15')
+        center(d, 'Сонсоод хариулаарай' if mode == 'meaning' else 'Тонгоо сайн бод!', 1610, cfont(54), '#facc15')
     else:
         center(d, f'Зөв хариулт: {LET[correct]}', 1590, cfont(70), '#4ade80')
     center(d, SITE, 1775, cfont(42), '#facc15')
@@ -112,27 +150,29 @@ def main():
     try: learned = json.load(open(os.path.join(OUT, 'state.json'))).get('next', 0)
     except Exception: learned = 0
     words, _ = M.load(); idx = st.get('next', 0)
-    lv, w, opts, ci = build(words, learned, idx, a.word)
-    print('Шалгалт:', w[0], w[1], short(w[2]), '→', LET[ci], '(HSK', lv, ')')
+    lv, w, opts, ci, mode = build(words, learned, idx, a.word)
+    print('Шалгалт:', mode, w[0], w[1], short(w[2]), '→', LET[ci], opts, '(HSK', lv, ')')
     os.makedirs(OUT, exist_ok=True)
     with tempfile.TemporaryDirectory() as tmp:
         P = lambda n: os.path.join(tmp, n)
         z1 = say(w[0], ZH_VOICE, '-15%', tmp, 1, a.silent)
         z2 = say(w[0], ZH_VOICE, '+0%', tmp, 2, a.silent)
-        ans = say(f'Зөв хариулт, {LET[ci]}. {short(w[2])}.', MN_VOICE, MN_RATE, tmp, 3, a.silent)
+        ans = say(f'Зөв хариулт, {LET[ci]}. Утга нь, {short(w[2])}.', MN_VOICE, MN_RATE, tmp, 3, a.silent)
         if M.TTS_FAIL and not a.silent: sys.exit('Дуу үүсгэж чадсангүй: ' + ', '.join(M.TTS_FAIL))
-        # 1) асуулт: үгийг уншина
-        aq = P('aq.wav'); gap = P('g.wav'); silence(gap, 0.6); join([z1, gap, z2], 0, aq)
+        # 1) асуулт: утгын горимд үгийг уншина; дуудлагын горимд хариултыг задруулахгүйн тулд чимээгүй
+        aq = P('aq.wav'); gap = P('g.wav'); silence(gap, 0.6)
+        if mode == 'meaning': join([z1, gap, z2], 0, aq)
+        else: silence(aq, 2.5)
         nq = int(probe(aq)) + 1; imgs = []
-        for i in range(nq): frame(P(f'q{i}.png'), lv, w, opts, ci, 'q'); imgs.append(P(f'q{i}.png'))
+        for i in range(nq): frame(P(f'q{i}.png'), lv, w, opts, ci, 'q', None, mode); imgs.append(P(f'q{i}.png'))
         segs = [segment(tmp, 'q', imgs, aq)]
         # 2) тоолуур 5..1
         at = P('at.wav'); tick(at, 5); imgs = []
-        for i, c in enumerate([5, 4, 3, 2, 1]): frame(P(f'c{i}.png'), lv, w, opts, ci, 'q', c); imgs.append(P(f'c{i}.png'))
+        for i, c in enumerate([5, 4, 3, 2, 1]): frame(P(f'c{i}.png'), lv, w, opts, ci, 'q', c, mode); imgs.append(P(f'c{i}.png'))
         segs.append(segment(tmp, 'c', imgs, at))
         # 3) хариулт
-        aa = P('aa.wav'); silence(gap, 0.4); join([ans, gap, z2], 0, aa); na = int(probe(aa)) + 1; imgs = []
-        for i in range(na): frame(P(f'a{i}.png'), lv, w, opts, ci, 'a'); imgs.append(P(f'a{i}.png'))
+        aa = P('aa.wav'); silence(gap, 0.4); join([z1, gap, ans, gap, z2] if mode == 'pinyin' else [ans, gap, z2], 0, aa); na = int(probe(aa)) + 1; imgs = []
+        for i in range(na): frame(P(f'a{i}.png'), lv, w, opts, ci, 'a', None, mode); imgs.append(P(f'a{i}.png'))
         segs.append(segment(tmp, 'a', imgs, aa))
         # 4) CTA
         cta(P('cta.png')); ac = P('ac.wav'); silence(ac, 3); segs.append(segment(tmp, 'cta', [P('cta.png')], ac))
@@ -140,9 +180,10 @@ def main():
         tag = f'{idx + 1:04d}'; out = os.path.join(OUT, f'quiz-{tag}.mp4')
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c:v', 'copy', '-af', M.LOUDNORM,
                         '-c:a', 'aac', '-b:a', '160k', '-ar', '44100', '-movflags', '+faststart', out], check=True)
-    opts_txt = '\n'.join(f'{LET[i]}) {short(o[2])}' for i, o in enumerate(opts))
-    cap = (f'🧠 Энэ үгийн утга юу вэ? Хариулаад комментд бич!\n\n📌 {w[0]}\n\n{opts_txt}\n\n'
-           f'✅ Зөв хариулт: {LET[ci]}) {short(w[2])}  [{w[1]}]\n🎓 HSK {lv}\n\n💾 Хадгалаад давтаарай ❤️ Найздаа илгээгээрэй\n'
+    opts_txt = '\n'.join(f'{LET[i]}) {o}' for i, o in enumerate(opts))
+    q_txt = 'Энэ үгийн утга юу вэ?' if mode == 'meaning' else 'Аль дуудлага зөв вэ?'
+    cap = (f'🧠 {q_txt} Хариулаад комментд бич!\n\n📌 {w[0]}\n\n{opts_txt}\n\n'
+           f'✅ Зөв хариулт: {LET[ci]}) {opts[ci]}  ({short(w[2])})\n🎓 HSK {lv}\n\n💾 Хадгалаад давтаарай ❤️ Найздаа илгээгээрэй\n'
            f'👉 Үнэгүй сурах сайт: {SITE}\n\n{M.TAGS[0]} #HSK{lv} #шалгалт #quiz ' + ' '.join(M.TAGS[1:]))
     open(out[:-4] + '.txt', 'w', encoding='utf8').write(cap)
     if not a.silent and not a.word:
