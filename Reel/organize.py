@@ -41,6 +41,24 @@ def prune(days, today, keep):
             gone.append(name)
     return gone
 
+def write_index(out):
+    """reels салбарын үндсэн хуудсанд харагдах README.md: хамгийн шинэ видеог дээр нь, холбоостой жагсаана
+    (утаснаас GitHub нээгээд шууд дарж үзэх/татахад зориулав)."""
+    days = os.path.join(out, 'days')
+    if not os.path.isdir(days): return
+    L = ['# Reels', '', 'Видеог дарж үзээд, **Download** (↓) хийж хадгална. Доорх caption-ыг нээж хуулна.', '']
+    for day in sorted((x for x in os.listdir(days) if DAY.match(x) and os.path.isdir(os.path.join(days, x))), reverse=True):
+        dd = os.path.join(days, day)
+        vids = sorted((f for f in os.listdir(dd) if f.endswith('.mp4')), key=lambda f: os.path.getmtime(os.path.join(dd, f)), reverse=True)
+        L += [f'## {day}', '']
+        if os.path.exists(dd + '.zip'): L += [f'📦 [Өдрийн бүх видео (zip)](days/{day}.zip)', '']
+        for f in vids:
+            txt = os.path.join(dd, f[:-4] + '.txt'); first = ''
+            if os.path.exists(txt): first = open(txt, encoding='utf8').read().strip().split('\n')[0][:90]
+            L.append(f'- 🎬 [{f}](days/{day}/{f}) — {first}' + (f' · [caption](days/{day}/{f[:-4]}.txt)' if os.path.exists(txt) else ''))
+        L.append('')
+    open(os.path.join(out, 'README.md'), 'w', encoding='utf8').write('\n'.join(L) + '\n')
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('mode', choices=['legacy', 'daily']); ap.add_argument('out')
@@ -56,6 +74,7 @@ def main():
     if os.path.isdir(d):
         print(f'{today}: +{n} файл → {make_zip(d)}')
     print('устгасан хуучин өдөр:', prune(days, today, a.keep_days) if os.path.isdir(days) else [])
+    write_index(a.out)
 
 if __name__ == '__main__':
     main()
