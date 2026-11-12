@@ -1,0 +1,127 @@
+name: Daily grammar
+
+concurrency:
+  group: reel
+  cancel-in-progress: false
+
+on:
+  schedule:
+    - cron: '37 1-14 * * *'
+  workflow_dispatch:
+    inputs:
+      index:
+        description: 'Number (optional, 0 = first)'
+        required: false
+      auto:
+        description: 'true бол автомат горим (gap шалгана)'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: read
+
+jobs:
+  grammar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    env:
+      MIN_GAP_MIN: '150'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Get reels branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          rm -rf reels-out
+          URL="https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git"
+          if git ls-remote --exit-code --heads "$URL" reels >/dev/null 2>&1; then
+            git clone -q --branch reels --depth 1 "$URL" reels-out
+            rm -rf reels-out/.git
+          else
+            mkdir reels-out
+          fi
+
+      - name: Move old files to days/legacy (one time)
+        run: |
+          set -euo pipefail
+          [ -d reels-out/days ] || python3 Reel/organize.py legacy reels-out
+
+      - name: Early gap check
+        id: gap
+        env:
+          EVENT: ${{ github.event_name }}
+          AUTO: ${{ github.event.inputs.auto }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT" = "schedule" ] || [ "$AUTO" = "true" ]; then
+            python3 Reel/gap_check.py reels-out/grammar-state.json "$MIN_GAP_MIN"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install tools
+        if: steps.gap.outputs.skip != 'true'
+        timeout-minutes: 6
+        run: |
+          set -euo pipefail
+          sudo apt-get -o Acquire::Retries=3 update -qq
+          sudo apt-get -o Acquire::Retries=3 install -y -qq --no-install-recommends ffmpeg fonts-noto-cjk fonts-dejavu-core
+          pip install -q --retries 5 --timeout 30 -r Reel/requirements.txt
+
+      - name: Make grammar
+        id: make
+        if: steps.gap.outputs.skip != 'true'
+        timeout-minutes: 11
+        env:
+          PYTHONUNBUFFERED: '1'
+          WATCHDOG_SEC: '600'
+          EVENT: ${{ github.event_name }}
+          AUTO: ${{ github.event.inputs.auto }}
+          INDEX: ${{ github.event.inputs.index }}
+          REEL_OUT: ${{ github.workspace }}/reels-out
+        run: |
+          set -euo pipefail
+          args=()
+          if [ -n "$INDEX" ]; then
+            [[ "$INDEX" =~ ^[0-9]{1,4}$ ]] || { echo "::error::index тоо байх ёстой"; exit 1; }
+            args+=(--index "$INDEX")
+          fi
+          if [ "$EVENT" = "schedule" ] || [ "$AUTO" = "true" ]; then
+            args+=(--min-gap "$MIN_GAP_MIN")
+          fi
+          python3 Reel/make_grammar.py "${args[@]}"
+
+      - name: Send to Telegram
+        if: steps.gap.outputs.skip != 'true' && steps.make.outputs.skipped != 'true'
+        continue-on-error: true
+        timeout-minutes: 5
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python3 Reel/notify_telegram.py reels-out
+
+      - name: Organize by day (zip, keep 3 days)
+        if: steps.gap.outputs.skip != 'true' && steps.make.outputs.skipped != 'true'
+        run: python3 Reel/organize.py daily reels-out --keep-days 3
+
+      - name: Publish to reels branch
+        if: steps.gap.outputs.skip != 'true' && steps.make.outputs.skipped != 'true'
+        working-directory: reels-out
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          git init -q -b reels
+          git config user.name "reel-bot"
+          git config user.email "reel-bot@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Grammar"
+          git push -q --force "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" HEAD:refs/heads/reels
