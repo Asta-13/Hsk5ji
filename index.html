@@ -68,13 +68,22 @@
     <div class="note" id="obStep" data-i18n="obStep" style="border-left:4px solid var(--seal);font-weight:700"></div>
     <div class="hint" data-i18n="obHint"></div>
     <label class="f" for="obNick"><span data-i18n="nick"></span><input id="obNick" type="text" maxlength="24" data-i18n-ph="obNickPh"></label>
+    <details id="obMore" style="margin:2px 0"><summary class="hint" style="cursor:pointer;padding:6px 0" data-i18n="obMore"></summary>
     <div><div class="label" style="margin-bottom:8px" data-i18n="level"></div><div class="chips" id="obLv"></div></div>
     <div class="grid2">
       <label class="f" for="obExam"><span data-i18n="examDate"></span><input id="obExam" type="date"></label>
       <label class="f" for="obMin"><span data-i18n="dailyTime"></span><select id="obMin"></select></label>
     </div>
+    </details>
     <button class="btn" id="obSave" type="button" data-i18n="start"></button>
     <div class="hint" id="obNote"></div>
+  </div>
+
+  <div class="card" id="lvPick" hidden>
+    <h2 data-i18n="lvPickT"></h2>
+    <div class="chips" id="lvPickChips"></div>
+    <div class="hint" data-i18n="lvPickH"></div>
+    <button class="btn ghost small" id="lvPickLater" type="button" style="align-self:flex-start" data-i18n="lvPickLater"></button>
   </div>
 
   <div class="card" id="heroCard">
