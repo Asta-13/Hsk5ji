@@ -94,6 +94,15 @@ jobs:
           cd Reel
           python3 make_scene.py "${args[@]}"
 
+      - name: Send to Telegram
+        if: steps.gap.outputs.skip != 'true' && steps.make.outputs.skipped != 'true'
+        continue-on-error: true
+        timeout-minutes: 5
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python3 Reel/notify_telegram.py reels-out
+
       - name: Organize by day (zip, keep 3 days)
         if: steps.gap.outputs.skip != 'true' && steps.make.outputs.skipped != 'true'
         run: python3 Reel/organize.py daily reels-out --keep-days 3
