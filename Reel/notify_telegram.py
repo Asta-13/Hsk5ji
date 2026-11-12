@@ -7,7 +7,7 @@ import json, os, re, sys, time, uuid, urllib.request, urllib.error
 
 API = os.environ.get('TELEGRAM_API', 'https://api.telegram.org')
 TOKEN, CHAT = os.environ.get('TELEGRAM_TOKEN', '').strip(), os.environ.get('TELEGRAM_CHAT_ID', '').strip()
-PAT = re.compile(r'^(reel|scene)-.+\.mp4$')
+PAT = re.compile(r'^(reel|scene|quiz)-.+\.mp4$')
 
 def call(method, fields, file=None, tries=3):
     for n in range(tries):

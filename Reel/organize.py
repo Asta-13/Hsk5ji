@@ -10,7 +10,7 @@
 import argparse, datetime, os, re, shutil, sys, zipfile
 from zoneinfo import ZoneInfo
 
-PAT = re.compile(r'^(reel|scene)-.+\.(mp4|txt)$')
+PAT = re.compile(r'^(reel|scene|quiz)-.+\.(mp4|txt)$')
 DAY = re.compile(r'^\d{4}-\d{2}-\d{2}$')
 
 def root_files(out):
