@@ -164,15 +164,17 @@
 
 <!-- BEGINNER -->
 <div class="pane" id="p-learn" role="tabpanel" hidden>
+  <div id="lrnNext"></div>
   <div class="card hero">
     <div class="between"><h2 data-i18n="lrnTitle"></h2><button class="btn small ghost" id="lrnBack" type="button" data-i18n="plBack"></button></div>
     <div class="hint" data-i18n="lrnSub"></div>
-    <div class="row" style="flex-wrap:wrap"><button class="chip" type="button" id="pyOpen" data-i18n="lrnPy" aria-pressed="false"></button><button class="chip" type="button" id="cyrTog" data-i18n="lrnCyr" aria-pressed="true"></button><button class="chip" type="button" id="cmpOpen" data-i18n="lrnCmp" aria-pressed="false"></button><button class="chip" type="button" id="toneOpen" data-i18n="lrnTone" aria-pressed="false"></button><button class="chip" type="button" id="decOpen" data-i18n="lrnDec" aria-pressed="false"></button><button class="chip" type="button" id="dictOpen" data-i18n="lrnDict" aria-pressed="false"></button></div>
+    <div class="row" style="flex-wrap:wrap"><button class="chip" type="button" id="pyOpen" data-i18n="lrnPy" aria-pressed="false"></button><button class="chip" type="button" id="cyrTog" data-i18n="lrnCyr" aria-pressed="true"></button><button class="chip" type="button" id="tcTog" data-i18n="lrnTc" aria-pressed="true"></button><button class="chip" type="button" id="pyTog" data-i18n="lrnPyHide" aria-pressed="false"></button><button class="chip" type="button" id="cmpOpen" data-i18n="lrnCmp" aria-pressed="false"></button><button class="chip" type="button" id="toneOpen" data-i18n="lrnTone" aria-pressed="false"></button><button class="chip" type="button" id="decOpen" data-i18n="lrnDec" aria-pressed="false"></button><button class="chip" type="button" id="dictOpen" data-i18n="lrnDict" aria-pressed="false"></button></div>
     <div id="cmpBox" hidden></div>
     <div id="toneBox" hidden></div>
     <div id="decBox" hidden></div>
     <div id="dictBox" hidden></div>
     <div id="pyBox" hidden></div>
+    <div id="tcLeg" class="tcleg" hidden></div>
     <div class="prog"><i id="lrnBar"></i></div>
     <div class="hint" id="lrnProg"></div>
   </div>
