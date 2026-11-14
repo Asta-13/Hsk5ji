@@ -124,6 +124,7 @@ var DATA=window.DATA;
     lrnGo:["HSK 1 рүү шилжих →","Go to HSK 1 →","Перейти к HSK 1 →","HSK 1へ進む →"],
     lrnProg:["Дууссан: {a} / {b}","Done: {a} / {b}","Пройдено: {a} / {b}","完了：{a} / {b}"],
     lrnL0:["Анхан шат (HSK 1)","Beginner (HSK 1)","Начальный уровень (HSK 1)","初級（HSK 1）"],
+    sbTap:["Доорх хэсгүүдийг дарж өгүүлбэрээ угсар","Tap the pieces below to build the sentence","Нажимайте на части ниже, чтобы составить предложение","下のピースをタップして文を作ろう"],
     lrnTc:["🎨 Тоны өнгө","🎨 Tone colors","🎨 Цвета тонов","🎨 声調の色"],
     lrnPyHide:["👁 Пиньинийг нуух (шалгах)","👁 Hide pinyin (test yourself)","👁 Скрыть пиньинь (проверка)","👁 ピンインを隠す（練習）"],
     lrnTcLbl:["өндөр тэгш|өгсөх|хонхор (буугаад өгсөх)|огцом буух|хөнгөн","high, flat|rising|dipping (down then up)|sharp falling|neutral","ровный|восходящий|нисходяще-восходящий|нисходящий|лёгкий","高く平ら|上昇|下がって上がる|急降下|軽声"],
@@ -469,6 +470,7 @@ var DATA=window.DATA;
   function applyStatic(){
     document.documentElement.lang={mn:'mn',en:'en',ru:'ru',ja:'ja'}[lang];
     document.querySelectorAll('[data-i18n]').forEach(function(e){e.textContent=T(e.dataset.i18n)});
+    decorateMenu();
     document.querySelectorAll('[data-i18n-html]').forEach(function(e){e.innerHTML=T(e.dataset.i18nHtml)});
     document.querySelectorAll('[data-i18n-ph]').forEach(function(e){e.placeholder=T(e.dataset.i18nPh)});
     document.querySelectorAll('[data-i18n-aria]').forEach(function(e){e.setAttribute('aria-label',T(e.dataset.i18nAria))});
@@ -1550,10 +1552,10 @@ var DATA=window.DATA;
       src=shuf(pool.filter(function(w){return ms[w.h]})).concat(shuf(pool.filter(function(w){return !ms[w.h]}))).slice(0,5);
     }
     else if(mode==='sprint')src=shuf(P.all).slice(0,300);
-    else if(mode==='build')src=shuf(gramList()).slice(0,5);else src=shuf(P.mine.length>=5?P.mine:P.all).slice(0,10);
+    else if(mode==='build')src=sbPool();else src=shuf(P.mine.length>=5?P.mine:P.all).slice(0,10);
     if(!src.length)return;
     GM={mode:mode,src:src,i:0,ok:0,all:P.all,back:back||''};
-    if(mode==='sprint'){GM.end=Date.now()+60000;clearInterval(SPT);SPT=setInterval(function(){if(!GM||GM.mode!=='sprint'){clearInterval(SPT);return}var l=Math.max(0,Math.ceil((GM.end-Date.now())/1000));$('plScore').textContent='⏱ '+l+' · ✓ '+GM.ok;if(l<=0){clearInterval(SPT);endGame()}},250)}
+    if(mode==='sprint'){GM.end=Date.now()+60000;clearInterval(SPT);SPT=setInterval(function(){if(!GM||GM.mode!=='sprint'){clearInterval(SPT);return}var l=Math.max(0,Math.ceil((GM.end-Date.now())/1000));$('plScore').textContent='⏱ '+l+' · ✓ '+GM.ok;$('plProg').style.width=Math.min(100,Math.round((60-l)*100/60))+'%';if(l<=0){clearInterval(SPT);endGame()}},250)}
     $('plMenu').hidden=true;$('plGame').hidden=false;nextQ();
   }
   function endGame(){
@@ -1567,15 +1569,14 @@ var DATA=window.DATA;
   }
   function nextQ(){
     if(GM.i>=GM.src.length){endGame();return}
-    var q=GM.src[GM.i];$('plQ').textContent=(GM.i+1)+' / '+GM.src.length;$('plScore').textContent='✓ '+GM.ok;
-    $('plBuilt').textContent='';$('plBuilt').style.color='';
-    if(GM.mode==='build'){
-      var z=q.z.replace(/[，。？！、…,.?!]/g,'');GM.ans=z;GM.cur='';var ch=[];
-      for(var k=0;k<z.length;k+=2)ch.push(z.slice(k,k+2));
-      $('plPrompt').innerHTML='<span style="font-size:1rem;font-family:inherit;font-weight:700">'+esc(gLoc(q,'t'))+'</span>';
-      $('plOpts').innerHTML=shuf(ch).map(function(c){return '<button class="btn ghost" type="button" data-chunk="'+esc(c)+'" lang="zh">'+esc(c)+'</button>'}).join('');
-      return;
+    var q=GM.src[GM.i];$('plQ').textContent=(GM.i+1)+' / '+GM.src.length;$('plScore').textContent=scoreTxt();
+    if(GM.mode!=='sprint'){
+      $('plProg').style.width=Math.round(GM.i*100/GM.src.length)+'%';
+      var gc=$('plGame');gc.classList.remove('qin');void gc.offsetWidth;gc.classList.add('qin');
     }
+    $('plOpts').className='list m-'+GM.mode;
+    $('plBuilt').textContent='';$('plBuilt').style.color='';
+    if(GM.mode==='build'){sbStart(q);return}
     if(GM.mode==='write'){
       GM.q=q;GM.wi=0;GM.wm=0;GM.hinted=false;GM.chars=Array.from(q.h).filter(function(c){return /[\u4e00-\u9fff]/.test(c)});
       $('plPrompt').innerHTML='<div style="font-size:1.3rem;font-weight:800">'+esc(q.p||'')+'</div><div style="font-size:1rem;font-weight:500;margin-top:2px">'+esc(mn(q.m))+'</div>';
@@ -1674,19 +1675,108 @@ var DATA=window.DATA;
       GM.lock=1;var ok=b.dataset.opt===GM.q.h;b.style.background=ok?'var(--ok)':'var(--bad)';b.style.color='#fff';
       if(!ok)document.querySelectorAll('#plOpts [data-opt]').forEach(function(x){if(x.dataset.opt===GM.q.h){x.style.background='var(--ok)';x.style.color='#fff'}});
       if(ok){GM.ok++;missOk(GM.q.h)}else{missAdd(GM.q);srsGrade(GM.q.h,0)}
+      cmb(ok);b.classList.add(ok?'gpop':'gshake');
+      if(GM.mode!=='sprint'){$('plScore').textContent=scoreTxt();if(ok&&GM.combo>=3&&GM.combo%3===0)fxTone([784,988])}
       setTimeout(function(){if(!GM)return;GM.lock=0;GM.i++;nextQ()},GM.mode==='sprint'?(ok?150:600):(ok?500:1100));return;
-    }
-    b=e.target.closest('[data-chunk]');
-    if(b&&!b.disabled){
-      b.disabled=true;GM.cur+=b.dataset.chunk;$('plBuilt').textContent=GM.cur;
-      if(GM.cur.length>=GM.ans.length){
-        var ok2=GM.cur===GM.ans;if(ok2)GM.ok++;
-        $('plBuilt').style.color=ok2?'var(--ok)':'var(--bad)';if(!ok2)$('plBuilt').textContent=GM.cur+'  →  '+GM.ans;
-        GM.lock=1;setTimeout(function(){if(!GM)return;GM.lock=0;GM.i++;nextQ()},ok2?700:1800);
-      }
     }
   });
   $('plBack')&&0;
+  function scoreTxt(){return '✓ '+GM.ok+((GM.combo||0)>=3?' · 🔥 '+GM.combo:'')}
+  function cmb(ok){if(GM)GM.combo=ok?(GM.combo||0)+1:0}
+
+  /* ---------- Өгүүлбэр угсрах: өгүүлбэрийг үгээр нь хувааж, санамсаргүй дарааллаар гаргана. Дарж зөв дарааллаар нь байрлуулна ---------- */
+  var SBW=null;
+  function sbWords(){
+    if(!SBW){SBW={};try{hskPool().forEach(function(x){var h=String(x.h||'').replace(/[^一-鿿]/g,'');if(h.length>1&&h.length<=4)SBW[h]=1})}catch(e){}}
+    return SBW;
+  }
+  function sbSplit(z){
+    var s=String(z).replace(/[^一-鿿]/g,''),W=sbWords(),out=[],i=0;
+    while(i<s.length){
+      var w=null;
+      for(var n=Math.min(4,s.length-i);n>=2;n--){if(W[s.substr(i,n)]){w=s.substr(i,n);break}}
+      if(!w)w=s.charAt(i);
+      out.push(w);i+=w.length;
+    }
+    /* хэт олон хэсэг болбол хамгийн богино хоёр зэрэгцээг нэгтгэнэ (дээд тал нь 9 хэсэг) */
+    while(out.length>9){
+      var bi=0,bl=99;
+      for(var k=0;k<out.length-1;k++){var l=out[k].length+out[k+1].length;if(l<bl){bl=l;bi=k}}
+      out.splice(bi,2,out[bi]+out[bi+1]);
+    }
+    if(out.length<3&&s.length>=3)out=Array.from(s);
+    return out;
+  }
+  function sbPool(){
+    var lv=(S.profile&&S.profile.level)||3,L={},out=[],seen={},X=(window.DATA&&DATA.EXD)||{};
+    try{hskPool().forEach(function(x){L[x.h]=x.l})}catch(e){}
+    function add(z,m,l,ex){
+      var a=String(z||'').replace(/[^一-鿿]/g,'');
+      if(a.length<4||seen[a])return;seen[a]=1;
+      var o=ex||{};o.z=z;o.m=m;o.l=l;out.push(o);
+    }
+    Object.keys(X).forEach(function(h){var l=L[h];if(l&&l<=lv&&X[h]&&X[h][0])add(X[h][0],X[h][1],l)});
+    gramList().forEach(function(g){if(g.z&&g.l<=lv)add(g.z,g.t,g.l,{k:g.k,t:g.t})});
+    var near=out.filter(function(o){return o.l>=lv-1}),far=out.filter(function(o){return o.l<lv-1}),res=shuf(near).slice(0,6);
+    if(res.length<6)res=res.concat(shuf(far).slice(0,6-res.length));
+    return res;
+  }
+  function sbStart(q){
+    var g=GM;
+    if(!q.tl){q.a=String(q.z).replace(/[^一-鿿]/g,'');q.tl=sbSplit(q.z)}
+    g.q=q;g.ans=q.a;g.hint=0;g.placed=[];g.last=-1;g.lock=0;g.state='';
+    var tiles=q.tl.map(function(t,k){return {id:k,t:t}}),sh=shuf(tiles),n=0;
+    while(n++<6&&tiles.length>1&&sh.map(function(x){return x.t}).join('')===q.a)sh=shuf(tiles);
+    g.tiles=sh;
+    $('plPrompt').innerHTML='<span class="sb-tr">'+esc((q.k?gLoc(q,'t'):q.m)||'')+'</span>';
+    sbRender();
+  }
+  function sbRender(){
+    var g=GM;if(!g||g.mode!=='build')return;
+    var by={},used={},dis=g.lock?' disabled':'';
+    g.tiles.forEach(function(x){by[x.id]=x});g.placed.forEach(function(id){used[id]=1});
+    var sl=g.placed.length?g.placed.map(function(id){return '<button class="tile'+(id===g.last?' in':'')+'" type="button" data-sbp="'+id+'" lang="zh"'+dis+'>'+esc(by[id].t)+'</button>'}).join(''):'<span class="sb-ph">'+esc(T('sbTap'))+'</span>';
+    var bk=g.tiles.map(function(x){return used[x.id]?'<span class="tile ghost" aria-hidden="true">'+esc(x.t)+'</span>':'<button class="tile" type="button" data-sbt="'+x.id+'" lang="zh"'+dis+'>'+esc(x.t)+'</button>'}).join('');
+    $('plOpts').innerHTML='<div class="sb-slots'+(g.state?' '+g.state:'')+'" lang="zh">'+sl+'</div><div class="sb-bank">'+bk+'</div>'+
+      '<div class="sb-tools"><button class="btn ghost small" type="button" data-sbundo="1" aria-label="↩"'+dis+'>↩</button><button class="btn ghost small" type="button" data-sbreset="1" aria-label="⟲"'+dis+'>⟲</button><button class="btn ghost small" type="button" data-sbhint="1" aria-label="💡"'+dis+'>💡</button></div>';
+  }
+  function sbText(g){var by={};g.tiles.forEach(function(x){by[x.id]=x});return g.placed.map(function(id){return by[id].t}).join('')}
+  function sbCheck(){
+    var g=GM,ok=sbText(g)===g.ans;
+    g.lock=1;g.state=ok?'ok':'no';
+    if(ok&&!g.hint)g.ok++;
+    cmb(ok&&!g.hint);$('plScore').textContent=scoreTxt();
+    $('plBuilt').style.color=ok?'var(--ok)':'var(--bad)';
+    $('plBuilt').textContent=(ok?'✓ ':'✗ ')+g.q.z;
+    if(ok){fxTone([659,880]);try{speak(g.q.z)}catch(e){}}
+    sbRender();
+    setTimeout(function(){if(GM!==g)return;g.lock=0;g.state='';g.i++;nextQ()},ok?1400:2600);
+  }
+  document.addEventListener('click',function(e){
+    var g=GM;if(!g||g.mode!=='build'||g.lock||!e.target.closest)return;
+    var t=e.target.closest('[data-sbt],[data-sbp],[data-sbundo],[data-sbreset],[data-sbhint]');if(!t)return;
+    if(t.dataset.sbt!=null){var id=+t.dataset.sbt;g.placed.push(id);g.last=id;sbRender();if(g.placed.length===g.tiles.length)sbCheck();return}
+    if(t.dataset.sbp!=null){var id2=+t.dataset.sbp;g.placed=g.placed.filter(function(x){return x!==id2});g.last=-1;sbRender();return}
+    if(t.dataset.sbundo!=null){g.placed.pop();g.last=-1;sbRender();return}
+    if(t.dataset.sbreset!=null){g.placed=[];g.last=-1;sbRender();return}
+    if(t.dataset.sbhint!=null){
+      var cur=sbText(g);if(g.ans.indexOf(cur)!==0){g.placed=[];cur=''}
+      var need=null;
+      g.tiles.forEach(function(x){if(need===null&&g.placed.indexOf(x.id)<0&&g.ans.substr(cur.length,x.t.length)===x.t)need=x.id});
+      if(need!==null){g.placed.push(need);g.last=need;g.hint++;sbRender();if(g.placed.length===g.tiles.length)sbCheck()}
+    }
+  });
+  /* тоглоомын цэсийн товчнуудыг «дүрс + нэр» тайл болгоно */
+  function decorateMenu(){
+    try{document.querySelectorAll('#plMenu [data-game]').forEach(function(b){
+      var m=/^(\p{Extended_Pictographic}️?)\s*([\s\S]*)$/u.exec(b.textContent||'');
+      if(!m)return;
+      b.textContent='';
+      var a=document.createElement('span');a.className='gi';a.textContent=m[1];
+      var c=document.createElement('span');c.textContent=m[2];
+      b.appendChild(a);b.appendChild(c);
+    })}catch(err){}
+  }
   /* ---------- HSK test mode (questions drawn from every word of a level) ---------- */
   var EX=null,exTimer=null,exSel={lv:5,n:20,mode:'word'};
   function exPool(lv){var o=[];(HR()[lv]||'').split(',').forEach(function(it){var a=it.split('|'),m=hM(a[0]);if(m)o.push({h:a[0],p:hP(a[0],a[1]),m:m})});return o}
