@@ -314,3 +314,21 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
 @keyframes tpop{from{transform:scale(.6);opacity:.3}to{transform:none;opacity:1}}
 .sb-tools{display:flex;justify-content:center;gap:10px}
 .sb-tools .btn{min-width:56px}
+
+/* ---------- Шинэ тоглоомууд: хос олох, тон таах, хоосон нөхөх, түвшин сонгогч ---------- */
+#plMenu>#plLv,#plMenu>#plLvT{grid-column:1/-1}
+#plMenu>#plLvT{margin-bottom:-4px}
+#plMenu>[data-game="sprint"]{grid-column:1/-1;min-height:72px;flex-direction:row}
+#plOpts.m-tone,#plOpts.m-cloze{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#plOpts.m-tone .btn{min-height:64px;font-size:1.3rem;font-weight:800}
+#plOpts.m-cloze .btn{min-height:64px;font-family:var(--font-han);font-size:1.5rem;font-weight:900}
+.rvb{font-family:var(--font-body);font-size:1.05rem;font-weight:700}
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mc{min-height:96px;border-radius:14px;border:1px solid var(--line);background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center;padding:6px;cursor:pointer;transition:transform .15s}
+.mc:active{transform:scale(.96)}
+.mc .mq{font-size:1.8rem;font-weight:900;opacity:.85}
+.mc .mh{font-family:var(--font-han);font-size:1.9rem;font-weight:900}
+.mc .mm{font-size:.84rem;font-weight:700;line-height:1.25;overflow-wrap:anywhere}
+.mc.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);animation:tpop .2s ease-out}
+.mc.ok{background:var(--ok);color:#fff;border-color:var(--ok);animation:gpop .35s ease-out}
+.mc.bad{background:var(--bad);color:#fff;border-color:var(--bad);animation:gshake .4s ease-out}

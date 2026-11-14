@@ -124,6 +124,13 @@ var DATA=window.DATA;
     lrnGo:["HSK 1 рүү шилжих →","Go to HSK 1 →","Перейти к HSK 1 →","HSK 1へ進む →"],
     lrnProg:["Дууссан: {a} / {b}","Done: {a} / {b}","Пройдено: {a} / {b}","完了：{a} / {b}"],
     lrnL0:["Анхан шат (HSK 1)","Beginner (HSK 1)","Начальный уровень (HSK 1)","初級（HSK 1）"],
+    gMatch:["🃏 Хос олох (иероглиф ↔ утга)","🃏 Memory match (hanzi ↔ meaning)","🃏 Найди пары (иероглиф ↔ значение)","🃏 神経衰弱（漢字↔意味）"],
+    gTone:["🎼 Тон таах (пиньин)","🎼 Guess the tone (pinyin)","🎼 Угадай тон (пиньинь)","🎼 声調クイズ（ピンイン）"],
+    gCloze:["✏️ Хоосон нөхөх (өгүүлбэр)","✏️ Fill the blank (sentence)","✏️ Заполни пропуск (предложение)","✏️ 空欄を埋めよう（文）"],
+    plLvT:["Түвшин сонгох (бүх тоглоомд)","Choose level (all games)","Выбери уровень (все игры)","レベル選択（全ゲーム）"],
+    plLvAuto:["Авто","Auto","Авто","自動"],
+    mcHint:["Иероглиф ба утгыг хос болго","Pair each hanzi with its meaning","Соедини иероглиф со значением","漢字と意味をペアにしよう"],
+    mcMoves:["Алхам","Moves","Ходы","手数"],
     sbTap:["Доорх хэсгүүдийг дарж өгүүлбэрээ угсар","Tap the pieces below to build the sentence","Нажимайте на части ниже, чтобы составить предложение","下のピースをタップして文を作ろう"],
     lrnTc:["🎨 Тоны өнгө","🎨 Tone colors","🎨 Цвета тонов","🎨 声調の色"],
     lrnPyHide:["👁 Пиньинийг нуух (шалгах)","👁 Hide pinyin (test yourself)","👁 Скрыть пиньинь (проверка)","👁 ピンインを隠す（練習）"],
@@ -1530,6 +1537,7 @@ var DATA=window.DATA;
   }
   function renderPlay(){
     if(!$('plLvl'))return;
+    renderPlLv();
     var ok=hasProfile();$('dayCard').hidden=!ok;if(!ok)return;
     var p=S.profile||{},xp=p.xp||0,lv=Math.floor(Math.sqrt(xp/20))+1,b=20*(lv-1)*(lv-1),n=20*lv*lv;
     $('plLvl').textContent='Lv '+lv;$('plXp').textContent=xp+' / '+n+' XP';
@@ -1540,9 +1548,12 @@ var DATA=window.DATA;
   }
   function gPool(){
     var o=[];wordsArr().forEach(function(w){if(w.m)o.push({h:w.h,p:w.p,m:w.m})});var mine=o.length;
-    [1,2,3].forEach(function(l){(HR()[l]||'').split(',').forEach(function(it){var a=it.split('|'),m=hM(a[0]);if(m)o.push({h:a[0],p:hP(a[0],a[1]),m:m})})});
+    gLevels().forEach(function(l){(HR()[l]||'').split(',').forEach(function(it){var a=it.split('|'),m=hM(a[0]);if(m)o.push({h:a[0],p:hP(a[0],a[1]),m:m,l:l})})});
     return {all:o,mine:o.slice(0,mine)};
   }
+  /* тоглоомын түвшин: «Авто» = миний түвшин ба нэг түвшин доош, эсвэл гараар сонгосон HSK түвшин */
+  function plLvSel(){var v=0;try{v=+lget('hsk-pl')||0}catch(e){}return v>=1&&v<=6?v:0}
+  function gLevels(){var s=plLvSel();if(s)return [s];var lv=(S.profile&&S.profile.level)||2;return lv<=1?[1]:[lv-1,lv]}
   var SPT=null;
   function startGame(mode,custom,back){
     var P=gPool(),src;
@@ -1552,7 +1563,11 @@ var DATA=window.DATA;
       src=shuf(pool.filter(function(w){return ms[w.h]})).concat(shuf(pool.filter(function(w){return !ms[w.h]}))).slice(0,5);
     }
     else if(mode==='sprint')src=shuf(P.all).slice(0,300);
-    else if(mode==='build')src=sbPool();else src=shuf(P.mine.length>=5?P.mine:P.all).slice(0,10);
+    else if(mode==='build')src=sbPool();
+    else if(mode==='cloze')src=clPool();
+    else if(mode==='tone')src=tnPool(P);
+    else if(mode==='match'){var mw=mcPool(P);src=mw.length>=12?[mw.slice(0,6),mw.slice(6,12)]:[]}
+    else src=shuf(P.mine.length>=5?P.mine:P.all).slice(0,10);
     if(!src.length)return;
     GM={mode:mode,src:src,i:0,ok:0,all:P.all,back:back||''};
     if(mode==='sprint'){GM.end=Date.now()+60000;clearInterval(SPT);SPT=setInterval(function(){if(!GM||GM.mode!=='sprint'){clearInterval(SPT);return}var l=Math.max(0,Math.ceil((GM.end-Date.now())/1000));$('plScore').textContent='⏱ '+l+' · ✓ '+GM.ok;$('plProg').style.width=Math.min(100,Math.round((60-l)*100/60))+'%';if(l<=0){clearInterval(SPT);endGame()}},250)}
@@ -1577,6 +1592,9 @@ var DATA=window.DATA;
     $('plOpts').className='list m-'+GM.mode;
     $('plBuilt').textContent='';$('plBuilt').style.color='';
     if(GM.mode==='build'){sbStart(q);return}
+    if(GM.mode==='match'){mcStart(q);return}
+    if(GM.mode==='tone'){tnStart(q);return}
+    if(GM.mode==='cloze'){clStart(q);return}
     if(GM.mode==='write'){
       GM.q=q;GM.wi=0;GM.wm=0;GM.hinted=false;GM.chars=Array.from(q.h).filter(function(c){return /[\u4e00-\u9fff]/.test(c)});
       $('plPrompt').innerHTML='<div style="font-size:1.3rem;font-weight:800">'+esc(q.p||'')+'</div><div style="font-size:1rem;font-weight:500;margin-top:2px">'+esc(mn(q.m))+'</div>';
@@ -1677,7 +1695,9 @@ var DATA=window.DATA;
       if(ok){GM.ok++;missOk(GM.q.h)}else{missAdd(GM.q);srsGrade(GM.q.h,0)}
       cmb(ok);b.classList.add(ok?'gpop':'gshake');
       if(GM.mode!=='sprint'){$('plScore').textContent=scoreTxt();if(ok&&GM.combo>=3&&GM.combo%3===0)fxTone([784,988])}
-      setTimeout(function(){if(!GM)return;GM.lock=0;GM.i++;nextQ()},GM.mode==='sprint'?(ok?150:600):(ok?500:1100));return;
+      if(GM.mode==='cloze'){$('plBuilt').style.color=ok?'var(--ok)':'var(--bad)';$('plBuilt').textContent=(ok?'✓ ':'✗ ')+GM.q.z;try{speak(GM.q.z)}catch(e){}}
+      else if(GM.mode==='mean'||GM.mode==='listen'){$('plBuilt').style.color='';$('plBuilt').innerHTML=revHtml(GM.q)}
+      setTimeout(function(g0){return function(){if(GM!==g0)return;GM.lock=0;GM.i++;nextQ()}}(GM),GM.mode==='sprint'?(ok?150:600):GM.mode==='cloze'?(ok?1700:2700):(ok?900:1700));return;
     }
   });
   $('plBack')&&0;
@@ -1708,7 +1728,7 @@ var DATA=window.DATA;
     return out;
   }
   function sbPool(){
-    var lv=(S.profile&&S.profile.level)||3,L={},out=[],seen={},X=(window.DATA&&DATA.EXD)||{};
+    var sel=plLvSel(),lv=sel||(S.profile&&S.profile.level)||3,L={},out=[],seen={},X=(window.DATA&&DATA.EXD)||{};
     try{hskPool().forEach(function(x){L[x.h]=x.l})}catch(e){}
     function add(z,m,l,ex){
       var a=String(z||'').replace(/[^一-鿿]/g,'');
@@ -1717,7 +1737,7 @@ var DATA=window.DATA;
     }
     Object.keys(X).forEach(function(h){var l=L[h];if(l&&l<=lv&&X[h]&&X[h][0])add(X[h][0],X[h][1],l)});
     gramList().forEach(function(g){if(g.z&&g.l<=lv)add(g.z,g.t,g.l,{k:g.k,t:g.t})});
-    var near=out.filter(function(o){return o.l>=lv-1}),far=out.filter(function(o){return o.l<lv-1}),res=shuf(near).slice(0,6);
+    var inBand=function(o){return sel?o.l===lv:o.l>=lv-1},near=out.filter(inBand),far=out.filter(function(o){return !inBand(o)}),res=shuf(near).slice(0,6);
     if(res.length<6)res=res.concat(shuf(far).slice(0,6-res.length));
     return res;
   }
@@ -1766,6 +1786,178 @@ var DATA=window.DATA;
       if(need!==null){g.placed.push(need);g.last=need;g.hint++;sbRender();if(g.placed.length===g.tiles.length)sbCheck()}
     }
   });
+  /* ---------- Тоглоомын түвшин сонгогч ---------- */
+  function renderPlLv(){
+    var el=$('plLv');if(!el)return;var s=plLvSel();
+    el.innerHTML=['0','1','2','3','4','5','6'].map(function(v){return '<button class="chip" type="button" data-pl="'+v+'" aria-pressed="'+(String(s)===v?'true':'false')+'">'+(v==='0'?esc(T('plLvAuto')):'HSK '+v)+'</button>'}).join('');
+  }
+  /* хариулсны дараа иероглиф · пиньин(тоны өнгөтэй) · утгыг харуулна */
+  function revHtml(q){return '<span lang="zh">'+esc(q.h)+'</span> <span class="rvb">'+toneHtml(q.p||'')+' · '+esc(mn(q.m))+'</span>'}
+
+  /* ---------- Пиньиний тон солих (тон таах тоглоомд зориулсан төөрөгдүүлэгч хариулт) ---------- */
+  var TMARK={a:'āáǎà',e:'ēéěè',i:'īíǐì',o:'ōóǒò',u:'ūúǔù','ü':'ǖǘǚǜ'};
+  function toneSyl(plain,t){
+    if(!t)return plain;
+    var idx=plain.indexOf('a');
+    if(idx<0)idx=plain.indexOf('e');
+    if(idx<0&&plain.indexOf('ou')>-1)idx=plain.indexOf('ou');
+    if(idx<0){for(var k=plain.length-1;k>=0;k--){if('iouü'.indexOf(plain.charAt(k))>-1){idx=k;break}}}
+    if(idx<0)return plain;
+    var ch=plain.charAt(idx);
+    return plain.slice(0,idx)+TMARK[ch][t-1]+plain.slice(idx+1);
+  }
+  /* py → {parts, syl:[{k,plain,tone}]} эсвэл null (слог тусгаарлаж чадахгүй бол) */
+  function pyParse(py){
+    var parts=String(py).normalize('NFC').split(/([A-Za-zÀ-ɏḿ]+)/),syl=[],bad=false;
+    parts.forEach(function(p,k){
+      if(k%2===0||bad)return;
+      var pl=Array.from(p.toLowerCase()).map(function(c){return PY_TONE[c]||c}).join('').replace(/([jqxy])u(?=e|an|n|$)/g,'$1ü'),
+          sg=(pl.length===p.length&&/^[a-zü]+$/.test(pl))?pySeg(pl):null;
+      if(!sg||!sg.a.length){bad=true;return}
+      var pos=0;
+      sg.a.forEach(function(x){var L=x[0].length+x[1].length;syl.push({k:k,plain:pl.substr(pos,L),tone:toneOfStr(p.substr(pos,L))});pos+=L});
+    });
+    return bad||!syl.length?null:{parts:parts,syl:syl};
+  }
+  function pyBuild(ps,tones){
+    var out=ps.parts.slice(),by={};
+    ps.syl.forEach(function(s,i){(by[s.k]=by[s.k]||[]).push(toneSyl(s.plain,tones[i]))});
+    Object.keys(by).forEach(function(k){
+      var t=by[k].join(''),o=ps.parts[k];
+      if(o.charAt(0)!==o.charAt(0).toLowerCase())t=t.charAt(0).toUpperCase()+t.slice(1);
+      out[k]=t;
+    });
+    return out.join('');
+  }
+  function pyVariants(py){
+    var ps=pyParse(py);if(!ps||ps.syl.length>3||ps.syl.every(function(s){return !s.tone}))return null;
+    var base=ps.syl.map(function(s){return s.tone}),set={},list=[];
+    function add(tones){var s=pyBuild(ps,tones);if(s!==py&&!set[s]){set[s]=1;list.push(s)}}
+    ps.syl.forEach(function(s,i){
+      if(!s.tone)return;
+      for(var t=1;t<=4;t++){if(t!==s.tone){var a=base.slice();a[i]=t;add(a)}}
+    });
+    if(ps.syl.length>1){
+      var tries=0;
+      while(list.length<6&&tries++<30){var b=base.map(function(t){return t?1+Math.floor(Math.random()*4):0});add(b)}
+    }
+    return list.length>=3?shuf(list).slice(0,3):null;
+  }
+
+  /* ---------- 🎼 Тон таах ---------- */
+  function tnPool(P){
+    var pool=shuf(P.all.filter(function(w){return w.p&&w.m})),out=[],n=0;
+    for(var i=0;i<pool.length&&out.length<10&&n<600;i++,n++){
+      var v=pyVariants(pool[i].p);
+      if(v)out.push({h:pool[i].h,p:pool[i].p,m:pool[i].m,v:v});
+    }
+    return out;
+  }
+  function tnStart(q){
+    GM.q=q;GM.lock=0;
+    $('plPrompt').innerHTML='<span lang="zh">'+esc(q.h)+'</span><div class="sb-tr" style="font-weight:600;color:var(--muted)">'+esc(mn(q.m))+'</div><button class="btn ghost small" type="button" data-speak="'+esc(q.h)+'" aria-label="🔊">🔊</button>';
+    $('plOpts').innerHTML=shuf([q.p].concat(q.v)).map(function(o){return '<button class="btn ghost" type="button" data-topt="'+esc(o)+'">'+esc(o)+'</button>'}).join('');
+    try{speak(q.h)}catch(e){}
+  }
+
+  /* ---------- ✏️ Хоосон нөхөх ---------- */
+  function clPool(){
+    var X=(window.DATA&&DATA.EXD)||{};
+    function build(lvs){
+      var L={},byLen={},out=[];
+      hskPool().forEach(function(x){L[x.h]=x;if(lvs.indexOf(x.l)>-1&&hM(x.h))(byLen[x.h.length]=byLen[x.h.length]||[]).push(x)});
+      Object.keys(X).forEach(function(h){
+        var x=L[h];
+        if(x&&lvs.indexOf(x.l)>-1&&X[h]&&X[h][0]&&X[h][0].indexOf(h)>-1&&hM(h))out.push({h:h,p:hP(h,x.p),m:hM(h),z:X[h][0],zt:X[h][1],l:x.l});
+      });
+      out=shuf(out).slice(0,8);
+      var all=[].concat.apply([],Object.keys(byLen).map(function(k){return byLen[k]}));
+      out.forEach(function(q){
+        var same=byLen[q.h.length]||[],opts=[q.h],t=0;
+        while(opts.length<4&&t++<60){var r=(same.length>4?same:all)[Math.floor(Math.random()*(same.length>4?same:all).length)];if(r&&opts.indexOf(r.h)<0&&q.z.indexOf(r.h)<0)opts.push(r.h)}
+        q.opts=opts;
+      });
+      return out.filter(function(q){return q.opts.length===4});
+    }
+    var r=build(gLevels());
+    return r.length>=4?r:build([1,2,3,4,5,6]);
+  }
+  function clStart(q){
+    GM.q=q;GM.lock=0;
+    $('plPrompt').innerHTML='<div lang="zh" style="font-size:1.7rem;line-height:1.5;font-weight:700">'+esc(q.z.replace(q.h,'＿＿'))+'</div><div class="sb-tr" style="font-weight:600;color:var(--muted)">'+esc(q.zt||'')+'</div>';
+    $('plOpts').innerHTML=shuf(q.opts).map(function(o){return '<button class="btn ghost" type="button" data-opt="'+esc(o)+'" lang="zh">'+esc(o)+'</button>'}).join('');
+  }
+
+  /* ---------- 🃏 Хос олох (санах ойн тоглоом) ---------- */
+  function mcPool(P){
+    var base=P.mine.length>=12?P.mine:P.all,seenH={},seenM={},out=[];
+    shuf(base).forEach(function(w){
+      var m=mn(w.m);
+      if(out.length>=12||!w.h||!m||seenH[w.h]||seenM[m]||m.length>28)return;
+      seenH[w.h]=1;seenM[m]=1;out.push(w);
+    });
+    return out;
+  }
+  function mcStart(round){
+    var cards=[];
+    round.forEach(function(w){cards.push({id:w.h,t:'h',w:w});cards.push({id:w.h,t:'m',w:w})});
+    GM.mc={cards:shuf(cards),open:[],done:0,moves:0,lock:0};GM.lock=0;
+    mcRender();
+  }
+  function mcRender(){
+    var g=GM&&GM.mc;if(!g)return;
+    $('plPrompt').innerHTML='<span class="sb-tr">'+esc(T('mcHint'))+' · '+esc(T('mcMoves'))+': '+g.moves+'</span>';
+    $('plOpts').innerHTML='<div class="mgrid">'+g.cards.map(function(c,i){
+      var on=c.open||c.ok;
+      return '<button type="button" class="mc'+(c.ok?' ok':c.open?' on':'')+(c.bad?' bad':'')+'" data-mc="'+i+'"'+(c.t==='h'?' lang="zh"':'')+'>'+(on?(c.t==='h'?'<span class="mh">'+esc(c.w.h)+'</span>':'<span class="mm">'+esc(mn(c.w.m))+'</span>'):'<span class="mq">?</span>')+'</button>';
+    }).join('')+'</div>';
+  }
+
+  document.addEventListener('click',function(e){
+    var t=e.target;if(!t||!t.closest)return;
+    var pl=t.closest('[data-pl]');
+    if(pl){lset('hsk-pl',pl.dataset.pl);renderPlLv();return}
+    var g=GM;if(!g)return;
+    /* Тон таах */
+    var to=t.closest('[data-topt]');
+    if(to&&g.mode==='tone'&&!g.lock){
+      g.lock=1;var ok=to.dataset.topt===g.q.p;
+      document.querySelectorAll('#plOpts [data-topt]').forEach(function(x){if(x.dataset.topt===g.q.p){x.style.background='var(--ok)';x.style.color='#fff'}});
+      if(!ok){to.style.background='var(--bad)';to.style.color='#fff'}
+      to.classList.add(ok?'gpop':'gshake');
+      if(ok){g.ok++;missOk(g.q.h)}else{missAdd(g.q);srsGrade(g.q.h,0)}
+      cmb(ok);$('plScore').textContent=scoreTxt();if(ok&&g.combo>=3&&g.combo%3===0)fxTone([784,988]);
+      $('plBuilt').style.color='';$('plBuilt').innerHTML=revHtml(g.q);
+      setTimeout(function(){if(GM!==g)return;g.lock=0;g.i++;nextQ()},ok?1100:2000);
+      return;
+    }
+    /* Хос олох */
+    var mc=t.closest('[data-mc]');
+    if(mc&&g.mode==='match'&&g.mc&&!g.mc.lock){
+      var m=g.mc,c=m.cards[+mc.dataset.mc];
+      if(!c||c.ok||c.open)return;
+      c.open=true;m.open.push(+mc.dataset.mc);
+      if(c.t==='h'){try{speak(c.w.h)}catch(err){}}
+      if(m.open.length===2){
+        m.moves++;
+        var a=m.cards[m.open[0]],b=m.cards[m.open[1]];
+        if(a.id===b.id&&a.t!==b.t){
+          a.ok=b.ok=true;a.open=b.open=false;m.open=[];m.done++;fxTone([659,880]);
+          mcRender();
+          if(m.done===m.cards.length/2){
+            g.ok++;$('plScore').textContent=scoreTxt();
+            setTimeout(function(){if(GM!==g)return;g.i++;nextQ()},1000);
+          }
+        }else{
+          m.lock=1;a.bad=b.bad=true;mcRender();
+          setTimeout(function(){if(GM!==g)return;a.open=b.open=false;a.bad=b.bad=false;m.open=[];m.lock=0;mcRender()},850);
+        }
+        return;
+      }
+      mcRender();
+    }
+  });
+
   /* тоглоомын цэсийн товчнуудыг «дүрс + нэр» тайл болгоно */
   function decorateMenu(){
     try{document.querySelectorAll('#plMenu [data-game]').forEach(function(b){
