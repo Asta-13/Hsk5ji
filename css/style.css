@@ -6,16 +6,28 @@ body{margin:0}
 :root{
   --bg:#EDF0F3; --surface:#FFFFFF; --fg:#131A24; --muted:#5B6675; --line:#D3D9E0;
   --accent:#1F3F8F; --accent-soft:#DDE5F6; --seal:#C23B22; --ok:#2E7D4F; --bad:#B3402A; --on-accent:#FFFFFF;
+  --t0:#5B6675; --t1:#C0392B; --t2:#2E7D4F; --t3:#1F3F8F; --t4:#7B3FA8;
   --font-display:"Noto Serif","Noto Serif SC",Georgia,serif;
   --font-han:"Noto Serif SC","Songti SC","STSong",serif;
   --font-body:"Noto Sans","Noto Sans JP",system-ui,-apple-system,"Segoe UI","Hiragino Sans",sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0F141C; --surface:#18202C; --fg:#E7ECF3; --muted:#9AA6B6; --line:#2A3445;
-  --accent:#8FAAF0; --accent-soft:#223157; --seal:#E5654C; --ok:#5DBB86; --bad:#E98A74; --on-accent:#0F141C; color-scheme:dark}}
+  --accent:#8FAAF0; --accent-soft:#223157; --seal:#E5654C; --ok:#5DBB86; --bad:#E98A74; --on-accent:#0F141C; color-scheme:dark;
+  --t0:#9AA6B6; --t1:#FF8A75; --t2:#5DBB86; --t3:#8FAAF0; --t4:#C79BF0}}
 :root[data-theme="dark"]{
   --bg:#0F141C; --surface:#18202C; --fg:#E7ECF3; --muted:#9AA6B6; --line:#2A3445;
-  --accent:#8FAAF0; --accent-soft:#223157; --seal:#E5654C; --ok:#5DBB86; --bad:#E98A74; --on-accent:#0F141C; color-scheme:dark}
+  --accent:#8FAAF0; --accent-soft:#223157; --seal:#E5654C; --ok:#5DBB86; --bad:#E98A74; --on-accent:#0F141C; color-scheme:dark;
+  --t0:#9AA6B6; --t1:#FF8A75; --t2:#5DBB86; --t3:#8FAAF0; --t4:#C79BF0}
+/* тоны өнгө (пиньиний 1–4 тон + хөнгөн тон) */
+.tn.t0{color:var(--t0)}.tn.t1{color:var(--t1)}.tn.t2{color:var(--t2)}.tn.t3{color:var(--t3)}.tn.t4{color:var(--t4)}
+body.tc-off .tn{color:inherit}
+body.py-off .w .p{filter:blur(6px);cursor:pointer;transition:filter .2s}
+body.py-off .w .p.rv{filter:none}
+.tcleg{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin-top:8px}
+.tcleg b{font-weight:700}
+.lnext{border:2px solid var(--accent);margin-bottom:10px}
+.lnext .lntt{font-weight:700;font-size:1.05rem;overflow-wrap:anywhere}
 
 body{background:var(--bg);color:var(--fg);font-family:var(--font-body);line-height:1.6;
   padding-block:14px 96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}

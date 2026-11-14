@@ -124,6 +124,13 @@ var DATA=window.DATA;
     lrnGo:["HSK 1 рүү шилжих →","Go to HSK 1 →","Перейти к HSK 1 →","HSK 1へ進む →"],
     lrnProg:["Дууссан: {a} / {b}","Done: {a} / {b}","Пройдено: {a} / {b}","完了：{a} / {b}"],
     lrnL0:["Анхан шат (HSK 1)","Beginner (HSK 1)","Начальный уровень (HSK 1)","初級（HSK 1）"],
+    lrnTc:["🎨 Тоны өнгө","🎨 Tone colors","🎨 Цвета тонов","🎨 声調の色"],
+    lrnPyHide:["👁 Пиньинийг нуух (шалгах)","👁 Hide pinyin (test yourself)","👁 Скрыть пиньинь (проверка)","👁 ピンインを隠す（練習）"],
+    lrnTcLbl:["өндөр тэгш|өгсөх|хонхор (буугаад өгсөх)|огцом буух|хөнгөн","high, flat|rising|dipping (down then up)|sharp falling|neutral","ровный|восходящий|нисходяще-восходящий|нисходящий|лёгкий","高く平ら|上昇|下がって上がる|急降下|軽声"],
+    lrnNextT:["▶ Эндээс эхэл","▶ Start here","▶ Начни отсюда","▶ ここから始めよう"],
+    lrnNextN:["▶ Дараагийн хичээл","▶ Next lesson","▶ Следующий урок","▶ 次のレッスン"],
+    lrnNextHint:["Хичээл бүр ойролцоогоор 5 минут. Нээгээд 🔊-г дарж сонсоод, дуугаар давтан хэл.","Each lesson takes about 5 minutes. Open it, tap 🔊 to listen, then repeat aloud.","Каждый урок занимает около 5 минут. Откройте, нажмите 🔊, послушайте и повторите вслух.","1レッスン約5分。開いて🔊を押し、聞いてから声に出して繰り返しましょう。"],
+    lrnNextGo:["Хичээл нээх","Open lesson","Открыть урок","レッスンを開く"],
     lrnDaily:["Өдөр тутмын хэллэг","Everyday phrases","Повседневные фразы","日常フレーズ"],
     hskTitle:["HSK үгсийн сан (монгол орчуулгатай)","HSK vocabulary (Mongolian)","Словарь HSK (с монгольским переводом)","HSK単語（モンゴル語訳付き）"],
     hskSearch:["Хайх: иероглиф, пиньинь, монгол утга","Search: hanzi, pinyin, meaning","Поиск: иероглиф, пиньинь, значение","検索：漢字、ピンイン、意味"],
@@ -2228,10 +2235,14 @@ var DATA=window.DATA;
     $('cyrTog').setAttribute('aria-pressed',cyrOn()?'true':'false');
     var done=lrnDoneArr();
     $('lrnProg').textContent=T('lrnProg',{a:done.length,b:LESSONS.length});$('lrnBar').style.width=Math.round(done.length*100/LESSONS.length)+'%';
-    var cy=cyrOn(),pl=-1;
-    el.innerHTML=LESSONS.map(function(L,i){
+    var cy=cyrOn(),pl=-1,ord=lrnOrder(),nx=-1;
+    ord.forEach(function(j){if(nx<0&&done.indexOf(j)<0)nx=j});
+    $('tcTog').setAttribute('aria-pressed',lget('hsk-tc')==='off'?'false':'true');
+    $('pyTog').setAttribute('aria-pressed',lget('hsk-py')==='hide'?'true':'false');
+    renderTcLeg();renderNext(nx,ord,done.length);
+    el.innerHTML=ord.map(function(i,pos){var L=LESSONS[i];
       var lh=(L.lv||0)!==pl?'<h2>'+(L.lv===9?esc(T('lrnDaily')):L.lv?'HSK '+L.lv:esc(T('lrnL0')))+'</h2>':'';pl=L.lv||0;
-      var d=done.indexOf(i)>-1,open=lrnOpen===i,h='<div class="gm"><button class="btn'+(open?'':' ghost')+'" type="button" data-lopen="'+i+'" style="text-align:left">'+(d?'✓ ':'')+(i+1)+'. '+esc(LT(L.t))+'</button>';
+      var d=done.indexOf(i)>-1,open=lrnOpen===i,h='<div class="gm"><button class="btn'+(open?'':' ghost')+'" type="button" data-lopen="'+i+'" style="text-align:left">'+(d?'✓ ':'')+(pos+1)+'. '+esc(LT(L.t))+'</button>';
       if(open){
         h+='<span class="hint">'+esc(LT(L.n))+'</span>';
         if(LQ&&LQ.i===i)h+=lqRender(i);
@@ -2272,6 +2283,68 @@ var DATA=window.DATA;
     if(e.target.closest('[data-golearn]')){showTab('learn');renderLearn();return}
     if(e.target.closest('#lrnBack')){showTab('today');return}
     if(e.target.closest('[data-gohsk]')){hLv=1;hLim=60;showTab('hsk');renderHsk()}
+  });
+
+  /* ---------- анхан шатны сайжруулалт: хичээлийн дараалал, «дараагийн хичээл», тоны өнгө, пиньин нуух ---------- */
+  /* Хадгалсан ахиц (lrn) нь хичээлийн индексээр хадгалагддаг тул өгөгдлийг эрэмбэлэхгүй, зөвхөн харуулах дарааллыг өөрчилнө:
+     анхан шат → өдөр тутмын хэллэг → HSK 2 → HSK 3 */
+  function lrnOrder(){
+    var rk=function(L){var v=L.lv||0;return v===9?1:v?v+1:0};
+    return LESSONS.map(function(L,i){return i}).sort(function(a,b){return rk(LESSONS[a])-rk(LESSONS[b])||a-b});
+  }
+  function renderNext(nx,ord,nd){
+    var el=$('lrnNext');if(!el)return;
+    if(nx<0){el.innerHTML='';return}
+    el.innerHTML='<div class="card lnext"><div class="label">'+esc(T(nd?'lrnNextN':'lrnNextT'))+'</div><div class="lntt">'+(ord.indexOf(nx)+1)+'. '+esc(LT(LESSONS[nx].t))+'</div><div class="hint">'+esc(T('lrnNextHint'))+'</div><button class="btn" type="button" data-lnext="'+nx+'">'+esc(T('lrnNextGo'))+'</button></div>';
+  }
+  function renderTcLeg(){
+    var g=$('tcLeg');if(!g)return;
+    var off=lget('hsk-tc')==='off';g.hidden=off;if(off)return;
+    var lb=T('lrnTcLbl').split('|'),sy=['mā','má','mǎ','mà','ma'];
+    g.innerHTML=sy.map(function(s,k){return '<span><span class="tn t'+(k<4?k+1:0)+'">'+esc(s)+'</span> <b>'+(k<4?k+1:'·')+'</b> '+esc(lb[k]||'')+'</span>'}).join('');
+  }
+  /* пиньиний слог бүрийг тоноор нь өнгөлнө (диакритик тэмдгээр тодорхойлно; тэмдэггүй = хөнгөн тон) */
+  var TONE_CH={};
+  [['āēīōūǖ',1],['áéíóúǘń',2],['ǎěǐǒǔǚň',3],['àèìòùǜǹ',4]].forEach(function(g){Array.from(g[0]).forEach(function(c){TONE_CH[c]=g[1]})});
+  function toneOfStr(s){for(var c of s){if(TONE_CH[c])return TONE_CH[c]}return 0}
+  function toneHtml(src){
+    var parts=String(src).normalize('NFC').split(/([A-Za-zÀ-ɏḿ]+)/);
+    return parts.map(function(p,k){
+      if(k%2===0)return esc(p);
+      var pl=Array.from(p.toLowerCase()).map(function(c){return PY_TONE[c]||c}).join('').replace(/([jqxy])u(?=e|an|n|$)/g,'$1ü'),
+          sg=/^[a-zü]+$/.test(pl)&&pl.length===p.length?pySeg(pl):null;
+      if(!sg||!sg.a.length)return '<span class="tn t'+toneOfStr(p)+'">'+esc(p)+'</span>';
+      var pos=0;
+      return sg.a.map(function(x){var n=x[0].length+x[1].length,s=p.slice(pos,pos+n);pos+=n;return '<span class="tn t'+toneOfStr(s)+'">'+esc(s)+'</span>'}).join('');
+    }).join('');
+  }
+  var tcQ=0;
+  function tcRun(){
+    tcQ=0;
+    document.querySelectorAll('.w .p:not([data-tc])').forEach(function(el){
+      el.setAttribute('data-tc','1');
+      if(el.children.length)return;
+      try{el.innerHTML=toneHtml(el.textContent)}catch(err){}
+    });
+  }
+  function applyPrefs(){
+    document.body.classList.toggle('tc-off',lget('hsk-tc')==='off');
+    document.body.classList.toggle('py-off',lget('hsk-py')==='hide');
+  }
+  applyPrefs();
+  new MutationObserver(function(){if(!tcQ)tcQ=requestAnimationFrame(tcRun)}).observe(document.body,{childList:true,subtree:true});
+  document.addEventListener('click',function(e){
+    var t=e.target;if(!t||!t.closest)return;
+    var pe=t.closest('.w .p');
+    if(pe&&document.body.classList.contains('py-off')){pe.classList.toggle('rv');return}
+    if(t.closest('#tcTog')){lset('hsk-tc',lget('hsk-tc')==='off'?'on':'off');applyPrefs();renderLearn();return}
+    if(t.closest('#pyTog')){lset('hsk-py',lget('hsk-py')==='hide'?'show':'hide');applyPrefs();renderLearn();return}
+    var b=t.closest('[data-lnext]');
+    if(b){
+      lrnOpen=+b.dataset.lnext;LQ=null;renderLearn();
+      var o=document.querySelector('#lrnList [data-lopen="'+lrnOpen+'"]');
+      if(o&&o.scrollIntoView)o.scrollIntoView({behavior:'smooth',block:'start'});
+    }
   });
   $('missDueBtn').addEventListener('click',function(){
     var mp=missMap(),src=missDue().map(function(h){return {h:h,p:mp[h].p||'',m:hM(h)||mp[h].m||''}}).filter(function(x){return x.m});
