@@ -332,3 +332,14 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
 .mc.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);animation:tpop .2s ease-out}
 .mc.ok{background:var(--ok);color:#fff;border-color:var(--ok);animation:gpop .35s ease-out}
 .mc.bad{background:var(--bad);color:#fff;border-color:var(--bad);animation:gshake .4s ease-out}
+
+/* ---- search first: big search boxes + example sentences ---- */
+.search.big input{font-size:1.08rem;padding-top:14px;padding-bottom:14px;border-width:2px;border-radius:14px}
+.card.gs{border:2px solid var(--accent);background:linear-gradient(135deg,var(--accent-soft),var(--surface));display:flex;flex-direction:column;gap:10px}
+.gs-t{font-weight:800;font-size:1.08rem}
+.w .exs{grid-column:1/-1;display:flex;flex-direction:column;gap:6px;margin-top:4px;padding-top:8px;border-top:1px dashed var(--line)}
+.w .ex{display:flex;flex-direction:column;gap:2px;padding:6px 10px;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 8px 8px 0}
+.w .exz{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:1.05rem;line-height:1.5}
+.w .exz .btn{flex:none}
+.w .exm{font-size:.85rem;color:var(--muted);overflow-wrap:anywhere}
+.w .exz mark{background:var(--accent);color:var(--on-accent);border-radius:3px;padding:0 2px}
