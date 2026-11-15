@@ -62,7 +62,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$EVENT" = "schedule" ] || [ "$AUTO" = "true" ]; then
-            python3 Reel/gap_check.py reels-out/quiz-state.json "$MIN_GAP_MIN"
+            python3 Reel/gap_check.py reels-out/series.json "$MIN_GAP_MIN" quiz
           else
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi

@@ -5,10 +5,10 @@
 import argparse, datetime, json, math, os, random, re, subprocess, sys, tempfile, time, wave
 from PIL import Image
 import make_reel as M
+import series as SR
 from make_reel import W, H, cfont, font, bg, center, wrap, say, join, probe, silence, SITE, ZH_VOICE, MN_VOICE, MN_RATE
 
 OUT = M.OUT
-STATE = os.path.join(OUT, 'quiz-state.json')
 LET = ['A', 'B', 'C']
 COLS = ['#f472b6', '#38bdf8', '#facc15']
 
@@ -50,14 +50,15 @@ def tone_variants(py, rng, n=2):
         if v != py and v not in out: out.append(v)
     return out
 
-def build(words, num_learned, idx, forced=None):
+def build(words, chosen, idx, forced=None):
+    """chosen = (түвшин, үг): аль хэдийн заасан үгсээс (series) сонгогдсон."""
     seq = M.ordered(words)
     if forced:
         hit = [x for x in seq if x[1][0] == forced]
         if not hit: sys.exit('Үг олдсонгүй: ' + forced)
         lv, w = hit[0]
     else:
-        lv, w = seq[idx % max(1, min(num_learned, len(seq)))] if num_learned else seq[idx % len(seq)]
+        lv, w = chosen
     rng = random.Random(idx * 7919 + 13)
     mode = 'pinyin' if idx % 3 != 2 else 'meaning'      # 3-аас 2 нь дуудлага (тон), 1 нь утга
     if mode == 'pinyin':
@@ -141,16 +142,17 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--silent', action='store_true'); ap.add_argument('--min-gap', type=int, default=0); ap.add_argument('--word')
     a = ap.parse_args(); M.start_watchdog()
-    try: st = json.load(open(STATE))
-    except Exception: st = {}
-    if a.min_gap and time.time() - st.get('last', 0) < a.min_gap * 60:
-        print('Алгасав'); go = os.environ.get('GITHUB_OUTPUT')
-        if go: open(go, 'a').write('skipped=true\n')
-        return
-    try: learned = json.load(open(os.path.join(OUT, 'state.json'))).get('next', 0)
-    except Exception: learned = 0
-    words, _ = M.load(); idx = st.get('next', 0)
-    lv, w, opts, ci, mode = build(words, learned, idx, a.word)
+    st = SR.load()
+    if SR.too_soon(st, 'quiz', a.min_gap):
+        print('Алгасав'); SR.skip_out(); return
+    words, _ = M.load(); seq = M.ordered(words); SR.init(st, seq)
+    SR.seed_done(st, 'quiz', [w[0] for _, w in seq], st['seed'].get('quiz', 0))
+    # Холболт: зөвхөн аль хэдийн заасан үгээс (Үг / Энгийн үг видеогоор), одоогийн түвшнээс нь эхлэн асууна.
+    pool = SR.taught(seq, st) or seq[:20]
+    chosen, _ = SR.pick(st, 'quiz', pool, lambda x: x[0], lambda x: x[1][0])
+    num = None if a.word else SR.num(st, 'quiz'); idx = (num or 1) - 1
+    M.BADGE = ('quiz', num) if num else None
+    lv, w, opts, ci, mode = build(words, chosen, idx, a.word)
     print('Шалгалт:', mode, w[0], w[1], short(w[2]), '→', LET[ci], opts, '(HSK', lv, ')')
     os.makedirs(OUT, exist_ok=True)
     with tempfile.TemporaryDirectory() as tmp:
@@ -177,17 +179,17 @@ def main():
         # 4) CTA
         cta(P('cta.png')); ac = P('ac.wav'); silence(ac, 3); segs.append(segment(tmp, 'cta', [P('cta.png')], ac))
         lst = P('l.txt'); open(lst, 'w').write(''.join(f"file '{s}'\n" for s in segs))
-        tag = f'{idx + 1:04d}'; out = os.path.join(OUT, f'quiz-{tag}.mp4')
+        out = os.path.join(OUT, SR.file_name('quiz', num) if num else 'quiz-manual-' + w[0] + '.mp4')
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c:v', 'copy', '-af', M.LOUDNORM,
                         '-c:a', 'aac', '-b:a', '160k', '-ar', '44100', '-movflags', '+faststart', out], check=True)
     opts_txt = '\n'.join(f'{LET[i]}) {o}' for i, o in enumerate(opts))
     q_txt = 'Энэ үгийн утга юу вэ?' if mode == 'meaning' else 'Аль дуудлага зөв вэ?'
     cap = (f'🧠 {q_txt} Хариулаад комментд бич!\n\n📌 {w[0]}\n\n{opts_txt}\n\n'
-           f'✅ Зөв хариулт: {LET[ci]}) {opts[ci]}  ({short(w[2])})\n🎓 HSK {lv}\n\n💾 Хадгалаад давтаарай ❤️ Найздаа илгээгээрэй\n'
+           f'✅ Зөв хариулт: {LET[ci]}) {opts[ci]}  ({short(w[2])})\n🎓 HSK {lv}' + (f' · Шалгалт №{num}' if num else '') + '\n\n💾 Хадгалаад давтаарай ❤️ Найздаа илгээгээрэй\n\n' + (SR.series_line(st, 'quiz', num) + '\n\n' if num else '') +
            f'👉 Үнэгүй сурах сайт: {SITE}\n\n{M.TAGS[0]} #HSK{lv} #шалгалт #quiz ' + ' '.join(M.TAGS[1:]))
     open(out[:-4] + '.txt', 'w', encoding='utf8').write(cap)
-    if not a.silent and not a.word:
-        json.dump({'next': idx + 1, 'last': int(time.time())}, open(STATE, 'w'))
+    if num and (not a.silent or os.environ.get('REEL_TEST_STATE') == '1'):
+        SR.finish(st, 'quiz', 'quiz', w[0]); SR.save(st)
     print('Бэлэн:', out, round(probe(out), 1), 'сек')
 
 if __name__ == '__main__': main()

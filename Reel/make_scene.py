@@ -4,10 +4,10 @@
 import argparse, json, os, struct, subprocess, sys, tempfile, time, wave
 from PIL import Image, ImageDraw
 import make_reel as M
+import series as SR
 from make_reel import W, H, cfont, font, bg, center, wrap, say, join, probe, silence, SITE
 
 OUT = M.OUT
-STATE = os.path.join(OUT, 'scene-state.json')
 PAIRS = [('zh-CN-XiaoxiaoNeural', 'zh-CN-YunxiNeural'), ('zh-CN-XiaoyiNeural', 'zh-CN-YunjianNeural'), ('zh-CN-XiaoxiaoNeural', 'zh-CN-YunyangNeural')]
 FPS = 10   # дүрсний давтамж (амны хөдөлгөөн дуутай таарна)
 
@@ -118,6 +118,7 @@ def stick(d, cx, feet, who, speaking, t, mo=0.0):
 
 def frame(sc, upto, path, t=0, th='home', mo=0.0):
     im, d = bg(); set_bg(d, th)
+    if M.BADGE: M.badge(d, *M.BADGE)   # set_bg дэвсгэрийг дарж зурдаг тул дахин зурна
     center(d, 'КИНОНЫ ХАРИЛЦАН ЯРИА', 95, cfont(52), '#93c5fd')
     f = cfont(44); hk = f"HSK {sc['level']}"; w = d.textlength(hk, font=f)
     d.rounded_rectangle([(W - w) / 2 - 30, 170, (W + w) / 2 + 30, 240], 35, fill='#facc15'); d.text(((W - w) / 2, 177), hk, font=f, fill='#1e293b')
@@ -186,15 +187,16 @@ def main():
     ap.add_argument('--index', type=int); ap.add_argument('--silent', action='store_true'); ap.add_argument('--min-gap', type=int, default=0)
     a = ap.parse_args()
     M.start_watchdog()
-    try: st = json.load(open(STATE))
-    except Exception: st = {}
-    if a.min_gap and time.time() - st.get('last', 0) < a.min_gap * 60:
-        print('Алгасав'); go = os.environ.get('GITHUB_OUTPUT')
-        if go: open(go, 'a').write('skipped=true\n')
-        return
+    st = SR.load()
+    if SR.too_soon(st, 'scene', a.min_gap):
+        print('Алгасав'); SR.skip_out(); return
+    words, _ = M.load(); SR.init(st, M.ordered(words))
     S = json.load(open(os.path.join(M.HERE, 'scenes.json'), encoding='utf8'))
-    num = a.index if a.index is not None else st.get('next', 0)
-    sc = S[num % len(S)]; th = theme_of(sc, num)
+    sid = lambda x: x['title_zh']
+    SR.seed_done(st, 'scene', [sid(x) for x in S], st['seed'].get('scene', 0))
+    if a.index is not None: sc, sn = S[a.index % len(S)], None; num = a.index
+    else: sc, _ = SR.pick(st, 'scene', S, lambda x: x['level'], sid); sn = SR.num(st, 'scene'); num = sn - 1   # num: өнгө/хоолойн эргэлтэд
+    M.BADGE = ('scene', sn) if sn else None; th = theme_of(sc, num)
     VOICE = dict(zip('AB', PAIRS[num % len(PAIRS)]))
     os.makedirs(OUT, exist_ok=True)
     with tempfile.TemporaryDirectory() as tmp:
@@ -223,15 +225,15 @@ def main():
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-loop', '1', '-framerate', '30', '-i', img, '-i', aud, '-t', '5', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-ar', '44100', '-shortest', mp4], check=True)
         segs.append(mp4)
         lst = os.path.join(tmp, 'l.txt'); open(lst, 'w').write(''.join(f"file '{s}'\n" for s in segs))
-        out = os.path.join(OUT, f'scene-{num % len(S) + 1:04d}.mp4')
+        out = os.path.join(OUT, SR.file_name('scene', sn) if sn else f'scene-manual-{num + 1:04d}.mp4')
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c:v', 'copy', '-af', M.LOUDNORM, '-c:a', 'aac', '-b:a', '160k', '-ar', '44100', '-movflags', '+faststart', out], check=True)
     zh_all = '\n'.join(f'{w}: {z}' for w, z, m in sc['lines'])
     mn_all = '\n'.join(f'{w}: {m}' for w, z, m in sc['lines'])
-    cap = (f"🎬 {sc['title_zh']} — {sc['title_mn']}\n🎓 HSK {sc['level']}\n\n{zh_all}\n\n🇲🇳 Орчуулга:\n{mn_all}\n\n"
-           f"💾 Хадгалаад давтаарай ❤️ Найздаа илгээгээрэй\n👉 Үнэгүй сурах сайт: {SITE}\n\n#HSK #HSK{sc['level']} #хятадхэл #хятадхэлсурах #learnchinese #mandarin #中文 #монгол")
+    cap = (f"🎬 {sc['title_zh']} — {sc['title_mn']}\n🎓 HSK {sc['level']}" + (f" · Яриа №{sn}" if sn else "") + f"\n\n{zh_all}\n\n🇲🇳 Орчуулга:\n{mn_all}\n\n"
+           f"💾 Хадгалаад давтаарай ❤️ Найздаа илгээгээрэй\n\n" + (SR.series_line(st, 'scene', sn) + "\n\n" if sn else "") + f"👉 Үнэгүй сурах сайт: {SITE}\n\n#HSK #HSK{sc['level']} #хятадхэл #хятадхэлсурах #learnchinese #mandarin #中文 #монгол")
     open(out[:-4] + '.txt', 'w', encoding='utf8').write(cap)
-    if not a.silent and a.index is None:
-        json.dump({'next': num + 1, 'last': int(time.time())}, open(STATE, 'w'))
+    if sn and (not a.silent or os.environ.get('REEL_TEST_STATE') == '1'):
+        SR.finish(st, 'scene', 'scene', sid(sc)); SR.save(st)
     print('Бэлэн:', out, round(probe(out), 1), 'сек', 'TTS алдаа:' if M.TTS_FAIL else '', M.TTS_FAIL)
     if M.TTS_FAIL and not a.silent:
         os.remove(out); sys.exit('Дуу үүсгэж чадсангүй')
