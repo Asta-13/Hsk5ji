@@ -12,6 +12,7 @@ var DATA=window.DATA;
     gmHint:["难道, 听说, 受不了, 而是, 而且, 并且 гэх мэт холбоос, хэллэг","Connectors and set phrases like 难道, 听说, 而是, 并且","Союзы и устойчивые выражения, такие как 难道, 听说, 受不了, 而是, 而且, 并且","难道, 听说, 受不了, 而是, 而且, 并且 などの接続詞・慣用表現"],
     tabHsk:["HSK","HSK","HSK","HSK"],
     tabGram:["Дүрэм","Rules","Правила","文法"],
+    noEx:["Жишээ өгүүлбэр одоохондоо алга","No example sentence yet","Примера пока нет","例文はまだありません"],
     hskOnly:["Зөвхөн миний санд байхгүй","Only words not in my bank","Только слова, которых нет в моём словаре","マイ単語帳にない単語のみ"],
     hskProg:["Миний санд: {a} / {b}","In my bank: {a} / {b}","В моём словаре: {a} / {b}","マイ単語帳：{a} / {b}"],
     more:["Цааш үзэх","Show more","Показать ещё","もっと見る"],
@@ -135,6 +136,10 @@ var DATA=window.DATA;
     lrnTc:["🎨 Тоны өнгө","🎨 Tone colors","🎨 Цвета тонов","🎨 声調の色"],
     lrnPyHide:["👁 Пиньинийг нуух (шалгах)","👁 Hide pinyin (test yourself)","👁 Скрыть пиньинь (проверка)","👁 ピンインを隠す（練習）"],
     lrnTcLbl:["өндөр тэгш|өгсөх|хонхор (буугаад өгсөх)|огцом буух|хөнгөн","high, flat|rising|dipping (down then up)|sharp falling|neutral","ровный|восходящий|нисходяще-восходящий|нисходящий|лёгкий","高く平ら|上昇|下がって上がる|急降下|軽声"],
+    hskExT:["💬 Жишээ өгүүлбэр","💬 Example sentences","💬 Примеры предложений","💬 例文"],
+    gsTitle:["🔍 Үг хайх","🔍 Search any word","🔍 Поиск слова","🔍 単語を検索"],
+    gsPh:["Иероглиф, пиньинь эсвэл монгол утга…","Hanzi, pinyin or meaning…","Иероглиф, пиньинь или значение…","漢字・ピンイン・意味…"],
+    gsHint:["Үг бүрийг жишээ өгүүлбэр, орчуулга, дуудлагатай нь харна.","Every word shows with example sentences, translation and audio.","Каждое слово — с примерами, переводом и озвучкой.","どの単語も例文・訳・音声付きで表示されます。"],
     lrnNextT:["▶ Эндээс эхэл","▶ Start here","▶ Начни отсюда","▶ ここから始めよう"],
     lrnNextN:["▶ Дараагийн хичээл","▶ Next lesson","▶ Следующий урок","▶ 次のレッスン"],
     lrnNextHint:["Хичээл бүр ойролцоогоор 5 минут. Нээгээд 🔊-г дарж сонсоод, дуугаар давтан хэл.","Each lesson takes about 5 minutes. Open it, tap 🔊 to listen, then repeat aloud.","Каждый урок занимает около 5 минут. Откройте, нажмите 🔊, послушайте и повторите вслух.","1レッスン約5分。開いて🔊を押し、聞いてから声に出して繰り返しましょう。"],
@@ -1156,6 +1161,30 @@ var DATA=window.DATA;
   function toks(q){return nz(q).split(/\s+/).filter(Boolean)}
   /* every space-separated token must appear (pinyin also matches without spaces: canjia = cān jiā) */
   function mq(hay,q){var ts=toks(q);if(!ts.length)return true;var a=nz(hay),b=a.replace(/\s+/g,'');return ts.every(function(x){return a.indexOf(x)>-1||b.indexOf(x)>-1})}
+  var EXI=null,EXC={};
+  function exIdx(){
+    if(EXI)return EXI;
+    var X=(window.DATA&&DATA.EXD)||{},seen={},o=[];
+    Object.keys(X).forEach(function(h){var s=X[h];if(s&&s[0]&&!seen[s[0]]){seen[s[0]]=1;o.push({z:s[0],m:s[1]||''})}});
+    try{gramList().forEach(function(g){if(g.z&&!seen[g.z]){seen[g.z]=1;o.push({z:g.z,m:g.t||''})}})}catch(e){}
+    if(o.length)EXI=o;return o;
+  }
+  /* up to 3 example sentences for a word: its own first, then short ones from the whole corpus that contain it */
+  function exFor(h){
+    if(EXC[h])return EXC[h];
+    var X=(window.DATA&&DATA.EXD)||{},r=[],s=X[h];
+    if(s&&s[0])r.push({z:s[0],m:s[1]||''});
+    var more=exIdx().filter(function(e){return e.z.indexOf(h)>-1&&!r.some(function(y){return y.z===e.z})}).sort(function(a,b){return a.z.length-b.z.length}).slice(0,3-r.length);
+    r=r.concat(more);
+    if(Object.keys(X).length)EXC[h]=r;
+    return r;
+  }
+  var hEx=true;try{hEx=localStorage.getItem('hsk-ex')!=='0'}catch(x){}
+  function exHtml(h){
+    if(!hEx)return '';
+    var r=exFor(h);if(!r.length)return '<div class="exs"><span class="hint">'+T('noEx')+'</span></div>';
+    return '<div class="exs">'+r.map(function(e){return '<div class="ex"><div class="exz"><span lang="zh">'+hl(e.z,h)+'</span><button class="btn small ghost" type="button" data-speak="'+esc(e.z)+'" aria-label="Audio">🔊</button></div>'+(e.m?'<div class="exm">'+esc(e.m)+'</div>':'')+'</div>'}).join('')+'</div>';
+  }
   function emptyRes(q,id){return '<div class="empty"><b>'+T('noRes')+(q?' «'+esc(q)+'»':'')+'</b>'+T('noResH')+(q?'<br><button class="btn small ghost" type="button" data-clear="'+id+'" style="margin-top:10px">'+T('clearQ')+'</button>':'')+'</div>'}
   function hl(t,q){t=String(t==null?'':t);var ts=String(q||'').toLowerCase().split(/\s+/).filter(Boolean);if(!ts.length)return esc(t);
     var lo=t.toLowerCase(),out='',pos=0;
@@ -1170,7 +1199,7 @@ var DATA=window.DATA;
     $('hskStd').innerHTML=[2,3].map(function(v){return '<button class="chip" type="button" data-std="'+v+'" aria-pressed="'+(hStd===v)+'">HSK '+v+'.0<small>'+(v===3?'2021':'2012')+'</small></button>'}).join('');
     lvChips('hskLv',hLv,true,c);
     var q=hQ,items=[],added=0,tot=0;
-    (hLv?[hLv]:LEVELS).forEach(function(lv){(HR()[lv]||'').split(',').forEach(function(it){
+    ((hLv&&!q)?[hLv]:LEVELS).forEach(function(lv){(HR()[lv]||'').split(',').forEach(function(it){
       var a=it.split('|'),h=a[0],p=hP(h,a[1]),m=hM(h);tot++;if(have[h])added++;
       if(hOnly&&have[h])return;
       if(q&&!mq(h+' '+p+' '+m+' '+hMn(h),hQ))return;
@@ -1180,7 +1209,7 @@ var DATA=window.DATA;
     if(q){
       hskLookup('');var cur=hStd===3?HSKD3:HSKD,oth=hStd===3?HSKRAW:HSKRAW3,ot=hStd===3?'2.0':'3.0',seen={};
       items.forEach(function(x){seen[x.h]=1});
-      (hLv?[hLv]:LEVELS).forEach(function(lv){(oth[lv]||'').split(',').forEach(function(it){
+      ((hLv&&!q)?[hLv]:LEVELS).forEach(function(lv){(oth[lv]||'').split(',').forEach(function(it){
         var a2=it.split('|'),h=a2[0];if(cur[h]||seen[h])return;seen[h]=1;
         var p=hP(h,a2[1]),m=hM(h);
         if(hOnly&&have[h])return;
@@ -1192,9 +1221,9 @@ var DATA=window.DATA;
     $('hskInfo').textContent=T('hskProg',{a:added,b:tot});
     $('hskCnt').textContent=items.length+' / '+tot;
     var h2=items.slice(0,hLim).map(function(x){
-      return '<div class="w"><span class="h" lang="zh">'+hl(x.h,hQ)+'</span><span><span class="p">'+esc(x.p)+'</span>'+(hLv&&!x.o?'':' <span class="badge">HSK '+x.l+(x.o?' · '+x.o:'')+'</span>')+'<br><span class="m">'+(x.m?hl(x.m,hQ):'<span class="hint">'+T('hskNoTr')+'</span>')+'</span></span><span>'+
+      return '<div class="w"><span class="h" lang="zh">'+hl(x.h,hQ)+'</span><span><span class="p">'+esc(x.p)+'</span>'+(hLv&&!q&&!x.o?'':' <span class="badge">HSK '+x.l+(x.o?' · '+x.o:'')+'</span>')+'<br><span class="m">'+(x.m?hl(x.m,hQ):'<span class="hint">'+T('hskNoTr')+'</span>')+'</span></span><span>'+
         '<button class="btn small ghost" type="button" data-speak="'+esc(x.h)+'" aria-label="Audio">🔊</button> <button class="btn small ghost star" type="button" data-fav="'+esc(x.h)+'" aria-pressed="'+(isFav(x.h)?'true':'false')+'" aria-label="Favorite">'+(isFav(x.h)?'★':'☆')+'</button> <button class="btn small ghost" type="button" data-write="'+esc(x.h)+'" aria-label="Write">✍</button> '+(isOwner?'<button class="btn small ghost" type="button" data-hedit="'+esc(x.h)+'">✎</button> ':'')+
-        (x.m?'<button class="btn small ghost'+(hJust===x.h?' pop':'')+'" type="button" data-hadd="'+esc(x.h)+'"'+(x.got?' disabled':'')+'>'+(x.got?'✓':'+')+'</button>':'')+'</span></div>';
+        (x.m?'<button class="btn small ghost'+(hJust===x.h?' pop':'')+'" type="button" data-hadd="'+esc(x.h)+'"'+(x.got?' disabled':'')+'>'+(x.got?'✓':'+')+'</button>':'')+'</span>'+exHtml(x.h)+'</div>';
     }).join('');
     if(items.length>hLim)h2+='<button class="btn ghost" type="button" data-hmore="1">'+T('more')+' ('+(items.length-hLim)+')</button>';
     $('hskList').innerHTML=h2||emptyRes(hQ,'hskQ');hJust='';
@@ -1226,6 +1255,22 @@ var DATA=window.DATA;
   var hT=null;
   $('hskQ').addEventListener('input',function(){var v=this.value.trim();clearTimeout(hT);hT=setTimeout(function(){hQ=v;hLim=60;renderHsk()},120)});
   $('hskOnly').addEventListener('change',function(){hOnly=this.checked;hLim=60;renderHsk()});
+  (function(){
+    var b=$('hskEx');if(!b)return;b.setAttribute('aria-pressed',String(hEx));
+    b.addEventListener('click',function(){hEx=!hEx;try{localStorage.setItem('hsk-ex',hEx?'1':'0')}catch(x){}b.setAttribute('aria-pressed',String(hEx));renderHsk()});
+  })();
+  /* big search on the Today tab -> jumps to the HSK tab with results + examples */
+  function goSearch(v){
+    v=String(v||'').trim();if(!v)return;
+    hQ=v;hLv=0;hOnly=false;hLim=60;var o=$('hskOnly');if(o)o.checked=false;
+    var i=$('hskQ');i.value=v;var sx=i.parentNode.querySelector('.sx');if(sx)sx.hidden=false;
+    showTab('hsk');renderHsk();
+  }
+  (function(){
+    var f=$('gsForm');if(!f)return;
+    f.addEventListener('submit',function(e){e.preventDefault();goSearch($('gsQ').value)});
+    document.addEventListener('click',function(e){var b=e.target.closest('[data-gsq]');if(b){$('gsQ').value=b.dataset.gsq;goSearch(b.dataset.gsq)}});
+  })();
   $('wlQ').addEventListener('input',function(){wlQ=this.value.trim();renderList()});
   document.addEventListener('click',function(e){if(e.target.closest('[data-hmore]')){hLim+=120;renderHsk()}});
   document.addEventListener('input',function(e){var sx=e.target.parentNode&&e.target.parentNode.querySelector&&e.target.parentNode.querySelector('.sx');if(sx)sx.hidden=!e.target.value});
@@ -2514,6 +2559,7 @@ var DATA=window.DATA;
   function renderLearn(){
     var el=$('lrnList');if(!el||!LESSONS)return;
     $('lrnCard').hidden=!hasProfile();
+    if($('gsCard'))$('gsCard').hidden=!hasProfile();
     $('cyrTog').setAttribute('aria-pressed',cyrOn()?'true':'false');
     var done=lrnDoneArr();
     $('lrnProg').textContent=T('lrnProg',{a:done.length,b:LESSONS.length});$('lrnBar').style.width=Math.round(done.length*100/LESSONS.length)+'%';

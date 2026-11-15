@@ -39,6 +39,12 @@
 <!-- TODAY -->
 <div class="pane" id="p-today" role="tabpanel">
   <div class="banner" id="notice" hidden><b data-i18n="noticeLbl"></b><span id="noticeTx"></span></div>
+  <div class="card gs" id="gsCard" hidden>
+    <div class="gs-t" data-i18n="gsTitle"></div>
+    <form id="gsForm" class="search big" role="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="gsQ" type="search" data-i18n-ph="gsPh" autocomplete="off" enterkeyhint="search"></form>
+    <div class="chips" id="gsEg"><button class="chip" type="button" data-gsq="爱">爱</button><button class="chip" type="button" data-gsq="谢谢">谢谢</button><button class="chip" type="button" data-gsq="学习">学习</button><button class="chip" type="button" data-gsq="xuexi">xuexi</button><button class="chip" type="button" data-gsq="ном">ном</button></div>
+    <div class="hint" data-i18n="gsHint"></div>
+  </div>
   <div class="card hero" id="dayCard" hidden>
     <div class="between"><span class="badge" data-i18n="dayWord"></span><button class="btn small" type="button" data-goplay="1" data-i18n="plGoBtn"></button></div>
     <div id="dayBody"></div>
@@ -236,13 +242,13 @@
 <div class="pane" id="p-hsk" role="tabpanel" hidden>
   <div class="card hero">
     <h2 data-i18n="hskTitle"></h2>
+    <div class="search big"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="hskQ" type="search" data-i18n-ph="hskSearch" autocomplete="off" enterkeyhint="search"><button type="button" class="sx" data-clear="hskQ" aria-label="×" hidden>×</button><button type="button" class="sx" id="hwOpen" style="right:44px" aria-label="Draw">✍</button></div>
     <div class="between"><span class="hint" id="hskInfo"></span><span class="hint" id="hskCnt"></span></div>
     <div class="prog"><i id="hskProg"></i></div>
     <div class="chips" id="hskStd" role="group" aria-label="HSK 2.0 / 3.0"></div>
     <div class="chips" id="hskLv"></div>
-    <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="hskQ" type="search" data-i18n-ph="hskSearch" autocomplete="off" enterkeyhint="search"><button type="button" class="sx" data-clear="hskQ" aria-label="×" hidden>×</button><button type="button" class="sx" id="hwOpen" style="right:44px" aria-label="Draw">✍</button></div>
     <label class="chk"><input type="checkbox" id="hskOnly"><span data-i18n="hskOnly"></span></label>
-    <div class="row" style="flex-wrap:wrap"><button class="chip" type="button" data-playq="#hskList" data-i18n="lsPlay"></button><button class="chip" type="button" data-slow="1" aria-pressed="false" data-i18n="lsSlow"></button></div>
+    <div class="row" style="flex-wrap:wrap"><button class="chip" type="button" data-playq="#hskList" data-i18n="lsPlay"></button><button class="chip" type="button" data-slow="1" aria-pressed="false" data-i18n="lsSlow"></button><button class="chip" type="button" id="hskEx" aria-pressed="true" data-i18n="hskExT"></button></div>
   </div>
   <div id="hskList" class="list"></div>
 </div>
