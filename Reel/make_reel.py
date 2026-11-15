@@ -3,7 +3,7 @@
 Үгийг ../index.html доторх өгөгдлөөс авна. Хятад хэлийг эхлээд ээлжлэн (удаан, хэвийн) уншина,
 дараа нь монгол тайлбар, жишээ өгүүлбэр, давталт.
 Хэрэглээ: python3 reel/make_reel.py [--level N] [--word 爱] [--silent]
-Өдөрт 4 удаа ажиллана; HSK 1-ээс эхлэн үгсийг дарааллаар нь авна (reels/state.json дээр байр тэмдэглэнэ).
+Өдөрт 4 удаа ажиллана; HSK 1-ээс эхлэн үгсийг дарааллаар нь авна (дугаар, заасан үгсийг reels/series.json дээр тэмдэглэнэ; Reel/series.py).
 """
 import argparse, asyncio, datetime, faulthandler, json, os, re, subprocess, sys, time, wave, tempfile
 from PIL import Image, ImageDraw, ImageFont
@@ -19,7 +19,16 @@ OUT = os.environ.get('REEL_OUT') or os.path.join(ROOT, 'reels')
 HERE = os.path.dirname(os.path.abspath(__file__))
 KEEP = 100
 W, H = 1080, 1920
+# Instagram Reels-ийн дээд (нэр, камер) ба доод (тайлбар, дуу, товчнууд) UI-ийн доор үсэг орвол халхлагдана.
+# Бүх чухал зүйлийг SAFE_TOP..SAFE_BOTTOM завсарт, зүүн/баруун PAD-аас дотогш байрлуул.
+PAD = 110
+SAFE_TOP, SAFE_BOTTOM = 270, 1480
+FOOT_Y = 1425
+DITHER = float(os.environ.get('REEL_DITHER') or 0)      # дэвсгэрийн «үр» (banding арилгана, гэхдээ файл ~2-3 дахин том болно; жишээ нь 0.8)
+CRF = os.environ.get('REEL_CRF') or '22'                 # эцсийн видеоны чанар: бага = чанартай/том (18-26)
 SITE = 'asta-13.github.io/Hsk5ji'
+import series as SR
+BADGE = None   # (төрөл, дугаар): тохируулбал bg() бүрийн баруун дээд буланд «#35» тэмдэг зурна
 ZH_VOICE = os.environ.get('ZH_VOICE', 'zh-CN-XiaoxiaoNeural')   # өөр: zh-CN-XiaoyiNeural, zh-CN-YunxiNeural
 MN_VOICE = os.environ.get('MN_VOICE') or 'mn-MN-YesuiNeural'      # эрэгтэй: mn-MN-BataaNeural
 MN_RATE = os.environ.get('MN_RATE') or '-8%'      # монгол хоолойн хурд (жишээ -12%, +0%)
@@ -83,12 +92,18 @@ def load():
     for line in gram_raw.split('\n'):
         a = line.split('|')
         if len(a) >= 5: gram.append((a[3], a[4]))
+    try: fix = json.load(open(os.path.join(HERE, 'word_overrides.json'), encoding='utf8')).get('pinyin_fix', {})
+    except Exception: fix = {}
+    def clean_py(h, p):
+        # Эх өгөгдөлд нэг үсэгт үгийн пиньинь заримдаа буруу дуудлагатай эсвэл том үсгээр эхэлсэн байдаг.
+        if h in fix: return fix[h]
+        return p[:1].lower() + p[1:] if len(h) == 1 else p
     words = {}
     for lv, s in raw.items():
         L = []
         for it in s.split(','):
             a = it.split('|')
-            if len(a) >= 2 and a[0] in mn: L.append((a[0], a[1], mn[a[0]]))
+            if len(a) >= 2 and a[0] in mn: L.append((a[0], clean_py(a[0], a[1]), mn[a[0]]))
         words[int(lv)] = L
     return words, gram
 
@@ -181,11 +196,25 @@ def join(wavs, gap, dst):
     os.remove(gp)
 
 # ---------- зураг ----------
+_BG = None
+def badge(d, kind, n):
+    """Баруун дээд булан (Instagram-ын дээд UI-ийн доор, баруун товчнуудын дээр): өнгөт «#35» + төрлийн нэр."""
+    col = SR.KINDS[kind][2]; f = cfont(46); t = f'#{n}'; w = d.textlength(t, font=f); x1 = W - 40; x0 = x1 - w - 44
+    d.rounded_rectangle([x0, 278, x1, 342], 32, fill=col); d.text((x0 + 22, 284), t, font=f, fill='#0f172a')
+    lf = cfont(30); lab = SR.KINDS[kind][1].upper(); d.text((x1 - d.textlength(lab, font=lf), 350), lab, font=lf, fill=col)
+
 def bg():
-    im = Image.new('RGB', (W, H)); d = ImageDraw.Draw(im)
-    for y in range(H):
-        t = y / H
-        d.line([(0, y), (W, y)], fill=(int(30 + 10 * t), int(58 - 25 * t), int(138 - 70 * t)))
+    """Градиент дэвсгэр. REEL_DITHER>0 үед маш бага тогтмол «үр» нэмж градиентын зэрэглэлийг (banding) зөөлрүүлнэ."""
+    global _BG
+    if _BG is None:
+        from PIL import ImageChops
+        g = Image.new('RGB', (W, H)); gd = ImageDraw.Draw(g)
+        for y in range(H):
+            t = y / H
+            gd.line([(0, y), (W, y)], fill=(int(30 + 10 * t), int(58 - 25 * t), int(138 - 70 * t)))
+        _BG = ImageChops.add(g, Image.effect_noise((W, H), DITHER).convert('RGB'), 1.0, -128) if DITHER > 0 else g
+    im = _BG.copy(); d = ImageDraw.Draw(im)
+    if BADGE: badge(d, *BADGE)
     return im, d
 
 def center(d, text, y, f, fill='white'):
@@ -206,94 +235,154 @@ def wrap(d, text, f, maxw):
     if cur.strip(): lines.append(cur.rstrip())
     return lines
 
-def header(d, lv):
-    center(d, 'ӨДРИЙН ҮГ', 130, cfont(56), '#93c5fd')
-    f = cfont(48); t = f'HSK {lv}'; w = d.textlength(t, font=f)
-    d.rounded_rectangle([(W - w) / 2 - 36, 220, (W + w) / 2 + 36, 306], 43, fill='#facc15')
-    d.text(((W - w) / 2, 228), t, font=f, fill='#1e293b')
+def header(d, lv, label):
+    """Дээд хэсэг: хөшүүрэг (hook) асуулт/гарчиг + HSK түвшин. Бүгд SAFE_TOP-оос доош."""
+    center(d, label, 285, cfont(56), '#93c5fd')
+    f = cfont(46); t = f'HSK {lv}'; w = d.textlength(t, font=f)
+    d.rounded_rectangle([(W - w) / 2 - 32, 365, (W + w) / 2 + 32, 440], 38, fill='#facc15')
+    d.text(((W - w) / 2, 372), t, font=f, fill='#1e293b')
 
 def footer(d):
-    center(d, 'Дагаж, өдөр бүр нэг үг сур', 1700, cfont(44), '#bfdbfe')
-    center(d, SITE, 1775, cfont(42), '#facc15')
+    center(d, SITE, FOOT_Y, cfont(40), '#facc15')
+
+_FULL = {',': '，', '?': '？', '!': '！', ';': '；', ':': '：'}
+def zh_punct(t):
+    return re.sub(r'(?<=[\u4e00-\u9fff])[,?!;:]', lambda m: _FULL[m.group(0)], t)
 
 def hanzi_size(t): return 420 if len(t) == 1 else 300 if len(t) == 2 else 200 if len(t) == 3 else 150 if len(t) == 4 else 120
 
+def fit(d, text, mk, size, maxw, minsize=40):
+    """Текст maxw-д багтах хүртэл фонтыг багасгана (урт пиньинь/монгол үг хажуу тийш халихгүй)."""
+    while size > minsize and d.textlength(text, font=mk(size)) > maxw: size -= 4
+    return mk(size)
+
+def draw_hl(d, line, f, y, hl, off, color='#0f172a', hlc='#dc2626'):
+    """Хятад мөрийг төвд зурж, hl=(эхлэл, төгсгөл) завсрын тэмдэгтүүдийг тодруулна (off = мөрийн эхний тэмдэгтийн дугаар)."""
+    ws = [d.textlength(ch, font=f) for ch in line]
+    x = (W - sum(ws)) / 2
+    for i, ch in enumerate(line):
+        d.text((x, y), ch, font=f, fill=hlc if hl and hl[0] <= off + i < hl[1] else color)
+        x += ws[i]
+
+LABELS = {'word': 'Энэ үгийг мэдэх үү?', 'meaning': 'Монгол утга', 'example': 'Жишээ өгүүлбэр', 'repeat': 'Дагаж хэлээрэй!'}
+
 EX_PY = ''
-def scene_img(kind, lv, w, ex, path):
+def scene_img(kind, lv, w, ex, path, stage=2):
+    """stage: жишээ дэлгэцэд 1 = хятад өгүүлбэр л, 2 = орчуулгатай нь (дуутай нь хамт аажим гарна)."""
     ex_py = EX_PY
-    im, d = bg(); header(d, lv); han, py, mn = w
-    hs = hanzi_size(han)
-    if kind == 'word':
-        center(d, han, 600, font(hs), 'white'); center(d, py, 600 + hs + 90, cfont(100), '#fde68a')
+    im, d = bg(); header(d, lv, LABELS[kind]); han, py, mn = w
+    hs = hanzi_size(han); inner = W - 2 * PAD
+    if kind in ('word', 'repeat'):
+        blk = hs * 1.2 + 90 + 110
+        y0 = 480 + (SAFE_BOTTOM - 60 - 480 - blk) / 2
+        center(d, han, y0, font(hs), 'white')
+        center(d, py, y0 + hs * 1.2 + 40, fit(d, py, cfont, 110, inner), '#fde68a')
+        if kind == 'repeat':
+            center(d, 'Хадгалаад өдөр бүр давтаарай', y0 + hs * 1.2 + 230, cfont(46), '#bfdbfe')
     elif kind == 'meaning':
-        center(d, han, 420, font(min(hs, 300)), 'white'); center(d, py, 420 + min(hs, 300) + 70, cfont(80), '#fde68a')
-        y = 1000
-        d.rounded_rectangle([90, y, W - 90, y + 460], 50, fill='white')
-        f = cfont(84 if len(mn) < 14 else 60); L = wrap(d, mn, f, W - 260)[:4]
-        top = y + (460 - len(L) * (f.size + 20)) / 2
-        for i, l in enumerate(L): center(d, l, top + i * (f.size + 20), f, '#1e3a8a')
-    elif kind == 'example':
-        center(d, 'ЖИШЭЭ', 440, cfont(58), '#93c5fd')
-        d.rounded_rectangle([70, 540, W - 70, 1380], 50, fill='white')
-        f = font(100); L = wrap(d, ex[0], f, W - 240)[:4]; y = 600
-        for l in L:
-            center(d, l, y, f, '#0f172a'); y += 135
-        if ex_py:
-            fp = cfont(40)
-            for l in wrap(d, ex_py, fp, W - 240)[:2]:
-                center(d, l, y + 10, fp, '#2563eb'); y += 56
-        f2 = cfont(50); L2 = wrap(d, ex[1], f2, W - 240)[:4]; y = max(y + 60, 1050)
-        for l in L2:
-            center(d, l, y, f2, '#475569'); y += 90
-    else:  # repeat
-        center(d, 'ДАХИН ДАВТЪЯ', 440, cfont(62), '#93c5fd')
-        center(d, han, 640, font(hs), 'white'); center(d, py, 640 + hs + 90, cfont(100), '#fde68a')
+        hz = min(hs, 260)
+        center(d, han, 500, font(hz), 'white'); center(d, py, 500 + hz * 1.2 + 10, fit(d, py, cfont, 90, inner), '#fde68a')
+        top, hgt = 960, 400
+        d.rounded_rectangle([PAD - 20, top, W - PAD + 20, top + hgt], 50, fill='white')
+        f = cfont(88 if len(mn) < 14 else 64); L = wrap(d, mn, f, inner - 40)[:4]
+        y = top + (hgt - len(L) * (f.size + 20)) / 2
+        for i, l in enumerate(L): center(d, l, y + i * (f.size + 20), f, '#1e3a8a')
+    else:  # example
+        iw = inner - 40; zh = zh_punct(ex[0])
+        n = len(zh); fz = font(96 if n <= 12 else 80 if n <= 18 else 66)
+        zl = wrap(d, zh, fz, iw)[:3]
+        fp = cfont(46); pl = wrap(d, ex_py, fp, iw)[:3] if ex_py else []
+        ft = cfont(58); tl = wrap(d, ex[1], ft, iw)[:4]
+        lz, lp, lt = int(fz.size * 1.35), 62, 80
+        hgt = 80 + len(zl) * lz + (30 + len(pl) * lp if pl else 0) + 60 + len(tl) * lt
+        top = max(SAFE_TOP + 200, 470 + ((SAFE_BOTTOM - 60 - 470) - hgt) / 2)
+        card_h = hgt if stage >= 2 else hgt - 60 - len(tl) * lt + 10   # 1-р шатанд орчуулгын зайг авахгүй; 2-р шатанд карт доош тэлнэ
+        d.rounded_rectangle([PAD - 20, top, W - PAD + 20, top + card_h], 50, fill='white')
+        y = top + 50; i = zh.find(w[0]); hl = (i, i + len(w[0])) if i >= 0 else None; cur = 0
+        for l in zl:
+            off = zh.find(l, cur); off = cur if off < 0 else off; cur = off + len(l)
+            draw_hl(d, l, fz, y, hl, off); y += lz
+        for l in pl: center(d, l, y + 20, fp, '#2563eb'); y += lp
+        y += 40 if pl else 20
+        if stage >= 2:
+            d.line([(PAD + 60, y), (W - PAD - 60, y)], fill='#e2e8f0', width=4); y += 30
+            for l in tl: center(d, l, y, ft, '#334155'); y += lt
     footer(d); im.save(path)
 
-def render(kind, lv, w, ex, wavs, gap, tmp, n):
+# Видеоны кодлолт: дундын (scene) файл бараг алдалтгүй, эцсийн файл CRF 22 (текст тод, хэмжээ жижиг).
+SCENE_V = ['-c:v', 'libx264', '-preset', 'veryfast', '-crf', '14', '-pix_fmt', 'yuv420p', '-r', '30']
+FADE = 'fade=t=in:st=0:d=0.2:color=0x1e3a8a' if os.environ.get('REEL_FADE', '1') != '0' else None   # дэвсгэрийн өнгөөс бүдэгээр гарч ирнэ
+
+def render(kind, lv, w, ex, wavs, gap, tmp, n, stage=2, tail=0.7, fade=True):
     img = os.path.join(tmp, f's{n}.png'); aud = os.path.join(tmp, f's{n}.wav'); mp4 = os.path.join(tmp, f's{n}.mp4')
-    scene_img(kind, lv, w, ex, img); join(wavs, gap, aud)
-    dur = probe(aud) + 0.7
+    scene_img(kind, lv, w, ex, img, stage); join(wavs, gap, aud)
+    dur = probe(aud) + tail
+    vf = ['-vf', FADE] if (fade and FADE) else []
     subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-loop', '1', '-framerate', '30', '-i', img, '-i', aud, '-t', f'{dur:.2f}',
-                    '-af', 'apad', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-ar', '44100', '-shortest', mp4], check=True)
+                    '-af', 'apad'] + vf + SCENE_V + ['-c:a', 'aac', '-ar', '44100', '-shortest', mp4], check=True)
     return mp4
 
-HOOKS = [
-    '🇨🇳 Энэ үгийг мэдэх үү?',
-    '📚 Өнөөдөр нэг үг сурцгаая!',
-    '🤔 Хятадаар хэрхэн хэлэх вэ?',
-    '💡 Өдөр бүр 1 үг = жилд 365 үг!',
-    '🔥 HSK шалгалтад заавал таардаг үг!',
-    '👀 Үүнийг санаж аваарай!',
-]
-TAGS = ['#HSK', '#хятадхэл', '#хятадхэлсурах', '#хятад', '#mongolia', '#монгол', '#chinese', '#learnchinese', '#mandarin', '#中文', '#汉语']
+def finalize(lst, total, out):
+    """Сегментүүдийг нэгтгэж, дээд талд ахицын зурвас нэмээд нэг удаа CRF-ээр кодлоно. Дууг нэг түвшинд (loudnorm) болгоно."""
+    bar_w = W - 2 * PAD
+    fc = (f"[1:v]scale=w='max(2,2*trunc({bar_w}*t/{total:.2f}/2))':h=10:eval=frame[bar];"
+          f"[0:v][bar]overlay=x={PAD}:y=LANE:eval=frame,format=yuv420p[v]").replace('LANE', str(SAFE_TOP - 10))
+    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst,
+                    '-f', 'lavfi', '-i', f'color=c=0xfacc15:s={bar_w}x10:r=30:d={total + 1:.2f}',
+                    '-filter_complex', fc, '-map', '[v]', '-map', '0:a', '-af', LOUDNORM,
+                    '-c:v', 'libx264', '-preset', 'medium', '-crf', CRF, '-profile:v', 'high', '-g', '300',
+                    '-x264-params', 'aq-mode=3', '-r', '30',
+                    '-c:a', 'aac', '-b:a', '192k', '-ar', '44100', '-movflags', '+faststart', '-shortest', out], check=True)
 
-def make_caption(han, py, mn, lv, ex, ex_py, num):
+HOOKS = [
+    'Энэ үгийг мэдэх үү? 🇨🇳',
+    'Өнөөдрийн нэг үг 📚',
+    'Хятадаар хэрхэн хэлэх вэ? 🤔',
+    'Өдөр бүр 1 үг = жилд 365 үг 💡',
+    'HSK шалгалтад таарна 🔥',
+    'Үүнийг санаж аваарай 👀',
+]
+# Instagram одоо 3-5 hashtag-ийг зөвлөдөг; 12 hashtag нь спам шиг харагдаж хүртээмжийг бууруулдаг.
+TAGS = ['#хятадхэл', '#HSK', '#learnchinese', '#монгол', '#中文']
+
+def make_caption(han, py, mn, lv, ex, ex_py, num, series=''):
     k = (num if num is not None else datetime.date.today().toordinal()) % len(HOOKS)
-    lines = [HOOKS[k], '', f'📌 {han}  [{py}]', f'🇲🇳 {mn}', f'🎓 HSK {lv}']
+    lines = [HOOKS[k], '', f'{han}  [{py}]  —  {mn}', f'HSK {lv}' + (f' · Үг №{num}' if num else '')]
     if ex:
-        lines += ['', '🗣 Жишээ:', ex[0]] + ([ex_py] if ex_py else []) + [ex[1]]
-    lines += ['', '💾 Хадгалаад дараа давтаарай', '❤️ Таалагдвал like дарж, найздаа илгээгээрэй', '➕ Өдөр бүр шинэ үг — дагаж аваарай!', '',
-              f'👉 Үнэгүй сурах сайт: {SITE}', '', f'{TAGS[0]} #HSK{lv} ' + ' '.join(TAGS[1:])]
+        lines += ['', zh_punct(ex[0])] + ([ex_py] if ex_py else []) + [ex[1]]
+    lines += ['', '💾 Хадгалаад дараа давтаарай', '📩 Хятад хэл сурч буй найздаа илгээгээрэй', '➕ Өдөр бүр шинэ үг — дагаарай', '']
+    if series: lines += [series, '']
+    lines += ['🔗 Үнэгүй сурах сайт — профайлын линкээс (bio)', '', ' '.join(TAGS[:2] + [f'#HSK{lv}'] + TAGS[2:])]
     return '\n'.join(lines)
 
+def find_word(words, han):
+    for lv, L in words.items():
+        for w in L:
+            if w[0] == han: return lv, w
+    sys.exit('Үг олдсонгүй: ' + han)
+
 def main():
+    global EX_PY, BADGE
     ap = argparse.ArgumentParser()
     ap.add_argument('--min-gap', type=int, default=0, help='сүүлийн видеоноос N минут болоогүй бол алгасна')
     ap.add_argument('--level', type=int); ap.add_argument('--word'); ap.add_argument('--silent', action='store_true')
     a = ap.parse_args()
     start_watchdog()
-    global EX_PY
-    if a.min_gap:
-        try: last = json.load(open(STATE)).get('last', 0)
-        except Exception: last = 0
-        if time.time() - last < a.min_gap * 60:
-            print('Алгасав: сүүлийн видеоноос', round((time.time() - last) / 60), 'минут болсон')
-            go = os.environ.get('GITHUB_OUTPUT')
-            if go: open(go, 'a').write('skipped=true\n')
-            return
-    words, gram = load(); lv, w, num = pick(words, a.level, a.word)
-    han, py, mn = w; print('Үг:', han, py, mn, '(HSK', lv, ')', '#' + str(num + 1) if num is not None else '')
+    st = SR.load()
+    if SR.too_soon(st, 'word', a.min_gap):
+        print('Алгасав: сүүлийн видеоноос', round((time.time() - st['last'].get('word', 0)) / 60), 'минут болсон'); SR.skip_out(); return
+    words, gram = load(); seq = ordered(words)
+    # Хуучин систем (түвшин, дарааллаар) хэдийг гаргасан бол тэдгээрийг «заасан» гэж нэг удаа тэмдэглэнэ.
+    SR.init(st, seq)
+    if a.word: lv, w = find_word(words, a.word); num = None
+    else:
+        needed, _ = SR.split_words(seq, st)
+        if a.level: needed = [x for x in needed if x[0] == a.level] or needed
+        if not needed:                                      # бүх «хэрэгтэй үг» дууссан → эхнээс нь давтана
+            st['done']['word'] = []; needed, _ = SR.split_words(seq, st)
+        lv, w = needed[0]; num = SR.num(st, 'word')
+    BADGE = ('word', num) if num else None
+    han, py, mn = w; print('Үг:', han, py, mn, '(HSK', lv, ')', '#' + str(num) if num else '')
     exs = examples()
     ex = tuple(exs[han]) if han in exs else next(((z, t) for z, t in gram if han in z and z != han), None)
     ex_py = EX_PY = sent_pinyin(ex[0]) if ex else ''
@@ -307,20 +396,21 @@ def main():
         if TTS_FAIL: sys.exit('Дуу үүсгэж чадсангүй: ' + ', '.join(TTS_FAIL))
         scenes = [render('word', lv, w, ex, [zs, zn], 0.5, tmp, 0)]
         scenes.append(render('meaning', lv, w, ex, [a_mean], 0, tmp, 1))
-        if ex: scenes.append(render('example', lv, w, ex, a_ex, 0.5, tmp, 2))
+        if ex:
+            # Эхлээд хятад өгүүлбэр (удаан → хэвийн), дараа нь орчуулга гарч ирнэ: дэлгэц дууны дагуу өөрчлөгдөнө.
+            scenes.append(render('example', lv, w, ex, a_ex[:2], 0.5, tmp, 2, stage=1, tail=0.4))
+            scenes.append(render('example', lv, w, ex, [a_ex[2]], 0, tmp, 4, stage=2, fade=False))
         scenes.append(render('repeat', lv, w, ex, [zn, zs, zn], 0.6, tmp, 3))
         lst = os.path.join(tmp, 'list.txt')
         open(lst, 'w').write(''.join(f"file '{s}'\n" for s in scenes))
-        tag = f'{num + 1:04d}' if num is not None else datetime.datetime.now().strftime('manual-%Y%m%d-%H%M%S')
-        out = os.path.join(OUT, f'reel-{tag}.mp4')
-        # Дууг нэг түвшинд (хэт чимээгүй/чанга биш) болгоно; видеог дахин кодлохгүй.
-        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c:v', 'copy', '-af', LOUDNORM,
-                        '-c:a', 'aac', '-b:a', '160k', '-ar', '44100', '-movflags', '+faststart', out], check=True)
-    cap = make_caption(han, py, mn, lv, ex, ex_py, num)
+        total = sum(probe(s) for s in scenes)
+        out = os.path.join(OUT, SR.file_name('word', num) if num else datetime.datetime.now().strftime('reel-manual-%Y%m%d-%H%M%S.mp4'))
+        finalize(lst, total, out)
+    cap = make_caption(han, py, mn, lv, ex, ex_py, num, SR.series_line({**st, 'level': lv}, 'word', num) if num else '')
     open(out[:-4] + '.txt', 'w', encoding='utf8').write(cap)
-    if num is not None and not a.silent:
-        json.dump({'next': num + 1, 'last': int(time.time())}, open(STATE, 'w'))
-        keep = sorted(f[:-4] for f in os.listdir(OUT) if f.startswith('reel-') and f.endswith('.mp4'))[:-KEEP]
+    if num and not a.silent or (num and os.environ.get('REEL_TEST_STATE') == '1'):
+        SR.finish(st, 'word', 'word', han, lv); SR.save(st)
+        keep = sorted(f[:-4] for f in os.listdir(OUT) if f.startswith('reel-') and f.endswith('.mp4') and 'manual' not in f)[:-KEEP]
         for k in keep:
             for ext in ('.mp4', '.txt'):
                 try: os.remove(os.path.join(OUT, k + ext))

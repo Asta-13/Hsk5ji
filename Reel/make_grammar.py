@@ -5,10 +5,10 @@
 import argparse, json, os, re, subprocess, sys, tempfile, time
 import make_reel as M
 import make_quiz as Q
+import series as SR
 from make_reel import W, H, cfont, font, bg, center, wrap, say, join, probe, silence, SITE, ZH_VOICE, MN_VOICE, MN_RATE
 
 OUT = M.OUT
-STATE = os.path.join(OUT, 'grammar-state.json')
 
 def spoken(t):
     t = t.replace('……', '，').replace('...', '，').replace('…', '，')
@@ -65,14 +65,15 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--silent', action='store_true'); ap.add_argument('--min-gap', type=int, default=0); ap.add_argument('--index', type=int)
     a = ap.parse_args(); M.start_watchdog()
-    try: st = json.load(open(STATE))
-    except Exception: st = {}
-    if a.min_gap and time.time() - st.get('last', 0) < a.min_gap * 60:
-        print('Алгасав'); go = os.environ.get('GITHUB_OUTPUT')
-        if go: open(go, 'a').write('skipped=true\n')
-        return
-    rows = items(); idx = a.index if a.index is not None else st.get('next', 0)
-    lv, pat, mn, ex, ex_mn = rows[idx % len(rows)]
+    st = SR.load()
+    if SR.too_soon(st, 'grammar', a.min_gap):
+        print('Алгасав'); SR.skip_out(); return
+    words, _ = M.load(); SR.init(st, M.ordered(words))
+    rows = items(); rid = lambda r: r[1] + '|' + r[3]
+    SR.seed_done(st, 'grammar', [rid(r) for r in rows], st['seed'].get('grammar', 0))
+    if a.index is not None: row, num = rows[a.index % len(rows)], None
+    else: row, _ = SR.pick(st, 'grammar', rows, lambda r: r[0], rid); num = SR.num(st, 'grammar')
+    lv, pat, mn, ex, ex_mn = row; M.BADGE = ('grammar', num) if num else None
     py = M.sent_pinyin(pat); ex_py = M.sent_pinyin(ex)
     print('Дүрэм:', lv, pat, '|', mn)
     os.makedirs(OUT, exist_ok=True)
@@ -93,15 +94,15 @@ def main():
             segs.append(Q.segment(tmp, f's{n}', imgs, aud))
         cta(P('cta.png')); ac = P('ac.wav'); silence(ac, 3); segs.append(Q.segment(tmp, 'cta', [P('cta.png')], ac))
         lst = P('l.txt'); open(lst, 'w').write(''.join(f"file '{s}'\n" for s in segs))
-        out = os.path.join(OUT, f'grammar-{idx % len(rows) + 1:04d}.mp4')
+        out = os.path.join(OUT, SR.file_name('grammar', num) if num else f'grammar-manual-{a.index + 1:04d}.mp4')
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c:v', 'copy', '-af', M.LOUDNORM,
                         '-c:a', 'aac', '-b:a', '160k', '-ar', '44100', '-movflags', '+faststart', out], check=True)
-    cap = (f'📚 Дүрмийн хичээл — HSK {lv}\n\n📌 {pat}\n🇲🇳 {mn}\n\n🗣 Жишээ:\n{ex}\n{ex_py}\n{ex_mn}\n\n'
-           f'✍️ Өөрөө нэг өгүүлбэр зохиогоод комментд бичээрэй!\n💾 Хадгалаад давтаарай ❤️ Найздаа илгээгээрэй\n👉 Үнэгүй сурах сайт: {SITE}\n\n'
+    cap = (f'📚 Дүрмийн хичээл — HSK {lv}' + (f' · №{num}' if num else '') + f'\n\n📌 {pat}\n🇲🇳 {mn}\n\n🗣 Жишээ:\n{ex}\n{ex_py}\n{ex_mn}\n\n'
+           f'✍️ Өөрөө нэг өгүүлбэр зохиогоод комментд бичээрэй!\n💾 Хадгалаад давтаарай ❤️ Найздаа илгээгээрэй\n\n' + (SR.series_line(st, 'grammar', num) + '\n\n' if num else '') + f'👉 Үнэгүй сурах сайт: {SITE}\n\n'
            f'{M.TAGS[0]} #HSK{lv} #дүрэм #grammar ' + ' '.join(M.TAGS[1:]))
     open(out[:-4] + '.txt', 'w', encoding='utf8').write(cap)
-    if not a.silent and a.index is None:
-        json.dump({'next': idx + 1, 'last': int(time.time())}, open(STATE, 'w'))
+    if num and (not a.silent or os.environ.get('REEL_TEST_STATE') == '1'):
+        SR.finish(st, 'grammar', 'grammar', rid(row)); SR.save(st)
     print('Бэлэн:', out, round(probe(out), 1), 'сек')
 
 if __name__ == '__main__': main()
