@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Киноны хэв маягийн богино харилцан яриа (reel, 9:16 mp4). scenes.json доторх 40 өөрийн зохиосон яриаг дарааллаар нь хийнэ.
+"""Богино харилцан яриа (reel, 9:16 mp4). scenes.json доторх 40 өөрийн зохиосон яриаг дарааллаар нь хийнэ.
 Хэрэглээ: python3 reel/make_scene.py [--index N] [--silent] [--min-gap МИНУТ]"""
 import argparse, json, os, struct, subprocess, sys, tempfile, time, wave
 from PIL import Image, ImageDraw
@@ -119,7 +119,7 @@ def stick(d, cx, feet, who, speaking, t, mo=0.0):
 def frame(sc, upto, path, t=0, th='home', mo=0.0):
     im, d = bg(); set_bg(d, th)
     if M.BADGE: M.badge(d, *M.BADGE)   # set_bg дэвсгэрийг дарж зурдаг тул дахин зурна
-    center(d, 'КИНОНЫ ХАРИЛЦАН ЯРИА', 95, cfont(52), '#93c5fd')
+    center(d, 'ХАРИЛЦАН ЯРИА', 95, cfont(52), '#93c5fd')
     f = cfont(44); hk = f"HSK {sc['level']}"; w = d.textlength(hk, font=f)
     d.rounded_rectangle([(W - w) / 2 - 30, 170, (W + w) / 2 + 30, 240], 35, fill='#facc15'); d.text(((W - w) / 2, 177), hk, font=f, fill='#1e293b')
     center(d, sc['title_zh'], 275, font(76), 'white')
@@ -159,26 +159,26 @@ def frame(sc, upto, path, t=0, th='home', mo=0.0):
     n = len(L); bw = (W - 240) / n
     for i in range(n):
         d.rounded_rectangle([120 + i * bw, 1640, 120 + (i + 1) * bw - 8, 1656], 8, fill='#facc15' if i <= upto else '#475569')
-    center(d, 'Дагаж, өдөр бүр хятад хэл сур', 1700, cfont(44), '#bfdbfe'); center(d, SITE, 1775, cfont(42), '#facc15')
+    center(d, 'Өдөр бүр хамт хятад хэл сурцгаая', 1700, cfont(44), '#bfdbfe'); center(d, SITE, 1775, cfont(42), '#facc15')
     im.save(path)
 
 def card(sc, kind, path):
     im, d = bg()
     if kind == 'hook':
-        center(d, '🎬'.replace('🎬', 'КИНОНЫ ХАРИЛЦАН ЯРИА'), 330, cfont(56), '#93c5fd')
+        center(d, '🎬'.replace('🎬', 'ХАРИЛЦАН ЯРИА'), 330, cfont(56), '#93c5fd')
         center(d, f"HSK {sc['level']}", 440, cfont(60), '#facc15')
         for i, l in enumerate(wrap(d, sc['title_zh'], font(120), W - 160)[:2]): center(d, l, 640 + i * 150, font(120), 'white')
         for i, l in enumerate(wrap(d, sc['title_mn'], cfont(56), W - 200)[:2]): center(d, l, 1000 + i * 80, cfont(56), '#fde68a')
-        center(d, 'Хэдийг нь ойлгох вэ?', 1250, cfont(52), '#bfdbfe')
+        center(d, 'Чи хэдийг нь ойлгов?', 1250, cfont(52), '#bfdbfe')
     else:
-        center(d, 'ДАХИН САНА', 200, cfont(64), '#93c5fd')
+        center(d, 'Дахин сонсъё', 200, cfont(64), '#93c5fd')
         y = 340
         for who, zh, mn in sc['lines'][:6]:
             col = COL[who]
             for l in wrap(d, zh, font(54), W - 160)[:1]: d.text((80, y), l, font=font(54), fill='white'); y += 70
             for l in wrap(d, mn, cfont(36), W - 160)[:2]: d.text((80, y), l, font=cfont(36), fill='#fde68a'); y += 50
             y += 22
-        center(d, 'Ойлгосон бол комментд 1 гэж бич!', 1560, cfont(46), '#facc15')
+        center(d, 'Ойлгосон бол комментдоо 1 гэж бичээрэй', 1560, cfont(46), '#facc15')
         center(d, SITE, 1775, cfont(42), '#facc15')
     im.save(path)
 
@@ -230,7 +230,7 @@ def main():
     zh_all = '\n'.join(f'{w}: {z}' for w, z, m in sc['lines'])
     mn_all = '\n'.join(f'{w}: {m}' for w, z, m in sc['lines'])
     cap = (f"🎬 {sc['title_zh']} — {sc['title_mn']}\n🎓 HSK {sc['level']}" + (f" · Яриа №{sn}" if sn else "") + f"\n\n{zh_all}\n\n🇲🇳 Орчуулга:\n{mn_all}\n\n"
-           f"💾 Хадгалаад давтаарай ❤️ Найздаа илгээгээрэй\n\n" + (SR.series_line(st, 'scene', sn) + "\n\n" if sn else "") + f"👉 Үнэгүй сурах сайт: {SITE}\n\n#HSK #HSK{sc['level']} #хятадхэл #хятадхэлсурах #learnchinese #mandarin #中文 #монгол")
+           f"💾 Хадгалаад дараа дахин үзээрэй ❤️ Хятад хэл сурдаг найздаа ч илгээгээрэй\n\n" + (SR.series_line(st, 'scene', sn) + "\n\n" if sn else "") + f"👉 Үнэгүй сурах сайт: {SITE}\n\n#HSK #HSK{sc['level']} #хятадхэл #хятадхэлсурах #learnchinese #mandarin #中文 #монгол")
     open(out[:-4] + '.txt', 'w', encoding='utf8').write(cap)
     if sn and (not a.silent or os.environ.get('REEL_TEST_STATE') == '1'):
         SR.finish(st, 'scene', 'scene', sid(sc)); SR.save(st)

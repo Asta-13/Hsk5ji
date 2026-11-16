@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""«5 энгийн үг» reel (9:16 mp4): энгийн (нэг үсэгт) үгсийг 5-аар нэг видеонд цуглуулна.
+"""«5 шинэ үг» reel (9:16 mp4): энгийн (нэг үсэгт) үгсийг 5-аар нэг видеонд цуглуулна.
 Жишээ өгүүлбэргүй — зөвхөн хятад үсэг + пиньинь + монгол орчуулга; үг бүрийг удаан, хэвийн хоёр удаа уншина.
 Хэрэгтэй (олон үсэгт) үгс тусдаа `make_reel.py`-ээр жишээ өгүүлбэртэй гарна. Хуваалтыг `series.py` тодорхойлно.
 Хэрэглээ: python3 Reel/make_words5.py [--silent] [--min-gap МИНУТ] [--level N]"""
@@ -27,7 +27,7 @@ def trunc(d, text, f, maxw):
 
 def panel(path, lv, ws, upto, cur):
     """ws: [(хятад, пиньинь, монгол)]; upto: хэдэн мөр харагдах; cur: яг одоо дуугарч буй мөр (-1 = аль нь ч биш)"""
-    im, d = bg(); header(d, lv, 'Энгийн 5 үг')
+    im, d = bg(); header(d, lv, 'Өнөөдрийн шинэ үгс')
     for i, (han, py, mn) in enumerate(ws):
         if i >= upto: break
         on = i == cur; top = ROW_TOP + i * ROW_H
@@ -42,18 +42,18 @@ def panel(path, lv, ws, upto, cur):
 
 
 def hook(path, lv, ws):
-    im, d = bg(); header(d, lv, 'Энгийн үгс')
-    center(d, '5 энгийн үг', 560, cfont(104), 'white')
+    im, d = bg(); header(d, lv, '')
+    center(d, 'Өнөөдрийн', 440, cfont(96), 'white'); center(d, '5 шинэ үг', 560, cfont(104), '#fde68a')
     f = font(120 if all(len(w[0]) == 1 for w in ws) else 84); gap = 34
     ww = [d.textlength(w[0], font=f) for w in ws]; x = (W - sum(ww) - gap * (len(ws) - 1)) / 2
     for (han, _, _), w in zip(ws, ww): d.text((x, 780), han, font=f, fill='#fde68a'); x += w + gap
-    center(d, 'Хэдийг нь мэдэх вэ?', 1040, cfont(60), '#bfdbfe'); footer(d); im.save(path)
+    center(d, 'Чи хэдийг нь мэднэ?', 1040, cfont(60), '#bfdbfe'); footer(d); im.save(path)
 
 
 def cta(path, lv):
-    im, d = bg(); header(d, lv, 'Энгийн 5 үг')
-    for i, l in enumerate(['Хэдийг нь мэдэж байсан бэ?', 'Комментд тоогоо бич!']): center(d, l, 640 + i * 100, cfont(60), '#bfdbfe')
-    center(d, 'Хадгалаад өдөр бүр давтаарай', 960, cfont(56), '#facc15')
+    im, d = bg(); header(d, lv, 'Өнөөдрийн шинэ үгс')
+    for i, l in enumerate(['Хэдийг нь мэдэж байсан бэ?', 'Комментдоо тоогоо бичээрэй']): center(d, l, 640 + i * 100, cfont(60), '#bfdbfe')
+    center(d, 'Хадгалаад дараа дахин үзээрэй', 960, cfont(56), '#facc15')
     center(d, 'Өдөр бүр шинэ үгс', 1130, cfont(54), 'white'); footer(d); im.save(path)
 
 
@@ -76,7 +76,7 @@ def main():
     with tempfile.TemporaryDirectory() as tmp:
         P = lambda n: os.path.join(tmp, n)
         c = lambda t, v, r, i: say(t, v, r, tmp, i, a.silent)
-        intro = c('Таван энгийн үг. Хамт сурцгаая.', MN_VOICE, MN_RATE, 1)
+        intro = c('Өнөөдөр таван шинэ үг сурцгаая.', MN_VOICE, MN_RATE, 1)
         zs = [c(w[0], ZH_VOICE, '-30%', 10 + i) for i, w in enumerate(ws)]
         zn = [c(w[0], ZH_VOICE, '+0%', 20 + i) for i, w in enumerate(ws)]
         ms = [c(short(w[2], 40), MN_VOICE, MN_RATE, 30 + i) for i, w in enumerate(ws)]
@@ -100,7 +100,7 @@ def main():
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c:v', 'copy', '-af', M.LOUDNORM,
                         '-c:a', 'aac', '-b:a', '160k', '-ar', '44100', '-movflags', '+faststart', out], check=True)
     lines = '\n'.join(f'{i + 1}) {h}  [{p}]  —  {short(m, 60)}' for i, (h, p, m) in enumerate(ws))
-    cap = (f'📚 5 энгийн үг — HSK {lv} · №{num}\n\n{lines}\n\n🎯 Хэдийг нь мэдэж байсан бэ? Комментд тоогоо бичээрэй!\n'
+    cap = (f'📚 Өнөөдрийн 5 шинэ үг — HSK {lv} · №{num}\n\n{lines}\n\n🎯 Хэдийг нь мэдэж байсан бэ? Комментд тоогоо бичээрэй!\n'
            f'💾 Хадгалаад дараа давтаарай\n📩 Хятад хэл сурч буй найздаа илгээгээрэй\n\n{SR.series_line({**st, "level": lv}, "group", num)}\n\n'
            f'🔗 Үнэгүй сурах сайт — профайлын линкээс (bio)\n\n{M.TAGS[0]} #HSK{lv} #хятадүг ' + ' '.join(M.TAGS[2:]))
     open(out[:-4] + '.txt', 'w', encoding='utf8').write(cap)
