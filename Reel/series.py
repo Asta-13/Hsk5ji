@@ -27,7 +27,7 @@ def out_dir(): return os.environ.get('REEL_OUT') or os.path.join(ROOT, 'reels')
 # төрөл: (файлын угтвар, нэр, дэлгэцийн булангийн өнгө)
 KINDS = {
     'word':    ('reel',    'Үг',        '#38bdf8'),
-    'group':   ('words5',  'Энгийн үг', '#a78bfa'),
+    'group':   ('words5',  'Шинэ үгс',  '#a78bfa'),
     'grammar': ('grammar', 'Дүрэм',     '#4ade80'),
     'scene':   ('scene',   'Яриа',      '#fb923c'),
     'tone':    ('tone',    'Тон',       '#f472b6'),
