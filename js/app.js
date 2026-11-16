@@ -489,17 +489,16 @@ var DATA=window.DATA;
   }
 
   var LEVELS=[1,2,3,4,5,6];
-  var NEWWORDS={1:150,2:150,3:300,4:600,5:1300,6:2500}; /* HSK 2.0 new words per level */
+  function NW(lv){return ((HSKRAW[lv]||'').split(',').length)} /* words per level in the merged list */
   var INT=[1,3,7,14,30];
-  var HSKD=null,HSKD3=null,hStd=2,LESSONS=null,CI18N=null;
+  var HSKD=null,LESSONS=null,CI18N=null;
   function LT(x){if(lang==='mn'||!CI18N)return x;var a=CI18N[x];return a&&a[LI[lang]-1]||x}
-  try{hStd=localStorage.getItem('hskStd')==='3'?3:2}catch(e){}
-  function HR(){return hStd===3?HSKRAW3:HSKRAW}
+  try{localStorage.removeItem('hskStd')}catch(e){}
+  function HR(){return HSKRAW}
   function buildD(R){var d={};Object.keys(R).forEach(function(l){R[l].split(',').forEach(function(it){var a=it.split('|');if(!d[a[0]])d[a[0]]={l:+l,p:a[1]}})});return d}
   function hskLookup(h){
-    if(!HSKD){HSKD=buildD(HSKRAW);HSKD3=buildD(HSKRAW3)}
-    var a=hStd===3?HSKD3:HSKD,b=hStd===3?HSKD:HSKD3;
-    return a[h]||b[h]||null;
+    if(!HSKD)HSKD=buildD(HSKRAW);
+    return HSKD[h]||null;
   }
   var DEFMIN={1:60,2:60,3:120,4:120,5:180,6:180};
 
@@ -678,7 +677,7 @@ var DATA=window.DATA;
     }else{$('days').textContent='—';$('examLbl').textContent=T('examLblNone');$('sub').textContent=T('subNoExam')}
     var pl=$('planLine');pl.textContent='';
     if(p.exam&&hasProfile()){
-      var dl=Math.round((parseIso(p.exam)-today)/86400000),mineN=wordsArr().filter(function(w){return w.l===lv}).length,tg=NEWWORDS[lv],need=Math.max(0,tg-mineN);
+      var dl=Math.round((parseIso(p.exam)-today)/86400000),mineN=wordsArr().filter(function(w){return w.l===lv}).length,tg=NW(lv),need=Math.max(0,tg-mineN);
       if(need===0)pl.textContent=T('planDone',{lv:lv});
       else if(dl>0){var per=Math.ceil(need/dl),td=wordsArr().filter(function(w){return w.d===TODAY}).length;pl.textContent=T('planLine',{d:dl,n:per,t:tg,lv:lv,k:td})}
     }
@@ -691,7 +690,7 @@ var DATA=window.DATA;
     var ps=phasesFor(),idx=-1;ps.forEach(function(x,i){if(today>=x.a&&today<=x.b)idx=i});
     $('phaseNow').innerHTML=idx>=0?'<b>'+esc(phTitle(ps[idx]))+'</b>'+esc(phSub(ps[idx]))+' ('+fmt(ps[idx].a)+' – '+fmt(ps[idx].b)+')'
       :esc(!ps.length?T('phaseNoDate'):(today<ps[0].a?T('phaseStarts',{d:fmt(ps[0].a)}):T('phaseOver')));
-    var ws=wordsArr(),mine=ws.filter(function(w){return w.l===lv}).length,tgt=NEWWORDS[lv];
+    var ws=wordsArr(),mine=ws.filter(function(w){return w.l===lv}).length,tgt=NW(lv);
     $('stToday').textContent=ws.filter(function(w){return w.d===TODAY}).length;
     $('stTotal').textContent=ws.length;$('stStreak').textContent=streakOf(S.act);
     $('lvProgTx').textContent=mine+' / '+tgt;$('lvProg').style.width=Math.min(100,Math.round(mine/tgt*100))+'%';
@@ -829,7 +828,7 @@ var DATA=window.DATA;
   var F={mode:'today',lv:0,ids:[],i:0,flipped:false,dir:'zh',shuffle:false,ok:0,no:0,busy:false};
   var HPOOL={};
   function hskPool(){
-    var k=hStd;if(HPOOL[k])return HPOOL[k];var R=HR(),out=[],seen={};
+    var k=0;if(HPOOL[k])return HPOOL[k];var R=HR(),out=[],seen={};
     Object.keys(R).sort().forEach(function(l){R[l].split(',').forEach(function(it){var a=it.split('|');if(a[0]&&!seen[a[0]]){seen[a[0]]=1;out.push({h:a[0],p:a[1]||'',l:+l})}})});
     return HPOOL[k]=out;
   }
@@ -1196,7 +1195,6 @@ var DATA=window.DATA;
     if(!$('hskList'))return;
     var have={};wordsArr().forEach(function(w){have[w.h]=1});
     var c={0:0};LEVELS.forEach(function(l){c[l]=(HR()[l]||'').split(',').length;c[0]+=c[l]});
-    $('hskStd').innerHTML=[2,3].map(function(v){return '<button class="chip" type="button" data-std="'+v+'" aria-pressed="'+(hStd===v)+'">HSK '+v+'.0<small>'+(v===3?'2021':'2012')+'</small></button>'}).join('');
     lvChips('hskLv',hLv,true,c);
     var q=hQ,items=[],added=0,tot=0;
     ((hLv&&!q)?[hLv]:LEVELS).forEach(function(lv){(HR()[lv]||'').split(',').forEach(function(it){
@@ -1205,18 +1203,6 @@ var DATA=window.DATA;
       if(q&&!mq(h+' '+p+' '+m+' '+hMn(h),hQ))return;
       items.push({h:h,p:p,m:m,l:lv,got:!!have[h]});
     })});
-    /* while searching, also look in the other standard (2.0 + 3.0 together) */
-    if(q){
-      hskLookup('');var cur=hStd===3?HSKD3:HSKD,oth=hStd===3?HSKRAW:HSKRAW3,ot=hStd===3?'2.0':'3.0',seen={};
-      items.forEach(function(x){seen[x.h]=1});
-      ((hLv&&!q)?[hLv]:LEVELS).forEach(function(lv){(oth[lv]||'').split(',').forEach(function(it){
-        var a2=it.split('|'),h=a2[0];if(cur[h]||seen[h])return;seen[h]=1;
-        var p=hP(h,a2[1]),m=hM(h);
-        if(hOnly&&have[h])return;
-        if(!mq(h+' '+p+' '+m+' '+hMn(h),hQ))return;
-        items.push({h:h,p:p,m:m,l:lv,got:!!have[h],o:ot});
-      })});
-    }
     $('hskProg').style.width=(tot?Math.round(added*100/tot):0)+'%';
     $('hskInfo').textContent=T('hskProg',{a:added,b:tot});
     $('hskCnt').textContent=items.length+' / '+tot;
@@ -1229,9 +1215,7 @@ var DATA=window.DATA;
     $('hskList').innerHTML=h2||emptyRes(hQ,'hskQ');hJust='';
   }
   document.addEventListener('click',function(e){
-    var b=e.target.closest('#hskStd [data-std]');
-    if(b){hStd=+b.dataset.std;try{localStorage.setItem('hskStd',String(hStd))}catch(x){}DAYL=null;hLim=60;renderHsk();if(typeof renderToday==='function')renderToday();return}
-    b=e.target.closest('#hskLv [data-l]');if(b){hLv=+b.dataset.l;hLim=60;renderHsk();return}
+    var b=e.target.closest('#hskLv [data-l]');if(b){hLv=+b.dataset.l;hLim=60;renderHsk();return}
     b=e.target.closest('[data-hedit]');
     if(b){editHsk(b.dataset.hedit);return}
     b=e.target.closest('[data-hadd]');if(!b||!hasProfile())return;
@@ -2284,7 +2268,7 @@ var DATA=window.DATA;
   window.HWL=window.HWL||{};
   window.HWL.lookup=function(q){
     var out=[],seen={};
-    [HSKRAW,HSKRAW3].forEach(function(R){LEVELS.forEach(function(lv){(R[lv]||'').split(',').forEach(function(it){
+    [HSKRAW].forEach(function(R){LEVELS.forEach(function(lv){(R[lv]||'').split(',').forEach(function(it){
       var p=it.split('|'),h=p[0];if(!h||h.indexOf(q)<0||seen[h])return;seen[h]=1;
       out.push({h:h,p:hP(h,p[1]),m:hM(h),l:lv,x:h===q?1:0})})})});
     out.sort(function(x,y){return (y.x-x.x)||(x.h.length-y.h.length)||(x.l-y.l)});
