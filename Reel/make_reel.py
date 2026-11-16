@@ -77,9 +77,9 @@ def sent_pinyin(z):
 def load():
     """Өгөгдлийг data/*.json-оос уншина (шинэ бүтэц); байхгүй бол хуучин index.html-ээс."""
     D = os.path.join(ROOT, 'data')
-    if os.path.exists(os.path.join(D, 'hsk-words-a.json')):
+    if os.path.exists(os.path.join(D, 'hsk-words.json')):
         rd = lambda f: json.load(open(os.path.join(D, f), encoding='utf8'))
-        raw, mn_raw, gram_raw = rd('hsk-words-a.json'), rd('hsk-mongolian.json'), rd('grammar.json')
+        raw, mn_raw, gram_raw = rd('hsk-words.json'), rd('hsk-mongolian.json'), rd('grammar.json')
     else:
         src = open(os.path.join(ROOT, 'index.html'), encoding='utf8').read()
         raw = json.loads(re.search(r'var HSKRAW=(\{.*?\});', src, re.S).group(1))

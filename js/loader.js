@@ -2,7 +2,7 @@
    Орчуулгын том JSON-ууд (en/ru/ja) зөвхөн тэр хэл сонгосон үед л татагдана. */
 (function(){
   var CORE={
-    HSKRAW:'data/hsk-words-a.json', HSKRAW3:'data/hsk-words-b.json',
+    HSKRAW:'data/hsk-words.json',
     HSKMN_RAW:'data/hsk-mongolian.json', GRAM_RAW:'data/grammar.json',
     LESSONS:'data/course-lessons.json', EXD:'data/examples.json',
     SCN:'data/scenarios.json', RAD:'data/radicals.json'
@@ -78,7 +78,7 @@
   if(needI18N)jobs.push(track(loadSet(I18N).then(exposeI18N)));
 
   Promise.all(jobs).then(function(r){
-    window.HSKRAW=DATA.HSKRAW;window.HSKRAW3=DATA.HSKRAW3;   /* апп эдгээрийг глобалаар уншдаг */
+    window.HSKRAW=DATA.HSKRAW;   /* апп эдгээрийг глобалаар уншдаг */
     window.addEventListener('error',function(ev){            /* эхлэхэд унавал хоосон биш, алдааг харуулна */
       if(!booted)fail(ev.error||ev.message)});
     var s=document.createElement('script');      /* CSP-д 'unsafe-inline' хэрэггүй болгохын тулд src-ээр ачаална */
