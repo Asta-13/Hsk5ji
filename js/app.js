@@ -1369,7 +1369,7 @@ var DATA=window.DATA;
     if(MED.loading&&!force)return MED.loading;
     MED.loading=(async function(){
       var out=[];
-      var fl=['data/media.json','data/media-auto.json'];
+      var fl=['data/media.json','data/media-auto.json','data/stories.json'];
       for(var fi=0;fi<fl.length;fi++){try{var r=await fetch(fl[fi]);if(r.ok){var j=await r.json();(j.items||[]).forEach(function(x){x.local=1;out.push(x)})}}catch(e){}}
       if(sb){try{
         var x=await sb.from('media').select('*').order('created_at',{ascending:false});
@@ -1407,7 +1407,7 @@ var DATA=window.DATA;
   function ytId(u){var m=/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/.exec(u||'');return m?m[1]:(/^[\w-]{11}$/.test(u||'')?u:'')}
   function mediaPlayer(it){
     if(it.srcType==='youtube'&&ytId(it.src))return '<div class="mplay"><iframe src="https://www.youtube-nocookie.com/embed/'+esc(ytId(it.src))+'" title="'+esc(it.title)+'" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>';
-    if(it.srcType==='file'&&/^media\/[\w. -]+$/.test(it.src||'')){
+    if(it.srcType==='file'&&/^(media|video)\/[\w. -]+$/.test(it.src||'')){
       var au=/\.(mp3|m4a|wav|ogg)$/i.test(it.src);
       return '<'+(au?'audio class="maud"':'video class="mvid"')+' id="mVid" controls playsinline preload="metadata" src="'+esc(encodeURI(it.src))+'"></'+(au?'audio':'video')+'>';
     }
@@ -1431,7 +1431,7 @@ var DATA=window.DATA;
     $('mBody').innerHTML=L.length?'<div class="list">'+L.map(function(x){
       var ws=mediaWords(x),nw=ws.filter(function(w){return !hv[w.h]&&w.m}).length;
       return '<button class="card mcard" type="button" data-mi="'+esc(x.id)+'"><div class="between"><b>'+esc(x.title)+'</b>'+(x.level?'<span class="badge">HSK '+x.level+'</span>':'')+'</div>'+
-        (x.titleZh?'<span class="m" lang="zh">'+esc(x.titleZh)+'</span>':'')+(x.auto?'<span class="hint">🤖 '+esc(T('mAuto'))+'</span>':'')+'<span class="hint">'+esc(T('mMeta',{n:(x.lines||[]).length,w:nw}))+'</span></button>';
+        (x.titleZh?'<span class="m" lang="zh">'+esc(x.titleZh)+'</span>':'')+(x.auto?'<span class="hint">🤖 '+esc(T('mAuto'))+'</span>':'')+(x.story?'<span class="hint">🎬</span>':'')+'<span class="hint">'+esc(T('mMeta',{n:(x.lines||[]).length,w:nw}))+'</span></button>';
     }).join('')+'</div>':'<div class="empty">'+T('mEmpty')+'</div>';
   }
   function renderMediaItem(it){
@@ -1482,7 +1482,7 @@ var DATA=window.DATA;
   }
 
   /* TikTok маягийн босоо лент: богино бичлэг автоматаар тоглож, хадмал цагтай гарч, үг дээр дарж сурна */
-  function feedItems(items){return items.filter(function(x){return x.srcType==='file'&&/\.(mp4|webm)$/i.test(x.src||'')})}
+  function feedItems(items){var L=items.filter(function(x){return x.srcType==='file'&&/\.(mp4|webm)$/i.test(x.src||'')});return L.filter(function(x){return x.story}).reverse().concat(L.filter(function(x){return !x.story}))}
   function mediaStop(){document.querySelectorAll('#mBody video,#mBody audio').forEach(function(v){try{v.pause()}catch(e){}});if(MED.obs){MED.obs.disconnect();MED.obs=null}}
   function capHtml(ln){
     var z=segZh(ln.zh).map(function(x){
@@ -1506,7 +1506,7 @@ var DATA=window.DATA;
     box.innerHTML='<div class="mfeed'+(MED.pin?' pin':'')+'" id="mFeed">'+L.map(function(x,i){
       var nw=mediaWords(x).filter(function(w){return !hv[w.h]&&w.m}).length;
       return '<section class="mslide" data-fi="'+i+'"><video class="mfv" playsinline loop preload="'+(i<2?'auto':'metadata')+'" src="'+esc(encodeURI(x.src))+'"></video><div class="mfcap"></div>'+
-        '<div class="mftop"><b>'+esc(x.title)+'</b>'+(x.level?'<span class="badge">HSK '+x.level+'</span>':'')+'</div>'+
+        (x.story?'':'<div class="mftop"><b>'+esc(x.title)+'</b>'+(x.level?'<span class="badge">HSK '+x.level+'</span>':'')+'</div>')+
         '<div class="mfside"><button type="button" data-mfsnd aria-label="sound">'+(MED.muted?'🔇':'🔊')+'</button><button type="button" data-mfpy aria-label="pinyin">拼</button><button type="button" data-mfwords>📚<small>'+nw+'</small></button></div><div class="mfbar"><i></i></div></section>';
     }).join('')+'</div><div class="card mfcard" id="mfCard" hidden></div>';
     var feed=$('mFeed');
