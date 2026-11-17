@@ -57,7 +57,7 @@ const B={
   }},
  title(c,root){
   const ring=el('<div class="abs" style="left:240px;top:520px;width:600px;height:600px;border-radius:50%;border:6px solid #e9c46a;opacity:0;box-shadow:0 0 90px rgba(233,196,106,.35)"></div>',root);
-  const big=el(`<div class="abs serif gold" style="left:0;right:0;top:${c.big.length>3?640:600}px;text-align:center;font-size:${c.big.length>3?190:230}px;line-height:1.1;text-shadow:0 10px 50px rgba(0,0,0,.7)">${c.big}</div>`,root);
+  const big=el(`<div class="abs serif gold" style="left:0;right:0;top:${c.big.length>3?640:600}px;text-align:center;font-size:${c.big.length>3?190:c.big.length==3?205:230}px;line-height:1.1;text-shadow:0 10px 50px rgba(0,0,0,.7)">${c.big}</div>`,root);
   const py=el(`<div class="abs" style="left:0;right:0;top:880px;text-align:center;font-size:56px;color:#f0b9a8">${c.pinyin}</div>`,root);
   const ln=el('<div class="abs" style="left:240px;top:1010px;height:8px;width:0;background:#e5533d;border-radius:4px"></div>',root);
   const sub=el(`<div class="abs" style="left:0;right:0;top:1090px;text-align:center"><div style="font-size:78px;font-weight:800">${c.sub}</div><div style="font-size:46px;color:#b9c3d9;margin-top:10px">${c.sub_mn}</div></div>`,root);

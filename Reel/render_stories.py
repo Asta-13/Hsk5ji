@@ -8,7 +8,7 @@ os.makedirs(os.path.join(ROOT, 'video'), exist_ok=True)
 reg_path = os.path.join(ROOT, 'data', 'stories.json')
 reg = json.load(open(reg_path, encoding='utf8')) if os.path.exists(reg_path) else {'items': []}
 done = {x['id'] for x in reg['items']}
-files = sorted(glob.glob(os.path.join(ROOT, 'Reel', 'stories', '*.json')))
+files = sorted(glob.glob(os.path.join(ROOT, 'Reel', 'stories', '*.json')), key=lambda f: (json.load(open(f, encoding='utf8')).get('order', 999), f))
 n = 0
 for f in files:
     sid = json.load(open(f, encoding='utf8'))['id']
