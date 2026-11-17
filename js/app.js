@@ -48,6 +48,7 @@ var DATA=window.DATA;
     mVideo:["📺 Бичлэг","📺 Videos","📺 Видео","📺 動画"],
     mSong:["🎵 Дуу","🎵 Songs","🎵 Песни","🎵 歌"],
     mMeta:["{n} мөр · {w} шинэ үг","{n} lines · {w} new words","{n} строк · {w} новых слов","{n}行 · 新しい単語{w}"],
+    mAuto:["Автомат хадмал (алдаатай байж болно)","Auto subtitles (may contain errors)","Автосубтитры (возможны ошибки)","自動字幕（誤りあり）"],
     mEmpty:["Одоохондоо алга","Nothing here yet","Пока ничего нет","まだありません"],
     mTapHint:["Хятад үг дээр дарвал тайлбар гарна","Tap a Chinese word for its meaning","Нажмите на слово для значения","単語をタップすると意味が出ます"],
     mNoLines:["Хадмал алга","No subtitles","Нет субтитров","字幕なし"],
@@ -1366,7 +1367,8 @@ var DATA=window.DATA;
     if(MED.loading&&!force)return MED.loading;
     MED.loading=(async function(){
       var out=[];
-      try{var r=await fetch('data/media.json');if(r.ok){var j=await r.json();(j.items||[]).forEach(function(x){x.local=1;out.push(x)})}}catch(e){}
+      var fl=['data/media.json','data/media-auto.json'];
+      for(var fi=0;fi<fl.length;fi++){try{var r=await fetch(fl[fi]);if(r.ok){var j=await r.json();(j.items||[]).forEach(function(x){x.local=1;out.push(x)})}}catch(e){}}
       if(sb){try{
         var x=await sb.from('media').select('*').order('created_at',{ascending:false});
         if(!x.error)(x.data||[]).forEach(function(d){out.unshift({id:d.id,kind:d.kind,level:d.level,title:d.title,titleZh:d.title_zh,srcType:d.src_type,src:d.src,lines:d.lines||[]})});
@@ -1403,7 +1405,10 @@ var DATA=window.DATA;
   function ytId(u){var m=/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/.exec(u||'');return m?m[1]:(/^[\w-]{11}$/.test(u||'')?u:'')}
   function mediaPlayer(it){
     if(it.srcType==='youtube'&&ytId(it.src))return '<div class="mplay"><iframe src="https://www.youtube-nocookie.com/embed/'+esc(ytId(it.src))+'" title="'+esc(it.title)+'" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>';
-    if(it.srcType==='file'&&/^media\/[\w./-]+$/.test(it.src||''))return '<video class="mvid" id="mVid" controls playsinline preload="metadata" src="'+esc(it.src)+'"></video>';
+    if(it.srcType==='file'&&/^media\/[\w. -]+$/.test(it.src||'')){
+      var au=/\.(mp3|m4a|wav|ogg)$/i.test(it.src);
+      return '<'+(au?'audio class="maud"':'video class="mvid"')+' id="mVid" controls playsinline preload="metadata" src="'+esc(encodeURI(it.src))+'"></'+(au?'audio':'video')+'>';
+    }
     return '';
   }
   function renderMedia(){
@@ -1422,7 +1427,7 @@ var DATA=window.DATA;
     $('mBody').innerHTML=L.length?'<div class="list">'+L.map(function(x){
       var ws=mediaWords(x),nw=ws.filter(function(w){return !hv[w.h]&&w.m}).length;
       return '<button class="card mcard" type="button" data-mi="'+esc(x.id)+'"><div class="between"><b>'+esc(x.title)+'</b>'+(x.level?'<span class="badge">HSK '+x.level+'</span>':'')+'</div>'+
-        (x.titleZh?'<span class="m" lang="zh">'+esc(x.titleZh)+'</span>':'')+'<span class="hint">'+esc(T('mMeta',{n:(x.lines||[]).length,w:nw}))+'</span></button>';
+        (x.titleZh?'<span class="m" lang="zh">'+esc(x.titleZh)+'</span>':'')+(x.auto?'<span class="hint">🤖 '+esc(T('mAuto'))+'</span>':'')+'<span class="hint">'+esc(T('mMeta',{n:(x.lines||[]).length,w:nw}))+'</span></button>';
     }).join('')+'</div>':'<div class="empty">'+T('mEmpty')+'</div>';
   }
   function renderMediaItem(it){
@@ -1488,7 +1493,7 @@ var DATA=window.DATA;
     if(!sb||!isOwner)return;
     var title=$('mTitle').value.trim(),lines=parseLines($('mText').value),src=$('mSrc').value.trim();
     if(!title||!lines.length){toast(T('mNeed'));return}
-    var type=ytId(src)?'youtube':(/^media\/[\w./-]+$/.test(src)?'file':'none');
+    var type=ytId(src)?'youtube':(/^media\/[\w. -]+\.(mp4|mp3|m4a|wav|ogg|webm)$/i.test(src)?'file':'none');
     var row={id:'m_'+Date.now().toString(36),kind:$('mKind').value,level:+$('mLvl').value||null,title:title,title_zh:$('mTitleZh').value.trim(),src_type:type,src:type==='youtube'?ytId(src):(type==='file'?src:''),lines:lines};
     var x=await sb.from('media').insert(row);
     if(x.error){toast(String(x.error.message||x.error));return}

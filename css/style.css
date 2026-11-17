@@ -356,3 +356,4 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
 .mw.has{border-bottom-color:transparent;opacity:.75}
 .h.big{font-size:2rem}
 .mrow{display:flex;align-items:center;gap:10px}.mrow>span:nth-child(2){flex:1;min-width:0}
+.maud{width:100%;display:block}
