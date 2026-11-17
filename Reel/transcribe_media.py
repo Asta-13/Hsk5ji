@@ -62,7 +62,17 @@ def align(lyrics, chars):
             elif hi is not None: ts[i] = max(0, ts[hi] - 3 * (hi - i))
             else: ts[i] = 0
     for i in range(1, len(ts)): ts[i] = max(ts[i], ts[i - 1])   # цаг буурахгүй
-    return [dict(ln, t=int(t)) for ln, t in zip(lyrics, ts)]
+    return [dict(ln, t=round(t, 1)) for ln, t in zip(lyrics, ts)]
+
+def split_seg(text, t0, t1):
+    """Урт өгүүлбэрийг цэг таслалаар богино хадмал болгож, цагийг үсгийн тоогоор хуваана (TikTok маягийн богино хадмал)."""
+    parts = [p for p in re.split(r'(?<=[。，！？；,.!?;])', text) if HAN.sub('', p)]
+    tot = sum(len(HAN.sub('', p)) for p in parts) or 1
+    out, t = [], t0
+    for p in parts:
+        d = (t1 - t0) * len(HAN.sub('', p)) / tot
+        out.append({'t': round(t, 1), 'e': round(t + d, 1), 'zh': p.strip('，, ')}); t += d
+    return out
 
 def main():
     files = sorted(f for f in glob.glob(os.path.join(ROOT, 'media', '*')) if f.lower().endswith(EXT))
@@ -97,7 +107,7 @@ def main():
         lines, chars = [], []
         for s_ in segs:
             z = t2s(s_.text.strip())
-            if z and re.search(r'[\u4e00-\u9fff]', z): lines.append({'t': int(s_.start), 'zh': z})
+            if z and re.search(r'[\u4e00-\u9fff]', z): lines += split_seg(z, s_.start, s_.end)
             for w in (s_.words or []):
                 cs = HAN.sub('', t2s(w.word))
                 for k, c in enumerate(cs): chars.append((c, w.start + (w.end - w.start) * k / max(1, len(cs))))
