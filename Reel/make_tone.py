@@ -134,7 +134,7 @@ def main():
         lst = P('l.txt'); open(lst, 'w').write(''.join(f"file '{s}'\n" for s in segs))
         out = os.path.join(OUT, SR.file_name('tone', num) if num else f'tone-manual-{a.index + 1:04d}.mp4')
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c:v', 'copy', '-af', M.LOUDNORM,
-                        '-c:a', 'aac', '-b:a', '160k', '-ar', '44100', '-movflags', '+faststart', out], check=True)
+                        '-c:a', 'aac', '-b:a', '192k', '-ar', '44100', '-movflags', '+faststart', out], check=True)
     lines = '\n'.join(f'{t}-р тон: {py(syl, t)} {ch} — {mn}' for t, ch, mn in rows)
     cap = (f'🎵 Тоны дасгал: "{syl}"' + (f' · №{num}' if num else '') + f'\n\nИжил үе, өөр тон — өөр утга!\n\n{lines}\n\n'
            f'🎯 Аль тон танд хамгийн хэцүү вэ? Комментд бичээрэй!\n💾 Хадгалаад давтаарай ❤️ Найздаа илгээгээрэй\n\n' + (SR.series_line(st, 'tone', num) + '\n\n' if num else '') + f'👉 Үнэгүй сурах сайт: {SITE}\n\n'

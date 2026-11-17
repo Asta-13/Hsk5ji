@@ -204,7 +204,7 @@ def main():
         for kind in ('hook',):
             img = os.path.join(tmp, kind + '.png'); card(sc, kind, img); aud = os.path.join(tmp, kind + '.wav'); silence(aud, 2.2)
             mp4 = os.path.join(tmp, kind + '.mp4')
-            subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-loop', '1', '-framerate', '30', '-i', img, '-i', aud, '-t', '2.2', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-ar', '44100', '-shortest', mp4], check=True)
+            subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-loop', '1', '-framerate', '30', '-i', img, '-i', aud, '-t', '2.2', '-vf', M.CVF] + M.VQ + M.AQ + ['-shortest', mp4], check=True)
             segs.append(mp4)
         # Эхлээд бүх дууг үүсгэнэ: сервис доголдвол зураг зурахаас өмнө түргэн зогсоно.
         wavs = [say(zh, VOICE[who], '-6%', tmp, i, a.silent) for i, (who, zh, mn) in enumerate(sc['lines'])]
@@ -217,16 +217,15 @@ def main():
             fd = os.path.join(tmp, f'fr{i}'); os.makedirs(fd)
             for t in range(nf): frame(sc, i, os.path.join(fd, f'f{t:03d}.png'), t, th, env[t] if t < len(env) else 0)
             mp4 = os.path.join(tmp, f's{i}.mp4')
-            subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', str(FPS), '-i', os.path.join(fd, 'f%03d.png'), '-i', aud, '-r', '30',
-                            '-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-ar', '44100', '-shortest', mp4], check=True)
+            subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', str(FPS), '-i', os.path.join(fd, 'f%03d.png'), '-i', aud, '-r', '30', '-vf', M.CVF] + M.VQ + M.AQ + ['-shortest', mp4], check=True)
             segs.append(mp4)
             for f in os.listdir(fd): os.remove(os.path.join(fd, f))
         img = os.path.join(tmp, 'end.png'); card(sc, 'end', img); aud = os.path.join(tmp, 'end.wav'); silence(aud, 5.0); mp4 = os.path.join(tmp, 'end.mp4')
-        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-loop', '1', '-framerate', '30', '-i', img, '-i', aud, '-t', '5', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-ar', '44100', '-shortest', mp4], check=True)
+        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-loop', '1', '-framerate', '30', '-i', img, '-i', aud, '-t', '5', '-vf', M.CVF] + M.VQ + M.AQ + ['-shortest', mp4], check=True)
         segs.append(mp4)
         lst = os.path.join(tmp, 'l.txt'); open(lst, 'w').write(''.join(f"file '{s}'\n" for s in segs))
         out = os.path.join(OUT, SR.file_name('scene', sn) if sn else f'scene-manual-{num + 1:04d}.mp4')
-        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c:v', 'copy', '-af', M.LOUDNORM, '-c:a', 'aac', '-b:a', '160k', '-ar', '44100', '-movflags', '+faststart', out], check=True)
+        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c:v', 'copy', '-af', M.LOUDNORM, '-c:a', 'aac', '-b:a', '192k', '-ar', '44100', '-movflags', '+faststart', out], check=True)
     zh_all = '\n'.join(f'{w}: {z}' for w, z, m in sc['lines'])
     mn_all = '\n'.join(f'{w}: {m}' for w, z, m in sc['lines'])
     cap = (f"🎬 {sc['title_zh']} — {sc['title_mn']}\n🎓 HSK {sc['level']}" + (f" · Яриа №{sn}" if sn else "") + f"\n\n{zh_all}\n\n🇲🇳 Орчуулга:\n{mn_all}\n\n"
