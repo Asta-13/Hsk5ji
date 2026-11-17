@@ -134,8 +134,7 @@ def segment(tmp, name, imgs, wav):
     for i, im in enumerate(imgs): os.replace(im, os.path.join(fd, f'f{i:03d}.png'))
     mp4 = os.path.join(tmp, name + '.mp4')
     subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', '1', '-i', os.path.join(fd, 'f%03d.png'), '-i', wav, '-r', '30', '-t', f'{dur:.2f}',
-                    '-vf', f'tpad=stop_mode=clone:stop_duration={dur + 2:.2f}', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '18', '-pix_fmt', 'yuv420p',
-                    '-c:a', 'aac', '-ar', '44100', mp4], check=True)
+                    '-vf', f'tpad=stop_mode=clone:stop_duration={dur + 2:.2f},{M.CVF}'] + M.VQ + M.AQ + [mp4], check=True)
     return mp4
 
 def main():
@@ -181,7 +180,7 @@ def main():
         lst = P('l.txt'); open(lst, 'w').write(''.join(f"file '{s}'\n" for s in segs))
         out = os.path.join(OUT, SR.file_name('quiz', num) if num else 'quiz-manual-' + w[0] + '.mp4')
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c:v', 'copy', '-af', M.LOUDNORM,
-                        '-c:a', 'aac', '-b:a', '160k', '-ar', '44100', '-movflags', '+faststart', out], check=True)
+                        '-c:a', 'aac', '-b:a', '192k', '-ar', '44100', '-movflags', '+faststart', out], check=True)
     opts_txt = '\n'.join(f'{LET[i]}) {o}' for i, o in enumerate(opts))
     q_txt = 'Энэ үгийн утга юу вэ?' if mode == 'meaning' else 'Аль дуудлага зөв вэ?'
     cap = (f'🧠 {q_txt} Хариулаад комментд бич!\n\n📌 {w[0]}\n\n{opts_txt}\n\n'

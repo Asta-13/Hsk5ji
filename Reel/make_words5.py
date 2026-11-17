@@ -98,7 +98,7 @@ def main():
         lst = P('l.txt'); open(lst, 'w').write(''.join(f"file '{s}'\n" for s in segs))
         out = os.path.join(OUT, SR.file_name('group', num))
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c:v', 'copy', '-af', M.LOUDNORM,
-                        '-c:a', 'aac', '-b:a', '160k', '-ar', '44100', '-movflags', '+faststart', out], check=True)
+                        '-c:a', 'aac', '-b:a', '192k', '-ar', '44100', '-movflags', '+faststart', out], check=True)
     lines = '\n'.join(f'{i + 1}) {h}  [{p}]  —  {short(m, 60)}' for i, (h, p, m) in enumerate(ws))
     cap = (f'📚 Өнөөдрийн 5 шинэ үг — HSK {lv} · №{num}\n\n{lines}\n\n🎯 Хэдийг нь мэдэж байсан бэ? Комментд тоогоо бичээрэй!\n'
            f'💾 Хадгалаад дараа давтаарай\n📩 Хятад хэл сурч буй найздаа илгээгээрэй\n\n{SR.series_line({**st, "level": lv}, "group", num)}\n\n'

@@ -310,14 +310,20 @@ def scene_img(kind, lv, w, ex, path, stage=2):
     footer(d); im.save(path)
 
 # Видеоны кодлолт: дундын (scene) файл бараг алдалтгүй, эцсийн файл CRF 22 (текст тод, хэмжээ жижиг).
-SCENE_V = ['-c:v', 'libx264', '-preset', 'veryfast', '-crf', '14', '-pix_fmt', 'yuv420p', '-r', '30']
+# Өнгө: PNG (RGB) → YUV хөрвүүлэлтэд bt709 матриц + tag тавина (үгүй бол HD дээр өнгө бүдгэрч/хазайдаг).
+BT709 = ['-colorspace', 'bt709', '-color_primaries', 'bt709', '-color_trc', 'bt709']
+CVF = 'scale=out_color_matrix=bt709:out_range=tv'
+# Бүх скриптийн дундын сегментийн нэгдсэн чанар: CRF 16 (текст тод), аудио 256k (дахин кодлоход алдагдахгүй).
+VQ = ['-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-profile:v', 'high', '-pix_fmt', 'yuv420p'] + BT709
+AQ = ['-c:a', 'aac', '-b:a', '256k', '-ar', '44100']
+SCENE_V = ['-c:v', 'libx264', '-preset', 'veryfast', '-crf', '14', '-profile:v', 'high', '-pix_fmt', 'yuv420p', '-r', '30'] + BT709
 FADE = 'fade=t=in:st=0:d=0.2:color=0x1e3a8a' if os.environ.get('REEL_FADE', '1') != '0' else None   # дэвсгэрийн өнгөөс бүдэгээр гарч ирнэ
 
 def render(kind, lv, w, ex, wavs, gap, tmp, n, stage=2, tail=0.7, fade=True):
     img = os.path.join(tmp, f's{n}.png'); aud = os.path.join(tmp, f's{n}.wav'); mp4 = os.path.join(tmp, f's{n}.mp4')
     scene_img(kind, lv, w, ex, img, stage); join(wavs, gap, aud)
     dur = probe(aud) + tail
-    vf = ['-vf', FADE] if (fade and FADE) else []
+    vf = ['-vf', ','.join(x for x in ((FADE if fade else None), CVF) if x)]
     subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-loop', '1', '-framerate', '30', '-i', img, '-i', aud, '-t', f'{dur:.2f}',
                     '-af', 'apad'] + vf + SCENE_V + ['-c:a', 'aac', '-ar', '44100', '-shortest', mp4], check=True)
     return mp4
@@ -326,11 +332,12 @@ def finalize(lst, total, out):
     """Сегментүүдийг нэгтгэж, дээд талд ахицын зурвас нэмээд нэг удаа CRF-ээр кодлоно. Дууг нэг түвшинд (loudnorm) болгоно."""
     bar_w = W - 2 * PAD
     fc = (f"[1:v]scale=w='max(2,2*trunc({bar_w}*t/{total:.2f}/2))':h=10:eval=frame[bar];"
-          f"[0:v][bar]overlay=x={PAD}:y=LANE:eval=frame,format=yuv420p[v]").replace('LANE', str(SAFE_TOP - 10))
+          f"[0:v][bar]overlay=x={PAD}:y=LANE:eval=frame,{CVF},format=yuv420p[v]").replace('LANE', str(SAFE_TOP - 10))
     subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst,
                     '-f', 'lavfi', '-i', f'color=c=0xfacc15:s={bar_w}x10:r=30:d={total + 1:.2f}',
                     '-filter_complex', fc, '-map', '[v]', '-map', '0:a', '-af', LOUDNORM,
-                    '-c:v', 'libx264', '-preset', 'medium', '-crf', CRF, '-profile:v', 'high', '-g', '300',
+                    '-c:v', 'libx264', '-preset', 'medium', '-crf', CRF, '-profile:v', 'high', '-g', '300'] + BT709 + [
+                    
                     '-x264-params', 'aq-mode=3', '-r', '30',
                     '-c:a', 'aac', '-b:a', '192k', '-ar', '44100', '-movflags', '+faststart', '-shortest', out], check=True)
 

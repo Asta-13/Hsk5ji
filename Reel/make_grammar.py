@@ -96,7 +96,7 @@ def main():
         lst = P('l.txt'); open(lst, 'w').write(''.join(f"file '{s}'\n" for s in segs))
         out = os.path.join(OUT, SR.file_name('grammar', num) if num else f'grammar-manual-{a.index + 1:04d}.mp4')
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c:v', 'copy', '-af', M.LOUDNORM,
-                        '-c:a', 'aac', '-b:a', '160k', '-ar', '44100', '-movflags', '+faststart', out], check=True)
+                        '-c:a', 'aac', '-b:a', '192k', '-ar', '44100', '-movflags', '+faststart', out], check=True)
     cap = (f'📚 Дүрмийн хичээл — HSK {lv}' + (f' · №{num}' if num else '') + f'\n\n📌 {pat}\n🇲🇳 {mn}\n\n🗣 Жишээ:\n{ex}\n{ex_py}\n{ex_mn}\n\n'
            f'✍️ Өөрөө нэг өгүүлбэр зохиогоод комментд бичээрэй!\n💾 Хадгалаад давтаарай ❤️ Найздаа илгээгээрэй\n\n' + (SR.series_line(st, 'grammar', num) + '\n\n' if num else '') + f'👉 Үнэгүй сурах сайт: {SITE}\n\n'
            f'{M.TAGS[0]} #HSK{lv} #дүрэм #grammar ' + ' '.join(M.TAGS[1:]))
