@@ -43,6 +43,23 @@ var DATA=window.DATA;
     days:["өдөр","days","дн.","日"],
     dayWord:["Өнөөдрийн үг","Word of the day","Слово дня","今日の単語"],
     plGoBtn:["🎮 Тоглох","🎮 Play","🎮 Играть","🎮 プレイ"],
+    tabMedia:["Бичлэг·Дуу","Videos·Songs","Видео·Песни","動画・歌"],
+    mdMedia:["Хадмал дээрх үгийг товшиж сур","Tap words in subtitles to learn","Нажимайте слова в субтитрах","字幕の単語をタップして学ぶ"],
+    mVideo:["📺 Бичлэг","📺 Videos","📺 Видео","📺 動画"],
+    mSong:["🎵 Дуу","🎵 Songs","🎵 Песни","🎵 歌"],
+    mMeta:["{n} мөр · {w} шинэ үг","{n} lines · {w} new words","{n} строк · {w} новых слов","{n}行 · 新しい単語{w}"],
+    mEmpty:["Одоохондоо алга","Nothing here yet","Пока ничего нет","まだありません"],
+    mTapHint:["Хятад үг дээр дарвал тайлбар гарна","Tap a Chinese word for its meaning","Нажмите на слово для значения","単語をタップすると意味が出ます"],
+    mNoLines:["Хадмал алга","No subtitles","Нет субтитров","字幕なし"],
+    mNew:["Энэ хэсгээс сурах шинэ үг ({n})","New words to learn here ({n})","Новые слова ({n})","ここで学ぶ新出単語 ({n})"],
+    mAddAll:["Бүгдийг давтахад нэмэх","Add all to review","Добавить все","すべて復習に追加"],
+    mAddOne:["Давтахад нэмэх","Add to review","Добавить","復習に追加"],
+    mAllKnown:["Бүх үгийг чи аль хэдийн мэднэ 🎉","You already know all these words 🎉","Вы уже знаете все слова 🎉","すべて知っています 🎉"],
+    mHave:["✓ Миний санд байгаа","✓ In my bank","✓ Уже в словаре","✓ 登録済み"],
+    mQuiz:["Энэ бичлэгийн шалгалт","Quiz on this clip","Тест по этому ролику","この動画のクイズ"],
+    mScore:["Оноо: {a}/{b}","Score: {a}/{b}","Результат: {a}/{b}","スコア: {a}/{b}"],
+    mNeed:["Гарчиг ба хадмалаа оруулна уу","Enter a title and the lines","Введите название и строки","タイトルと字幕を入力"],
+    mSaved:["Хадгаллаа","Saved","Сохранено","保存しました"],
     tabList:["Миний жагсаалт","My lists","Мои списки","マイリスト"],
     mdList:["Алдсан үг, ⭐ дуртай","Mistakes & ⭐ favorites","Ошибки, ⭐ избранное","間違えた単語、⭐ お気に入り"],
     lsTitle:["Миний жагсаалт","My lists","Мои списки","マイリスト"],
@@ -590,7 +607,7 @@ var DATA=window.DATA;
   function weekWords(act){var n=0;for(var i=0;i<7;i++){var a=act&&act[iso(plus(today,-i))];if(a)n+=a.w||0}return n}
 
   /* ---------- tabs ---------- */
-  var tabs=document.querySelectorAll('.tab[data-t]'),SUBT=['words','hsk','gram','cards','play','list'],TABS=['today','words','hsk','gram','play','learn','cards','list','group','me','admin'];
+  var tabs=document.querySelectorAll('.tab[data-t]'),SUBT=['words','hsk','gram','cards','play','list','media'],TABS=['today','words','hsk','gram','play','learn','cards','list','group','me','admin','media'];
   function showTab(n){
     if(typeof hkFlush==='function'&&n!=='cards')hkFlush();
     if(!hasProfile()&&n!=='today')n='today';
@@ -602,7 +619,8 @@ var DATA=window.DATA;
     if(n==='list')renderLs();
     if(n==='play')renderPlay();
     if(n==='group'){renderGroup();refresh()}
-    if(n==='admin'){renderAdmin();refresh()}
+    if(n==='admin'){renderAdmin();refresh();renderMediaAdmin()}
+    if(n==='media')renderMedia();
   }
   tabs.forEach(function(b){b.addEventListener('click',function(){showTab(b.dataset.t)})});
   function openMenu(){if(!hasProfile()){showTab('today');return}$('menuSheet').hidden=false;$('menuBtn').setAttribute('aria-expanded','true');var a=document.querySelector('#menuSheet .tab[aria-selected="true"]')||document.querySelector('#menuSheet .tab');a&&a.focus()}
@@ -1340,6 +1358,165 @@ var DATA=window.DATA;
   applyStatic();fillMin('obMin');fillMin('meMin');$('obMin').value='180';
   fillSelect('fL',false,lvOf());fillSelect('cLv',true,0);
   renderTasks();renderAll();startDeck();
+
+  /* ---------- Бичлэг · Дуу (media): хадмал дээрх үгийг товшиж сурах ---------- */
+  var MED={items:null,loading:null,kind:'video',cur:null,sel:'',quiz:null,t:-1};
+  function mediaLoad(force){
+    if(MED.items&&!force)return Promise.resolve(MED.items);
+    if(MED.loading&&!force)return MED.loading;
+    MED.loading=(async function(){
+      var out=[];
+      try{var r=await fetch('data/media.json');if(r.ok){var j=await r.json();(j.items||[]).forEach(function(x){x.local=1;out.push(x)})}}catch(e){}
+      if(sb){try{
+        var x=await sb.from('media').select('*').order('created_at',{ascending:false});
+        if(!x.error)(x.data||[]).forEach(function(d){out.unshift({id:d.id,kind:d.kind,level:d.level,title:d.title,titleZh:d.title_zh,srcType:d.src_type,src:d.src,lines:d.lines||[]})});
+      }catch(e){}}
+      MED.items=out;return out;
+    })();
+    return MED.loading;
+  }
+  /* Хятад текстийг HSK үгсэд хуваана (хамгийн урт таарсан үг) */
+  function segZh(s){
+    if(!HSKD)HSKD=buildD(HSKRAW);
+    var out=[],i=0,a=Array.from(String(s||''));
+    while(i<a.length){
+      var done=false;
+      if(/[一-鿿]/.test(a[i])){
+        for(var n=Math.min(6,a.length-i);n>=1;n--){
+          var w=a.slice(i,i+n).join('');
+          if(HSKD[w]){out.push({h:w});i+=n;done=true;break}
+        }
+      }
+      if(!done){out.push({t:a[i]});i++}
+    }
+    return out;
+  }
+  function mediaWords(it){
+    var seen={},o=[];
+    (it.lines||[]).forEach(function(ln){segZh(ln.zh).forEach(function(x){
+      if(!x.h||seen[x.h])return;seen[x.h]=1;
+      var hit=hskLookup(x.h);o.push({h:x.h,l:hit.l,p:hP(x.h,hit.p),m:hM(x.h)});
+    })});
+    return o.sort(function(a,b){return a.l-b.l});
+  }
+  function haveSet(){var s={};wordsArr().forEach(function(w){s[w.h]=1});return s}
+  function ytId(u){var m=/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/.exec(u||'');return m?m[1]:(/^[\w-]{11}$/.test(u||'')?u:'')}
+  function mediaPlayer(it){
+    if(it.srcType==='youtube'&&ytId(it.src))return '<div class="mplay"><iframe src="https://www.youtube-nocookie.com/embed/'+esc(ytId(it.src))+'" title="'+esc(it.title)+'" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>';
+    if(it.srcType==='file'&&/^media\/[\w./-]+$/.test(it.src||''))return '<video class="mvid" id="mVid" controls playsinline preload="metadata" src="'+esc(it.src)+'"></video>';
+    return '';
+  }
+  function renderMedia(){
+    var box=$('mBody');if(!box)return;
+    mediaLoad().then(function(items){
+      var it=MED.cur&&items.filter(function(x){return x.id===MED.cur})[0];
+      $('mKinds').hidden=!!it;
+      if(!it){MED.cur=null;renderMediaList(items);return}
+      renderMediaItem(it);
+    });
+  }
+  function renderMediaList(items){
+    var k=MED.kind;
+    $('mKinds').innerHTML=['video','song'].map(function(x){return '<button class="chip" type="button" data-mk="'+x+'" aria-pressed="'+(k===x)+'">'+T(x==='video'?'mVideo':'mSong')+'</button>'}).join('');
+    var L=items.filter(function(x){return x.kind===k}),hv=haveSet();
+    $('mBody').innerHTML=L.length?'<div class="list">'+L.map(function(x){
+      var ws=mediaWords(x),nw=ws.filter(function(w){return !hv[w.h]&&w.m}).length;
+      return '<button class="card mcard" type="button" data-mi="'+esc(x.id)+'"><div class="between"><b>'+esc(x.title)+'</b>'+(x.level?'<span class="badge">HSK '+x.level+'</span>':'')+'</div>'+
+        (x.titleZh?'<span class="m" lang="zh">'+esc(x.titleZh)+'</span>':'')+'<span class="hint">'+esc(T('mMeta',{n:(x.lines||[]).length,w:nw}))+'</span></button>';
+    }).join('')+'</div>':'<div class="empty">'+T('mEmpty')+'</div>';
+  }
+  function renderMediaItem(it){
+    var hv=haveSet(),ws=mediaWords(it),nw=ws.filter(function(w){return !hv[w.h]&&w.m});
+    var lines=(it.lines||[]).map(function(ln,i){
+      var z=segZh(ln.zh).map(function(x){return x.h?'<button type="button" class="mw'+(hv[x.h]?' has':'')+'" data-h="'+esc(x.h)+'" lang="zh">'+esc(x.h)+'</button>':esc(x.t)}).join('');
+      return '<div class="mline" data-li="'+i+'"'+(ln.t!=null?' data-t="'+ln.t+'"':'')+'><div class="zh" lang="zh">'+z+'</div>'+(ln.mn?'<div class="m">'+esc(ln.mn)+'</div>':'')+'</div>';
+    }).join('');
+    $('mBody').innerHTML='<div class="card"><div class="between"><button class="btn ghost small" type="button" id="mBack">←</button><span class="badge">'+(it.level?'HSK '+it.level:'')+'</span></div>'+
+      '<h2>'+esc(it.title)+'</h2>'+(it.titleZh?'<div class="m" lang="zh">'+esc(it.titleZh)+'</div>':'')+mediaPlayer(it)+'<div class="hint">'+esc(T('mTapHint'))+'</div></div>'+
+      '<div class="card" id="mWord" hidden></div>'+
+      '<div class="card"><div class="mlines">'+(lines||'<div class="empty">'+T('mNoLines')+'</div>')+'</div></div>'+
+      '<div class="card"><div class="between"><h3>'+esc(T('mNew',{n:nw.length}))+'</h3>'+(nw.length?'<button class="btn small" type="button" id="mAddAll">'+esc(T('mAddAll'))+'</button>':'')+'</div>'+
+      (nw.length?'<div class="list">'+nw.map(function(w){return '<div class="w"><span class="h" lang="zh">'+esc(w.h)+'</span><span><span class="p">'+esc(w.p)+'</span><br><span class="m">'+esc(w.m)+'</span></span><span class="badge">HSK '+w.l+'</span><button class="btn small ghost" type="button" data-ma="'+esc(w.h)+'">+</button></div>'}).join('')+'</div>':'<div class="empty">'+T('mAllKnown')+'</div>')+
+      (ws.length>=4?'<button class="btn" type="button" id="mQuizBtn">'+esc(T('mQuiz'))+'</button>':'')+'<div id="mQuiz"></div></div>';
+    var v=$('mVid');
+    if(v&&(it.lines||[]).some(function(l){return l.t!=null}))v.addEventListener('timeupdate',function(){
+      var cur=-1;(it.lines||[]).forEach(function(l,i){if(l.t!=null&&l.t<=v.currentTime)cur=i});
+      document.querySelectorAll('.mline').forEach(function(e){e.classList.toggle('on',+e.dataset.li===cur)});
+    });
+  }
+  function mediaAdd(h){
+    if(haveSet()[h])return false;
+    var hit=hskLookup(h);if(!hit)return false;var m=hM(h);if(!m)return false;
+    addWord(h,hP(h,hit.p),m,'',TODAY,hit.l);return true;
+  }
+  function mediaWordCard(h){
+    var hit=hskLookup(h),has=haveSet()[h],m=hM(h);
+    var b=$('mWord');b.hidden=false;
+    b.innerHTML='<div class="between"><span class="h big" lang="zh">'+esc(h)+'</span><span class="badge">HSK '+hit.l+'</span></div><div class="p">'+esc(hP(h,hit.p))+'</div><div class="m">'+esc(m||'—')+'</div>'+
+      '<div class="row"><button class="btn ghost small" type="button" data-msp="'+esc(h)+'">🔊</button>'+(has?'<span class="hint">'+esc(T('mHave'))+'</span>':(m?'<button class="btn small" type="button" data-ma="'+esc(h)+'">+ '+esc(T('mAddOne'))+'</button>':''))+'</div>';
+    b.scrollIntoView({block:'nearest',behavior:'smooth'});
+  }
+  function mediaQuiz(it){
+    var ws=mediaWords(it).filter(function(w){return w.m});
+    var pool=ws.slice().sort(function(){return Math.random()-.5}).slice(0,8);
+    var all=Object.keys(HSKD||buildD(HSKRAW));
+    function wrong(ex){var o=[],g=0;while(o.length<3&&g++<400){var h=all[Math.floor(Math.random()*all.length)],m=hM(h);if(m&&m!==ex&&o.indexOf(m)<0)o.push(m)}return o}
+    MED.quiz={q:pool.map(function(w){var opts=wrong(w.m).concat([w.m]).sort(function(){return Math.random()-.5});return {w:w,opts:opts}}),i:0,ok:0};
+    renderMediaQuiz();
+  }
+  function renderMediaQuiz(){
+    var Q=MED.quiz,box=$('mQuiz');if(!Q||!box)return;
+    if(Q.i>=Q.q.length){box.innerHTML='<div class="card"><h3>'+esc(T('mScore',{a:Q.ok,b:Q.q.length}))+'</h3><button class="btn small" type="button" id="mQuizBtn2">'+esc(T('exAgain'))+'</button></div>';return}
+    var x=Q.q[Q.i];
+    box.innerHTML='<div class="card"><div class="hint">'+(Q.i+1)+'/'+Q.q.length+'</div><div class="h big" lang="zh">'+esc(x.w.h)+'</div><div class="p">'+esc(x.w.p)+'</div><div class="list">'+
+      x.opts.map(function(o){return '<button class="btn ghost" type="button" data-mo="'+esc(o)+'">'+esc(o)+'</button>'}).join('')+'</div></div>';
+  }
+  function parseLines(txt){
+    return String(txt||'').split('\n').map(function(r){return r.trim()}).filter(Boolean).map(function(r){
+      var t=null,m=/^(\d+):(\d{2})\s+/.exec(r);if(m){t=+m[1]*60+ +m[2];r=r.slice(m[0].length)}
+      var p=r.split(/\s*\|\s*/);return {t:t,zh:p[0],mn:p[1]||''};
+    }).filter(function(l){return l.zh}).map(function(l){if(l.t==null)delete l.t;return l});
+  }
+  function renderMediaAdmin(){
+    var box=$('mAdmin');if(!box||!isOwner)return;
+    mediaLoad(true).then(function(items){
+      var mine=items.filter(function(x){return !x.local});
+      $('mAdList').innerHTML=mine.length?mine.map(function(x){return '<div class="between"><span>'+esc(x.title)+' <small>('+esc(x.kind)+')</small></span><button class="btn small ghost" type="button" data-mdel="'+esc(x.id)+'">×</button></div>'}).join(''):'<div class="hint">'+esc(T('mEmpty'))+'</div>';
+    });
+  }
+  $('mSave').addEventListener('click',async function(){
+    if(!sb||!isOwner)return;
+    var title=$('mTitle').value.trim(),lines=parseLines($('mText').value),src=$('mSrc').value.trim();
+    if(!title||!lines.length){toast(T('mNeed'));return}
+    var type=ytId(src)?'youtube':(/^media\/[\w./-]+$/.test(src)?'file':'none');
+    var row={id:'m_'+Date.now().toString(36),kind:$('mKind').value,level:+$('mLvl').value||null,title:title,title_zh:$('mTitleZh').value.trim(),src_type:type,src:type==='youtube'?ytId(src):(type==='file'?src:''),lines:lines};
+    var x=await sb.from('media').insert(row);
+    if(x.error){toast(String(x.error.message||x.error));return}
+    ['mTitle','mTitleZh','mSrc','mText'].forEach(function(i){$(i).value=''});
+    toast(T('mSaved'));MED.items=null;renderMediaAdmin();
+  });
+  document.addEventListener('click',async function(e){
+    var t=e.target;if(!t.closest)return;
+    var d=t.closest('[data-mdel]');if(d&&isOwner&&sb){var x=await sb.from('media').delete().eq('id',d.dataset.mdel);if(!x.error){MED.items=null;renderMediaAdmin()}return}
+    if(!t.closest('#p-media'))return;
+    var b;
+    if((b=t.closest('[data-mk]'))){MED.kind=b.dataset.mk;renderMedia();return}
+    if((b=t.closest('[data-mi]'))){MED.cur=b.dataset.mi;window.scrollTo(0,0);renderMedia();return}
+    if(t.closest('#mBack')){MED.cur=null;MED.quiz=null;renderMedia();return}
+    if((b=t.closest('.mw'))){mediaWordCard(b.dataset.h);return}
+    if((b=t.closest('[data-msp]'))){speak(b.dataset.msp);return}
+    if((b=t.closest('[data-ma]'))){
+      if(mediaAdd(b.dataset.ma)){syncSummary(TODAY);toast(T('tAdded'));var y=window.scrollY;renderAll();renderMedia();setTimeout(function(){window.scrollTo(0,y)},60)}
+      return}
+    if(t.closest('#mAddAll')){
+      var it=MED.items.filter(function(x){return x.id===MED.cur})[0],n=0;
+      mediaWords(it).forEach(function(w){if(mediaAdd(w.h))n++});
+      if(n){syncSummary(TODAY);toast(T('tAddedN',{n:n}));renderAll();renderMedia()}return}
+    if(t.closest('#mQuizBtn')||t.closest('#mQuizBtn2')){mediaQuiz(MED.items.filter(function(x){return x.id===MED.cur})[0]);return}
+    if((b=t.closest('[data-mo]'))&&MED.quiz){
+      var Q=MED.quiz,x2=Q.q[Q.i];if(b.dataset.mo===x2.w.m)Q.ok++;else toast(x2.w.h+' = '+x2.w.m);
+      Q.i++;renderMediaQuiz()}
+  });
 
   /* ---------- server mode (Supabase) ---------- */
   async function fetchAll(mk){var out=[],i=0,n=0;for(;;){var x=await mk().range(i,i+999);if(x.error)throw x.error;var d=x.data||[];out=out.concat(d);if(!d.length||++n>300)break;i+=d.length}return out}
