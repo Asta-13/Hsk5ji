@@ -1,6 +1,6 @@
 """media/ дахь mp3/mp4 файлуудаас хятад хадмал (цагтай) автоматаар гаргана → data/media-auto.json.
 Whisper (faster-whisper, CPU) ашиглана. Нэг удаа боловсруулсан файлыг дахин хийхгүй (нэр+хэмжээгээр таниж кэшлэнэ)."""
-import json, os, re, sys, glob
+import json, os, re, sys, glob, hashlib, difflib
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 EXT = ('.mp4', '.mp3', '.m4a', '.wav', '.ogg', '.webm')
 OUT = os.path.join(ROOT, 'data', 'media-auto.json')
@@ -29,6 +29,41 @@ def guess_level(lines, D):
     lv = sorted(D[w] for ln in lines for w in segment(ln['zh'], D))
     return lv[int(len(lv) * 0.85)] if lv else 3
 
+HAN = re.compile(r'[^\u4e00-\u9fff]')
+
+def read_lyrics(txt):
+    """media/<нэр>.txt: мөр бүр `中文` эсвэл `中文 | монгол`. Хоосон мөр, # тайлбар алгасна."""
+    rows = []
+    for r in open(txt, encoding='utf8').read().splitlines():
+        r = r.strip()
+        if not r or r.startswith('#'): continue
+        p = [x.strip() for x in r.split('|', 1)]
+        if HAN.sub('', p[0]): rows.append({'zh': p[0], 'mn': p[1] if len(p) > 1 else ''})
+    return rows
+
+def align(lyrics, chars):
+    """lyrics: [{'zh',..}], chars: [(char, start_sec)] (Whisper-ийн таньсан текст). Дууны үгийн мөр бүрт эхлэх цаг ононо."""
+    A, owner = [], []
+    for i, ln in enumerate(lyrics):
+        for c in HAN.sub('', ln['zh']): A.append(c); owner.append(i)
+    B = [c for c, _ in chars]
+    first = {}
+    if A and B:
+        for blk in difflib.SequenceMatcher(None, A, B, autojunk=False).get_matching_blocks():
+            for k in range(blk.size):
+                first.setdefault(owner[blk.a + k], chars[blk.b + k][1])
+    ts = [first.get(i) for i in range(len(lyrics))]
+    for i, t in enumerate(ts):                       # олдоогүй мөрийг хөрш мөрүүдийн хооронд тэгшилнэ
+        if t is None:
+            lo = next((j for j in range(i - 1, -1, -1) if ts[j] is not None), None)
+            hi = next((j for j in range(i + 1, len(ts)) if ts[j] is not None), None)
+            if lo is not None and hi is not None: ts[i] = ts[lo] + (ts[hi] - ts[lo]) * (i - lo) / (hi - lo)
+            elif lo is not None: ts[i] = ts[lo] + 3
+            elif hi is not None: ts[i] = max(0, ts[hi] - 3 * (hi - i))
+            else: ts[i] = 0
+    for i in range(1, len(ts)): ts[i] = max(ts[i], ts[i - 1])   # цаг буурахгүй
+    return [dict(ln, t=int(t)) for ln, t in zip(lyrics, ts)]
+
 def main():
     files = sorted(f for f in glob.glob(os.path.join(ROOT, 'media', '*')) if f.lower().endswith(EXT))
     old = {}
@@ -37,7 +72,9 @@ def main():
     todo = []
     for f in files:
         rel = 'media/' + os.path.basename(f)
-        fid = 'a_' + re.sub(r'\W+', '-', os.path.splitext(os.path.basename(f))[0]).strip('-').lower() + '_' + str(os.path.getsize(f))
+        txt = os.path.splitext(f)[0] + '.txt'
+        sig = str(os.path.getsize(f)) + ('_' + hashlib.sha1(open(txt, 'rb').read()).hexdigest()[:6] if os.path.exists(txt) else '')
+        fid = 'a_' + re.sub(r'\W+', '-', os.path.splitext(os.path.basename(f))[0]).strip('-').lower() + '_' + sig
         todo.append((f, rel, fid))
     keep = {fid for _, _, fid in todo}
     items = {k: v for k, v in old.items() if k in keep}      # устгасан файлын хадмал автоматаар арилна
@@ -53,16 +90,25 @@ def main():
     model = WhisperModel(MODEL, device='cpu', compute_type='int8')
     for f, rel, fid in need:
         print('Хадмал:', rel, flush=True)
-        segs, info = model.transcribe(f, language='zh', vad_filter=True, beam_size=5, initial_prompt='以下是普通话的句子，使用简体中文。')
-        lines = []
-        for s in segs:
-            z = t2s(s.text.strip())
-            if z and re.search(r'[一-鿿]', z): lines.append({'t': int(s.start), 'zh': z})
+        txt = os.path.splitext(f)[0] + '.txt'
+        lyr = read_lyrics(txt) if os.path.exists(txt) else None
+        segs, info = model.transcribe(f, language='zh', vad_filter=not lyr, beam_size=5, word_timestamps=bool(lyr),
+                                      initial_prompt='以下是普通话的句子，使用简体中文。')
+        lines, chars = [], []
+        for s_ in segs:
+            z = t2s(s_.text.strip())
+            if z and re.search(r'[\u4e00-\u9fff]', z): lines.append({'t': int(s_.start), 'zh': z})
+            for w in (s_.words or []):
+                cs = HAN.sub('', t2s(w.word))
+                for k, c in enumerate(cs): chars.append((c, w.start + (w.end - w.start) * k / max(1, len(cs))))
+        if lyr:
+            lines = align(lyr, chars)
+            print('  дууны үгийг цагт тааруулав: %d мөр' % len(lines), flush=True)
         if not lines:
             print('  хоосон — алгаслаа'); continue
         title = os.path.splitext(os.path.basename(f))[0].replace('_', ' ').replace('-', ' ')
         items[fid] = {'id': fid, 'kind': 'song' if f.lower().endswith(('.mp3', '.m4a', '.wav', '.ogg')) else 'video',
-                      'level': guess_level(lines, D), 'title': title, 'titleZh': '', 'srcType': 'file', 'src': rel, 'auto': 1, 'lines': lines}
+                      'level': guess_level(lines, D), 'title': title, 'titleZh': '', 'srcType': 'file', 'src': rel, 'auto': 0 if lyr else 1, 'lines': lines}
         print('  %d мөр, HSK ~%d' % (len(lines), items[fid]['level']), flush=True)
     json.dump({'items': list(items.values())}, open(OUT, 'w', encoding='utf8'), ensure_ascii=False, indent=1)
 
