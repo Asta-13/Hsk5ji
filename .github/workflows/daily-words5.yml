@@ -6,8 +6,8 @@ concurrency:
 
 on:
   schedule:
-    # 5 энгийн үг: gap (240 мин) нь өдөрт ~3-4 видеонд хязгаарлана.
-    - cron: '12 1-14 * * *'
+    # Бүх үг (HSK 1→6) 5-аар: цаг бүр оролдож, gap (40 мин) нь өдөрт ~24 видеонд хязгаарлана.
+    - cron: '12 * * * *'
   workflow_dispatch:
     inputs:
       level:
@@ -28,7 +28,7 @@ jobs:
     permissions:
       contents: write
     env:
-      MIN_GAP_MIN: '240'
+      MIN_GAP_MIN: '40'
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:

@@ -37,7 +37,7 @@ ORDER = ('word', 'group', 'grammar', 'scene', 'tone', 'quiz')
 OLD_STATE = {'word': 'state.json', 'grammar': 'grammar-state.json', 'scene': 'scene-state.json',
              'tone': 'tone-state.json', 'quiz': 'quiz-state.json'}
 GROUP_SIZE = 5
-SIMPLE_MAX_LEN = 1          # энэ хэмжээнээс ихгүй үсэгтэй үг = «энгийн үг»
+SIMPLE_MAX_LEN = 99         # бүх үг «энгийн» → 5-аар нэг видеонд (олон үсэгт үг ч орно)
 
 
 def overrides():
