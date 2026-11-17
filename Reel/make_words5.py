@@ -85,15 +85,15 @@ def main():
         hook(P('h0.png'), lv, ws); ai = P('ai.wav'); join([intro], 0, ai)
         segs.append(Q.segment(tmp, 'hook', [P('h0.png')], ai))
         for i in range(len(ws)):
-            aud = P(f'a{i}.wav'); join([zs[i], gap, zn[i], gap, ms[i]], 0, aud); k = int(probe(aud)) + 1; imgs = []
-            for j in range(k): panel(P(f'p{i}_{j}.png'), lv, ws, i + 1, i); imgs.append(P(f'p{i}_{j}.png'))
-            segs.append(Q.segment(tmp, f's{i}', imgs, aud))
+            aud = P(f'a{i}.wav'); join([zs[i], gap, zn[i], gap, ms[i]], 0, aud)
+            panel(P(f'p{i}.png'), lv, ws, i + 1, i)               # нэг зураг, аудио дуустал барина (давхар зурахгүй)
+            segs.append(Q.segment(tmp, f's{i}', [P(f'p{i}.png')], aud))
         # давталт: 5-ыг хурдан дараалан (хариуг мэдэх)
         g2 = P('g2.wav'); silence(g2, 0.4); parts = []
         for i, z in enumerate(zn): parts += [z] + ([g2] if i < len(zn) - 1 else [])
-        rep = P('rep.wav'); join(parts, 0, rep); k = int(probe(rep)) + 1; imgs = []
-        for j in range(k): panel(P(f'r{j}.png'), lv, ws, len(ws), -1); imgs.append(P(f'r{j}.png'))
-        segs.append(Q.segment(tmp, 'rep', imgs, rep))
+        rep = P('rep.wav'); join(parts, 0, rep)
+        panel(P('r.png'), lv, ws, len(ws), -1)
+        segs.append(Q.segment(tmp, 'rep', [P('r.png')], rep))
         cta(P('cta.png'), lv); ac = P('ac.wav'); silence(ac, 3); segs.append(Q.segment(tmp, 'cta', [P('cta.png')], ac))
         lst = P('l.txt'); open(lst, 'w').write(''.join(f"file '{s}'\n" for s in segs))
         out = os.path.join(OUT, SR.file_name('group', num))

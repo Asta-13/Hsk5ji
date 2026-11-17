@@ -134,7 +134,7 @@ def segment(tmp, name, imgs, wav):
     for i, im in enumerate(imgs): os.replace(im, os.path.join(fd, f'f{i:03d}.png'))
     mp4 = os.path.join(tmp, name + '.mp4')
     subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', '1', '-i', os.path.join(fd, 'f%03d.png'), '-i', wav, '-r', '30', '-t', f'{dur:.2f}',
-                    '-vf', 'tpad=stop_mode=clone:stop_duration=3', '-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p',
+                    '-vf', f'tpad=stop_mode=clone:stop_duration={dur + 2:.2f}', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '18', '-pix_fmt', 'yuv420p',
                     '-c:a', 'aac', '-ar', '44100', mp4], check=True)
     return mp4
 
