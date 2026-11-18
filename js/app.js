@@ -18,11 +18,11 @@ var DATA=window.DATA;
     more:["Цааш үзэх","Show more","Показать ещё","もっと見る"],
     forgot:["Нууц үгээ мартсан уу?","Forgot password?","Забыли пароль?","パスワードをお忘れですか？"],
     forgotSent:["Нууц үг сэргээх холбоосыг имэйлээр илгээлээ. Имэйлээ шалгаарай.","Reset link sent. Check your email.","Ссылка для сброса пароля отправлена на почту. Проверьте email.","パスワード再設定のリンクをメールで送信しました。メールをご確認ください。"],
-    emailBad:["Зөв имэйл хаяг оруулна уу.","Enter a valid email address.","Введите корректный адрес email.","正しいメールアドレスを入力してください。"],
-    confirmMail:["Бүртгэл үүслээ. Имэйлээ шалгаад холбоос дээр дарж баталгаажуулна уу.","Account created. Check your email and confirm it.","Аккаунт создан. Проверьте почту и подтвердите регистрацию по ссылке.","アカウントを作成しました。メールを確認し、リンクをクリックして認証してください。"],
+    emailBad:["Имэйл хаяг буруу байна. Дахин шалгаарай.","Enter a valid email address.","Введите корректный адрес email.","正しいメールアドレスを入力してください。"],
+    confirmMail:["Бүртгэл үүслээ! Имэйлээ нээгээд холбоос дээр дарж баталгаажуулаарай.","Account created. Check your email and confirm it.","Аккаунт создан. Проверьте почту и подтвердите регистрацию по ссылке.","アカウントを作成しました。メールを確認し、リンクをクリックして認証してください。"],
     resetTitle:["Шинэ нууц үг тохируулах","Set a new password","Установка нового пароля","新しいパスワードを設定"],
     resetSave:["Хадгалах","Save","Сохранить","保存"],
-    resetDone:["Нууц үг шинэчлэгдлээ","Password updated","Пароль обновлён","パスワードを更新しました"],
+    resetDone:["Нууц үг шинэчлэгдлээ. Сайн байна!","Password updated","Пароль обновлён","パスワードを更新しました"],
     accTitle:["Бүртгэлийн тохиргоо","Account settings","Настройки аккаунта","アカウント設定"],
     accEmail:["Имэйл холбох / солих","Link / change email","Привязать / изменить email","メールの登録・変更"],
     accEmailBtn:["Имэйл хадгалах","Save email","Сохранить email","メールを保存"],
@@ -32,7 +32,7 @@ var DATA=window.DATA;
     accHint:["Хуучин нэвтрэх нэрээр бүртгүүлсэн бол имэйлээ холбовол нууц үгээ сэргээх боломжтой болно.","If you signed up with a login name, link an email to enable password recovery.","Если вы регистрировались по логину, привяжите email, чтобы можно было восстановить пароль.","ログイン名で登録した場合は、メールを登録するとパスワードを再設定できます。"],
     accCur:["Одоогийн имэйл: {e}","Current email: {e}","Текущий email: {e}","現在のメール：{e}"],
     accNone:["Имэйл холбоогүй (хуучин нэр: {n}). Доор имэйлээ холбоно уу.","No email linked (old login: {n}). Link one below.","Email не привязан (прежний логин: {n}). Привяжите его ниже.","メール未登録（以前のログイン名：{n}）。下でメールを登録してください。"],
-    speakErr:["Энэ төхөөрөмж хятад дуу хоолой дэмжихгүй байна","This device has no Chinese voice","Это устройство не поддерживает китайский голос","この端末は中国語の音声に対応していません"],
+    speakErr:["Энэ төхөөрөмж хятад дуу хоолой дэмжихгүй байна.","This device has no Chinese voice","Это устройство не поддерживает китайский голос","この端末は中国語の音声に対応していません"],
     playTitle:["Тоглоом ба оноо","Games & XP","Игры и XP","ゲームとXP"],
     gMean:["🎯 Утга тааруулах (10 асуулт)","🎯 Match the meaning (10 questions)","🎯 Подбери значение (10 вопросов)","🎯 意味を選ぼう（10問）"],
     gListen:["🎧 Сонсоод таах","🎧 Listen and guess","🎧 Слушай и угадывай","🎧 聞いて当てよう"],
@@ -61,8 +61,8 @@ var DATA=window.DATA;
     mHave:["✓ Миний санд байгаа","✓ In my bank","✓ Уже в словаре","✓ 登録済み"],
     mQuiz:["Энэ бичлэгийн шалгалт","Quiz on this clip","Тест по этому ролику","この動画のクイズ"],
     mScore:["Оноо: {a}/{b}","Score: {a}/{b}","Результат: {a}/{b}","スコア: {a}/{b}"],
-    mNeed:["Гарчиг ба хадмалаа оруулна уу","Enter a title and the lines","Введите название и строки","タイトルと字幕を入力"],
-    mSaved:["Хадгаллаа","Saved","Сохранено","保存しました"],
+    mNeed:["Гарчиг, хадмалаа оруулж өгнө үү.","Enter a title and the lines","Введите название и строки","タイトルと字幕を入力"],
+    mSaved:["Хадгаллаа!","Saved","Сохранено","保存しました"],
     tabList:["Миний жагсаалт","My lists","Мои списки","マイリスト"],
     mdList:["Алдсан үг, ⭐ дуртай","Mistakes & ⭐ favorites","Ошибки, ⭐ избранное","間違えた単語、⭐ お気に入り"],
     lsTitle:["Миний жагсаалт","My lists","Мои списки","マイリスト"],
@@ -74,14 +74,14 @@ var DATA=window.DATA;
     lsSlow:["🐢 Удаан","🐢 Slow","🐢 Медленно","🐢 ゆっくり"],
     lsEmptyMiss:["Алдсан үг одоогоор алга. Тоглоом, шалгалтад буруу хариулсан үгс энд автоматаар нэмэгдэнэ. Хоёр удаа дараалан зөв хариулбал жагсаалтаас гарна.","No mistakes yet. Words you miss in games and tests are added here automatically. Two correct answers in a row remove a word.","Ошибок пока нет. Слова, в которых вы ошибётесь в играх и тестах, автоматически появятся здесь. После двух правильных ответов подряд слово исчезает из списка.","間違えた単語はまだありません。ゲームやテストで間違えた単語は自動的にここに追加されます。2回連続で正解するとリストから消えます。"],
     lsEmptyFav:["Дуртай үг алга. HSK хэсгээс ☆ дарж нэмнэ.","No favorites yet. Tap ☆ in the HSK list to add.","Избранных слов нет. Нажмите ☆ в разделе HSK, чтобы добавить.","お気に入りの単語はまだありません。HSKの一覧で☆をタップして追加できます。"],
-    lsNeedProfile:["Эхлээд профайлаа үүсгэнэ үү.","Create your profile first.","Сначала создайте профиль.","まずプロフィールを作成してください。"],
+    lsNeedProfile:["Эхлээд профайлаа үүсгэе, дараа нь хамт сурна.","Create your profile first.","Сначала создайте профиль.","まずプロフィールを作成してください。"],
     planLine:["{d} хоног үлдсэн · өдөрт ~{n} шинэ үг хийвэл {lv}-н {t} үгэнд хүрнэ (өнөөдөр {k}/{n})","{d} days left · about {n} new words a day to reach {t} words of HSK {lv} (today {k}/{n})","Осталось дней: {d} · добавляя ~{n} новых слов в день, вы дойдёте до {t} слов HSK {lv} (сегодня {k}/{n})","残り{d}日 · 1日約{n}語ずつ追加すると、HSK {lv}の{t}語に到達します（今日 {k}/{n}）"],
     planDone:["HSK {lv}-н үгсээ бүгдийг нэмсэн байна ✓ Одоо давтлага хийгээрэй.","All HSK {lv} words added ✓ Now focus on review.","Все слова HSK {lv} добавлены ✓ Теперь займитесь повторением.","HSK {lv}の単語をすべて追加しました ✓ 今は復習に集中しましょう。"],
     obStep:["Алхам 2/2: Нэрээ бичээд доорх «Эхлэх» товчийг заавал дараарай. Үгүй бол бүртгэл идэвхжихгүй.","Step 2/2: enter a nickname and press «Start» below, or your account stays inactive.","Шаг 2/2: введите имя и обязательно нажмите кнопку «Начать» ниже. Иначе аккаунт не активируется.","ステップ2/2：ニックネームを入力し、下の「スタート」ボタンを必ず押してください。押さないとアカウントが有効になりません。"],
     authSteps:["① Имэйл, нууц үгээ бичээд «Бүртгүүлэх» дар → ② дараагийн дэлгэц дээр нэрээ бичээд «Эхлэх» дар.","① Enter email + password and tap «Sign up» → ② on the next screen enter a nickname and tap «Start».","① Введите email и пароль и нажмите «Регистрация» → ② на следующем экране введите имя и нажмите «Начать».","① メールとパスワードを入力して「新規登録」をタップ → ② 次の画面でニックネームを入力して「スタート」をタップ。"],
     wrAnim:["▶ Зураасны дараалал","▶ Stroke order","▶ Порядок черт","▶ 筆順"],
     wrQuiz:["✍ Би зурна","✍ I will draw","✍ Я напишу","✍ 自分で書く"],
-    wrErr:["Зураасны өгөгдөл ачаалж чадсангүй. Интернетээ шалгана уу.","Could not load stroke data. Check your connection.","Не удалось загрузить данные о чертах. Проверьте интернет.","筆画データを読み込めませんでした。接続を確認してください。"],
+    wrErr:["Зураасны өгөгдөл ачаалж чадсангүй. Интернетээ шалгаарай.","Could not load stroke data. Check your connection.","Не удалось загрузить данные о чертах. Проверьте интернет.","筆画データを読み込めませんでした。接続を確認してください。"],
     wrHint:["Хуруугаараа зураасыг дарааллаар нь зур.","Draw each stroke in order.","Рисуйте пальцем черты по порядку.","指で筆順どおりに書いてください。"],
     wrDone:["Гайхалтай! +5 XP","Great! +5 XP","Отлично! +5 XP","すばらしい！+5 XP"],
     wrClose:["Хаах","Close","Закрыть","閉じる"],
@@ -99,10 +99,10 @@ var DATA=window.DATA;
     joinBtn:["Нэгдэх","Join","Войти","参加する"],
     tStart:["Эхлэх","Start","Начать","開始"],
     tFinish:["Дууслаа","Done","Готово","完了"],
-    tDone:["Даалгавар биелэв! +{x} XP","Task done! +{x} XP","Задание выполнено! +{x} XP","課題完了！ +{x} XP"],
-    tFail:["80%-аас дээш зөв хариулж байж биелнэ","You need 80%+ correct","Нужно более 80% правильных ответов","80%以上の正解が必要です"],
+    tDone:["Даалгавар биелэв! +{x} XP. Маш сайн!","Task done! +{x} XP","Задание выполнено! +{x} XP","課題完了！ +{x} XP"],
+    tFail:["80%-аас дээш зөв хариулбал биелнэ. Дахин оролдъё!","You need 80%+ correct","Нужно более 80% правильных ответов","80%以上の正解が必要です"],
     tNoCls:["Ангид нэгдээгүй байна. Багшийнхаа кодыг оруулна уу.","Not in a class yet. Enter your teacher's code.","Вы ещё не в классе. Введите код учителя.","まだクラスに参加していません。先生のコードを入力してください。"],
-    tWords:["Тестэд хангалттай үг алга","Not enough words for the test","Недостаточно слов для теста","テストに必要な単語が足りません"],
+    tWords:["Тест хийхэд үг дутуу байна. Эхлээд хэдэн үг нэмээрэй.","Not enough words for the test","Недостаточно слов для теста","テストに必要な単語が足りません"],
     hwTitle:["Иероглифыг зураад хайх","Search by drawing","Поиск по рисунку иероглифа","文字を描いて検索"],
     hwClear:["Арилгах","Clear","Стереть","消去"],
     hwUndo:["↶ Буцаах","↶ Undo","↶ Отменить","↶ 元に戻す"],
@@ -268,15 +268,15 @@ var DATA=window.DATA;
     tourYou:["Таны байр: #{r} · {x} XP","Your rank: #{r} · {x} XP","Ваше место: #{r} · {x} XP","あなたの順位：{r}位・{x} XP"],
     tourLast:["Өмнөх долоо хоногийн ялагчид","Last week's winners","Победители прошлой недели","先週の入賞者"],
     tourClaim:["🎁 Шагнал авах: +{x} XP","🎁 Claim reward: +{x} XP","🎁 Получить награду: +{x} XP","🎁 報酬を受け取る：+{x} XP"],
-    tourGot:["+{x} XP шагнал авлаа!","+{x} XP reward claimed!","Награда +{x} XP получена!","+{x} XPを獲得！"],
-    streakBonus:["🔥 {n} өдөр дараалсан! +50 XP","🔥 {n}-day streak! +50 XP","🔥 Серия {n} дн.! +50 XP","🔥 {n}日連続！+50 XP"],
+    tourGot:["+{x} XP шагнал авлаа! 🎁","+{x} XP reward claimed!","Награда +{x} XP получена!","+{x} XPを獲得！"],
+    streakBonus:["🔥 {n} өдөр дараалсан! Урамшуулал +50 XP!","🔥 {n}-day streak! +50 XP","🔥 Серия {n} дн.! +50 XP","🔥 {n}日連続！+50 XP"],
     gSpeak:["🎤 Хэлэх дасгал (микрофон)","🎤 Speaking practice (microphone)","🎤 Тренировка речи (микрофон)","🎤 発音練習（マイク）"],
     micTap:["🎤 дараад хятадаар хэл","Tap 🎤 and say it in Chinese","Нажми 🎤 и скажи по-китайски","🎤 を押して中国語で言おう"],
     micListen:["Сонсож байна…","Listening…","Слушаю…","聞いています…"],
     micRetry:["Дахин оролдоорой","Try once more","Попробуй ещё раз","もう一度どうぞ"],
     micSkip:["Алгасах","Skip","Пропустить","スキップ"],
     micHeard:["Сонссон:","Heard:","Услышано:","認識結果:"],
-    micErr:["Энэ хөтөч дээр дуу таних боломжгүй байна (Android-ын Chrome-оор оролдоорой) эсвэл микрофоны зөвшөөрөл хаалттай байна.","Speech recognition isn't available here (try Chrome on Android) or mic permission is blocked.","Распознавание речи недоступно (попробуй Chrome на Android) или нет доступа к микрофону.","音声認識が使えません（AndroidのChromeで試してください）。マイクの許可も確認してください。"],
+    micErr:["Энэ хөтөч дуу таньж чадахгүй байна. Android-ын Chrome-оор оролдоорой, эсвэл микрофоны зөвшөөрлийг шалгаарай.","Speech recognition isn't available here (try Chrome on Android) or mic permission is blocked.","Распознавание речи недоступно (попробуй Chrome на Android) или нет доступа к микрофону.","音声認識が使えません（AndroidのChromeで試してください）。マイクの許可も確認してください。"],
     gWrite:["✍ Иероглиф бичих дасгал","✍ Stroke-writing practice","✍ Практика письма иероглифов","✍ 筆順ドリル"],
     gSprint:["⚡ Үгийн спринт (60 секунд)","⚡ Word sprint (60 seconds)","⚡ Спринт слов (60 секунд)","⚡ 単語スプリント（60秒）"],
     sprintRes:["⚡ {a} үг зөв · дээд амжилт {b} · +{x} XP","⚡ {a} correct · best {b} · +{x} XP","⚡ Верно: {a} · рекорд {b} · +{x} XP","⚡ 正解{a}・最高{b}・+{x} XP"],
@@ -421,29 +421,44 @@ var DATA=window.DATA;
     tabDraw:["Зурах","Draw","Рисовать","描く"],
     tabAdmin:["Админ","Admin","Админ","管理"],
     navLbl:["Цэс","Menu","Меню","メニュー"],
-    tNeedNick:["Хоч / нэрээ бичнэ үү.","Please enter a nickname.","Введите ник.","ニックネームを入力してください。"],
-    tNeedWord:["Хятад үсэг болон утгыг бөглөнө үү.","Please fill in the characters and the meaning.","Заполните иероглифы и значение.","漢字と意味を入力してください。"],
-    tAdded:["Үг нэмэгдлээ","Word added","Слово добавлено","単語を追加しました"],
-    tAddedN:["{n} үг нэмэгдлээ","{n} words added","Добавлено слов: {n}","{n}語を追加しました"],
-    tBadLines:["Мөр {l}: хэлбэр буруу байна.","Line {l}: wrong format.","Строка {l}: неверный формат.","{l}行目：形式が正しくありません。"],
-    tDeleted:["Устгагдлаа","Deleted","Удалено","削除しました"],
-    tCopied:["Миний үгэнд нэмэгдлээ","Added to my words","Добавлено в мои слова","自分の単語に追加しました"],
-    tCopiedN:["{n} үг хуулагдлаа","{n} words copied","Скопировано слов: {n}","{n}語をコピーしました"],
-    tSaved:["Хадгалагдлаа","Saved","Сохранено","保存しました"],
-    tRestart:["Төлөвлөгөө өнөөдрөөс эхэллээ","Plan restarted from today","План начат с сегодняшнего дня","今日から計画を始めました"],
+    tNeedNick:["Эхлээд нэрээ бичээрэй.","Please enter a nickname.","Введите ник.","ニックネームを入力してください。"],
+    tNeedWord:["Хятад үсэг болон утгыг хоёуланг нь бөглөөрэй.","Please fill in the characters and the meaning.","Заполните иероглифы и значение.","漢字と意味を入力してください。"],
+    hzName:["Ханзи багш","Teacher Hanzi","Учитель Ханзи","ハンジ先生"],
+    hzMorn:["Өглөөний мэнд, {n}! Өнөөдрийг хамт эхэлье.","Good morning, {n}! Let's start today together.","Доброе утро, {n}! Начнём день вместе.","おはよう、{n}さん！今日も一緒に始めましょう。"],
+    hzDay:["Сайн байна уу, {n}! Нэг үг сурсан ч дэвшил шүү.","Hi {n}! Even one new word counts.","Привет, {n}! Даже одно слово — уже шаг.","こんにちは、{n}さん！1語でも前進です。"],
+    hzEve:["Оройн мэнд, {n}! Өнөөдрийн ажлаа дуусгая.","Good evening, {n}! Let's wrap up today.","Добрый вечер, {n}! Давай закончим день.","こんばんは、{n}さん！今日の分を仕上げましょう。"],
+    hzNight:["Оройтлоо шүү, {n}! Богино нэг давталт хийгээд амар.","Still up, {n}? One short review, then rest.","Ещё не спишь, {n}? Одно короткое повторение — и отдыхай.","{n}さん、夜更かし？短く1回だけ復習して休みましょう。"],
+    hzDue:["{n} үг давтах цаг боллоо. Мартахаас өмнө давтъя!","{n} words are due for review. Let's catch them before they fade!","{n} слов пора повторить. Успеем, пока не забылись!","復習の時間です：{n}語。忘れる前にやりましょう！"],
+    hzStreak:["{n} өдөр дараалан сурлаа. Гайхалтай, зогсоохгүй шүү!","{n} days in a row. Wonderful — keep it going!","{n} дней подряд. Отлично, не останавливайся!","{n}日連続！この調子で続けましょう。"],
+    hzExam:["Шалгалтад {d} хоног үлдлээ. Өдөр бүр бага багаар.","{d} days to the exam. A little every day.","До экзамена {d} дн. Понемногу каждый день.","試験まであと{d}日。毎日少しずつ。"],
+    hzTip0:["Үсгийн зураасны дарааллыг «Зурах» хэсэгт бич — гар чинь санана.","Practice stroke order in Draw — your hand remembers.","Тренируй порядок черт в «Рисовании» — рука запомнит.","「書く」で筆順を練習 — 手が覚えます。"],
+    hzTip1:["Үгийг өгүүлбэрт хийж уншвал хоёр дахин сайн тогтоно.","A word inside a sentence sticks twice as well.","Слово в предложении запоминается вдвое лучше.","文の中で覚えると定着が倍になります。"],
+    hzTip2:["Бичлэг үзэж байхдаа мэдэхгүй үг дээр дараад нэм.","While watching clips, tap an unknown word to add it.","Смотря клипы, нажимай на незнакомые слова и добавляй.","動画を見ながら知らない語をタップして追加しましょう。"],
+    hzTip3:["Тоны өнгө: 1 улаан, 2 ногоон, 3 цэнхэр, 4 ягаан. Өнгөөр нь санаарай.","Tone colours: 1 red, 2 green, 3 blue, 4 purple. Remember them by colour.","Цвета тонов: 1 красный, 2 зелёный, 3 синий, 4 фиолетовый.","声調の色：1赤・2緑・3青・4紫。色で覚えましょう。"],
+    hzAuth:["Сайн уу! Би Ханзи багш. Нэвтэрвэл чиний бүх үгийг хадгалж өгнө.","Hi! I'm Teacher Hanzi. Sign in and I'll keep all your words safe.","Привет! Я учитель Ханзи. Войди — и я сохраню все твои слова.","こんにちは！ハンジ先生です。ログインすれば単語を保存します。"],
+    hzOnb:["Нэрээ хэлээч — тэгээд хамт эхэлье!","Tell me your name — then we start!","Скажи, как тебя зовут — и начнём!","お名前を教えてください。さあ始めましょう！"],
+    obMore:["Нэмэлт тохиргоо (түвшин, шалгалтын огноо)","More options (level, exam date)","Дополнительно (уровень, дата экзамена)","詳細設定（レベル・試験日）"],
+    tAdded:["Үг нэмлээ, сайн байна!","Word added","Слово добавлено","単語を追加しました"],
+    tAddedN:["{n} үг нэмлээ, сайн байна!","{n} words added","Добавлено слов: {n}","{n}語を追加しました"],
+    tBadLines:["{l}-р мөрийн хэлбэр буруу байна. Шалгаад дахин оролдоорой.","Line {l}: wrong format.","Строка {l}: неверный формат.","{l}行目：形式が正しくありません。"],
+    tDeleted:["Устгалаа.","Deleted","Удалено","削除しました"],
+    tCopied:["Миний үгэнд нэмлээ!","Added to my words","Добавлено в мои слова","自分の単語に追加しました"],
+    tCopiedN:["{n} үгийг хууллаа!","{n} words copied","Скопировано слов: {n}","{n}語をコピーしました"],
+    tSaved:["Хадгаллаа!","Saved","Сохранено","保存しました"],
+    tRestart:["Төлөвлөгөө өнөөдрөөс шинээр эхэллээ!","Plan restarted from today","План начат с сегодняшнего дня","今日から計画を始めました"],
     tNoWrite:["Танд бичих эрх алга. Админаас «Contributor» эрх авна уу.","You do not have write access. Ask the admin for Contributor access.","У вас нет права записи. Попросите администратора выдать доступ Contributor.","書き込み権限がありません。管理者にContributor権限を頼んでください。"],
-    netOff:["📴 Интернэт салсан. Өөрчлөлт утсан дээрээ хадгалагдаж, холбогдоход илгээгдэнэ.","📴 You're offline. Changes are kept on this device and will sync when you're back online.","📴 Нет сети. Изменения сохранены на устройстве и отправятся при подключении.","📴 オフラインです。変更は端末に保存され、接続後に同期されます。"],
-    netOn:["✅ Холбогдлоо. Өөрчлөлтийг хадгаллаа.","✅ Back online. Changes synced.","✅ Связь восстановлена. Изменения синхронизированы.","✅ オンラインに戻りました。変更を同期しました。"],
-    lvUp:["🎉 Түвшин ахилаа! Lv {n}","🎉 Level up! Lv {n}","🎉 Новый уровень! Lv {n}","🎉 レベルアップ！ Lv {n}"],
+    netOff:["📴 Интернэт тасарлаа. Санаа зоволтгүй — өөрчлөлт утсанд хадгалагдаж, холбогдмогц илгээгдэнэ.","📴 You're offline. Changes are kept on this device and will sync when you're back online.","📴 Нет сети. Изменения сохранены на устройстве и отправятся при подключении.","📴 オフラインです。変更は端末に保存され、接続後に同期されます。"],
+    netOn:["✅ Холбогдлоо! Бүгдийг хадгаллаа.","✅ Back online. Changes synced.","✅ Связь восстановлена. Изменения синхронизированы.","✅ オンラインに戻りました。変更を同期しました。"],
+    lvUp:["🎉 Түвшин ахилаа! Одоо Lv {n} — маш сайн!","🎉 Level up! Lv {n}","🎉 Новый уровень! Lv {n}","🎉 レベルアップ！ Lv {n}"],
     fxTog:["🎊 Confetti ба дуу","🎊 Confetti & sounds","🎊 Конфетти и звуки","🎊 紙吹雪と効果音"],
     tSaveErr:["Хадгалах үед алдаа гарлаа.","Could not save.","Не удалось сохранить.","保存できませんでした。"],
-    tWelcome:["Тавтай морил, {n}!","Welcome, {n}!","Добро пожаловать, {n}!","ようこそ、{n}さん！"],
-    tNoticeSaved:["Мэдэгдэл хадгалагдлаа","Notice saved","Объявление сохранено","お知らせを保存しました"],
-    tRenamed:["Нэр солигдлоо","Name changed","Имя изменено","名前を変更しました"],
-    tAccDeleted:["Бүртгэл устгагдлаа","Account data deleted","Данные удалены","データを削除しました"],
-    tCollect:["Үгсийг цуглуулж байна…","Collecting words…","Сбор слов…","単語を集めています…"],
-    tCollectErr:["Үг татах үед алдаа гарлаа.","Could not collect words.","Не удалось собрать слова.","単語を取得できませんでした。"],
-    tFileSaved:["Файл хадгалагдлаа","File saved","Файл сохранён","ファイルを保存しました"],
+    tWelcome:["Тавтай морил, {n}! Хамт эхэлье 🎓","Welcome, {n}!","Добро пожаловать, {n}!","ようこそ、{n}さん！"],
+    tNoticeSaved:["Мэдэгдэл хадгалагдлаа.","Notice saved","Объявление сохранено","お知らせを保存しました"],
+    tRenamed:["Нэр солигдлоо.","Name changed","Имя изменено","名前を変更しました"],
+    tAccDeleted:["Бүртгэл устгагдлаа.","Account data deleted","Данные удалены","データを削除しました"],
+    tCollect:["Үгсийг цуглуулж байна, түр хүлээгээрэй…","Collecting words…","Сбор слов…","単語を集めています…"],
+    tCollectErr:["Үг татаж чадсангүй. Дахин оролдоорой.","Could not collect words.","Не удалось собрать слова.","単語を取得できませんでした。"],
+    tFileSaved:["Файл хадгалагдлаа.","File saved","Файл сохранён","ファイルを保存しました"],
     tFileErr:["Файл хадгалж чадсангүй.","Could not save the file.","Не удалось сохранить файл.","ファイルを保存できませんでした。"],
     tNoDl:["Татах боломж энэ харагдацад алга.","Downloads are not available here.","Скачивание здесь недоступно.","ここではダウンロードできません。"],
     authTitle:["Нэвтрэх / Бүртгүүлэх","Sign in / Sign up","Вход / Регистрация","ログイン／新規登録"],
@@ -454,9 +469,9 @@ var DATA=window.DATA;
     signUp:["Бүртгүүлэх","Sign up","Зарегистрироваться","新規登録"],
     signOut:["Гарах","Sign out","Выйти","ログアウト"],
     authNote:["Нууц үгээ мартвал «Нууц үгээ мартсан уу?» дарж имэйлээр сэргээнэ.","If you forget your password, use «Forgot password?» to reset it by email.","Если забыли пароль, нажмите «Забыли пароль?», и мы вышлем ссылку для сброса на email.","パスワードを忘れた場合は「パスワードをお忘れですか？」を押すと、メールで再設定できます。"],
-    tAuthBad:["Зөв имэйл (эсвэл 3-20 тэмдэгттэй нэр) болон 6+ тэмдэгттэй нууц үг оруулна уу.","Enter a valid email (or a 3-20 character name) and a 6+ character password.","Введите корректный email (или имя из 3–20 символов) и пароль от 6 символов.","有効なメールアドレス（または3〜20文字の名前）と6文字以上のパスワードを入力してください。"],
+    tAuthBad:["Зөв имэйл (эсвэл 3-20 тэмдэгттэй нэр) ба 8+ тэмдэгттэй нууц үг оруулаарай.","Enter a valid email (or a 3-20 character name) and a 8+ character password.","Введите корректный email (или имя из 3–20 символов) и пароль от 8 символов.","有効なメールアドレス（または3〜20文字の名前）と8文字以上のパスワードを入力してください。"],
     tAuthErr:["Нэвтэрч чадсангүй: ","Could not sign in: ","Не удалось войти: ","ログインできません："],
-    tConnErr:["Сервертэй холбогдож чадсангүй.","Could not reach the server.","Нет связи с сервером.","サーバーに接続できません。"],
+    tConnErr:["Сервертэй холбогдож чадсангүй. Интернетээ шалгаарай.","Could not reach the server.","Нет связи с сервером.","サーバーに接続できません。"],
     acctTitle:["Бүртгэл","Account","Аккаунт","アカウント"],
     acctLogin:["Нэвтрэх нэр: {n}","Login name: {n}","Логин: {n}","ログイン名：{n}"],
     techInfo:["Админд зориулсан мэдээлэл","Info for the admin","Для администратора","管理者向け情報"],
@@ -465,7 +480,7 @@ var DATA=window.DATA;
     hskNone:["HSK 1–6 жагсаалтад олдсонгүй. Түвшнээ өөрөө сонго.","Not in the HSK 1–6 list. Pick the level yourself.","В списке HSK 1–6 не найдено. Выберите уровень сами.","HSK1〜6のリストにありません。級を自分で選んでください。"],
     dupMine:["Та энэ үгийг өмнө нь нэмсэн байна.","You already added this word.","Вы уже добавляли это слово.","このことばはすでに追加済みです。"],
     othersN:["{n} суралцагч энэ үгийг нэмсэн. Утгыг дарж ав:","{n} learner(s) added this word. Tap a meaning to use it:","Это слово добавили учеников: {n}. Нажмите на значение, чтобы взять его:","{n}人がこの単語を追加済み。意味をタップして使えます："],
-    tDupMine:["Энэ үг өмнө нь нэмэгдсэн байна.","This word is already in your list.","Это слово уже есть в вашем списке.","このことばはすでに登録済みです。"],
+    tDupMine:["Энэ үг чамд аль хэдийн байна.","This word is already in your list.","Это слово уже есть в вашем списке.","このことばはすでに登録済みです。"],
     tDupN:["{n} давхардсан алгассан","{n} duplicate(s) skipped","дубликатов пропущено: {n}","重複{n}件はスキップ"],
     exBtn:["📝 HSK шалгалтын горим (түвшнээр)","📝 HSK test mode (by level)","📝 Режим теста HSK (по уровню)","📝 HSKテストモード（級別）"],
     exKind:["Төрөл","Type","Тип","種類"],
@@ -548,7 +563,7 @@ var DATA=window.DATA;
   var chain=Promise.resolve();
   function q(fn){chain=chain.then(fn).catch(function(e){if(uid){lset('hsk-unsynced-'+uid,'1');saveSnap()}toast(T(navigator.onLine===false?'netOff':'tSaveErr'))})}
   var toastT;
-  function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('on')},2600)}
+  function toast(m,mood){if(window.Hanzi)Hanzi.say(m,mood)}
 
   function hasProfile(){return !!S.profile.nick&&!needAuth}
   function lvOf(){return S.profile.level||5}
@@ -665,9 +680,9 @@ var DATA=window.DATA;
   $('obMin').addEventListener('change',function(){obMinTouched=true});
   $('obSave').addEventListener('click',function(){
     var nick=$('obNick').value.trim();
-    if(!nick){toast(T('tNeedNick'));$('obNick').focus();$('obNick').style.outline='2px solid var(--bad)';return}
+    if(!nick){toast(T('tNeedNick'),'oops');$('obNick').focus();$('obNick').style.outline='2px solid var(--bad)';return}
     S.profile={nick:nick,level:obLevel,exam:$('obExam').value||'',dailyMin:+$('obMin').value,start:TODAY,created:TODAY,last:TODAY,wc:0,lc:{}};
-    createProfile();renderAll();renderTasks();showTab('today');toast(T('tWelcome',{n:nick}));
+    createProfile();renderAll();renderTasks();showTab('today');toast(T('tWelcome',{n:nick}),'cheer');
   });
 
   /* ---------- today ---------- */
@@ -716,7 +731,39 @@ var DATA=window.DATA;
     $('stTotal').textContent=ws.length;$('stStreak').textContent=streakOf(S.act);
     $('lvProgTx').textContent=mine+' / '+tgt;$('lvProg').style.width=Math.min(100,Math.round(mine/tgt*100))+'%';
     var nt=CFG.notice&&CFG.notice.trim();$('notice').hidden=!nt;$('noticeTx').textContent=nt||'';
+    if(nt&&window.Hanzi&&!$('noticeHz').firstChild)Hanzi.mount($('noticeHz'),'hi');
+    hzRender();
   }
+  /* Ханзи багш: Өнөөдөр / нэвтрэх / бүртгэл хуудсан дээрх мэндчилгээ */
+  var hzTapN=0;
+  function hzLine(kind){
+    if(kind==='auth')return {t:T('hzAuth'),m:'hi'};
+    if(kind==='onb')return {t:T('hzOnb'),m:'hi'};
+    var p=S.profile||{},nick=p.nick||'',h=new Date().getHours(),g=h<5?'hzNight':h<11?'hzMorn':h<17?'hzDay':h<22?'hzEve':'hzNight';
+    var due=0;try{due=wordsArr().filter(function(w){return w.due&&w.due<=TODAY}).length+srsDue().length}catch(e){}
+    var st=streakNow(),left=p.exam?Math.round((parseIso(p.exam)-today)/864e5):-1,line='',m='hi';
+    if(hzTapN>0){line=T('hzTip'+(hzTapN%4));m=hzTapN%2?'think':'cheer'}
+    else if(due){line=T('hzDue',{n:due});m='think'}
+    else if(st>=2){line=T('hzStreak',{n:st});m='cheer'}
+    else if(left>0&&left<=60){line=T('hzExam',{d:left})}
+    return {t:hzTapN>0?line:T(g,{n:nick})+(line?' '+line:''),m:m};
+  }
+  function hzRender(){
+    if(!window.Hanzi)return;
+    $('heroCard').hidden=!hasProfile();
+    document.querySelectorAll('[data-hz]').forEach(function(el){
+      var d=hzLine(el.dataset.hz);
+      if(!el.firstChild){el.innerHTML='<button type="button" class="hzav2"></button><div class="hzsay"><b class="hzname2"></b><p></p></div>';Hanzi.mount(el.firstChild,d.m)}
+      el.firstChild.setAttribute('aria-label',T('hzName'));
+      el.querySelector('.hzname2').textContent=T('hzName');el.querySelector('p').textContent=d.t;Hanzi.mood(el.firstChild,d.m);
+    });
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('.hzav2');if(!b)return;
+    var host=b.parentNode;
+    if(host.dataset.hz==='today'){hzTapN++;var d=hzLine('today');host.querySelector('p').textContent=d.t;Hanzi.mood(b,d.m,true)}
+    else Hanzi.mood(b,'cheer',true);
+  });
   function checksToday(){return S.chk[TODAY]||{}}
   function renderTasks(){
     var Tk=tasksFor(),d=checksToday();
@@ -764,13 +811,13 @@ var DATA=window.DATA;
   $('addForm').addEventListener('submit',function(ev){
     ev.preventDefault();
     var h=$('fH').value.trim(),m=$('fM').value.trim();
-    if(!h||!m){toast(T('tNeedWord'));return}
-    if(wordsArr().some(function(w){return w.h===h})){toast(T('tDupMine'));return}
+    if(!h||!m){toast(T('tNeedWord'),'oops');return}
+    if(wordsArr().some(function(w){return w.h===h})){toast(T('tDupMine'),'oops');return}
     var d=$('fD').value||TODAY;
     addWord(h,$('fP').value.trim(),m,$('fE').value.trim(),d,+$('fL').value);
     syncSummary(d);
     $('fH').value='';$('fP').value='';$('fM').value='';$('fE').value='';$('fH').focus();$('fInfo').innerHTML='';autoP='';fhSeq++;
-    toast(T('tAdded'));renderAll();
+    toast(T('tAdded'),'cheer');renderAll();
   });
   $('bulkBtn').addEventListener('click',function(){
     var lines=$('bulk').value.split('\n'),n=0,dup=0,bad=[],d=$('fD').value||TODAY,l=+$('fL').value;
@@ -788,7 +835,7 @@ var DATA=window.DATA;
     });
     if(n)syncSummary(d);
     $('bulk').value=lines.filter(function(x,i){return bad.indexOf(i+1)>-1}).join('\n');
-    if(bad.length)toast(T('tBadLines',{l:bad.join(', ')}));
+    if(bad.length)toast(T('tBadLines',{l:bad.join(', ')}),'oops');
     else if(n||dup)toast((n?T('tAddedN',{n:n}):'')+(n&&dup?' · ':'')+(dup?T('tDupN',{n:dup}):''));
     renderAll();
   });
@@ -1014,7 +1061,7 @@ var DATA=window.DATA;
     el.innerHTML=h;
   }
   document.addEventListener('click',function(e){var b=e.target.closest('[data-twclaim]');if(!b)return;var a=b.dataset.twclaim.split('|');
-    if(S.profile.tw===a[0])return;S.profile.tw=a[0];pPatch({tw:a[0]});addXp(+a[1]);toast(T('tourGot',{x:a[1]}));renderTour()});
+    if(S.profile.tw===a[0])return;S.profile.tw=a[0];pPatch({tw:a[0]});addXp(+a[1]);toast(T('tourGot',{x:a[1]}),'cheer');renderTour()});
   function renderGroup(){
     if(G.view){renderDetail();return}
     renderTour();
@@ -1067,8 +1114,8 @@ var DATA=window.DATA;
     if(e.target.closest('#gBack')){G.view=null;renderGroup();return}
     var c=e.target.closest('[data-vl]');if(c){v.lv=+c.dataset.vl;renderDetail();return}
     var cp=e.target.closest('[data-cp]');
-    if(cp&&hasProfile()){var w=(v.data[v.lv]||{})[cp.dataset.cp];if(w&&copyWord(w,v.lv)){syncSummary(TODAY);toast(T('tCopied'));renderAll();renderDetail()}return}
-    if(e.target.closest('#gCopyAll')&&hasProfile()){var n=0,ws=v.data[v.lv]||{};Object.keys(ws).forEach(function(k){if(copyWord(ws[k],v.lv))n++});if(n)syncSummary(TODAY);toast(T('tCopiedN',{n:n}));renderAll();renderDetail()}
+    if(cp&&hasProfile()){var w=(v.data[v.lv]||{})[cp.dataset.cp];if(w&&copyWord(w,v.lv)){syncSummary(TODAY);toast(T('tCopied'),'cheer');renderAll();renderDetail()}return}
+    if(e.target.closest('#gCopyAll')&&hasProfile()){var n=0,ws=v.data[v.lv]||{};Object.keys(ws).forEach(function(k){if(copyWord(ws[k],v.lv))n++});if(n)syncSummary(TODAY);toast(T('tCopiedN',{n:n}),'cheer');renderAll();renderDetail()}
   });
 
   /* ---------- me / plan ---------- */
@@ -1099,11 +1146,11 @@ var DATA=window.DATA;
   $('meLv').addEventListener('click',function(e){var b=e.target.closest('[data-l]');if(!b)return;meLevel=+b.dataset.l;lvChips('meLv',meLevel,false);$('meMin').value=String(DEFMIN[meLevel])});
   document.querySelectorAll('#goals .chip').forEach(function(c){c.addEventListener('click',function(){pPatch({goal:c.dataset.g});renderMe()})});
   $('meSave').addEventListener('click',function(){
-    var nick=$('meNick').value.trim();if(!nick){toast(T('tNeedNick'));return}
+    var nick=$('meNick').value.trim();if(!nick){toast(T('tNeedNick'),'oops');return}
     pPatch({nick:nick,level:meLevel,exam:$('meExam').value||'',dailyMin:+$('meMin').value,s4:$('meS').value});
-    renderAll();renderTasks();toast(T('tSaved'));
+    renderAll();renderTasks();toast(T('tSaved'),'cheer');
   });
-  $('meRestart').addEventListener('click',function(){pPatch({start:TODAY});renderAll();toast(T('tRestart'))});
+  $('meRestart').addEventListener('click',function(){pPatch({start:TODAY});renderAll();toast(T('tRestart'),'cheer')});
 
   /* ---------- admin ---------- */
   var sureDel=null;
@@ -1128,12 +1175,12 @@ var DATA=window.DATA;
     }).join(''):'<div class="empty">'+T('admEmpty')+'</div>';
   }
   function saveNotice(){var n=CFG.notice;if(sb)q(async function(){var x=await sb.from('site').upsert({id:'cfg',notice:n});if(x.error)throw x.error})}
-  $('aNoticeSave').addEventListener('click',function(){CFG.notice=$('aNotice').value.trim();saveNotice();renderToday();toast(T('tNoticeSaved'))});
+  $('aNoticeSave').addEventListener('click',function(){CFG.notice=$('aNotice').value.trim();saveNotice();renderToday();toast(T('tNoticeSaved'),'cheer')});
   $('aList').addEventListener('click',function(e){
     var b=e.target.closest('button');if(!b||!sb)return;
     if(b.dataset.rn){var id=b.dataset.rn,inp=document.querySelector('[data-nick="'+id+'"]'),nm=inp.value.trim();if(!nm)return;
       if(P[id])P[id].nick=nm;var d=Object.assign({},P[id]);
-      q(async function(){var x=await sb.from('profiles').update({nick:nm,data:d}).eq('id',id);if(x.error)throw x.error});toast(T('tRenamed'));renderAdmin()}
+      q(async function(){var x=await sb.from('profiles').update({nick:nm,data:d}).eq('id',id);if(x.error)throw x.error});toast(T('tRenamed'),'cheer');renderAdmin()}
     else if(b.dataset.hd){var id2=b.dataset.hd,h=!CFG.hidden[id2];if(h)CFG.hidden[id2]=1;else delete CFG.hidden[id2];
       q(async function(){var x=await sb.from('profiles').update({hidden:h}).eq('id',id2);if(x.error)throw x.error});renderAdmin();renderGroup()}
     else if(b.dataset.vw){showTab('group');openMember(b.dataset.vw)}
@@ -1148,7 +1195,7 @@ var DATA=window.DATA;
   function csv(rows){return '﻿'+rows.map(function(r){return r.map(function(c){c=String(c==null?'':c);return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c}).join(',')}).join('\n')}
   function save(name,data){
     try{var bl=new Blob([data],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download=name;document.body.appendChild(a);a.click();
-      setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},800);toast(T('tFileSaved'))}catch(e){toast(T('tFileErr'))}
+      setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},800);toast(T('tFileSaved'),'cheer')}catch(e){toast(T('tFileErr'),'oops')}
   }
   $('aExpM').addEventListener('click',function(){
     var rows=[[T('nameLbl'),T('level'),T('examDate'),T('stTotal'),T('lastActive'),T('joined'),T('streakCol')]];
@@ -1156,13 +1203,13 @@ var DATA=window.DATA;
     save('hsk-members-'+TODAY+'.csv',csv(rows));
   });
   $('aExpW').addEventListener('click',async function(){
-    var btn=this;btn.disabled=true;toast(T('tCollect'));
+    var btn=this;btn.disabled=true;toast(T('tCollect'),'think');
     var rows=[[T('nameLbl'),T('level'),T('fHan'),T('fPin'),T('fMean'),T('csvEx'),T('fDate')]];
     try{
       var ws=await fetchAll(function(){return sb.from('words').select('*').order('id')});
       ws.forEach(function(w){rows.push([(P[w.uid]||{}).nick,w.l,w.h,w.p,w.m,w.e,w.d])});
       save('hsk-words-'+TODAY+'.csv',csv(rows));
-    }catch(e){toast(T('tCollectErr'))}
+    }catch(e){toast(T('tCollectErr'),'oops')}
     btn.disabled=false;
   });
 
@@ -1241,8 +1288,8 @@ var DATA=window.DATA;
     if(b){editHsk(b.dataset.hedit);return}
     b=e.target.closest('[data-hadd]');if(!b||!hasProfile())return;
     var h=b.dataset.hadd,m=hM(h),hit=hskLookup(h);if(!m||!hit)return;
-    if(wordsArr().some(function(w){return w.h===h})){toast(T('tDupMine'));return}
-    hJust=h;addWord(h,hP(h,hit.p),m,'',TODAY,hit.l);syncSummary(TODAY);toast(T('tAdded'));renderAll();
+    if(wordsArr().some(function(w){return w.h===h})){toast(T('tDupMine'),'oops');return}
+    hJust=h;addWord(h,hP(h,hit.p),m,'',TODAY,hit.l);syncSummary(TODAY);toast(T('tAdded'),'cheer');renderAll();
   });
   /* admin-only: fix pinyin / Mongolian meaning, saved to Supabase table hsk_edits */
   function editHsk(h){
@@ -1254,7 +1301,7 @@ var DATA=window.DATA;
     q(async function(){
       var x=await sb.from('hsk_edits').upsert({h:h,p:p,m:m,updated_at:new Date().toISOString()});
       if(x.error)throw x.error;
-      HSKED[h]={p:p,m:m};renderHsk();toast('✓');
+      HSKED[h]={p:p,m:m};renderHsk();toast('✓','cheer');
     });
   }
   var hT=null;
@@ -1301,7 +1348,7 @@ var DATA=window.DATA;
     q(async function(){
       var x=await sb.from('gram_edits').upsert(Object.assign({k:k,updated_at:new Date().toISOString()},rec));
       if(x.error)throw x.error;
-      GRAMED[k]=Object.assign({},GRAMED[k],rec);renderGram();toast('✓');
+      GRAMED[k]=Object.assign({},GRAMED[k],rec);renderGram();toast('✓','cheer');
     });
   }
   function askGram(g,isNew){
@@ -1545,12 +1592,12 @@ var DATA=window.DATA;
     if((b=t.closest('.mfw'))){feedWordCard(b.dataset.h,sl);return}
     if(t.closest('[data-mfx]')){$('mfCard').hidden=true;var a=document.querySelector('.mslide video:not([paused])');document.querySelectorAll('#mFeed .mslide').forEach(function(s){var r=s.getBoundingClientRect(),f=$('mFeed').getBoundingClientRect();if(r.top>=f.top-10&&r.top<f.top+f.height/2)s.querySelector('video').play().catch(function(){})});return}
     if((b=t.closest('[data-mfa]'))){
-      if(mediaAdd(b.dataset.mfa)){syncSummary(TODAY);toast(T('tAdded'));var cid=$('mfCard').dataset.it,fy=$('mFeed').scrollTop;renderAll();if(cid){var x2=MED.feed.filter(function(z){return z.id===cid})[0];x2&&feedWordsSheet(x2)}else $('mfCard').hidden=true}
+      if(mediaAdd(b.dataset.mfa)){syncSummary(TODAY);toast(T('tAdded'),'cheer');var cid=$('mfCard').dataset.it,fy=$('mFeed').scrollTop;renderAll();if(cid){var x2=MED.feed.filter(function(z){return z.id===cid})[0];x2&&feedWordsSheet(x2)}else $('mfCard').hidden=true}
       return}
     if(t.closest('[data-mfall]')){
       var it2=MED.feed.filter(function(z){return z.id===$('mfCard').dataset.it})[0],n=0;
       it2&&mediaWords(it2).forEach(function(w){if(mediaAdd(w.h))n++});
-      if(n){syncSummary(TODAY);toast(T('tAddedN',{n:n}));renderAll();feedWordsSheet(it2)}return}
+      if(n){syncSummary(TODAY);toast(T('tAddedN',{n:n}),'cheer');renderAll();feedWordsSheet(it2)}return}
     if(sl&&t.closest('.mfv')){var v=sl.querySelector('video');v.paused?v.play().catch(function(){}):v.pause()}
   });
   function parseLines(txt){
@@ -1569,13 +1616,13 @@ var DATA=window.DATA;
   $('mSave').addEventListener('click',async function(){
     if(!sb||!isOwner)return;
     var title=$('mTitle').value.trim(),lines=parseLines($('mText').value),src=$('mSrc').value.trim();
-    if(!title||!lines.length){toast(T('mNeed'));return}
+    if(!title||!lines.length){toast(T('mNeed'),'oops');return}
     var type=ytId(src)?'youtube':(/^media\/[\w. -]+\.(mp4|mp3|m4a|wav|ogg|webm)$/i.test(src)?'file':'none');
     var row={id:'m_'+Date.now().toString(36),kind:$('mKind').value,level:+$('mLvl').value||null,title:title,title_zh:$('mTitleZh').value.trim(),src_type:type,src:type==='youtube'?ytId(src):(type==='file'?src:''),lines:lines};
     var x=await sb.from('media').insert(row);
     if(x.error){toast(String(x.error.message||x.error));return}
     ['mTitle','mTitleZh','mSrc','mText'].forEach(function(i){$(i).value=''});
-    toast(T('mSaved'));MED.items=null;renderMediaAdmin();
+    toast(T('mSaved'),'cheer');MED.items=null;renderMediaAdmin();
   });
   document.addEventListener('click',async function(e){
     var t=e.target;if(!t.closest)return;
@@ -1588,15 +1635,15 @@ var DATA=window.DATA;
     if((b=t.closest('.mw'))){mediaWordCard(b.dataset.h);return}
     if((b=t.closest('[data-msp]'))){speak(b.dataset.msp);return}
     if((b=t.closest('[data-ma]'))){
-      if(mediaAdd(b.dataset.ma)){syncSummary(TODAY);toast(T('tAdded'));var y=window.scrollY;renderAll();renderMedia();setTimeout(function(){window.scrollTo(0,y)},60)}
+      if(mediaAdd(b.dataset.ma)){syncSummary(TODAY);toast(T('tAdded'),'cheer');var y=window.scrollY;renderAll();renderMedia();setTimeout(function(){window.scrollTo(0,y)},60)}
       return}
     if(t.closest('#mAddAll')){
       var it=MED.items.filter(function(x){return x.id===MED.cur})[0],n=0;
       mediaWords(it).forEach(function(w){if(mediaAdd(w.h))n++});
-      if(n){syncSummary(TODAY);toast(T('tAddedN',{n:n}));renderAll();renderMedia()}return}
+      if(n){syncSummary(TODAY);toast(T('tAddedN',{n:n}),'cheer');renderAll();renderMedia()}return}
     if(t.closest('#mQuizBtn')||t.closest('#mQuizBtn2')){mediaQuiz(MED.items.filter(function(x){return x.id===MED.cur})[0]);return}
     if((b=t.closest('[data-mo]'))&&MED.quiz){
-      var Q=MED.quiz,x2=Q.q[Q.i];if(b.dataset.mo===x2.w.m)Q.ok++;else toast(x2.w.h+' = '+x2.w.m);
+      var Q=MED.quiz,x2=Q.q[Q.i];if(b.dataset.mo===x2.w.m)Q.ok++;else toast(x2.w.h+' = '+x2.w.m,'think');
       Q.i++;renderMediaQuiz()}
   });
 
@@ -1662,8 +1709,8 @@ var DATA=window.DATA;
       lset('hsk-unsynced-'+uid,'0');return true;
     }catch(e){return false}
   }
-  window.addEventListener('offline',function(){toast(T('netOff'))});
-  window.addEventListener('online',function(){pushLocal().then(function(ok){if(ok)toast(T('netOn'))})});
+  window.addEventListener('offline',function(){toast(T('netOff'),'sleep')});
+  window.addEventListener('online',function(){pushLocal().then(function(ok){if(ok)toast(T('netOn'),'cheer')})});
   async function startSession(user,bg){
     uid=user.id;loginName=(user.email||'').split('@')[0];showEmail(user.email);mode='db';needAuth=false;
     var res=await Promise.all([
@@ -1693,9 +1740,9 @@ var DATA=window.DATA;
   function emailOf(l){return l.toLowerCase()+'@hskapp.mn'}
   function showEmail(e){var el=$('acCur');if(!el)return;var fake=!e||/@hskapp\.mn$/i.test(e);el.textContent=fake?T('accNone',{n:(e||'').split('@')[0]}):T('accCur',{e:e});el.style.color=fake?'var(--bad)':''}
   function speak(t,cb){
-    if(!window.speechSynthesis){toast(T('speakErr'));return}
+    if(!window.speechSynthesis){toast(T('speakErr'),'oops');return}
     var vs=speechSynthesis.getVoices(),v=vs.filter(function(x){return /^zh/i.test(x.lang)})[0];
-    if(vs.length&&!v){toast(T('speakErr'));return}
+    if(vs.length&&!v){toast(T('speakErr'),'oops');return}
     var u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=spRate();if(v)u.voice=v;
     if(cb){u.onend=cb;u.onerror=cb}
     speechSynthesis.cancel();speechSynthesis.speak(u);
@@ -1735,7 +1782,7 @@ var DATA=window.DATA;
   }
   function missFlush(){if(missDirty){missDirty=false;pPatch({miss:S.profile.miss||{},fav:S.profile.fav||{},srs:S.profile.srs||{}})}}
   function favToggle(h){
-    if(!hasProfile()){toast(T('lsNeedProfile'));return}
+    if(!hasProfile()){toast(T('lsNeedProfile'),'think');return}
     var f=favMap();if(f[h])delete f[h];else{var hit=hskLookup(h);f[h]={p:hP(h,hit&&hit.p),m:hM(h),t:TODAY}}
     pPatch({fav:f});renderHsk();renderLs();
   }
@@ -1816,12 +1863,12 @@ var DATA=window.DATA;
   function addXp(n){
     var p=S.profile,y=iso(new Date(today.getTime()-864e5)),st=p.sd===TODAY?(p.streak||1):(p.sd===y?(p.streak||0)+1:1);
     var oldLv=Math.floor(Math.sqrt((p.xp||0)/20))+1;
-    if(p.sd!==TODAY&&st>0&&st%7===0){n+=50;toast(T('streakBonus',{n:st}));fxWin('big')}
+    if(p.sd!==TODAY&&st>0&&st%7===0){n+=50;toast(T('streakBonus',{n:st}),'cheer');fxWin('big')}
     var xd=Object.assign({},p.xpd||{}),old=iso(new Date(today.getTime()-21*864e5));
     Object.keys(xd).forEach(function(k){if(k<old)delete xd[k]});xd[TODAY]=(xd[TODAY]||0)+n;
     var patch={xp:(p.xp||0)+n,xpd:xd,streak:st,sd:TODAY};Object.assign(p,patch);pPatch(patch);renderPlay();
     var newLv=Math.floor(Math.sqrt(patch.xp/20))+1;
-    if(newLv>oldLv){fxWin('big');toast(T('lvUp',{n:newLv}))}
+    if(newLv>oldLv){fxWin('big');toast(T('lvUp',{n:newLv}),'cheer')}
   }
   function renderPlay(){
     if(!$('plLvl'))return;
@@ -1950,7 +1997,7 @@ var DATA=window.DATA;
     else{missAdd(g.q);srsGrade(g.q.h,0);g.lock=1;$('plBuilt').textContent=(heard||'—')+'  →  '+g.q.h;micNext(g,1800)}
   }
   function micStart(){
-    if(!SRC){toast(T('micErr'));return}
+    if(!SRC){toast(T('micErr'),'oops');return}
     var g=GM,r=new SRC(),got=false;
     r.lang='zh-CN';r.interimResults=false;r.maxAlternatives=5;r.continuous=false;
     g.rec=r;g.lock=1;$('plBuilt').style.color='';$('plBuilt').textContent=T('micListen');
@@ -1961,10 +2008,10 @@ var DATA=window.DATA;
     };
     r.onerror=function(ev){
       if(GM!==g||ev.error==='no-speech'||ev.error==='aborted')return;
-      got=true;g.lock=0;g.rec=null;toast(T('micErr'));$('plBuilt').textContent=T('micTap');
+      got=true;g.lock=0;g.rec=null;toast(T('micErr'),'oops');$('plBuilt').textContent=T('micTap');
     };
     r.onend=function(){if(GM!==g||got)return;g.lock=0;g.rec=null;$('plBuilt').textContent=T('micRetry')};
-    try{r.start()}catch(x){g.lock=0;g.rec=null;toast(T('micErr'))}
+    try{r.start()}catch(x){g.lock=0;g.rec=null;toast(T('micErr'),'oops')}
   }
   document.addEventListener('click',function(e){
     var b=e.target.closest('[data-goplay]');if(b){showTab('play');return}
@@ -2327,7 +2374,7 @@ var DATA=window.DATA;
   }
   function exStart(fixed){
     var mock=exSel.mode==='mock'&&!fixed,qs=mock?mockBuild(exSel.lv,exSel.n):exBuild(exSel.lv,fixed,exSel.n);
-    if(qs.length<(mock?6:2)){toast(T('tWords'));return}
+    if(qs.length<(mock?6:2)){toast(T('tWords'),'oops');return}
     EX={lv:exSel.lv,qs:qs,i:0,t0:Date.now(),running:true,lock:0,mock:mock,limit:mock?qs.length*45:0};
     exShow('exRun');clearInterval(exTimer);
     function tick(){
@@ -2382,7 +2429,7 @@ var DATA=window.DATA;
   function exAdd(list){
     var own={},n=0;wordsArr().forEach(function(w){own[w.h]=1});
     list.forEach(function(w){if(own[w.h]||!w.h)return;own[w.h]=1;addWord(w.h,w.p||'',w.m,'',TODAY,EX.lv);n++});
-    if(n){syncSummary(TODAY);renderAll();toast(T('tAddedN',{n:n}))}
+    if(n){syncSummary(TODAY);renderAll();toast(T('tAddedN',{n:n}),'cheer')}
   }
   document.addEventListener('click',function(e){
     if(e.target.closest('#plBack'))exReset();
@@ -2413,7 +2460,7 @@ var DATA=window.DATA;
   function loadHW(cb){
     if(window.HanziWriter){cb();return}
     var sc=document.createElement('script');sc.src='js/vendor/hanzi-writer.min.js';
-    sc.onload=cb;sc.onerror=function(){toast(T('wrErr'))};document.head.appendChild(sc);
+    sc.onload=cb;sc.onerror=function(){toast(T('wrErr'),'oops')};document.head.appendChild(sc);
   }
   function cssv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||'#888'}
   function openWriter(t){
@@ -2479,15 +2526,15 @@ var DATA=window.DATA;
   async function finishTask(t,score){
     try{
       var x=await sb.from('task_done').insert({task_id:t.id,score:score});
-      if(x.error){toast(T('tAuthErr')+x.error.message);return}
-      CL.done.push({task_id:t.id,uid:uid,score:score});addXp(t.xp);toast(T('tDone',{x:t.xp}));renderCls();
-    }catch(e){toast(T('tConnErr'))}
+      if(x.error){toast(T('tAuthErr')+x.error.message,'oops');return}
+      CL.done.push({task_id:t.id,uid:uid,score:score});addXp(t.xp);toast(T('tDone',{x:t.xp}),'cheer');renderCls();
+    }catch(e){toast(T('tConnErr'),'oops')}
   }
-  function taskResult(t,ok,n){if(ok/n>=.8)finishTask(t,ok);else toast(T('tFail'))}
+  function taskResult(t,ok,n){if(ok/n>=.8)finishTask(t,ok);else toast(T('tFail'),'oops')}
   function doTask(t){
     if(t.kind!=='quiz'){finishTask(t,null);return}
     var src=String(t.words||'').split(/[\s,，、]+/).filter(function(h){return h&&hM(h)}).map(function(h){var l=hskLookup(h)||{};return {h:h,p:hP(h,l.p),m:hM(h)}});
-    if(src.length<3){toast(T('tWords'));return}
+    if(src.length<3){toast(T('tWords'),'oops');return}
     GM={mode:'mean',src:shuf(src),i:0,ok:0,all:gPool().all,task:t};
     showTab('play');$('plMenu').hidden=true;$('plGame').hidden=false;nextQ();
   }
@@ -2930,36 +2977,36 @@ var DATA=window.DATA;
   var EMRE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/,BASE=location.origin+location.pathname;
   async function doAuth(up){
     var u=$('auUser').value.trim(),p=$('auPass').value,isMail=u.indexOf('@')>-1;
-    if(up&&!EMRE.test(u)){toast(T('emailBad'));return}
-    if(isMail?!EMRE.test(u):!/^[A-Za-z0-9_]{3,20}$/.test(u)){toast(T('tAuthBad'));return}
-    if(p.length<8){toast(T('tAuthBad'));return}
+    if(up&&!EMRE.test(u)){toast(T('emailBad'),'oops');return}
+    if(isMail?!EMRE.test(u):!/^[A-Za-z0-9_]{3,20}$/.test(u)){toast(T('tAuthBad'),'oops');return}
+    if(p.length<8){toast(T('tAuthBad'),'oops');return}
     if(!sb)return;
     try{
       var v={email:isMail?u.toLowerCase():emailOf(u),password:p};
       var r=up?await sb.auth.signUp(Object.assign({options:{emailRedirectTo:BASE}},v)):await sb.auth.signInWithPassword(v);
-      if(r.error){toast(T('tAuthErr')+r.error.message);return}
-      if(!r.data||!r.data.session){toast(T('confirmMail'));return}
+      if(r.error){toast(T('tAuthErr')+r.error.message,'oops');return}
+      if(!r.data||!r.data.session){toast(T('confirmMail'),'think');return}
       await startSession(r.data.session.user);
-    }catch(e){toast(T('tConnErr'))}
+    }catch(e){toast(T('tConnErr'),'oops')}
   }
   $('auIn').addEventListener('click',function(){doAuth(false)});
   $('auUp').addEventListener('click',function(){doAuth(true)});
   $('auForgot').addEventListener('click',async function(){
     var u=$('auUser').value.trim().toLowerCase();
-    if(!EMRE.test(u)){toast(T('emailBad'));return}
+    if(!EMRE.test(u)){toast(T('emailBad'),'oops');return}
     if(!sb)return;
-    try{var r=await sb.auth.resetPasswordForEmail(u,{redirectTo:BASE});toast(r.error?T('tAuthErr')+r.error.message:T('forgotSent'))}catch(e){toast(T('tConnErr'))}
+    try{var r=await sb.auth.resetPasswordForEmail(u,{redirectTo:BASE});toast(r.error?T('tAuthErr')+r.error.message:T('forgotSent'))}catch(e){toast(T('tConnErr'),'oops')}
   });
   async function setPass(inp,done){
-    var p=$(inp).value;if(p.length<8){toast(T('tAuthBad'));return}
-    try{var r=await sb.auth.updateUser({password:p});if(r.error){toast(T('tAuthErr')+r.error.message);return}$(inp).value='';toast(T('resetDone'));if(done)done()}catch(e){toast(T('tConnErr'))}
+    var p=$(inp).value;if(p.length<8){toast(T('tAuthBad'),'oops');return}
+    try{var r=await sb.auth.updateUser({password:p});if(r.error){toast(T('tAuthErr')+r.error.message,'oops');return}$(inp).value='';toast(T('resetDone'),'cheer');if(done)done()}catch(e){toast(T('tConnErr'),'oops')}
   }
   $('rcSave').addEventListener('click',function(){setPass('rcPass',function(){$('recov').hidden=true})});
   $('acPassBtn').addEventListener('click',function(){setPass('acPass')});
   $('acMailBtn').addEventListener('click',async function(){
     var m=$('acMail').value.trim().toLowerCase();
-    if(!EMRE.test(m)){toast(T('emailBad'));return}
-    try{var r=await sb.auth.updateUser({email:m},{emailRedirectTo:BASE});toast(r.error?T('tAuthErr')+r.error.message:T('accSent'))}catch(e){toast(T('tConnErr'))}
+    if(!EMRE.test(m)){toast(T('emailBad'),'oops');return}
+    try{var r=await sb.auth.updateUser({email:m},{emailRedirectTo:BASE});toast(r.error?T('tAuthErr')+r.error.message:T('accSent'))}catch(e){toast(T('tConnErr'),'oops')}
   });
   $('signOut').addEventListener('click',async function(){try{localStorage.removeItem(SNAPK+uid)}catch(e){}try{await sb.auth.signOut()}catch(e){}location.reload()});
   (async function(){
@@ -2978,8 +3025,8 @@ var DATA=window.DATA;
       else if(fast){try{localStorage.removeItem(SNAPK+pu.id)}catch(e){}location.reload();return}
       else{authReady=true;renderAll()}
     }catch(e){
-      if(fast)toast(T('tConnErr'));
-      else{toast(T('tConnErr'));authReady=true;needAuth=!uid;renderAll()}
+      if(fast)toast(T('tConnErr'),'oops');
+      else{toast(T('tConnErr'),'oops');authReady=true;needAuth=!uid;renderAll()}
     }
   })().then(function(){window.__bootDone&&window.__bootDone()},function(){window.__bootDone&&window.__bootDone()});
 })();
