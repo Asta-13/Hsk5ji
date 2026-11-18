@@ -49,6 +49,8 @@ var DATA=window.DATA;
     mSong:["🎵 Дуу","🎵 Songs","🎵 Песни","🎵 歌"],
     mMeta:["{n} мөр · {w} шинэ үг","{n} lines · {w} new words","{n} строк · {w} новых слов","{n}行 · 新しい単語{w}"],
     mAuto:["Автомат хадмал (алдаатай байж болно)","Auto subtitles (may contain errors)","Автосубтитры (возможны ошибки)","自動字幕（誤りあり）"],
+    mFeed:["🔥 Лент","🔥 Feed","🔥 Лента","🔥 フィード"],
+    mFeedEmpty:["Богино бичлэг (mp4) одоохондоо алга. media/ хавтсанд оруулна уу.","No short videos (mp4) yet. Add them to media/.","Нет коротких видео (mp4). Добавьте в media/.","短い動画(mp4)がまだありません。media/ に追加してください。"],
     mEmpty:["Одоохондоо алга","Nothing here yet","Пока ничего нет","まだありません"],
     mTapHint:["Хятад үг дээр дарвал тайлбар гарна","Tap a Chinese word for its meaning","Нажмите на слово для значения","単語をタップすると意味が出ます"],
     mNoLines:["Хадмал алга","No subtitles","Нет субтитров","字幕なし"],
@@ -621,7 +623,7 @@ var DATA=window.DATA;
     if(n==='play')renderPlay();
     if(n==='group'){renderGroup();refresh()}
     if(n==='admin'){renderAdmin();refresh();renderMediaAdmin()}
-    if(n==='media')renderMedia();
+    if(n==='media')renderMedia();else mediaStop();
   }
   tabs.forEach(function(b){b.addEventListener('click',function(){showTab(b.dataset.t)})});
   function openMenu(){if(!hasProfile()){showTab('today');return}$('menuSheet').hidden=false;$('menuBtn').setAttribute('aria-expanded','true');var a=document.querySelector('#menuSheet .tab[aria-selected="true"]')||document.querySelector('#menuSheet .tab');a&&a.focus()}
@@ -1361,13 +1363,13 @@ var DATA=window.DATA;
   renderTasks();renderAll();startDeck();
 
   /* ---------- Бичлэг · Дуу (media): хадмал дээрх үгийг товшиж сурах ---------- */
-  var MED={items:null,loading:null,kind:'video',cur:null,sel:'',quiz:null,t:-1};
+  var MED={items:null,loading:null,kind:'feed',cur:null,sel:'',quiz:null,t:-1,muted:true,pin:true,obs:null};
   function mediaLoad(force){
     if(MED.items&&!force)return Promise.resolve(MED.items);
     if(MED.loading&&!force)return MED.loading;
     MED.loading=(async function(){
       var out=[];
-      var fl=['data/media.json','data/media-auto.json'];
+      var fl=['data/media.json','data/media-auto.json','data/stories.json'];
       for(var fi=0;fi<fl.length;fi++){try{var r=await fetch(fl[fi]);if(r.ok){var j=await r.json();(j.items||[]).forEach(function(x){x.local=1;out.push(x)})}}catch(e){}}
       if(sb){try{
         var x=await sb.from('media').select('*').order('created_at',{ascending:false});
@@ -1405,7 +1407,7 @@ var DATA=window.DATA;
   function ytId(u){var m=/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/.exec(u||'');return m?m[1]:(/^[\w-]{11}$/.test(u||'')?u:'')}
   function mediaPlayer(it){
     if(it.srcType==='youtube'&&ytId(it.src))return '<div class="mplay"><iframe src="https://www.youtube-nocookie.com/embed/'+esc(ytId(it.src))+'" title="'+esc(it.title)+'" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>';
-    if(it.srcType==='file'&&/^media\/[\w. -]+$/.test(it.src||'')){
+    if(it.srcType==='file'&&/^(media|video)\/[\w. -]+$/.test(it.src||'')){
       var au=/\.(mp3|m4a|wav|ogg)$/i.test(it.src);
       return '<'+(au?'audio class="maud"':'video class="mvid"')+' id="mVid" controls playsinline preload="metadata" src="'+esc(encodeURI(it.src))+'"></'+(au?'audio':'video')+'>';
     }
@@ -1422,12 +1424,14 @@ var DATA=window.DATA;
   }
   function renderMediaList(items){
     var k=MED.kind;
-    $('mKinds').innerHTML=['video','song'].map(function(x){return '<button class="chip" type="button" data-mk="'+x+'" aria-pressed="'+(k===x)+'">'+T(x==='video'?'mVideo':'mSong')+'</button>'}).join('');
+    $('mKinds').innerHTML=['feed','video','song'].map(function(x){return '<button class="chip" type="button" data-mk="'+x+'" aria-pressed="'+(k===x)+'">'+T(x==='feed'?'mFeed':x==='video'?'mVideo':'mSong')+'</button>'}).join('');
+    if(k==='feed'){renderMediaFeed(items);return}
+    mediaStop();
     var L=items.filter(function(x){return x.kind===k}),hv=haveSet();
     $('mBody').innerHTML=L.length?'<div class="list">'+L.map(function(x){
       var ws=mediaWords(x),nw=ws.filter(function(w){return !hv[w.h]&&w.m}).length;
       return '<button class="card mcard" type="button" data-mi="'+esc(x.id)+'"><div class="between"><b>'+esc(x.title)+'</b>'+(x.level?'<span class="badge">HSK '+x.level+'</span>':'')+'</div>'+
-        (x.titleZh?'<span class="m" lang="zh">'+esc(x.titleZh)+'</span>':'')+(x.auto?'<span class="hint">🤖 '+esc(T('mAuto'))+'</span>':'')+'<span class="hint">'+esc(T('mMeta',{n:(x.lines||[]).length,w:nw}))+'</span></button>';
+        (x.titleZh?'<span class="m" lang="zh">'+esc(x.titleZh)+'</span>':'')+(x.auto?'<span class="hint">🤖 '+esc(T('mAuto'))+'</span>':'')+(x.story?'<span class="hint">🎬</span>':'')+'<span class="hint">'+esc(T('mMeta',{n:(x.lines||[]).length,w:nw}))+'</span></button>';
     }).join('')+'</div>':'<div class="empty">'+T('mEmpty')+'</div>';
   }
   function renderMediaItem(it){
@@ -1476,6 +1480,79 @@ var DATA=window.DATA;
     box.innerHTML='<div class="card"><div class="hint">'+(Q.i+1)+'/'+Q.q.length+'</div><div class="h big" lang="zh">'+esc(x.w.h)+'</div><div class="p">'+esc(x.w.p)+'</div><div class="list">'+
       x.opts.map(function(o){return '<button class="btn ghost" type="button" data-mo="'+esc(o)+'">'+esc(o)+'</button>'}).join('')+'</div></div>';
   }
+
+  /* TikTok маягийн босоо лент: богино бичлэг автоматаар тоглож, хадмал цагтай гарч, үг дээр дарж сурна */
+  function feedItems(items){var L=items.filter(function(x){return x.srcType==='file'&&/\.(mp4|webm)$/i.test(x.src||'')});return L.filter(function(x){return x.story}).reverse().concat(L.filter(function(x){return !x.story}))}
+  function mediaStop(){document.querySelectorAll('#mBody video,#mBody audio').forEach(function(v){try{v.pause()}catch(e){}});if(MED.obs){MED.obs.disconnect();MED.obs=null}}
+  function capHtml(ln){
+    var z=segZh(ln.zh).map(function(x){
+      if(!x.h)return esc(x.t);
+      var hit=hskLookup(x.h);
+      return '<button type="button" class="mfw" data-h="'+esc(x.h)+'" lang="zh"><ruby>'+esc(x.h)+'<rt>'+esc(hP(x.h,hit.p))+'</rt></ruby></button>';
+    }).join('');
+    return '<div class="mfz">'+z+'</div>'+(ln.mn?'<div class="mfm">'+esc(ln.mn)+'</div>':'');
+  }
+  function feedCap(slide,it){
+    var v=slide.querySelector('video'),ct=v.currentTime,L=it.lines||[],cur=-1;
+    L.forEach(function(l,i){if(l.t==null)return;var e=l.e!=null?l.e:(L[i+1]&&L[i+1].t!=null?L[i+1].t:l.t+4);if(l.t<=ct&&ct<e)cur=i});
+    if(slide._cur!==cur){slide._cur=cur;slide.querySelector('.mfcap').innerHTML=cur<0?'':capHtml(L[cur])}
+    var b=slide.querySelector('.mfbar i');if(b&&v.duration)b.style.width=(100*ct/v.duration)+'%';
+  }
+  function renderMediaFeed(items){
+    mediaStop();
+    var L=feedItems(items),box=$('mBody');
+    if(!L.length){box.innerHTML='<div class="empty">'+T('mFeedEmpty')+'</div>';return}
+    var hv=haveSet();
+    box.innerHTML='<div class="mfeed'+(MED.pin?' pin':'')+'" id="mFeed">'+L.map(function(x,i){
+      var nw=mediaWords(x).filter(function(w){return !hv[w.h]&&w.m}).length;
+      return '<section class="mslide" data-fi="'+i+'"><video class="mfv" playsinline loop preload="'+(i<2?'auto':'metadata')+'" src="'+esc(encodeURI(x.src))+'"></video><div class="mfcap"></div>'+
+        (x.story?'':'<div class="mftop"><b>'+esc(x.title)+'</b>'+(x.level?'<span class="badge">HSK '+x.level+'</span>':'')+'</div>')+
+        '<div class="mfside"><button type="button" data-mfsnd aria-label="sound">'+(MED.muted?'🔇':'🔊')+'</button><button type="button" data-mfpy aria-label="pinyin">拼</button><button type="button" data-mfwords>📚<small>'+nw+'</small></button></div><div class="mfbar"><i></i></div></section>';
+    }).join('')+'</div><div class="card mfcard" id="mfCard" hidden></div>';
+    var feed=$('mFeed');
+    MED.obs=new IntersectionObserver(function(es){es.forEach(function(en){
+      var v=en.target.querySelector('video');
+      if(en.isIntersecting&&en.intersectionRatio>=.6){v.muted=MED.muted;v.play().catch(function(){});$('mfCard').hidden=true}
+      else{v.pause()}
+    })},{root:feed,threshold:[.6]});
+    feed.querySelectorAll('.mslide').forEach(function(sl,i){
+      var v=sl.querySelector('video');v.muted=MED.muted;
+      v.addEventListener('timeupdate',function(){feedCap(sl,L[i])});
+      MED.obs.observe(sl);
+    });
+    MED.feed=L;
+  }
+  function feedWordsSheet(it){
+    var hv=haveSet(),nw=mediaWords(it).filter(function(w){return !hv[w.h]&&w.m}),c=$('mfCard');
+    c.hidden=false;c.dataset.it=it.id;
+    c.innerHTML='<div class="between"><h3>'+esc(T('mNew',{n:nw.length}))+'</h3><button class="btn small ghost" type="button" data-mfx>×</button></div>'+
+      (nw.length?'<div class="list">'+nw.map(function(w){return '<div class="w mrow"><span class="h" lang="zh">'+esc(w.h)+'</span><span><span class="p">'+esc(w.p)+'</span><br><span class="m">'+esc(w.m)+'</span></span><span class="badge">HSK '+w.l+'</span><button class="btn small ghost" type="button" data-mfa="'+esc(w.h)+'">+</button></div>'}).join('')+'</div><button class="btn" type="button" data-mfall>'+esc(T('mAddAll'))+'</button>':'<div class="empty">'+T('mAllKnown')+'</div>');
+  }
+  function feedWordCard(h,slide){
+    var hit=hskLookup(h),m=hM(h),has=haveSet()[h],c=$('mfCard');
+    var v=slide.querySelector('video');v.pause();
+    c.hidden=false;c.dataset.it='';
+    c.innerHTML='<div class="between"><span class="h big" lang="zh">'+esc(h)+'</span><span class="badge">HSK '+hit.l+'</span></div><div class="p">'+esc(hP(h,hit.p))+'</div><div class="m">'+esc(m||'—')+'</div>'+
+      '<div class="row"><button class="btn ghost small" type="button" data-msp="'+esc(h)+'">🔊</button>'+(has?'<span class="hint">'+esc(T('mHave'))+'</span>':(m?'<button class="btn small" type="button" data-mfa="'+esc(h)+'">+ '+esc(T('mAddOne'))+'</button>':''))+'<button class="btn small ghost" type="button" data-mfx>▶</button></div>';
+  }
+  document.addEventListener('click',function(e){
+    var t=e.target;if(!t.closest||!t.closest('#p-media')||!$('mFeed'))return;
+    var sl=t.closest('.mslide'),b;
+    var it=sl&&MED.feed[+sl.dataset.fi];
+    if(t.closest('[data-mfsnd]')){MED.muted=!MED.muted;document.querySelectorAll('#mFeed video').forEach(function(v){v.muted=MED.muted});document.querySelectorAll('[data-mfsnd]').forEach(function(x){x.textContent=MED.muted?'🔇':'🔊'});return}
+    if(t.closest('[data-mfpy]')){MED.pin=!MED.pin;$('mFeed').classList.toggle('pin',MED.pin);return}
+    if(t.closest('[data-mfwords]')){sl.querySelector('video').pause();feedWordsSheet(it);return}
+    if((b=t.closest('.mfw'))){feedWordCard(b.dataset.h,sl);return}
+    if(t.closest('[data-mfx]')){$('mfCard').hidden=true;var a=document.querySelector('.mslide video:not([paused])');document.querySelectorAll('#mFeed .mslide').forEach(function(s){var r=s.getBoundingClientRect(),f=$('mFeed').getBoundingClientRect();if(r.top>=f.top-10&&r.top<f.top+f.height/2)s.querySelector('video').play().catch(function(){})});return}
+    if((b=t.closest('[data-mfa]'))){
+      if(mediaAdd(b.dataset.mfa)){syncSummary(TODAY);toast(T('tAdded'));var cid=$('mfCard').dataset.it,fy=$('mFeed').scrollTop;renderAll();if(cid){var x2=MED.feed.filter(function(z){return z.id===cid})[0];x2&&feedWordsSheet(x2)}else $('mfCard').hidden=true}
+      return}
+    if(t.closest('[data-mfall]')){
+      var it2=MED.feed.filter(function(z){return z.id===$('mfCard').dataset.it})[0],n=0;
+      it2&&mediaWords(it2).forEach(function(w){if(mediaAdd(w.h))n++});
+      if(n){syncSummary(TODAY);toast(T('tAddedN',{n:n}));renderAll();feedWordsSheet(it2)}return}
+    if(sl&&t.closest('.mfv')){var v=sl.querySelector('video');v.paused?v.play().catch(function(){}):v.pause()}
+  });
   function parseLines(txt){
     return String(txt||'').split('\n').map(function(r){return r.trim()}).filter(Boolean).map(function(r){
       var t=null,m=/^(\d+):(\d{2})\s+/.exec(r);if(m){t=+m[1]*60+ +m[2];r=r.slice(m[0].length)}

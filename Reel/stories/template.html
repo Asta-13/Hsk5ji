@@ -1,0 +1,100 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#0a0d16;font-family:'Noto Sans CJK SC','Noto Sans CJK JP',sans-serif;color:#f5ecd6}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:radial-gradient(ellipse at 50% 30%,#1f1a2e 0%,#0d0f1c 55%,#06070d 100%)}
+.serif{font-family:'Noto Serif CJK SC','Noto Serif CJK JP',serif;font-weight:900}
+.abs{position:absolute}
+.scene{position:absolute;inset:0;opacity:0}
+#grain{position:absolute;inset:-100px;opacity:.07;background-image:radial-gradient(#fff 1px,transparent 1.2px);background-size:46px 46px}
+#vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 45%,rgba(0,0,0,.65) 100%)}
+.gold{color:#e9c46a}.red{color:#e5533d}
+.blk{position:absolute;border-radius:28px;display:flex;align-items:center;justify-content:center;font-size:110px;color:#fff3d6;box-shadow:0 18px 40px rgba(0,0,0,.45),inset 0 0 0 3px rgba(255,255,255,.18)}
+.card{position:absolute;width:440px;height:420px;border-radius:36px;background:linear-gradient(160deg,#241c33,#14111f);box-shadow:0 22px 50px rgba(0,0,0,.5),inset 0 0 0 3px rgba(233,196,106,.55);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
+.card .g{font-size:170px;line-height:1;color:#e9c46a}
+.card .l{font-size:60px;font-weight:800}.card .p{font-size:34px;color:#f0b9a8}.card .m{font-size:36px;color:#b9c3d9}
+#hud{position:absolute;left:48px;top:120px;display:flex;gap:14px;align-items:center;font-size:36px;font-weight:700}
+#hud .tag{background:#e5533d;color:#fff;border-radius:22px;padding:6px 22px}
+#hud .lv{background:rgba(255,255,255,.14);border-radius:22px;padding:6px 22px}
+#prog{position:absolute;left:0;top:0;height:10px;background:#e9c46a;width:0}
+#cap{position:absolute;left:40px;right:40px;bottom:210px;text-align:center;opacity:0}
+#cap .py{font-size:36px;color:#e9c46a;letter-spacing:1px;margin-bottom:4px}
+#cap .zh{font-size:62px;font-weight:800;line-height:1.3;text-shadow:0 4px 18px #000}
+#cap .mn{font-size:40px;color:#d8dff0;margin-top:10px;line-height:1.3;text-shadow:0 3px 12px #000}
+#cap .bg{display:inline-block;background:rgba(6,8,16,.62);border-radius:30px;padding:22px 34px}
+</style></head><body><div id="stage">
+<div id="grain"></div><div id="scenes"></div><div id="vig"></div><div id="prog"></div>
+<div id="hud"><span class="tag" id="htag"></span><span class="lv" id="hlv"></span></div>
+<div id="cap"><div class="bg"><div class="py"></div><div class="zh"></div><div class="mn"></div></div></div>
+</div><script>
+const S=__STORY__, BURN=__BURN__, TL=__TIMELINE__, TOTAL=__TOTAL__;
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)), eo=x=>1-Math.pow(1-cl(x),3), eio=x=>{x=cl(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2}, bk=x=>{x=cl(x);const c=1.70158+1;return 1+c*Math.pow(x-1,3)+1.70158*Math.pow(x-1,2)};
+const seg=(t,a,b)=>cl((t-a)/(b-a));
+const el=(h,p)=>{const d=document.createElement('div');d.innerHTML=h;const e=d.firstElementChild;(p||document.getElementById('scenes')).appendChild(e);return e};
+document.getElementById('htag').textContent=S.tag;document.getElementById('hlv').textContent='HSK '+S.level;
+const scenes={};
+/* ---------- scene builders: each returns update(p,t,dur) ---------- */
+const B={
+ merge(c,root){
+  const area=el('<div class="abs" style="left:0;top:330px;width:1080px;height:1000px"></div>',root);
+  const cols={燕:'#3d5a80',赵:'#5b6c8f',齐:'#4b7f6b',魏:'#7a5c8f',韩:'#8f7a4b',楚:'#3f7f8f',秦:'#c0392b'};
+  const bl=c.blocks.map(([ch,x,y,w,h])=>{const e=el(`<div class="blk serif" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${cols[ch]}">${ch}</div>`,area);return {e,ch,x,y,w,h}});
+  const big=el(`<div class="abs serif red" style="left:0;right:0;top:1090px;text-align:center;font-size:150px;opacity:0;text-shadow:0 0 50px rgba(229,83,61,.6)"></div>`,root);
+  const cap=el(`<div class="abs" style="left:0;right:0;top:1120px;text-align:center;font-size:52px;color:#b9c3d9;opacity:0">七国 · 战国时代</div>`,root);
+  return (p)=>{
+    bl.forEach((b,i)=>{
+      const pop=bk(seg(p,.02+i*.035,.2+i*.035));
+      const mv=eio(seg(p,.5,.78)); const win=b.ch===c.winner;
+      const tx=(1080-b.w)/2-b.x, ty=(500-b.h)/2-b.y;
+      const s=win?1+mv*1.1:1-mv*.0;
+      b.e.style.transform=`translate(${win?tx*mv*.0:0}px,0) scale(${pop*(win?(1+mv*1.35):1)})`;
+      if(win){b.e.style.zIndex=5;b.e.style.transformOrigin='50% 50%';b.e.style.left=(b.x+(( (1080-b.w)/2-b.x)*mv))+'px';b.e.style.top=(b.y+(((600-b.h)/2+0-b.y)*mv))+'px'}
+      else{b.e.style.opacity=pop*(1-seg(p,.55,.8));b.e.style.left=(b.x+(((1080-b.w)/2-b.x)*mv*.55))+'px';b.e.style.top=(b.y+(((600-b.h)/2-b.y)*mv*.55))+'px'}
+    });
+    cap.style.opacity=seg(p,.25,.4)*(1-seg(p,.5,.6));
+    const n=Math.round(c.num+ (1-eo(seg(p,.8,.97)))*9);
+    big.style.opacity=seg(p,.8,.9);big.style.transform=`scale(${1+(1-bk(seg(p,.8,.92)))*.4})`;
+    big.textContent=c.prefix+n+c.suffix;
+  }},
+ title(c,root){
+  const ring=el('<div class="abs" style="left:240px;top:520px;width:600px;height:600px;border-radius:50%;border:6px solid #e9c46a;opacity:0;box-shadow:0 0 90px rgba(233,196,106,.35)"></div>',root);
+  const big=el(`<div class="abs serif gold" style="left:0;right:0;top:${c.big.length>3?640:600}px;text-align:center;font-size:${c.big.length>3?190:c.big.length==3?205:230}px;line-height:1.1;text-shadow:0 10px 50px rgba(0,0,0,.7)">${c.big}</div>`,root);
+  const py=el(`<div class="abs" style="left:0;right:0;top:880px;text-align:center;font-size:56px;color:#f0b9a8">${c.pinyin}</div>`,root);
+  const ln=el('<div class="abs" style="left:240px;top:1010px;height:8px;width:0;background:#e5533d;border-radius:4px"></div>',root);
+  const sub=el(`<div class="abs" style="left:0;right:0;top:1090px;text-align:center"><div style="font-size:78px;font-weight:800">${c.sub}</div><div style="font-size:46px;color:#b9c3d9;margin-top:10px">${c.sub_mn}</div></div>`,root);
+  return (p)=>{ring.style.opacity=seg(p,0,.2)*.9;ring.style.transform=`scale(${.7+eo(seg(p,0,.35))*.3}) rotate(${p*40}deg)`;
+   big.style.opacity=seg(p,.08,.3);big.style.transform=`scale(${.6+bk(seg(p,.08,.38))*.4})`;
+   py.style.opacity=seg(p,.3,.45);ln.style.width=600*eo(seg(p,.35,.6))+'px';sub.style.opacity=seg(p,.5,.7);sub.style.transform=`translateY(${(1-eo(seg(p,.5,.7)))*30}px)`}},
+ icons(c,root){
+  const pos=[[50,360],[590,360],[50,810],[590,810]];
+  const cards=c.items.map(([g,l,p,m],i)=>({e:el(`<div class="card" style="left:${pos[i][0]}px;top:${pos[i][1]}px"><div class="g serif">${g}</div><div class="l">${l}</div><div class="p">${p}</div><div class="m">${m}</div></div>`,root)}));
+  return (p)=>{cards.forEach((c2,i)=>{const t0=[.04,.2,.52,.68][i];const q=bk(seg(p,t0,t0+.16));c2.e.style.opacity=seg(p,t0,t0+.08);c2.e.style.transform=`scale(${.5+q*.5}) rotate(${(1-q)*(i%2?6:-6)}deg)`})}},
+ timeline(c,root){
+  const num=el(`<div class="abs serif gold" style="left:0;right:0;top:380px;text-align:center;font-size:240px;line-height:1">0</div>`,root);
+  const unit=el(`<div class="abs" style="left:0;right:0;top:650px;text-align:center;font-size:76px;font-weight:800">${c.unit||'年'}</div>`,root);
+  const bar=el('<div class="abs" style="left:100px;top:820px;width:880px;height:26px;border-radius:13px;background:rgba(255,255,255,.14)"></div>',root);
+  const fill=el('<div class="abs" style="left:100px;top:820px;width:0;height:26px;border-radius:13px;background:linear-gradient(90deg,#e5533d,#e9c46a)"></div>',root);
+  const l1=el(`<div class="abs" style="left:60px;top:870px;font-size:46px;font-weight:700">${c.from}</div>`,root);
+  const l2=el(`<div class="abs" style="left:560px;top:870px;font-size:46px;font-weight:700">${c.to}</div>`,root);
+  const tail=el(`<div class="abs" style="left:0;right:0;top:960px;text-align:center;opacity:0"><div class="serif gold" style="font-size:130px">${c.tail}<span style="font-size:70px"> ${c.tail_unit||'年'}</span></div><div style="font-size:60px;font-weight:800">${c.tail_label}</div><div style="font-size:42px;color:#b9c3d9;margin-top:6px">${c.tail_mn}</div></div>`,root);
+  return (p)=>{const a=eo(seg(p,.05,.4));num.textContent=Math.round(a*c.years);unit.style.opacity=seg(p,.02,.15);
+   fill.style.width=(560*a+ (880-560)*eio(seg(p,.55,.95)))+'px';l1.style.opacity=seg(p,0,.1);l2.style.opacity=seg(p,.35,.45);
+   tail.style.opacity=seg(p,.55,.75);tail.style.transform=`translateY(${(1-eo(seg(p,.55,.8)))*40}px)`;}},
+ outro(c,root){
+  const h=el('<div class="abs serif gold" style="left:0;right:0;top:330px;text-align:center;font-size:92px">今天学的词</div>',root);
+  const rows=S.words.map(([w,p,m],i)=>({e:el(`<div class="abs" style="left:90px;right:90px;top:${520+i*190}px;height:160px;border-radius:28px;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 2px rgba(233,196,106,.4);display:flex;align-items:center;gap:30px;padding:0 36px"><div class="serif gold" style="font-size:84px;min-width:240px">${w}</div><div><div style="font-size:38px;color:#f0b9a8">${p}</div><div style="font-size:44px;font-weight:700">${m}</div></div></div>`,root)}));
+  return (p)=>{h.style.opacity=seg(p,0,.1);rows.forEach((r,i)=>{const q=bk(seg(p,.1+i*.12,.28+i*.12));r.e.style.opacity=seg(p,.1+i*.12,.2+i*.12);r.e.style.transform=`translateX(${(1-q)*120}px)`})}}
+};
+const roots={},upd={};
+Object.keys(S.scenes).forEach(id=>{const c=S.scenes[id];const r=el('<div class="scene"></div>');roots[id]=r;upd[id]=B[c.type](c,r)});
+if(S.words){roots.__outro=el('<div class="scene"></div>');upd.__outro=B.outro({},roots.__outro)}
+function render(t){
+  document.getElementById('prog').style.width=(1080*t/TOTAL)+'px';
+  document.getElementById('grain').style.transform=`translate(${(t*9)%46}px,${(t*6)%46}px)`;
+  Object.values(roots).forEach(r=>r.style.opacity=0);
+  for(const sc of TL.scenes){ if(t>=sc.start&&t<sc.end){const r=roots[sc.id];const d=sc.end-sc.start,p=(t-sc.start)/d;
+     r.style.opacity=Math.min(seg(t,sc.start,sc.start+.4),1-seg(t,sc.end-.4,sc.end));upd[sc.id](p,t-sc.start,d)}}
+  const cap=document.getElementById('cap');let on=null;
+  if(BURN)for(const l of TL.lines){if(t>=l.t&&t<l.e)on=l}
+  if(on){cap.querySelector('.py').textContent=on.py;cap.querySelector('.zh').textContent=on.zh;cap.querySelector('.mn').textContent=on.mn;cap.style.opacity=Math.min(seg(t,on.t,on.t+.2),1-seg(t,on.e-.2,on.e))}else cap.style.opacity=0;
+}
+</script></body></html>
