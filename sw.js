@@ -1,7 +1,7 @@
 /* HSK app service worker: stale-while-revalidate.
    Кэшээс шууд нээгдэнэ (хурдан), ард нь шинэчлэлийг татна → шинэ хувилбар дараагийн нээлтээр гарна.
    Supabase API дуудлагыг хэзээ ч кэшлэхгүй. Бүх зүйлийг шууд шинэчлэхийг хүсвэл VER-ийг нэмж өгнө. */
-var VER='hsk-v36',CORE=['./','./index.html','./manifest.json','./icon-192.png','./icon-512.png',
+var VER='hsk-v39',CORE=['./','./index.html','./manifest.json','./icon-192.png','./icon-512.png',
   './css/style.css','./js/loader.js','./js/hanzi.js','./js/hw-lite.js','./js/vendor/supabase.min.js','./js/vendor/hanzi-writer.min.js','./js/app.js','./js/sw-register.js','./data/hsk-words.json','./data/hsk-mongolian.json','./data/grammar.json','./data/course-lessons.json','./data/examples.json','./data/scenarios.json','./data/radicals.json'];
 var OPT=['./data/hsk-translations.json','./data/grammar-translations.json','./data/course-translations.json'];
 /* Орчуулгын том файлуудыг offline-д зориулж ард нь (алдаа гарвал үл тоон) кэшлэнэ */
@@ -10,6 +10,11 @@ self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(func
 self.addEventListener('fetch',function(e){
   var r=e.request,u=new URL(r.url);
   if(r.method!=='GET'||u.hostname.indexOf('supabase.co')>-1)return;
+  /* mp3/mp4-ийг SW-ээр дамжуулахгүй: iOS/Safari Range(206) хүсэлтэд кэшийн 200 хариу өгвөл тоглохгүй */
+  if(/\.(mp3|mp4|m4a|wav|ogg|webm)$/i.test(u.pathname))return;
+  /* media жагсаалт: эхлээд сүлжээнээс (шинэ файл шууд харагдана), офлайн бол кэшээс */
+  if(/\/data\/(media|media-auto|stories)\.json$/.test(u.pathname)){
+    e.respondWith(fetch(r,{cache:'no-store'}).then(function(res){var cp=res.clone();caches.open(VER).then(function(c){c.put(r,cp)}).catch(function(){});return res}).catch(function(){return caches.match(r)}));return}
   e.respondWith(caches.open(VER).then(function(c){
     return c.match(r).then(function(m){
       var net=fetch(r).then(function(res){

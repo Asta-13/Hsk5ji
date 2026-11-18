@@ -102,23 +102,34 @@ def main():
         print('Хадмал:', rel, flush=True)
         txt = os.path.splitext(f)[0] + '.txt'
         lyr = read_lyrics(txt) if os.path.exists(txt) else None
-        segs, info = model.transcribe(f, language='zh', vad_filter=not lyr, beam_size=5, word_timestamps=bool(lyr),
-                                      initial_prompt='以下是普通话的句子，使用简体中文。')
-        lines, chars = [], []
-        for s_ in segs:
-            z = t2s(s_.text.strip())
-            if z and re.search(r'[\u4e00-\u9fff]', z): lines += split_seg(z, s_.start, s_.end)
-            for w in (s_.words or []):
-                cs = HAN.sub('', t2s(w.word))
-                for k, c in enumerate(cs): chars.append((c, w.start + (w.end - w.start) * k / max(1, len(cs))))
+        def run(vad):
+            segs, _ = model.transcribe(f, language='zh', vad_filter=vad, beam_size=5, word_timestamps=bool(lyr),
+                                       condition_on_previous_text=False,
+                                       initial_prompt='以下是普通话的句子，使用简体中文。')
+            lines, chars = [], []
+            for s_ in segs:
+                z = t2s(s_.text.strip())
+                if z and re.search(r'[\u4e00-\u9fff]', z): lines += split_seg(z, s_.start, s_.end)
+                for w in (s_.words or []):
+                    cs = HAN.sub('', t2s(w.word))
+                    for k, c in enumerate(cs): chars.append((c, w.start + (w.end - w.start) * k / max(1, len(cs))))
+            return lines, chars
+        lines, chars = run(not lyr)
+        if not lines and not lyr:
+            # Дуу/хөгжимтэй файлд VAD бүх дууг «чимээ» гэж тасалдаг → VAD-гүйгээр дахин оролдоно
+            print('  хоосон гарлаа — VAD-гүйгээр дахин оролдож байна', flush=True)
+            lines, chars = run(False)
         if lyr:
             lines = align(lyr, chars)
             print('  дууны үгийг цагт тааруулав: %d мөр' % len(lines), flush=True)
+        auto = 0 if lyr else 1
         if not lines:
-            print('  хоосон — алгаслаа'); continue
+            # Урьд нь энд `continue` хийж файлыг сайтаас бүр алгасдаг байсан. Одоо хадмалгүй ч тоглуулагчтай нэмнэ.
+            print('  хадмал олдсонгүй — хадмалгүй (зөвхөн тоглуулагч) нэмлээ. Дууны үгийг media/<нэр>.txt-д бичвэл цагт тааруулна.', flush=True)
+            auto = 2
         title = os.path.splitext(os.path.basename(f))[0].replace('_', ' ').replace('-', ' ')
         items[fid] = {'id': fid, 'kind': 'song' if f.lower().endswith(('.mp3', '.m4a', '.wav', '.ogg')) else 'video',
-                      'level': guess_level(lines, D), 'title': title, 'titleZh': '', 'srcType': 'file', 'src': rel, 'auto': 0 if lyr else 1, 'lines': lines}
+                      'level': guess_level(lines, D), 'title': title, 'titleZh': '', 'srcType': 'file', 'src': rel, 'auto': auto, 'lines': lines}
         print('  %d мөр, HSK ~%d' % (len(lines), items[fid]['level']), flush=True)
     json.dump({'items': list(items.values())}, open(OUT, 'w', encoding='utf8'), ensure_ascii=False, indent=1)
 

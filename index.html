@@ -76,16 +76,12 @@
   <div class="card" id="instCard" hidden><button class="btn" type="button" id="instBtn" data-i18n="instBtn"></button><div class="hint" data-i18n="instHint"></div></div>
   <div class="card" id="lrnCard" hidden><button class="btn" type="button" data-golearn="1" data-i18n="lrnCard"></button></div>
 
-  <div class="card" id="auth" hidden>
+  <div class="card hero" id="guestCard" hidden>
     <div class="hzhero" data-hz="auth"></div>
-    <h2 data-i18n="authTitle"></h2>
-    <div class="hint" data-i18n="authHint"></div>
-    <div class="note" data-i18n="authSteps"></div>
-    <label class="f" for="auUser"><span data-i18n="loginName"></span><input id="auUser" type="text" inputmode="email" autocapitalize="none" autocorrect="off" autocomplete="username" maxlength="60"></label>
-    <label class="f" for="auPass"><span data-i18n="password"></span><input id="auPass" type="password" autocomplete="current-password"></label>
-    <div class="row"><button class="btn" id="auIn" type="button" data-i18n="signIn"></button><button class="btn ghost" id="auUp" type="button" data-i18n="signUp"></button></div>
-    <button class="btn ghost small" id="auForgot" type="button" style="align-self:flex-start" data-i18n="forgot"></button>
-    <div class="hint" data-i18n="authNote"></div>
+    <h2 data-i18n="guestTitle"></h2>
+    <div class="hint" data-i18n="guestHint"></div>
+    <div class="row" style="flex-wrap:wrap"><button class="btn" type="button" data-gopen="hsk" data-i18n="guestHsk"></button><button class="btn" type="button" data-gopen="gram" data-i18n="guestGram"></button></div>
+    <button class="btn ghost" type="button" id="guestLogin" data-i18n="authTitle"></button>
   </div>
   <div class="card hero" id="recov" hidden>
     <h2 data-i18n="resetTitle"></h2>
@@ -437,6 +433,28 @@
 <div id="menuSheet" class="msheet" hidden><div class="mback" data-menuclose="1"></div>
   <div class="mpanel" role="dialog" aria-modal="true" aria-labelledby="menuTtl"><div class="mgrip"></div><div class="between"><h3 id="menuTtl" data-i18n="menuTtl"></h3><button class="btn small ghost" type="button" data-menuclose="1" aria-label="×">×</button></div>
   <div class="mgrid"><button class="tab mi" role="tab" data-t="media" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><path d="M10 9.5l5 2.5-5 2.5z"/></svg><b data-i18n="tabMedia"></b><small data-i18n="mdMedia"></small></button><button class="tab mi" role="tab" data-t="list" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.8 6.8 19.6l1-5.8L3.5 9.7l5.9-.9z"/></svg><b data-i18n="tabList"></b><small data-i18n="mdList"></small></button><button class="tab mi" role="tab" data-t="words" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><b data-i18n="tabWords"></b><small data-i18n="mdWords"></small></button><button class="tab mi" role="tab" data-t="hsk" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 4h10a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M9 9h5"/></svg><b data-i18n="tabHsk"></b><small data-i18n="mdHsk"></small></button><button class="tab mi" role="tab" data-t="gram" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h9"/></svg><b data-i18n="tabGram"></b><small data-i18n="mdGram"></small></button><button class="tab mi" role="tab" data-t="cards" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="2"/><path d="M8 3.5h8"/></svg><b data-i18n="tabCards"></b><small data-i18n="mdCards"></small></button><button class="tab mi" role="tab" data-t="play" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></svg><b data-i18n="tabPlay"></b><small data-i18n="mdPlay"></small></button></div></div></div>
+<div id="hzChat" class="hzc" hidden><div class="hzcback" data-hzcclose="1"></div>
+<div class="hzcpanel" role="dialog" aria-modal="true" aria-labelledby="hzcTtl">
+  <div class="hzchead"><div id="hzcAv" class="hzcav"></div><div class="hzct"><b id="hzcTtl"></b><small id="hzcSub"></small></div><button class="btn small ghost" type="button" id="hzcVoice" aria-label="Voice">🔊</button><button class="btn small ghost" type="button" data-hzcclose="1" aria-label="×">×</button></div>
+  <div id="hzcLog" class="hzclog" aria-live="polite"></div>
+  <div id="hzcQ" class="hzcq"></div>
+  <div class="hzcin"><input id="hzcIn" type="text" maxlength="200" autocomplete="off" enterkeyhint="send"><button class="btn" type="button" id="hzcSend" aria-label="Send">➤</button></div>
+</div></div>
+<div id="authModal" class="amodal" hidden><div class="aback" data-authclose="1"></div>
+<div class="apanel" role="dialog" aria-modal="true" aria-labelledby="authTtl">
+  <div class="card" id="auth">
+    <button class="btn small ghost aclose" type="button" data-authclose="1" aria-label="×">×</button>
+        <h2 id="authTtl" data-i18n="authTitle"></h2>
+    <div class="note" id="authWhy" data-i18n="authWhy" hidden></div>
+    <div class="hint" data-i18n="authHint"></div>
+    <div class="note" data-i18n="authSteps"></div>
+    <label class="f" for="auUser"><span data-i18n="loginName"></span><input id="auUser" type="text" inputmode="email" autocapitalize="none" autocorrect="off" autocomplete="username" maxlength="60"></label>
+    <label class="f" for="auPass"><span data-i18n="password"></span><input id="auPass" type="password" autocomplete="current-password"></label>
+    <div class="row"><button class="btn" id="auIn" type="button" data-i18n="signIn"></button><button class="btn ghost" id="auUp" type="button" data-i18n="signUp"></button></div>
+    <button class="btn ghost small" id="auForgot" type="button" style="align-self:flex-start" data-i18n="forgot"></button>
+    <div class="hint" data-i18n="authNote"></div>
+  </div>
+</div></div>
 <div class="hzbox" id="toast" role="status" aria-live="polite"></div>
 
 <script src="js/hw-lite.js"></script>

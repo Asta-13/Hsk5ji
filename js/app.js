@@ -50,7 +50,7 @@ var DATA=window.DATA;
     mMeta:["{n} мөр · {w} шинэ үг","{n} lines · {w} new words","{n} строк · {w} новых слов","{n}行 · 新しい単語{w}"],
     mAuto:["Автомат хадмал (алдаатай байж болно)","Auto subtitles (may contain errors)","Автосубтитры (возможны ошибки)","自動字幕（誤りあり）"],
     mFeed:["🔥 Лент","🔥 Feed","🔥 Лента","🔥 フィード"],
-    mFeedEmpty:["Богино бичлэг (mp4) одоохондоо алга. media/ хавтсанд оруулна уу.","No short videos (mp4) yet. Add them to media/.","Нет коротких видео (mp4). Добавьте в media/.","短い動画(mp4)がまだありません。media/ に追加してください。"],
+    mFeedEmpty:["Богино бичлэг (mp4/mp3) одоохондоо алга. media/ хавтсанд оруулна уу.","No short videos (mp4/mp3) yet. Add them to media/.","Нет коротких видео (mp4/mp3). Добавьте в media/.","短い動画(mp4/mp3)がまだありません。media/ に追加してください。"],
     mEmpty:["Одоохондоо алга","Nothing here yet","Пока ничего нет","まだありません"],
     mTapHint:["Хятад үг дээр дарвал тайлбар гарна","Tap a Chinese word for its meaning","Нажмите на слово для значения","単語をタップすると意味が出ます"],
     mNoLines:["Хадмал алга","No subtitles","Нет субтитров","字幕なし"],
@@ -465,6 +465,11 @@ var DATA=window.DATA;
     authHint:["Имэйл болон нууц үгээрээ нэвтэрнэ. Өгөгдөл чинь аль ч төхөөрөмж дээр дагалдана.","Sign in with your email and password. Your data follows you to any device.","Входите по email и паролю. Ваши данные будут доступны на любом устройстве.","メールアドレスとパスワードでログインします。データはどの端末でも引き継がれます。"],
     loginName:["Имэйл (хуучин хэрэглэгч бол нэвтрэх нэр)","Email (or old login name)","Email (или прежний логин)","メールアドレス（または旧ログイン名）"],
     password:["Нууц үг (6+ тэмдэгт)","Password (6+ characters)","Пароль (6+ символов)","パスワード（6文字以上）"],
+    guestTitle:["Зочноор үзэх","Browse as guest","Смотреть как гость","ゲストとして見る"],
+    guestHint:["Нэвтрэхгүйгээр HSK 1-6 үгийн сан, дүрмийг үзэж, үг хайж болно. Үгээ хадгалах, тоглоом, шалгалт, ахиц зэрэг бусад боломжид нэвтэрнэ.","Without signing in you can browse the HSK 1–6 word bank and grammar and search words. Saving words, games, quizzes and progress need an account.","Без входа можно смотреть словарь HSK 1–6 и грамматику и искать слова. Сохранение слов, игры, тесты и прогресс доступны после входа.","ログインなしでHSK1〜6の単語帳と文法を閲覧・検索できます。単語の保存、ゲーム、テスト、進捗にはログインが必要です。"],
+    guestHsk:["🔎 HSK үгийн сан","🔎 HSK word bank","🔎 Словарь HSK","🔎 HSK単語帳"],
+    guestGram:["📖 Дүрэм","📖 Grammar","📖 Грамматика","📖 文法"],
+    authWhy:["🔒 Үүнийг ашиглахын тулд нэвтэрнэ үү. Зочин зөвхөн HSK 1-6 үгийн сан, дүрмийг үзнэ.","🔒 Please sign in to use this. Guests can only browse the HSK 1–6 word bank and grammar.","🔒 Войдите, чтобы пользоваться этим. Гости видят только словарь HSK 1–6 и грамматику.","🔒 ご利用にはログインが必要です。ゲストはHSK1〜6の単語帳と文法のみ閲覧できます。"],
     signIn:["Нэвтрэх","Sign in","Войти","ログイン"],
     signUp:["Бүртгүүлэх","Sign up","Зарегистрироваться","新規登録"],
     signOut:["Гарах","Sign out","Выйти","ログアウト"],
@@ -626,9 +631,33 @@ var DATA=window.DATA;
 
   /* ---------- tabs ---------- */
   var tabs=document.querySelectorAll('.tab[data-t]'),SUBT=['words','hsk','gram','cards','play','list','media'],TABS=['today','words','hsk','gram','play','learn','cards','list','group','me','admin','media'];
+  /* ---------- зочин (нэвтрээгүй) горим: зөвхөн HSK 1-6 үгийн сан + дүрэм ---------- */
+  var GUEST_TABS=['today','hsk','gram'];
+  function isGuest(){return needAuth&&!uid&&authReady}
+  function openAuth(why){
+    var m=$('authModal');if(!m)return;
+    $('authWhy').hidden=!why;m.hidden=false;document.body.classList.add('amopen');
+    setTimeout(function(){try{$('auUser').focus({preventScroll:true})}catch(e){}},60);
+  }
+  function closeAuth(){var m=$('authModal');if(m&&!m.hidden){m.hidden=true;document.body.classList.remove('amopen')}}
+  /* capture: зочин түгжигдсэн tab/товч дарвал нэвтрэх цонх гарна */
+  document.addEventListener('click',function(e){
+    if(!isGuest())return;
+    var t=e.target.closest('.tab[data-t],#hwTab'),lock=false;
+    if(t)lock=!t.dataset.t||GUEST_TABS.indexOf(t.dataset.t)<0;
+    else if(e.target.closest('[data-fav],[data-hadd]'))lock=true;
+    if(!lock)return;
+    e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();closeMenu();openAuth(true);
+  },true);
+  document.addEventListener('click',function(e){
+    if(e.target.closest('[data-authclose]')){closeAuth();return}
+    var g=e.target.closest('[data-gopen]');if(g){showTab(g.dataset.gopen);return}
+    if(e.target.closest('#guestLogin'))openAuth(false);
+  });
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeAuth()});
   function showTab(n){
     if(typeof hkFlush==='function'&&n!=='cards')hkFlush();
-    if(!hasProfile()&&n!=='today')n='today';
+    if(!hasProfile()&&GUEST_TABS.indexOf(n)<0)n='today';
     TABS.forEach(function(k){$('p-'+k).hidden=k!==n});
     tabs.forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===n?'true':'false')});
     $('menuBtn').classList.toggle('on',SUBT.indexOf(n)>-1);closeMenu();
@@ -641,7 +670,7 @@ var DATA=window.DATA;
     if(n==='media')renderMedia();else mediaStop();
   }
   tabs.forEach(function(b){b.addEventListener('click',function(){showTab(b.dataset.t)})});
-  function openMenu(){if(!hasProfile()){showTab('today');return}$('menuSheet').hidden=false;$('menuBtn').setAttribute('aria-expanded','true');var a=document.querySelector('#menuSheet .tab[aria-selected="true"]')||document.querySelector('#menuSheet .tab');a&&a.focus()}
+  function openMenu(){if(!hasProfile()&&!isGuest()){showTab('today');return}$('menuSheet').hidden=false;$('menuBtn').setAttribute('aria-expanded','true');var a=document.querySelector('#menuSheet .tab[aria-selected="true"]')||document.querySelector('#menuSheet .tab');a&&a.focus()}
   function closeMenu(){var m=$('menuSheet');if(m&&!m.hidden){m.hidden=true;$('menuBtn').setAttribute('aria-expanded','false')}}
   $('menuBtn').addEventListener('click',function(){$('menuSheet').hidden?openMenu():closeMenu()});
   document.addEventListener('click',function(e){if(e.target.closest('[data-menuclose]'))closeMenu()});
@@ -669,7 +698,8 @@ var DATA=window.DATA;
   var obLevel=5,obMinTouched=false;
   var obFocused=false;
   function renderOnb(){
-    $('auth').hidden=!(needAuth&&authReady);$('p-today').classList.toggle('needauth',needAuth);
+    var gst=isGuest();$('guestCard').hidden=!gst;document.body.classList.toggle('guest',gst);if(!gst)closeAuth();
+    $('p-today').classList.toggle('needauth',needAuth);
     $('onb').hidden=hasProfile()||needAuth;
     if(hasProfile())return;
     lvChips('obLv',obLevel,false);
@@ -746,6 +776,7 @@ var DATA=window.DATA;
     else if(due){line=T('hzDue',{n:due});m='think'}
     else if(st>=2){line=T('hzStreak',{n:st});m='cheer'}
     else if(left>0&&left<=60){line=T('hzExam',{d:left})}
+    else{var wd=hzWod();if(wd)line=HT('wod',{w:wd,p:hP(wd,(hskLookup(wd)||{}).p),m:hM(wd)})}
     return {t:hzTapN>0?line:T(g,{n:nick})+(line?' '+line:''),m:m};
   }
   function hzRender(){
@@ -753,16 +784,399 @@ var DATA=window.DATA;
     $('heroCard').hidden=!hasProfile();
     document.querySelectorAll('[data-hz]').forEach(function(el){
       var d=hzLine(el.dataset.hz);
-      if(!el.firstChild){el.innerHTML='<button type="button" class="hzav2"></button><div class="hzsay"><b class="hzname2"></b><p></p></div>';Hanzi.mount(el.firstChild,d.m)}
+      if(!el.firstChild){el.innerHTML='<button type="button" class="hzav2"></button><div class="hzsay"><b class="hzname2"></b><p></p><button type="button" class="chip hzchatbtn" data-hzopen="1"></button></div>';Hanzi.mount(el.firstChild,d.m)}
       el.firstChild.setAttribute('aria-label',T('hzName'));
-      el.querySelector('.hzname2').textContent=T('hzName');el.querySelector('p').textContent=d.t;Hanzi.mood(el.firstChild,d.m);
+      el.querySelector('.hzname2').textContent=T('hzName');el.querySelector('p').textContent=d.t;var cbn=el.querySelector('.hzchatbtn');if(cbn)cbn.textContent=HT('chatBtn');Hanzi.mood(el.firstChild,d.m);
     });
   }
+  /* ---------- Ханзи багштай ярилцах: интернетгүй, дүрэмт яриа (үг заах · яриа · шалгалт · зөвлөгөө · хайлт) ---------- */
+  var HZD={
+    chatBtn:["💬 Багштай ярих","💬 Chat with teacher","💬 Поговорить","💬 先生と話す"],
+    sub:["онлайн · таны хятад хэлний багш","online · your Chinese teacher","онлайн · ваш учитель китайского","オンライン · 中国語の先生"],
+    ph:["Хятад үг, пиньинь эсвэл асуулт бич…","Type a Chinese word, pinyin or a question…","Слово, пиньинь или вопрос…","中国語・ピンイン・質問を入力…"],
+    hiGuest:[["你好！Сайн уу! Би Ханзи багш.","Сайн уу! 你好！Би Ханзи багш байна."],["你好! I'm Teacher Hanzi.","Hi there! 你好! I'm Teacher Hanzi."],"你好! Я учитель Ханзи.","你好！ハンジ先生です。"],
+    hello2:[["Юу хийх вэ? Доорх товчийг дар, эсвэл надад шууд бич.","Өнөөдөр хамт юу сурах вэ? Сонгоорой."],["What shall we do? Tap below or just write to me.","What should we learn today? Pick one."],"Что делаем? Нажми кнопку или напиши мне.","何をしましょう？下のボタンか、直接書いてね。"],
+    greetDue:["Өнөөдөр {n} үг давтах цаг болсон байна. Эхлээд тэрийг хийвэл дээр, гэхдээ чи сонго!","{n} words are waiting for review today. I'd start there, but you choose!","Сегодня {n} слов ждут повторения. Начнём с них, но выбирай ты!","今日は復習が{n}語あります。そこから始めるのがおすすめですが、選んでね！"],
+    greetStreak:["🔥 {n} өдөр дараалан сурлаа — 太棒了! Үргэлжлүүлье.","🔥 {n} days in a row — 太棒了! Let's keep going.","🔥 {n} дней подряд — 太棒了! Продолжаем.","🔥 {n}日連続！太棒了！続けましょう。"],
+    q_teach:["📚 Шинэ үг заа","📚 Teach me a word","📚 Новое слово","📚 新しい単語"],
+    q_role:["🗣 Яриа хийе","🗣 Let's talk","🗣 Поговорим","🗣 会話しよう"],
+    q_quiz:["🧠 Шалгаарай","🧠 Quiz me","🧠 Проверь меня","🧠 クイズ"],
+    q_advice:["💡 Зөвлөгөө","💡 Advice","💡 Совет","💡 アドバイス"],
+    q_more:["➡ Дараагийн үг","➡ Next word","➡ Следующее","➡ 次の単語"],
+    q_listen:["🔊 Дахин сонс","🔊 Listen again","🔊 Ещё раз","🔊 もう一度"],
+    q_ex:["🧩 Жишээ","🧩 Examples","🧩 Примеры","🧩 例文"],
+    q_add:["＋ Үгэндээ нэм","＋ Add to my words","＋ В мои слова","＋ 単語帳に追加"],
+    q_stop:["✋ Болъё","✋ Stop","✋ Стоп","✋ やめる"],
+    q_hsk:["🔎 Үгийн сан","🔎 Word bank","🔎 Словарь","🔎 単語帳"],
+    q_gram:["📖 Дүрэм","📖 Grammar","📖 Грамматика","📖 文法"],
+    q_cards:["🗂 Карт давтах","🗂 Review cards","🗂 Повторить","🗂 復習カード"],
+    q_again:["🔁 Өөр яриа","🔁 Another dialogue","🔁 Другой диалог","🔁 別の会話"],
+    q_menu:["🏠 Цэс","🏠 Menu","🏠 Меню","🏠 メニュー"],
+    wod:["📚 Өнөөдрийн үг: {w} ({p}) — {m}. Дарж ярилцаж сур!","📚 Word of the day: {w} ({p}) — {m}. Tap to learn!","📚 Слово дня: {w} ({p}) — {m}. Нажми, чтобы выучить!","📚 今日の単語：{w}（{p}）— {m}。タップして学ぼう！"],
+    teachIntro:[["Өнөөдөр {w} гэдэг үгийг сурцгаая!","Нэг сайхан үг заая — {w}!","{w} гэдэг үгийг мэдэх үү? Хамт үзье!"],["Let's learn {w} today!","Here's a nice one — {w}!","Do you know {w}? Let's look at it together!"],"Давай выучим {w}!","今日は「{w}」を覚えましょう！"],
+    tone:["Өнгө","Tones","Тоны","声調"],
+    noWord:["Энэ түвшний шинэ үг дууссан байна 👏 Үгийн сангаас өөр түвшин сонгоорой.","You've covered all new words at this level 👏 Try another level in the word bank.","Новые слова этого уровня закончились 👏 Попробуй другой уровень.","このレベルの新しい単語は終わりました 👏 別のレベルも試してね。"],
+    noEx:["Энэ үгэнд жишээ алга. Дараагийн үгийг үзье!","No example for this word. Let's try the next one!","Для этого слова нет примера. Давай следующее!","この単語には例文がありません。次へ！"],
+    noLast:["Эхлээд нэг үг заалгаарай 😊","Ask me to teach a word first 😊","Сначала попроси новое слово 😊","まず単語を教えてもらってね 😊"],
+    needLogin:["Үгээ хадгалахын тулд эхлээд нэвтэрнэ үү.","Please sign in first so I can save words for you.","Войди, чтобы я сохранил слова.","保存するにはログインしてね。"],
+    added:["{w}-г үгийн санд чинь нэмлээ! 好！Дараа давтана.","{w} is in your words now! 好! We'll review it later.","{w} добавлено в твои слова! 好!","「{w}」を単語帳に追加しました！好！"],
+    dup:["Энэ үг чамд аль хэдийн байна. 很好！","You already have this word. 很好!","Это слово уже у тебя. 很好!","この単語はもうあります。很好！"],
+    addFail:["Орчуулга алга тул нэмж чадсангүй.","I couldn't add it — no translation available.","Не получилось добавить — нет перевода.","訳がないため追加できませんでした。"],
+    quizAsk:["「{w}」 ({p}) юу гэсэн үг вэ?","What does 「{w}」 ({p}) mean?","Что значит 「{w}」 ({p})?","「{w}」（{p}）の意味は？"],
+    quizOk:[["对！很好！","正确！太棒了！","Яг зөв! 👏"],["对! 很好!","Correct! 太棒了! 👏","Exactly right! 👏"],"对! Правильно! 👏","正解！很好！👏"],
+    quizNo:["没关系！Зөв хариулт: {a}. Дараа нь санаарай.","没关系! The answer is {a}. You'll remember next time.","没关系! Правильно: {a}. В следующий раз запомнишь.","没关系！答えは {a}。次は覚えよう。"],
+    quizEnd:["Шалгалт дууслаа: {a}/{b}. {c}","Quiz done: {a}/{b}. {c}","Тест окончен: {a}/{b}. {c}","クイズ終了：{a}/{b}。{c}"],
+    quizNone:["Шалгах үг алга. Эхлээд шинэ үг сурцгаая!","Nothing to quiz yet. Let's learn a new word first!","Пока нечего проверять. Сначала выучим слово!","まだ出題できません。まず新しい単語を！"],
+    c_hi:["太棒了！Гайхалтай 🎉","太棒了! Fantastic 🎉","太棒了! Отлично 🎉","太棒了！素晴らしい 🎉"],
+    c_mid:["不错！Муугүй, давтаад үзээрэй.","不错! Not bad — review once more.","不错! Неплохо, повтори ещё.","不错！もう一度復習しよう。"],
+    c_lo:["加油！Бүү санаа зов, дахин давтъя.","加油! No worries, we'll practise again.","加油! Не переживай, повторим.","加油！また練習しよう。"],
+    roleStart:["「{t}」 сэдвээр яриа хийцгээе. Би эхэлье, чи хариулаарай!","Let's practise: 「{t}」. I'll start, you answer!","Практикуем: 「{t}」. Я начну, ты отвечай!","「{t}」の会話をしましょう。私から始めます！"],
+    roleYou:["Чиний ээлж — зөв хариуг сонго, эсвэл хятадаар бич:","Your turn — pick the right reply or type it in Chinese:","Твоя очередь — выбери ответ или напиши по-китайски:","あなたの番です。答えを選ぶか、中国語で入力："],
+    roleOk:[["对！","很好！","完美！"],["对!","很好!","Perfect!"],"对! Отлично!","いいね！对！"],
+    roleHint:["Зөв хариулт: {z}  ({m})","Better reply: {z}  ({m})","Лучше было так: {z}  ({m})","正しい答え：{z}（{m}）"],
+    roleEnd:["太好了！Яриа дууслаа. {a}/{b} зөв хариуллаа. {c}","太好了! Dialogue finished. {a}/{b} correct. {c}","太好了! Диалог окончен. Верно {a}/{b}. {c}","太好了！会話終了。{a}/{b} 正解。{c}"],
+    roleNone:["Тохирох яриа олдсонгүй.","No dialogue found.","Подходящего диалога нет.","会話が見つかりません。"],
+    advHead:["Чиний явцыг харлаа:","Here's what I see in your progress:","Вот что я вижу в твоём прогрессе:","進捗を見ました："],
+    advDue:["🔁 {n} үг давтах цаг болсон — эхлээд тэрийг хийе.","🔁 {n} words are due — start with those.","🔁 Пора повторить {n} слов — начни с них.","🔁 復習が{n}語あります。まずそこから。"],
+    advNoDeck:["📚 Үгийн сан чинь хоосон. Өдөрт 5 шинэ үг нэмж эхэл.","📚 Your word list is empty. Start with 5 new words a day.","📚 Список слов пуст. Начни с 5 новых слов в день.","📚 単語帳が空です。1日5語から始めよう。"],
+    advPace:["🎯 HSK {l}-д {t} үг үлдсэн, шалгалтад {d} хоног. Өдөрт ~{n} шинэ үг сурвал амжина.","🎯 HSK {l}: {t} words left, {d} days to the exam. About {n} new words a day will do it.","🎯 HSK {l}: осталось {t} слов, до экзамена {d} дн. ~{n} новых слов в день.","🎯 HSK{l}：残り{t}語、試験まで{d}日。1日約{n}語でOK。"],
+    advStreak:["🔥 {n} өдөр дараалан суралцлаа — хадгалаарай!","🔥 {n} days in a row — keep it up!","🔥 {n} дней подряд — так держать!","🔥 {n}日連続！この調子で。"],
+    advTasks:["✅ Өнөөдрийн {n} даалгавар үлдсэн байна.","✅ {n} tasks left for today.","✅ На сегодня осталось заданий: {n}.","✅ 今日のタスクが{n}件残っています。"],
+    advListen:["🎧 Өдөр бүр 10 минут хятад аудио сонс — чих дасна.","🎧 Listen to Chinese 10 minutes a day — your ear adapts.","🎧 Слушай китайский по 10 минут в день.","🎧 毎日10分、中国語を聞こう。"],
+    advGuest:["Зочин тул ерөнхий зөвлөгөө өгье:","You're a guest, so here's general advice:","Ты гость, поэтому общий совет:","ゲストなので一般的なアドバイス："],
+    lookupHead:["«{q}»-г задлав:","Breaking down «{q}»:","Разбор «{q}»:","「{q}」を分解："],
+    lookupNote:["Өгүүлбэрийг бүхлээр нь орчуулж чадахгүй, харин HSK үг бүрийг тайлбарлав.","I can't translate whole sentences, but I explained each HSK word.","Целое предложение я не перевожу, но разобрал каждое слово HSK.","文全体は訳せませんが、HSKの単語ごとに説明しました。"],
+    lookupNone:["HSK жагсаалтаас танигдсан үг алга.","No HSK words recognised.","Слов HSK не найдено.","HSKの単語が見つかりません。"],
+    searchHead:["«{q}» -р олсон үгс:","Words matching «{q}»:","Найдено по «{q}»:","「{q}」の検索結果："],
+    searchNone:["«{q}» гэсэн үг олдсонгүй. Өөр бичлэгээр оролдоорой.","Nothing found for «{q}». Try another spelling.","По «{q}» ничего. Попробуй иначе.","「{q}」は見つかりません。別の書き方で。"],
+    unknown:[["Ойлгосонгүй 😅 Хятад үг бичвэл тайлбарлая, эсвэл доорх товчийг дар.","Хм… Хятад үг, пиньинь эсвэл монгол утгаар нь хайж болно. Эсвэл товчоо сонго."],["I didn't get that 😅 Type a Chinese word and I'll explain it, or tap a button.","Hmm… try a Chinese word, pinyin or a meaning. Or pick a button."],"Не понял 😅 Напиши китайское слово — объясню, или нажми кнопку.","わかりませんでした 😅 中国語の単語を書くか、ボタンを押してね。"],
+    inQuiz:["Хариултаа доорх товчоор сонго, эсвэл «Болъё» гэж бич.","Pick your answer below, or type “stop”.","Выбери ответ ниже или напиши «стоп».","下から選ぶか「やめる」と入力。"],
+    st_hi:[["你好！Сайн уу, {n}!","Сайн сайхан уу! 你好！"],["你好! Hi, {n}!","Hello! 你好!"],"你好! Привет!","你好！こんにちは！"],
+    st_thanks:[["不客气！Зүгээр дээ 😊","Зүгээр, {n}! Үргэлжлүүлье!"],["不客气! You're welcome 😊","Anytime, {n}! Shall we continue?"],"不客气! Пожалуйста 😊","不客气！どういたしまして 😊"],
+    st_how:[["我很好！Би сайн, баярлалаа. Чи яаж байна?","Би бүр сайн! Чамтай хамт сурах дуртай."],["我很好! I'm great, thanks. And you?","Doing great! I love learning with you."],"我很好! Отлично, а ты как?","我很好！元気です。あなたは？"],
+    st_who:["Би Ханзи багш — таны хятад хэлний туслах. Үг заана, ярилцана, шалгана, зөвлөгөө өгнө.","I'm Teacher Hanzi — your Chinese helper. I teach words, hold dialogues, quiz you and give advice.","Я учитель Ханзи — помощник по китайскому: слова, диалоги, тесты и советы.","ハンジ先生です。単語、会話、クイズ、アドバイスをします。"],
+    st_bye:["再见！Дараа уулзъя 👋","再见! See you soon 👋","再见! До встречи 👋","再见！またね 👋"],
+    stopped:["За, болъё. Хэрэгтэй үедээ дуудаарай!","OK, let's stop. Call me whenever you need!","Хорошо, остановимся. Зови, когда нужно!","わかりました。いつでも呼んでね！"],
+    gramGo:["Дүрмийн хэсэгт үзье:","Let's look at it in Grammar:","Посмотрим в разделе грамматики:","文法セクションで見よう："]
+  };
+  function HT(k,v){
+    var a=HZD&&HZD[k];if(!a)return k;
+    var s=a[LI[lang]];if(s==null||s==='')s=a[1];
+    if(Array.isArray(s))s=s[Math.floor(Math.random()*s.length)];
+    if(v)s=s.replace(/\{(\w+)\}/g,function(m,n){return v[n]!=null?v[n]:m});
+    return s;
+  }
+  var HZC={q:Promise.resolve(),last:null,seen:[],mode:null,quiz:null,role:null,rseen:[],voice:true,wod:null};
+  try{HZC.voice=localStorage.getItem('hsk-hzvoice')!=='0'}catch(e){}
+  function hzLv(){return hasProfile()?(lvOf()||1):1}
+  function hzShuf(a){return a.slice().sort(function(){return Math.random()-.5})}
+  function hzUnseen(){
+    var lv=hzLv(),have=haveSet(),out=[];
+    (HR()[lv]||'').split(',').forEach(function(it){var h=it.split('|')[0];if(h&&!have[h]&&hM(h))out.push(h)});
+    return out;
+  }
+  function hzPick(){
+    var pool=hzUnseen().filter(function(h){return HZC.seen.indexOf(h)<0});
+    if(!pool.length&&HZC.seen.length){HZC.seen=[];pool=hzUnseen()}
+    if(!pool.length)return null;
+    var s=hzShuf(pool).slice(0,40);
+    for(var i=0;i<s.length;i++)if(exFor(s[i]).length)return s[i];
+    return s[0];
+  }
+  function hzWod(){
+    try{
+      var key=TODAY+'|'+hzLv()+'|'+Object.keys(S.words||{}).length;
+      if(HZC.wod&&HZC.wod.k===key)return HZC.wod.h;
+      var pool=hzUnseen();if(!pool.length)return null;
+      var n=0;for(var i=0;i<TODAY.length;i++)n=(n*31+TODAY.charCodeAt(i))>>>0;
+      HZC.wod={k:key,h:pool[n%pool.length]};return HZC.wod.h;
+    }catch(e){return null}
+  }
+  function hzTones(p){
+    var M={'ā':1,'á':2,'ǎ':3,'à':4,'ē':1,'é':2,'ě':3,'è':4,'ī':1,'í':2,'ǐ':3,'ì':4,'ō':1,'ó':2,'ǒ':3,'ò':4,'ū':1,'ú':2,'ǔ':3,'ù':4,'ǖ':1,'ǘ':2,'ǚ':3,'ǜ':4},out=[];
+    String(p||'').split(/\s+/).forEach(function(s){for(var i=0;i<s.length;i++)if(M[s[i]]){out.push(M[s[i]]);return}out.push('·')});
+    return out.join(' ');
+  }
+  function hzCard(h){
+    var hit=hskLookup(h)||{},p=hP(h,hit.p),tn=hzTones(p);
+    return '<div class="hzw"><div><span class="h" lang="zh">'+esc(h)+'</span>'+(hit.l?' <span class="badge">HSK '+hit.l+'</span>':'')+'</div><div class="p">'+esc(p)+(tn?' <small>'+esc(HT('tone'))+': '+esc(tn)+'</small>':'')+'</div><div class="m">'+esc(hM(h)||'—')+'</div></div>';
+  }
+  function hzSayBtn(z){return '<button class="btn small ghost" type="button" data-speak="'+esc(z)+'" aria-label="Audio">🔊</button>'}
+  function hzScroll(){var L=$('hzcLog');if(L)L.scrollTop=L.scrollHeight}
+  function hzAppend(cls,html){var d=document.createElement('div');d.className='hzm '+cls;d.innerHTML='<div class="hzb">'+html+'</div>';$('hzcLog').appendChild(d);hzScroll()}
+  function hzUser(html){hzAppend('me',html)}
+  function hzBot(html,mood,say){
+    HZC.q=HZC.q.then(function(){return new Promise(function(res){
+      var L=$('hzcLog'),tp=document.createElement('div');tp.className='hzm bot typing';tp.innerHTML='<div class="hzb"><i></i><i></i><i></i></div>';L.appendChild(tp);hzScroll();
+      if(window.Hanzi)Hanzi.mood($('hzcAv'),'think');
+      var n=String(html).replace(/<[^>]+>/g,'').length,rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+      setTimeout(function(){
+        tp.remove();hzAppend('bot',html);
+        if(window.Hanzi)Hanzi.mood($('hzcAv'),mood||'hi',true);
+        if(say&&HZC.voice&&window.speechSynthesis){try{speak(say)}catch(e){}}
+        res();
+      },rm?120:Math.min(1000,300+n*8));
+    })});
+    return HZC.q;
+  }
+  function hzChips(list){
+    HZC.q=HZC.q.then(function(){
+      $('hzcQ').innerHTML=list.map(function(c){return '<button type="button" class="chip" data-hza="'+c.a+'"'+(c.d!=null?' data-hzd="'+esc(String(c.d))+'"':'')+'>'+esc(c.t)+'</button>'}).join('');
+    });
+  }
+  function hzMain(){return [{t:HT('q_teach'),a:'teach'},{t:HT('q_role'),a:'role'},{t:HT('q_quiz'),a:'quiz'},{t:HT('q_advice'),a:'advice'},{t:HT('q_hsk'),a:'go',d:'hsk'},{t:HT('q_gram'),a:'go',d:'gram'}]}
+  function hzComment(a,b){var r=b?a/b:0;return HT(r>=.8?'c_hi':r>=.5?'c_mid':'c_lo')}
+  function hzGo(tab){
+    hzClose();
+    if(!hasProfile()&&GUEST_TABS.indexOf(tab)<0){if(isGuest())openAuth(true);return}
+    showTab(tab);
+  }
+  function hzOpen(){
+    var m=$('hzChat');if(!m||!m.hidden)return;
+    m.hidden=false;document.body.classList.add('hzopen');
+    $('hzcTtl').textContent=T('hzName');$('hzcSub').textContent=HT('sub');$('hzcIn').placeholder=HT('ph');
+    $('hzcVoice').textContent=HZC.voice?'🔊':'🔇';
+    if(window.Hanzi&&!$('hzcAv').firstChild)Hanzi.mount($('hzcAv'),'hi');
+    if(!$('hzcLog').children.length){
+      var p=S.profile||{},nick=hasProfile()?(p.nick||''):'',h=new Date().getHours(),g=h<5?'hzNight':h<11?'hzMorn':h<17?'hzDay':h<22?'hzEve':'hzNight';
+      hzBot(nick?T(g,{n:nick}):HT('hiGuest'),'hi');
+      var due=0;try{due=wordsArr().filter(function(w){return w.due&&w.due<=TODAY}).length+srsDue().length}catch(e){}
+      var st=0;try{st=streakNow()}catch(e){}
+      hzBot(due?HT('greetDue',{n:due}):st>=2?HT('greetStreak',{n:st}):HT('hello2'),due?'think':'cheer');
+      hzChips(hzMain());
+    }
+  }
+  function hzClose(){var m=$('hzChat');if(m&&!m.hidden){m.hidden=true;document.body.classList.remove('hzopen');try{window.speechSynthesis&&speechSynthesis.cancel()}catch(e){}}}
+
+  /* ── үг заах ── */
+  function hzTeach(h,noIntro){
+    h=h||hzPick();
+    if(!h){hzBot(HT('noWord'),'think');hzChips(hzMain());return}
+    HZC.last=h;if(HZC.seen.indexOf(h)<0)HZC.seen.push(h);
+    var ex=exFor(h)[0];
+    if(!noIntro)hzBot(HT('teachIntro',{w:h}),'cheer');
+    hzBot(hzCard(h)+(ex?'<div class="exz"><span lang="zh">'+esc(ex.z)+'</span> '+hzSayBtn(ex.z)+'</div>'+(ex.m?'<div class="m">'+esc(ex.m)+'</div>':''):''),'hi',h);
+    hzChips([{t:HT('q_listen'),a:'listen'},{t:HT('q_ex'),a:'ex'},{t:HT('q_add'),a:'add'},{t:HT('q_more'),a:'teach'},{t:HT('q_quiz'),a:'quiz'}]);
+  }
+  function hzExamples(){
+    var h=HZC.last;if(!h){hzBot(HT('noLast'),'think');hzChips(hzMain());return}
+    var r=exFor(h).slice(0,3);
+    if(!r.length)hzBot(HT('noEx'),'think');
+    else hzBot(r.map(function(e){return '<div class="exz"><span lang="zh">'+esc(e.z)+'</span> '+hzSayBtn(e.z)+'</div>'+(e.m?'<div class="m">'+esc(e.m)+'</div>':'')}).join('<hr class="hzhr">'),'hi',r[0].z);
+    hzChips([{t:HT('q_listen'),a:'listen'},{t:HT('q_add'),a:'add'},{t:HT('q_more'),a:'teach'},{t:HT('q_quiz'),a:'quiz'}]);
+  }
+  function hzAdd(){
+    var h=HZC.last;
+    if(!h){hzBot(HT('noLast'),'think');hzChips(hzMain());return}
+    if(!hasProfile()){if(isGuest())openAuth(true);hzBot(HT('needLogin'),'think');hzChips(hzMain());return}
+    if(haveSet()[h])hzBot(HT('dup'),'cheer');
+    else if(mediaAdd(h)){syncSummary(TODAY);renderAll();hzBot(HT('added',{w:h}),'cheer')}
+    else hzBot(HT('addFail'),'oops');
+    hzChips([{t:HT('q_more'),a:'teach'},{t:HT('q_quiz'),a:'quiz'},{t:HT('q_menu'),a:'menu'}]);
+  }
+
+  /* ── шалгалт ── */
+  function hzQuizStart(){
+    hskLookup('');
+    var all=Object.keys(HSKD||{}),src=wordsArr().map(function(w){return w.h}).filter(function(h){return hM(h)});
+    if(src.length<4)src=src.concat(HZC.seen).concat(hzShuf(hzUnseen()).slice(0,8));
+    src=hzShuf(src.filter(function(h,i){return src.indexOf(h)===i})).slice(0,5);
+    if(src.length<2){hzBot(HT('quizNone'),'think');hzChips(hzMain());return}
+    var qs=src.map(function(h){
+      var ans=hM(h),opts=[ans],guard=0;
+      while(opts.length<4&&guard++<80){var x=all[Math.floor(Math.random()*all.length)],m=hM(x);if(m&&opts.indexOf(m)<0)opts.push(m)}
+      opts=hzShuf(opts);return {h:h,p:hP(h,(hskLookup(h)||{}).p),ans:ans,opts:opts};
+    });
+    HZC.mode='quiz';HZC.quiz={qs:qs,i:0,ok:0};hzQuizAsk();
+  }
+  function hzQuizAsk(){
+    var Q=HZC.quiz,q=Q.qs[Q.i];
+    hzBot(HT('quizAsk',{w:q.h,p:q.p}),'think',q.h);
+    hzChips(q.opts.map(function(o,i){return {t:o,a:'qa',d:i}}).concat([{t:HT('q_stop'),a:'stop'}]));
+  }
+  function hzQuizAnswer(i){
+    var Q=HZC.quiz;if(!Q)return;var q=Q.qs[Q.i],ok=q.opts[i]===q.ans;
+    hzUser(esc(q.opts[i]));
+    if(ok){Q.ok++;hzBot(HT('quizOk'),'cheer')}else hzBot(HT('quizNo',{a:q.ans}),'oops');
+    Q.i++;
+    if(Q.i<Q.qs.length)hzQuizAsk();
+    else{hzBot(HT('quizEnd',{a:Q.ok,b:Q.qs.length,c:hzComment(Q.ok,Q.qs.length)}),Q.ok>=Q.qs.length/2?'cheer':'hi');HZC.mode=null;HZC.quiz=null;hzChips([{t:HT('q_quiz'),a:'quiz'},{t:HT('q_teach'),a:'teach'},{t:HT('q_advice'),a:'advice'},{t:HT('q_menu'),a:'menu'}])}
+  }
+
+  /* ── яриа (дүр тоглох): сценарийн дагуу багш нэг дүр, хэрэглэгч нөгөө дүр ── */
+  function hzSim(a,b){
+    var x=String(a).replace(/[^\u4e00-\u9fff]/g,''),y=String(b).replace(/[^\u4e00-\u9fff]/g,'');
+    if(!x||!y)return 0;var hit=0;for(var i=0;i<x.length;i++)if(y.indexOf(x[i])>-1)hit++;
+    return hit/Math.max(x.length,y.length);
+  }
+  function hzRoleStart(){
+    var lv=hzLv(),SC=(window.DATA&&DATA.SCN)||[],pool=SC.filter(function(x){return x.l<=lv&&HZC.rseen.indexOf(x)<0});
+    if(!pool.length){HZC.rseen=[];pool=SC.filter(function(x){return x.l<=lv})}
+    if(!pool.length)pool=SC;
+    if(!pool.length){hzBot(HT('roleNone'),'oops');hzChips(hzMain());return}
+    var sc=pool[Math.floor(Math.random()*pool.length)];HZC.rseen.push(sc);
+    var bot=sc.w[0],me=bot==='A'?'B':'A';
+    HZC.mode='role';HZC.role={sc:sc,bot:bot,me:me,i:0,ok:0,n:0,opts:null,lv:lv};
+    hzBot(HT('roleStart',{t:esc(sc.t)}),'cheer');hzRoleStep();
+  }
+  function hzRoleStep(){
+    var R=HZC.role,s=R.sc;
+    while(R.i<s.z.length&&s.w[R.i]===R.bot){
+      var z=s.z[R.i],m=s.m[R.i];
+      hzBot('<span lang="zh" class="hzz">'+esc(z)+'</span> '+hzSayBtn(z)+(m?'<div class="m">'+esc(m)+'</div>':''),'hi',z);R.i++;
+    }
+    if(R.i>=s.z.length){
+      hzBot(HT('roleEnd',{a:R.ok,b:R.n,c:hzComment(R.ok,R.n)}),R.ok>=R.n/2?'cheer':'hi');
+      HZC.mode=null;HZC.role=null;
+      hzChips([{t:HT('q_again'),a:'role'},{t:HT('q_teach'),a:'teach'},{t:HT('q_advice'),a:'advice'},{t:HT('q_menu'),a:'menu'}]);return;
+    }
+    var SC=(window.DATA&&DATA.SCN)||[],pool=[];
+    SC.forEach(function(x){if(x===s)return;x.w.forEach(function(w,j){if(w===R.me&&x.z[j]!==s.z[R.i]&&pool.indexOf(j)<0)pool.push({z:x.z[j],m:x.m[j]})})});
+    var d=hzShuf(pool).slice(0,2),opts=hzShuf([{z:s.z[R.i],m:s.m[R.i],ok:1}].concat(d));
+    R.opts=opts;
+    hzBot(HT('roleYou'),'think');
+    hzChips(opts.map(function(o,i){return {t:o.z+(R.lv<=2&&o.m?' — '+o.m:''),a:'ra',d:i}}).concat([{t:HT('q_stop'),a:'stop'}]));
+  }
+  function hzRoleAnswer(ok,said){
+    var R=HZC.role;if(!R)return;var s=R.sc;
+    hzUser('<span lang="zh">'+esc(said)+'</span>');
+    R.n++;
+    if(ok){R.ok++;hzBot(HT('roleOk'),'cheer')}
+    else hzBot(HT('roleHint',{z:esc(s.z[R.i]),m:esc(s.m[R.i]||'')}),'oops',s.z[R.i]);
+    R.i++;hzRoleStep();
+  }
+
+  /* ── зөвлөгөө ── */
+  function hzAdvice(){
+    var out=[],act=[];
+    if(!hasProfile()){
+      hzBot(HT('advGuest'),'hi');
+      hzBot(T('hzTip'+Math.floor(Math.random()*4))+'<br>'+HT('advListen'),'think');
+      hzChips([{t:HT('q_hsk'),a:'go',d:'hsk'},{t:HT('q_teach'),a:'teach'},{t:HT('q_menu'),a:'menu'}]);return;
+    }
+    var p=S.profile||{},due=0,tasks=0,st=0;
+    try{due=wordsArr().filter(function(w){return w.due&&w.due<=TODAY}).length+srsDue().length}catch(e){}
+    try{var ck=checksToday();tasks=tasksFor().filter(function(t){return !ck[t.id]}).length}catch(e){}
+    try{st=streakNow()}catch(e){}
+    var n=wordsArr().length;
+    if(due){out.push(HT('advDue',{n:due}));act.push({t:HT('q_cards'),a:'go',d:'cards'})}
+    if(!n){out.push(HT('advNoDeck'));act.push({t:HT('q_teach'),a:'teach'})}
+    else{
+      var lv=lvOf(),total=NW(lv),got=wordsArr().filter(function(w){return w.l===lv}).length,left=p.exam?Math.round((parseIso(p.exam)-today)/864e5):-1;
+      if(left>0&&total>got)out.push(HT('advPace',{l:lv,t:total-got,d:left,n:Math.max(1,Math.ceil((total-got)/left))}));
+    }
+    if(st>=2)out.push(HT('advStreak',{n:st}));
+    if(tasks)out.push(HT('advTasks',{n:tasks}));
+    if(out.length<3)out.push(HT('advListen'));
+    hzBot(HT('advHead')+'<br>'+out.slice(0,4).join('<br>'),'think');
+    act.push({t:HT('q_teach'),a:'teach'},{t:HT('q_quiz'),a:'quiz'},{t:HT('q_menu'),a:'menu'});
+    hzChips(act.filter(function(c,i){return act.findIndex(function(d){return d.a===c.a&&d.d===c.d})===i}));
+  }
+
+  /* ── хятад өгүүлбэр задлах / үг хайх ── */
+  function hzLookup(txt){
+    var seen={},rows=[];
+    segZh(txt).forEach(function(x){if(!x.h||seen[x.h])return;seen[x.h]=1;rows.push(x.h)});
+    if(!rows.length){hzBot(HT('lookupNone'),'think');hzChips(hzMain());return}
+    hzBot(HT('lookupHead',{q:esc(txt)})+rows.slice(0,10).map(function(h){var hit=hskLookup(h)||{};return '<div class="hzrow"><button type="button" class="hzlnk" data-hza="word" data-hzd="'+esc(h)+'"><span lang="zh" class="h">'+esc(h)+'</span> <span class="p">'+esc(hP(h,hit.p))+'</span> <span class="m">'+esc(hM(h)||'')+'</span></button></div>'}).join('')+'<div class="hint">'+HT('lookupNote')+'</div>','think',txt);
+    hzChips(hzMain());
+  }
+  function hzSearch(q){
+    var res=[];
+    LEVELS.forEach(function(lv){(HR()[lv]||'').split(',').forEach(function(it){var a=it.split('|'),h=a[0];if(!h)return;var p=hP(h,a[1]),m=hM(h);if(mq(h+' '+p+' '+m+' '+hMn(h),q))res.push(h)})});
+    if(!res.length){hzBot(HT('searchNone',{q:esc(q)}),'oops');hzChips(hzMain());return}
+    res.sort(function(a,b){return a.length-b.length});
+    if(res.length===1||nz(hP(res[0],(hskLookup(res[0])||{}).p)).replace(/\s+/g,'')===nz(q).replace(/\s+/g,'')){hzTeach(res[0],true);return}
+    hzBot(HT('searchHead',{q:esc(q)})+res.slice(0,6).map(function(h){var hit=hskLookup(h)||{};return '<div class="hzrow"><button type="button" class="hzlnk" data-hza="word" data-hzd="'+esc(h)+'"><span lang="zh" class="h">'+esc(h)+'</span> <span class="p">'+esc(hP(h,hit.p))+'</span> <span class="m">'+esc(hM(h)||'')+'</span></button></div>'}).join(''),'think');
+    hzChips(hzMain());
+  }
+
+  /* ── чөлөөт бичвэр ── */
+  var HZR={
+    teach:/шинэ үг|үг заа|үг зааж|teach|new word|learn.*word|слово|новое слово|単語|sine ug|ug zaa/,
+    role:/яриа|ярилц|ярья|chat|conversation|dialog|role|разговор|диалог|会話|yaria|yarilts/,
+    quiz:/шалга|тест|quiz|test|проверь|викторин|クイズ|テスト|shalga/,
+    advice:/зөвлөг|advice|\btips?\b|совет|アドバイス|zovlog|яаж сур|how to study|как учить|勉強/,
+    gram:/дүрэм|grammar|грамматик|文法|durem/,
+    ex:/жишээ|example|пример|例文|jishee/,
+    again:/дахин сон|дахиад сон|repeat|again|повтор|もう一度|dahin son/,
+    add:/нэм|\badd\b|save|добав|追加|hadgal/,
+    next:/дараагийн|\bnext\b|следующ|次の|daraagiin/,
+    stop:/болъё|болих|\bstop\b|хангалттай|стоп|やめ|boliy|bolyo/,
+    hi:/^(сайн уу|сайн байна уу|sain uu|sn uu|hello|hi|hey|你好|привет|здравствуй|こんにちは)/,
+    thanks:/баярлал|bayarlalaa|bayrlalaa|thank|谢谢|спасибо|ありがとう/,
+    how:/чи яаж|та сайн|how are you|你好吗|как дела|元気/,
+    who:/чи хэн|хэн бэ|who are you|кто ты|あなたは誰/,
+    bye:/баяртай|\bbye\b|再见|пока|さようなら|bayartai/
+  };
+  function hzText(raw){
+    var t=String(raw).trim();if(!t)return;
+    var lo=t.toLowerCase(),han=/[\u4e00-\u9fff]/.test(t);
+    if(HZC.mode==='role'&&HZC.role&&!HZR.stop.test(lo)){
+      var R=HZC.role,want=R.sc.z[R.i];
+      if(han){hzRoleAnswer(hzSim(t,want)>=.6,t);return}
+      hzUser(esc(t));hzBot(HT('roleYou'),'think');return;
+    }
+    if(HZC.mode==='quiz'&&HZC.quiz&&!HZR.stop.test(lo)){
+      var q=HZC.quiz.qs[HZC.quiz.i],idx=q.opts.findIndex(function(o){return nz(o)===nz(t)||(nz(t).length>2&&nz(o).indexOf(nz(t))>-1)});
+      if(idx>-1){hzQuizAnswer(idx);return}
+      hzUser(esc(t));hzBot(HT('inQuiz'),'think');return;
+    }
+    hzUser(esc(t));
+    if(HZR.stop.test(lo)){hzAct('stop');return}
+    if(han){hzLookup(t);return}
+    if(HZR.teach.test(lo)||HZR.next.test(lo)){hzTeach();return}
+    if(HZR.role.test(lo)){hzRoleStart();return}
+    if(HZR.quiz.test(lo)){hzQuizStart();return}
+    if(HZR.advice.test(lo)){hzAdvice();return}
+    if(HZR.gram.test(lo)){hzBot(HT('gramGo'),'hi');hzChips([{t:HT('q_gram'),a:'go',d:'gram'},{t:HT('q_menu'),a:'menu'}]);return}
+    if(HZC.last&&HZR.ex.test(lo)){hzExamples();return}
+    if(HZC.last&&HZR.again.test(lo)){hzAct('listen');return}
+    if(HZC.last&&HZR.add.test(lo)){hzAdd();return}
+    var nick=(hasProfile()&&S.profile.nick)||'';
+    if(HZR.hi.test(lo)){hzBot(HT('st_hi',{n:nick}),'cheer');hzChips(hzMain());return}
+    if(HZR.thanks.test(lo)){hzBot(HT('st_thanks',{n:nick}),'cheer');hzChips(hzMain());return}
+    if(HZR.how.test(lo)){hzBot(HT('st_how'),'cheer');hzChips(hzMain());return}
+    if(HZR.who.test(lo)){hzBot(HT('st_who'),'hi');hzChips(hzMain());return}
+    if(HZR.bye.test(lo)){hzBot(HT('st_bye'),'hi');hzChips(hzMain());return}
+    if(t.length>=2){hzSearch(t);return}
+    hzBot(HT('unknown'),'think');hzChips(hzMain());
+  }
+  function hzAct(a,d,label){
+    switch(a){
+      case 'menu':HZC.mode=null;hzBot(HT('hello2'),'hi');hzChips(hzMain());break;
+      case 'teach':HZC.mode=null;hzTeach();break;
+      case 'word':hzTeach(d,true);break;
+      case 'listen':if(HZC.last){try{speak(HZC.last)}catch(e){}hzChips([{t:HT('q_ex'),a:'ex'},{t:HT('q_add'),a:'add'},{t:HT('q_more'),a:'teach'},{t:HT('q_quiz'),a:'quiz'}])}else{hzBot(HT('noLast'),'think');hzChips(hzMain())}break;
+      case 'ex':hzExamples();break;
+      case 'add':hzAdd();break;
+      case 'quiz':hzQuizStart();break;
+      case 'qa':hzQuizAnswer(+d);break;
+      case 'role':hzRoleStart();break;
+      case 'ra':var R=HZC.role;if(R&&R.opts&&R.opts[+d])hzRoleAnswer(!!R.opts[+d].ok,R.opts[+d].z);break;
+      case 'advice':hzAdvice();break;
+      case 'go':hzGo(d);break;
+      case 'stop':HZC.mode=null;HZC.quiz=null;HZC.role=null;hzBot(HT('stopped'),'hi');hzChips(hzMain());break;
+    }
+  }
   document.addEventListener('click',function(e){
-    var b=e.target.closest&&e.target.closest('.hzav2');if(!b)return;
-    var host=b.parentNode;
-    if(host.dataset.hz==='today'){hzTapN++;var d=hzLine('today');host.querySelector('p').textContent=d.t;Hanzi.mood(b,d.m,true)}
-    else Hanzi.mood(b,'cheer',true);
+    var b=e.target.closest&&e.target.closest('.hzav2');
+    if(b){var host=b.parentNode;if(host.dataset.hz==='today'||host.dataset.hz==='auth'||host.dataset.hz==='onb'){hzOpen();Hanzi.mood(b,'cheer',true)}else Hanzi.mood(b,'cheer',true);return}
+    if(e.target.closest('[data-hzopen]')){hzOpen();return}
+    if(e.target.closest('[data-hzcclose]')){hzClose();return}
+    if(e.target.closest('#hzcVoice')){HZC.voice=!HZC.voice;try{localStorage.setItem('hsk-hzvoice',HZC.voice?'1':'0')}catch(x){}$('hzcVoice').textContent=HZC.voice?'🔊':'🔇';if(!HZC.voice)try{speechSynthesis.cancel()}catch(x){}return}
+    if(e.target.closest('#hzcSend')){var i=$('hzcIn');var v=i.value;i.value='';hzText(v);return}
+    var c=e.target.closest('[data-hza]');
+    if(c&&c.closest('#hzChat')){
+      var a=c.dataset.hza,d=c.dataset.hzd;
+      if(a!=='qa'&&a!=='ra'&&a!=='listen'&&a!=='go')hzUser(esc(c.textContent.trim().replace(/^[^\w\u0400-\u04ff\u3000-\u9fff]+\s*/,'')||c.textContent));
+      $('hzcQ').innerHTML='';
+      hzAct(a,d,c.textContent);
+    }
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape')hzClose();
+    if(e.key==='Enter'&&e.target&&e.target.id==='hzcIn'){e.preventDefault();var v=e.target.value;e.target.value='';hzText(v)}
   });
   function checksToday(){return S.chk[TODAY]||{}}
   function renderTasks(){
@@ -1387,7 +1801,7 @@ var DATA=window.DATA;
     renderOnb();renderToday();renderProg();renderList();renderHsk();renderGram();renderPlay();renderLs();renderCls();renderClasses();renderLearn();renderMe();
     $('storeNote').textContent=T(mode==='db'?'storeDb':'storeLocal');
     fillSelect('fL',false,+($('fL').value||lvOf()));fillSelect('cLv',true,F.lv);
-    tabs.forEach(function(b){if(b.dataset.t==='admin')b.hidden=!isOwner;else b.disabled=!hasProfile()&&b.dataset.t!=='today'});$('menuBtn').disabled=!hasProfile();
+    tabs.forEach(function(b){if(b.dataset.t==='admin')b.hidden=!isOwner;else b.disabled=!hasProfile()&&!isGuest()&&b.dataset.t!=='today'});$('menuBtn').disabled=!hasProfile()&&!isGuest();
     var t=curTab();
     if(t==='cards')renderModes();if(t==='group')renderGroup();if(t==='admin')renderAdmin();
   }
@@ -1408,6 +1822,9 @@ var DATA=window.DATA;
   applyStatic();fillMin('obMin');fillMin('meMin');$('obMin').value='180';
   fillSelect('fL',false,lvOf());fillSelect('cLv',true,0);
   renderTasks();renderAll();startDeck();
+  /* зочдод зориулсан шууд холбоос: …/#hsk эсвэл …/#gram (#guest = HSK үгийн сан) */
+  function hashTab(){var h=(location.hash||'').replace('#','');if(h==='hsk'||h==='gram')showTab(h);else if(h==='guest')showTab('hsk')}
+  hashTab();window.addEventListener('hashchange',hashTab);
 
   /* ---------- Бичлэг · Дуу (media): хадмал дээрх үгийг товшиж сурах ---------- */
   var MED={items:null,loading:null,kind:'feed',cur:null,sel:'',quiz:null,t:-1,muted:true,pin:true,obs:null};
@@ -1454,7 +1871,7 @@ var DATA=window.DATA;
   function ytId(u){var m=/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/.exec(u||'');return m?m[1]:(/^[\w-]{11}$/.test(u||'')?u:'')}
   function mediaPlayer(it){
     if(it.srcType==='youtube'&&ytId(it.src))return '<div class="mplay"><iframe src="https://www.youtube-nocookie.com/embed/'+esc(ytId(it.src))+'" title="'+esc(it.title)+'" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>';
-    if(it.srcType==='file'&&/^(media|video)\/[\w. -]+$/.test(it.src||'')){
+    if(it.srcType==='file'&&/^(media|video)\/[^\/\\<>"'?#]+$/.test(it.src||'')){
       var au=/\.(mp3|m4a|wav|ogg)$/i.test(it.src);
       return '<'+(au?'audio class="maud"':'video class="mvid"')+' id="mVid" controls playsinline preload="metadata" src="'+esc(encodeURI(it.src))+'"></'+(au?'audio':'video')+'>';
     }
@@ -1529,19 +1946,28 @@ var DATA=window.DATA;
   }
 
   /* TikTok маягийн босоо лент: богино бичлэг автоматаар тоглож, хадмал цагтай гарч, үг дээр дарж сурна */
-  function feedItems(items){var L=items.filter(function(x){return x.srcType==='file'&&/\.(mp4|webm)$/i.test(x.src||'')});return L.filter(function(x){return x.story}).reverse().concat(L.filter(function(x){return !x.story}))}
+  function feedItems(items){var L=items.filter(function(x){return x.srcType==='file'&&/\.(mp4|webm|mp3|m4a|wav|ogg)$/i.test(x.src||'')});return L.filter(function(x){return x.story}).reverse().concat(L.filter(function(x){return !x.story}))}
   function mediaStop(){document.querySelectorAll('#mBody video,#mBody audio').forEach(function(v){try{v.pause()}catch(e){}});if(MED.obs){MED.obs.disconnect();MED.obs=null}}
+  function isAud(x){return /\.(mp3|m4a|wav|ogg)$/i.test(x.src||'')}
+  function lineEnd(L,i){var l=L[i];return l.e!=null?l.e:(L[i+1]&&L[i+1].t!=null?L[i+1].t:l.t+4)}
   function capHtml(ln){
+    var hv=haveSet();
     var z=segZh(ln.zh).map(function(x){
       if(!x.h)return esc(x.t);
-      var hit=hskLookup(x.h);
-      return '<button type="button" class="mfw" data-h="'+esc(x.h)+'" lang="zh"><ruby>'+esc(x.h)+'<rt>'+esc(hP(x.h,hit.p))+'</rt></ruby></button>';
+      var hit=hskLookup(x.h),nw=!hv[x.h]&&hM(x.h);
+      return '<button type="button" class="mfw'+(nw?' new':'')+'" data-h="'+esc(x.h)+'" lang="zh"><ruby>'+esc(x.h)+'<rt>'+esc(hP(x.h,hit.p))+'</rt></ruby></button>';
     }).join('');
     return '<div class="mfz">'+z+'</div>'+(ln.mn?'<div class="mfm">'+esc(ln.mn)+'</div>':'');
   }
   function feedCap(slide,it){
-    var v=slide.querySelector('video'),ct=v.currentTime,L=it.lines||[],cur=-1;
-    L.forEach(function(l,i){if(l.t==null)return;var e=l.e!=null?l.e:(L[i+1]&&L[i+1].t!=null?L[i+1].t:l.t+4);if(l.t<=ct&&ct<e)cur=i});
+    var v=slide.querySelector('video,audio'),ct=v.currentTime,L=it.lines||[],cur=-1;
+    L.forEach(function(l,i){if(l.t==null)return;if(l.t<=ct&&ct<lineEnd(L,i))cur=i});
+    /* 🔁 нэг мөрийг давтаж сонсох */
+    if(MED.loop){
+      if(slide._lp==null&&cur>=0)slide._lp=cur;
+      var lp=slide._lp;
+      if(lp!=null&&L[lp]&&L[lp].t!=null&&cur!==lp&&ct>=lineEnd(L,lp)-.25){v.currentTime=L[lp].t;cur=lp}
+    }else slide._lp=null;
     if(slide._cur!==cur){slide._cur=cur;slide.querySelector('.mfcap').innerHTML=cur<0?'':capHtml(L[cur])}
     var b=slide.querySelector('.mfbar i');if(b&&v.duration)b.style.width=(100*ct/v.duration)+'%';
   }
@@ -1552,19 +1978,21 @@ var DATA=window.DATA;
     var hv=haveSet();
     box.innerHTML='<div class="mfeed'+(MED.pin?' pin':'')+'" id="mFeed">'+L.map(function(x,i){
       var nw=mediaWords(x).filter(function(w){return !hv[w.h]&&w.m}).length;
-      return '<section class="mslide" data-fi="'+i+'"><video class="mfv" playsinline loop preload="'+(i<2?'auto':'metadata')+'" src="'+esc(encodeURI(x.src))+'"></video><div class="mfcap"></div>'+
+      var au=isAud(x),pre=(i<2?'auto':'metadata'),src=esc(encodeURI(x.src));
+      return '<section class="mslide'+(au?' aud':'')+'" data-fi="'+i+'">'+(au?'<audio class="mfa" loop preload="'+pre+'" src="'+src+'"></audio><div class="mfcov"><div class="mfdisc">🎵</div><div class="mfeq"><i></i><i></i><i></i><i></i><i></i></div></div>':'<video class="mfv" playsinline loop preload="'+pre+'" src="'+src+'"></video>')+'<div class="mfcap"></div>'+
         (x.story?'':'<div class="mftop"><b>'+esc(x.title)+'</b>'+(x.level?'<span class="badge">HSK '+x.level+'</span>':'')+'</div>')+
-        '<div class="mfside"><button type="button" data-mfsnd aria-label="sound">'+(MED.muted?'🔇':'🔊')+'</button><button type="button" data-mfpy aria-label="pinyin">拼</button><button type="button" data-mfwords>📚<small>'+nw+'</small></button></div><div class="mfbar"><i></i></div></section>';
+        '<div class="mfside"><button type="button" data-mfsnd aria-label="sound">'+(MED.muted?'🔇':'🔊')+'</button><button type="button" data-mfpy aria-label="pinyin">拼</button><button type="button" data-mfloop aria-label="repeat line" class="'+(MED.loop?'on':'')+'">🔁</button><button type="button" data-mfspd aria-label="speed">'+(MED.spd||1)+'×</button><button type="button" data-mfwords>📚<small>'+nw+'</small></button></div><div class="mfbar"><i></i></div></section>';
     }).join('')+'</div><div class="card mfcard" id="mfCard" hidden></div>';
     var feed=$('mFeed');
     MED.obs=new IntersectionObserver(function(es){es.forEach(function(en){
-      var v=en.target.querySelector('video');
-      if(en.isIntersecting&&en.intersectionRatio>=.6){v.muted=MED.muted;v.play().catch(function(){});$('mfCard').hidden=true}
+      var v=en.target.querySelector('video,audio');
+      if(en.isIntersecting&&en.intersectionRatio>=.6){v.muted=MED.muted;v.playbackRate=MED.spd||1;v.play().catch(function(){});$('mfCard').hidden=true}
       else{v.pause()}
     })},{root:feed,threshold:[.6]});
     feed.querySelectorAll('.mslide').forEach(function(sl,i){
-      var v=sl.querySelector('video');v.muted=MED.muted;
+      var v=sl.querySelector('video,audio');v.muted=MED.muted;
       v.addEventListener('timeupdate',function(){feedCap(sl,L[i])});
+      v.addEventListener('play',function(){sl.classList.add('playing')});v.addEventListener('pause',function(){sl.classList.remove('playing')});
       MED.obs.observe(sl);
     });
     MED.feed=L;
@@ -1577,7 +2005,7 @@ var DATA=window.DATA;
   }
   function feedWordCard(h,slide){
     var hit=hskLookup(h),m=hM(h),has=haveSet()[h],c=$('mfCard');
-    var v=slide.querySelector('video');v.pause();
+    var v=slide.querySelector('video,audio');v.pause();
     c.hidden=false;c.dataset.it='';
     c.innerHTML='<div class="between"><span class="h big" lang="zh">'+esc(h)+'</span><span class="badge">HSK '+hit.l+'</span></div><div class="p">'+esc(hP(h,hit.p))+'</div><div class="m">'+esc(m||'—')+'</div>'+
       '<div class="row"><button class="btn ghost small" type="button" data-msp="'+esc(h)+'">🔊</button>'+(has?'<span class="hint">'+esc(T('mHave'))+'</span>':(m?'<button class="btn small" type="button" data-mfa="'+esc(h)+'">+ '+esc(T('mAddOne'))+'</button>':''))+'<button class="btn small ghost" type="button" data-mfx>▶</button></div>';
@@ -1586,11 +2014,13 @@ var DATA=window.DATA;
     var t=e.target;if(!t.closest||!t.closest('#p-media')||!$('mFeed'))return;
     var sl=t.closest('.mslide'),b;
     var it=sl&&MED.feed[+sl.dataset.fi];
-    if(t.closest('[data-mfsnd]')){MED.muted=!MED.muted;document.querySelectorAll('#mFeed video').forEach(function(v){v.muted=MED.muted});document.querySelectorAll('[data-mfsnd]').forEach(function(x){x.textContent=MED.muted?'🔇':'🔊'});return}
+    if(t.closest('[data-mfsnd]')){MED.muted=!MED.muted;document.querySelectorAll('#mFeed video,#mFeed audio').forEach(function(v){v.muted=MED.muted});document.querySelectorAll('[data-mfsnd]').forEach(function(x){x.textContent=MED.muted?'🔇':'🔊'});return}
+    if(t.closest('[data-mfloop]')){MED.loop=!MED.loop;document.querySelectorAll('#mFeed .mslide').forEach(function(s){s._lp=null});document.querySelectorAll('[data-mfloop]').forEach(function(x){x.classList.toggle('on',MED.loop)});toast(MED.loop?'🔁 ON':'🔁 OFF');return}
+    if(t.closest('[data-mfspd]')){MED.spd=MED.spd===1||!MED.spd?.75:(MED.spd===.75?.5:1);document.querySelectorAll('#mFeed video,#mFeed audio').forEach(function(v){v.playbackRate=MED.spd});document.querySelectorAll('[data-mfspd]').forEach(function(x){x.textContent=MED.spd+'×'});return}
     if(t.closest('[data-mfpy]')){MED.pin=!MED.pin;$('mFeed').classList.toggle('pin',MED.pin);return}
-    if(t.closest('[data-mfwords]')){sl.querySelector('video').pause();feedWordsSheet(it);return}
+    if(t.closest('[data-mfwords]')){sl.querySelector('video,audio').pause();feedWordsSheet(it);return}
     if((b=t.closest('.mfw'))){feedWordCard(b.dataset.h,sl);return}
-    if(t.closest('[data-mfx]')){$('mfCard').hidden=true;var a=document.querySelector('.mslide video:not([paused])');document.querySelectorAll('#mFeed .mslide').forEach(function(s){var r=s.getBoundingClientRect(),f=$('mFeed').getBoundingClientRect();if(r.top>=f.top-10&&r.top<f.top+f.height/2)s.querySelector('video').play().catch(function(){})});return}
+    if(t.closest('[data-mfx]')){$('mfCard').hidden=true;var a=document.querySelector('.mslide video:not([paused])');document.querySelectorAll('#mFeed .mslide').forEach(function(s){var r=s.getBoundingClientRect(),f=$('mFeed').getBoundingClientRect();if(r.top>=f.top-10&&r.top<f.top+f.height/2)s.querySelector('video,audio').play().catch(function(){})});return}
     if((b=t.closest('[data-mfa]'))){
       if(mediaAdd(b.dataset.mfa)){syncSummary(TODAY);toast(T('tAdded'),'cheer');var cid=$('mfCard').dataset.it,fy=$('mFeed').scrollTop;renderAll();if(cid){var x2=MED.feed.filter(function(z){return z.id===cid})[0];x2&&feedWordsSheet(x2)}else $('mfCard').hidden=true}
       return}
@@ -1598,7 +2028,7 @@ var DATA=window.DATA;
       var it2=MED.feed.filter(function(z){return z.id===$('mfCard').dataset.it})[0],n=0;
       it2&&mediaWords(it2).forEach(function(w){if(mediaAdd(w.h))n++});
       if(n){syncSummary(TODAY);toast(T('tAddedN',{n:n}),'cheer');renderAll();feedWordsSheet(it2)}return}
-    if(sl&&t.closest('.mfv')){var v=sl.querySelector('video');v.paused?v.play().catch(function(){}):v.pause()}
+    if(sl&&t.closest('.mfv,.mfcov')){var v=sl.querySelector('video,audio');v.paused?v.play().catch(function(){}):v.pause()}
   });
   function parseLines(txt){
     return String(txt||'').split('\n').map(function(r){return r.trim()}).filter(Boolean).map(function(r){
@@ -1617,7 +2047,7 @@ var DATA=window.DATA;
     if(!sb||!isOwner)return;
     var title=$('mTitle').value.trim(),lines=parseLines($('mText').value),src=$('mSrc').value.trim();
     if(!title||!lines.length){toast(T('mNeed'),'oops');return}
-    var type=ytId(src)?'youtube':(/^media\/[\w. -]+\.(mp4|mp3|m4a|wav|ogg|webm)$/i.test(src)?'file':'none');
+    var type=ytId(src)?'youtube':(/^media\/[^\/\\<>"'?#]+\.(mp4|mp3|m4a|wav|ogg|webm)$/i.test(src)?'file':'none');
     var row={id:'m_'+Date.now().toString(36),kind:$('mKind').value,level:+$('mLvl').value||null,title:title,title_zh:$('mTitleZh').value.trim(),src_type:type,src:type==='youtube'?ytId(src):(type==='file'?src:''),lines:lines};
     var x=await sb.from('media').insert(row);
     if(x.error){toast(String(x.error.message||x.error));return}

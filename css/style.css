@@ -1,7 +1,7 @@
 *,*::before,*::after{box-sizing:border-box}
 body{margin:0}
 [hidden]{display:none!important}
-#p-today.needauth>*:not(#auth){display:none!important}
+#p-today.needauth>*:not(#guestCard):not(#recov){display:none!important}
 /* Layout: one column, language picker on top, bottom tab bar. Tabs: Today / Words / Cards / Group / Me / Admin (owner only). */
 :root{
   --bg:#EDF0F3; --surface:#FFFFFF; --fg:#131A24; --muted:#5B6675; --line:#D3D9E0;
@@ -379,7 +379,7 @@ mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding
 *,*::before,*::after{box-sizing:border-box}
 body{margin:0}
 [hidden]{display:none!important}
-#p-today.needauth>*:not(#auth){display:none!important}
+#p-today.needauth>*:not(#guestCard):not(#recov){display:none!important}
 /* Layout: one column, language picker on top, bottom tab bar. Tabs: Today / Words / Cards / Group / Me / Admin (owner only). */
 :root{
   --bg:#EDF0F3; --surface:#FFFFFF; --fg:#131A24; --muted:#5B6675; --line:#D3D9E0;
@@ -885,3 +885,61 @@ body::before{content:"";position:fixed;left:-10%;right:-10%;top:-10%;height:62vh
 @media (max-width:380px){.hzav2{width:72px;height:82px}.hzsay p{font-size:.9rem}}
 #heroCard .hero{flex-direction:row;align-items:center;gap:14px}
 @media (max-width:420px){#heroCard .seal{width:88px;height:88px}#heroCard .seal b{font-size:2.3rem}#heroCard .hero h1{font-size:1.2rem}}
+
+/* 🎵 mp3 бичлэгийн слайд (лент дотор) + шинэ үг тодруулга + 🔁/хурд товч */
+.mslide.aud{background:radial-gradient(circle at 50% 35%,#312e81,#0f172a 70%)}
+.mfa{display:none}
+.mfcov{position:absolute;inset:0 0 40% 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;cursor:pointer}
+.mfdisc{width:132px;height:132px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:3.2rem;background:conic-gradient(from 0deg,#facc15,#f97316,#ec4899,#8b5cf6,#facc15);box-shadow:0 0 40px rgba(250,204,21,.35)}
+.mslide.playing .mfdisc{animation:mfspin 6s linear infinite}
+@keyframes mfspin{to{transform:rotate(360deg)}}
+.mfeq{display:flex;gap:5px;align-items:flex-end;height:34px}
+.mfeq i{display:block;width:6px;height:8px;border-radius:3px;background:#facc15}
+.mslide.playing .mfeq i{animation:mfeq .9s ease-in-out infinite}
+.mslide.playing .mfeq i:nth-child(2){animation-delay:.15s}.mslide.playing .mfeq i:nth-child(3){animation-delay:.3s}
+.mslide.playing .mfeq i:nth-child(4){animation-delay:.45s}.mslide.playing .mfeq i:nth-child(5){animation-delay:.6s}
+@keyframes mfeq{0%,100%{height:8px}50%{height:34px}}
+.mfw.new{border-bottom:2px solid #facc15;background:rgba(250,204,21,.14);border-radius:6px}
+.mfside button.on{background:#facc15;color:#111}
+@media (prefers-reduced-motion:reduce){.mslide.playing .mfdisc,.mslide.playing .mfeq i{animation:none}}
+
+/* нэвтрэх цонх (popup) + зочин горим */
+.amodal{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center}
+.amodal[hidden]{display:none!important}
+.aback{position:absolute;inset:0;background:rgba(0,0,0,.55)}
+.apanel{position:relative;width:100%;max-width:480px;max-height:92dvh;overflow:auto;border-radius:18px 18px 0 0;background:var(--bg);padding:8px;box-sizing:border-box}
+.apanel .card{margin:0}
+.aclose{position:absolute;top:12px;right:12px;z-index:2}
+@media(min-width:600px){.amodal{align-items:center}.apanel{border-radius:18px}}
+body.amopen{overflow:hidden}
+body.guest .tab[data-t]:not([data-t=today]):not([data-t=hsk]):not([data-t=gram]),body.guest #hwTab{opacity:.55}
+body.guest #p-hsk .prog,body.guest #p-hsk label.chk{display:none}
+
+/* 💬 Ханзи багштай ярилцах */
+.hzc{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center}
+.hzc[hidden]{display:none!important}
+.hzcback{position:absolute;inset:0;background:rgba(0,0,0,.5)}
+.hzcpanel{position:relative;width:100%;max-width:520px;height:min(88dvh,740px);display:flex;flex-direction:column;background:var(--bg);border-radius:18px 18px 0 0;overflow:hidden;box-shadow:0 -6px 30px rgba(0,0,0,.25)}
+@media(min-width:600px){.hzc{align-items:center}.hzcpanel{border-radius:18px}}
+body.hzopen{overflow:hidden}
+.hzchead{display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid var(--line,rgba(128,128,128,.25))}
+.hzcav{flex:none;width:44px;height:50px}.hzcav .hz{width:100%;height:100%}
+.hzct{flex:1;min-width:0;display:flex;flex-direction:column}.hzct b{font-size:.95rem;color:var(--seal)}.hzct small{opacity:.7;font-size:.74rem}
+.hzclog{flex:1;overflow:auto;padding:10px 12px;display:flex;flex-direction:column;gap:6px;-webkit-overflow-scrolling:touch}
+.hzm{display:flex}.hzm.me{justify-content:flex-end}
+.hzb{max-width:86%;padding:9px 12px;border-radius:16px 16px 16px 4px;background:var(--bub,#fff6e5);color:var(--bubfg,inherit);border:1px solid var(--bubbd,rgba(128,128,128,.25));line-height:1.5;font-size:.95rem;overflow-wrap:anywhere}
+.hzm.me .hzb{border-radius:16px 16px 4px 16px;background:var(--seal);color:#fff;border-color:transparent}
+.hzb .m{opacity:.8;font-size:.88rem;margin-top:2px}.hzb .hint{margin-top:6px;font-size:.78rem}
+.hzw .h{font:400 2.2rem/1.1 "Ma Shan Zheng",var(--font-han,serif)}.hzw .p{font-weight:700}.hzw .p small{font-weight:400;opacity:.7;margin-left:6px}
+.hzz{font:400 1.25rem/1.4 var(--font-han,serif)}
+.hzhr{border:0;border-top:1px dashed rgba(128,128,128,.4);margin:8px 0}
+.hzrow{margin:3px 0}.hzlnk{all:unset;cursor:pointer;display:block;padding:5px 8px;border-radius:10px;background:rgba(128,128,128,.12)}.hzlnk .h{font-size:1.15rem}.hzlnk .p{font-weight:700;margin:0 4px}
+.typing .hzb{display:flex;gap:4px;padding:12px 14px}.typing i{display:block;width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.35;animation:hztyp 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes hztyp{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:.8;transform:translateY(-3px)}}
+.hzcq{display:flex;flex-wrap:wrap;gap:6px;padding:8px 10px;max-height:32%;overflow:auto;border-top:1px solid var(--line,rgba(128,128,128,.25))}
+.hzcq:empty{display:none}
+.hzcin{display:flex;gap:8px;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line,rgba(128,128,128,.25))}
+.hzcin input{flex:1;min-width:0;font:inherit;padding:10px 12px;border-radius:12px;border:1px solid var(--line,rgba(128,128,128,.4));background:var(--card,#fff);color:inherit}
+.hzchatbtn{margin-top:6px}
+@media (prefers-reduced-motion:reduce){.typing i{animation:none}}
