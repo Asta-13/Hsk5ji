@@ -50,6 +50,19 @@ var DATA=window.DATA;
     mMeta:["{n} мөр · {w} шинэ үг","{n} lines · {w} new words","{n} строк · {w} новых слов","{n}行 · 新しい単語{w}"],
     mAuto:["Автомат хадмал (алдаатай байж болно)","Auto subtitles (may contain errors)","Автосубтитры (возможны ошибки)","自動字幕（誤りあり）"],
     mFeed:["🔥 Лент","🔥 Feed","🔥 Лента","🔥 フィード"],
+    mWorld:["🌍 Дэлхий","🌍 World","🌍 Мир","🌍 世界"],
+    wHome:["Өнөөдрийн сонин баримт","Today's fun fact","Интересный факт дня","今日の豆知識"],
+    wHist:["Түүхэнд өнөөдөр","On this day","В этот день","歴史の今日"],
+    wQuote:["Өдрийн урам","Daily motivation","Мотивация дня","今日のひとこと"],
+    wOpen:["🌍 Бүгдийг үзэх","🌍 See all","🌍 Смотреть все","🌍 すべて見る"],
+    wNext:["Дараагийнх ▶","Next ▶","Далее ▶","次へ ▶"],
+    wSwipe:["↑ дээш гүйлгэ","↑ swipe up","↑ листай вверх","↑ 上へスワイプ"],
+    wAdd:["📚 +{n} шинэ үг","📚 +{n} new words","📚 +{n} новых слов","📚 +{n} 新出単語"],
+    catCountry:["Улс орон","Countries","Страны","国"],
+    catSpace:["Сансар","Space","Космос","宇宙"],
+    catCulture:["Соёл · байгаль","Culture · nature","Культура · природа","文化・自然"],
+    catWisdom:["Урам зориг","Wisdom","Мудрость","名言"],
+    catHistory:["Түүх","History","История","歴史"],
     mFeedEmpty:["Богино бичлэг (mp4/mp3) одоохондоо алга. media/ хавтсанд оруулна уу.","No short videos (mp4/mp3) yet. Add them to media/.","Нет коротких видео (mp4/mp3). Добавьте в media/.","短い動画(mp4/mp3)がまだありません。media/ に追加してください。"],
     mEmpty:["Одоохондоо алга","Nothing here yet","Пока ничего нет","まだありません"],
     mTapHint:["Хятад үг дээр дарвал тайлбар гарна","Tap a Chinese word for its meaning","Нажмите на слово для значения","単語をタップすると意味が出ます"],
@@ -531,7 +544,7 @@ var DATA=window.DATA;
   var LEVELS=[1,2,3,4,5,6];
   function NW(lv){return ((HSKRAW[lv]||'').split(',').length)} /* words per level in the merged list */
   var INT=[1,3,7,14,30];
-  var HSKD=null,LESSONS=null,CI18N=null;
+  var HSKD=null,LESSONS=null,CI18N=null,WLD={items:null,loading:null,off:0};
   function LT(x){if(lang==='mn'||!CI18N)return x;var a=CI18N[x];return a&&a[LI[lang]-1]||x}
   try{localStorage.removeItem('hskStd')}catch(e){}
   function HR(){return HSKRAW}
@@ -763,6 +776,7 @@ var DATA=window.DATA;
     var nt=CFG.notice&&CFG.notice.trim();$('notice').hidden=!nt;$('noticeTx').textContent=nt||'';
     if(nt&&window.Hanzi&&!$('noticeHz').firstChild)Hanzi.mount($('noticeHz'),'hi');
     hzRender();
+    try{worldCardRender()}catch(e){console.error('world',e)}
   }
   /* Ханзи багш: Өнөөдөр / нэвтрэх / бүртгэл хуудсан дээрх мэндчилгээ */
   var hzTapN=0;
@@ -1888,8 +1902,10 @@ var DATA=window.DATA;
   }
   function renderMediaList(items){
     var k=MED.kind;
-    $('mKinds').innerHTML=['feed','video','song'].map(function(x){return '<button class="chip" type="button" data-mk="'+x+'" aria-pressed="'+(k===x)+'">'+T(x==='feed'?'mFeed':x==='video'?'mVideo':'mSong')+'</button>'}).join('');
+    if(k==='feed'&&!MED.userK&&!feedItems(items).length)k=MED.kind='world';
+    $('mKinds').innerHTML=['feed','world','video','song'].map(function(x){return '<button class="chip" type="button" data-mk="'+x+'" aria-pressed="'+(k===x)+'">'+T(x==='feed'?'mFeed':x==='world'?'mWorld':x==='video'?'mVideo':'mSong')+'</button>'}).join('');
     if(k==='feed'){renderMediaFeed(items);return}
+    if(k==='world'){renderWorldFeed();return}
     mediaStop();
     var L=items.filter(function(x){return x.kind===k}),hv=haveSet();
     $('mBody').innerHTML=L.length?'<div class="list">'+L.map(function(x){
@@ -1946,6 +1962,107 @@ var DATA=window.DATA;
   }
 
   /* TikTok маягийн босоо лент: богино бичлэг автоматаар тоглож, хадмал цагтай гарч, үг дээр дарж сурна */
+  /* ---------- 🌍 Дэлхий: улс орон · сансар · түүхэнд өнөөдөр · урам (data/world.json) ---------- */
+  function worldLoad(){
+    if(WLD.items)return Promise.resolve(WLD.items);
+    if(WLD.loading)return WLD.loading;
+    WLD.loading=fetch('data/world.json').then(function(r){return r.ok?r.json():{items:[]}}).then(function(j){WLD.items=j.items||[];return WLD.items}).catch(function(){WLD.loading=null;return []});
+    return WLD.loading;
+  }
+  function dayNum(){return Math.floor((Date.parse(TODAY)-Date.parse(TODAY.slice(0,4)+'-01-01'))/864e5)}
+  function wById(id){return (WLD.items||[]).filter(function(x){return x.id===id})[0]}
+  function worldPool(){
+    var md=TODAY.slice(5),it=WLD.items||[];
+    var hist=it.filter(function(x){return x.cat==='history'&&x.d===md});
+    var rest=it.filter(function(x){return x.cat!=='wisdom'&&x.cat!=='history'});
+    var k=rest.length?dayNum()%rest.length:0;
+    return hist.concat(rest.slice(k),rest.slice(0,k));
+  }
+  function worldFeedList(){
+    var md=TODAY.slice(5),it=WLD.items||[],seed=dayNum()+1;
+    function rnd(){seed=(seed*1103515245+12345)%2147483648;return seed/2147483648}
+    var hist=it.filter(function(x){return x.cat==='history'&&x.d===md});
+    var mid=it.filter(function(x){return x.cat!=='wisdom'&&!(x.cat==='history'&&x.d===md)});
+    for(var i=mid.length-1;i>0;i--){var j=Math.floor(rnd()*(i+1)),tmp=mid[i];mid[i]=mid[j];mid[j]=tmp}
+    return hist.concat(mid,it.filter(function(x){return x.cat==='wisdom'}));
+  }
+  function worldQuote(){var q=(WLD.items||[]).filter(function(x){return x.cat==='wisdom'});return q.length?q[dayNum()%q.length]:null}
+  function zhRuby(s,hv,cls){
+    return segZh(s).map(function(x){
+      if(!x.h)return esc(x.t);
+      var hit=hskLookup(x.h),nw=hv&&!hv[x.h]&&hM(x.h);
+      return '<button type="button" class="'+cls+(nw?' new':'')+'" data-h="'+esc(x.h)+'" lang="zh"><ruby>'+esc(x.h)+'<rt>'+esc(hP(x.h,hit.p))+'</rt></ruby></button>';
+    }).join('');
+  }
+  function wMeta(x){
+    if(x.cat==='history')return T('wHist')+(x.y?' · '+x.y:(x.d?' · '+x.d:''));
+    return T('cat'+x.cat.charAt(0).toUpperCase()+x.cat.slice(1));
+  }
+  function wNewWords(x){var hv=haveSet();return mediaWords({lines:[{zh:x.zh}]}).filter(function(w){return !hv[w.h]&&w.m})}
+  function worldCardRender(){
+    var c=$('worldCard'),q=$('quote');if(!c)return;
+    worldLoad().then(function(items){
+      if(!items.length){c.hidden=true;if(q)q.hidden=true;return}
+      var pool=worldPool(),x=pool[WLD.off%pool.length],hv=haveSet(),nw=wNewWords(x).length;
+      c.hidden=false;c.className='card wcard w-'+x.cat;
+      c.innerHTML='<div class="between"><span class="wbadge">'+x.e+' '+esc(wMeta(x))+'</span><span class="hint">'+esc(T('wHome'))+'</span></div>'+
+        '<h3 class="wt">'+esc(x.t)+'</h3><div class="wzh" lang="zh">'+zhRuby(x.zh,hv,'wfw')+'</div><div class="wmn">'+esc(x.mn)+'</div>'+
+        '<div class="row"><button class="btn small" type="button" data-wsay="'+x.id+'" aria-label="sound">🔊</button>'+(nw?'<button class="btn small ghost" type="button" data-wadd="'+x.id+'">'+esc(T('wAdd',{n:nw}))+'</button>':'')+
+        '<button class="btn small ghost" type="button" data-wnext>'+esc(T('wNext'))+'</button><button class="btn small ghost" type="button" data-wopen>'+esc(T('wOpen'))+'</button></div>';
+      var qt=worldQuote();
+      if(q){
+        if(qt){q.hidden=false;q.innerHTML='<span class="qlbl">💡 '+esc(T('wQuote'))+'</span><button type="button" class="qzh" data-wsay="'+qt.id+'" lang="zh">'+esc(qt.zh)+'</button><span class="qmn">'+esc(qt.mn)+'</span>'}
+        else q.hidden=true;
+      }
+    });
+  }
+  function renderWorldFeed(){
+    mediaStop();
+    var box=$('mBody');
+    worldLoad().then(function(){
+      if(MED.kind!=='world'||MED.cur)return;
+      var L=worldFeedList();
+      if(!L.length){box.innerHTML='<div class="empty">'+T('mEmpty')+'</div>';return}
+      var hv=haveSet();
+      box.innerHTML='<div class="mfeed wfeed pin" id="wFeed">'+L.map(function(x,i){
+        var nw=wNewWords(x).length;
+        return '<section class="mslide wslide w-'+x.cat+'" data-wi="'+x.id+'"><div class="wtop"><span class="wbadge">'+x.e+' '+esc(wMeta(x))+'</span><span class="wnum">'+(i+1)+' / '+L.length+'</span></div>'+
+          '<div class="wmid"><div class="wemo">'+x.e+'</div><h3 class="wtt">'+esc(x.t)+'</h3><div class="wzh" lang="zh">'+zhRuby(x.zh,hv,'mfw')+'</div><div class="wmn">'+esc(x.mn)+'</div></div>'+
+          '<div class="mfside"><button type="button" data-wsay="'+x.id+'" aria-label="sound">🔊</button><button type="button" data-wpy aria-label="pinyin">拼</button><button type="button" data-wwords="'+x.id+'">📚<small>'+nw+'</small></button></div>'+
+          (i===0?'<div class="wswipe">'+esc(T('wSwipe'))+'</div>':'')+'</section>';
+      }).join('')+'</div><div class="card mfcard" id="wfCard" hidden></div>';
+    });
+  }
+  function wWordCard(h){
+    var hit=hskLookup(h),m=hM(h),has=haveSet()[h],c=$('wfCard');if(!c||!hit)return;
+    c.hidden=false;
+    c.innerHTML='<div class="between"><span class="h big" lang="zh">'+esc(h)+'</span><span class="badge">HSK '+hit.l+'</span></div><div class="p">'+esc(hP(h,hit.p))+'</div><div class="m">'+esc(m||'—')+'</div>'+
+      '<div class="row"><button class="btn ghost small" type="button" data-msp="'+esc(h)+'">🔊</button>'+(has?'<span class="hint">'+esc(T('mHave'))+'</span>':(m?'<button class="btn small" type="button" data-wfa="'+esc(h)+'">+ '+esc(T('mAddOne'))+'</button>':''))+'<button class="btn small ghost" type="button" data-wfx>×</button></div>';
+  }
+  document.addEventListener('click',function(e){
+    var t=e.target;if(!t.closest)return;
+    var b;
+    if((b=t.closest('[data-wsay]'))){var x=wById(b.dataset.wsay);x&&speak(x.zh);return}
+    if(t.closest('[data-wnext]')){WLD.off++;worldCardRender();return}
+    if(t.closest('[data-wopen]')){MED.kind='world';MED.userK=1;MED.cur=null;showTab('media');return}
+    if((b=t.closest('[data-wadd]'))){
+      var x2=wById(b.dataset.wadd),n=0;
+      x2&&wNewWords(x2).forEach(function(w){if(mediaAdd(w.h))n++});
+      if(n){syncSummary(TODAY);toast(T('tAddedN',{n:n}),'cheer');renderAll()}return}
+    if(t.closest('#worldCard')&&(b=t.closest('.wfw'))){
+      var h=b.dataset.h,hit=hskLookup(h);speak(h);toast(h+' · '+hP(h,hit&&hit.p)+' — '+(hM(h)||''),'think');return}
+    if(!t.closest('#wFeed')&&!t.closest('#wfCard'))return;
+    if(t.closest('[data-wpy]')){var f=$('wFeed');f.classList.toggle('pin');return}
+    if((b=t.closest('[data-wwords]'))){
+      var x3=wById(b.dataset.wwords),n3=0;
+      x3&&wNewWords(x3).forEach(function(w){if(mediaAdd(w.h))n3++});
+      if(n3){syncSummary(TODAY);toast(T('tAddedN',{n:n3}),'cheer');renderAll();var sl=b.closest('.wslide');sl.querySelectorAll('.mfw.new').forEach(function(z){z.classList.remove('new')});b.querySelector('small').textContent='0'}
+      else toast(T('mAllKnown'));
+      return}
+    if((b=t.closest('.mfw'))){wWordCard(b.dataset.h);return}
+    if((b=t.closest('[data-wfa]'))){if(mediaAdd(b.dataset.wfa)){syncSummary(TODAY);toast(T('tAdded'),'cheer');renderAll();wWordCard(b.dataset.wfa)}return}
+    if(t.closest('[data-wfx]')){$('wfCard').hidden=true}
+  });
   function feedItems(items){var L=items.filter(function(x){return x.srcType==='file'&&/\.(mp4|webm|mp3|m4a|wav|ogg)$/i.test(x.src||'')});return L.filter(function(x){return x.story}).reverse().concat(L.filter(function(x){return !x.story}))}
   function mediaStop(){document.querySelectorAll('#mBody video,#mBody audio').forEach(function(v){try{v.pause()}catch(e){}});if(MED.obs){MED.obs.disconnect();MED.obs=null}}
   function isAud(x){return /\.(mp3|m4a|wav|ogg)$/i.test(x.src||'')}
@@ -1959,6 +2076,8 @@ var DATA=window.DATA;
     }).join('');
     return '<div class="mfz">'+z+'</div>'+(ln.mn?'<div class="mfm">'+esc(ln.mn)+'</div>':'');
   }
+  function fmtT(x){x=+x;if(!isFinite(x)||x<0)x=0;return Math.floor(x/60)+':'+('0'+Math.floor(x%60)).slice(-2)}
+  function hueOf(str){var h=0;String(str||'').split('').forEach(function(c){h=(h*31+c.charCodeAt(0))%360});return h}
   function feedCap(slide,it){
     var v=slide.querySelector('video,audio'),ct=v.currentTime,L=it.lines||[],cur=-1;
     L.forEach(function(l,i){if(l.t==null)return;if(l.t<=ct&&ct<lineEnd(L,i))cur=i});
@@ -1970,6 +2089,7 @@ var DATA=window.DATA;
     }else slide._lp=null;
     if(slide._cur!==cur){slide._cur=cur;slide.querySelector('.mfcap').innerHTML=cur<0?'':capHtml(L[cur])}
     var b=slide.querySelector('.mfbar i');if(b&&v.duration)b.style.width=(100*ct/v.duration)+'%';
+    var t0=slide.querySelector('.mft0');if(t0){t0.textContent=fmtT(ct);slide.querySelector('.mft1').textContent=fmtT(v.duration)}
   }
   function renderMediaFeed(items){
     mediaStop();
@@ -1979,8 +2099,8 @@ var DATA=window.DATA;
     box.innerHTML='<div class="mfeed'+(MED.pin?' pin':'')+'" id="mFeed">'+L.map(function(x,i){
       var nw=mediaWords(x).filter(function(w){return !hv[w.h]&&w.m}).length;
       var au=isAud(x),pre=(i<2?'auto':'metadata'),src=esc(encodeURI(x.src));
-      return '<section class="mslide'+(au?' aud':'')+'" data-fi="'+i+'">'+(au?'<audio class="mfa" loop preload="'+pre+'" src="'+src+'"></audio><div class="mfcov"><div class="mfdisc">🎵</div><div class="mfeq"><i></i><i></i><i></i><i></i><i></i></div></div>':'<video class="mfv" playsinline loop preload="'+pre+'" src="'+src+'"></video>')+'<div class="mfcap"></div>'+
-        (x.story?'':'<div class="mftop"><b>'+esc(x.title)+'</b>'+(x.level?'<span class="badge">HSK '+x.level+'</span>':'')+'</div>')+
+      return '<section class="mslide'+(au?' aud':'')+'" data-fi="'+i+'"'+(au?' style="--h:'+hueOf(x.title||x.id)+'"':'')+'>'+(au?'<audio class="mfa" loop preload="'+pre+'" src="'+src+'"></audio><div class="mfcov"><div class="mfdisc"><span>🎵</span></div><div class="mfct">'+esc(x.title)+'</div>'+(x.titleZh?'<div class="mfcz" lang="zh">'+esc(x.titleZh)+'</div>':'')+(x.level?'<span class="badge">HSK '+x.level+'</span>':'')+'<div class="mfeq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="mftime"><span class="mft0">0:00</span><span class="mft1">0:00</span></div><div class="mfplay" aria-hidden="true">▶</div></div>':'<video class="mfv" playsinline loop preload="'+pre+'" src="'+src+'"></video>')+'<div class="mfcap"></div>'+
+        (x.story||au?'':'<div class="mftop"><b>'+esc(x.title)+'</b>'+(x.level?'<span class="badge">HSK '+x.level+'</span>':'')+'</div>')+
         '<div class="mfside"><button type="button" data-mfsnd aria-label="sound">'+(MED.muted?'🔇':'🔊')+'</button><button type="button" data-mfpy aria-label="pinyin">拼</button><button type="button" data-mfloop aria-label="repeat line" class="'+(MED.loop?'on':'')+'">🔁</button><button type="button" data-mfspd aria-label="speed">'+(MED.spd||1)+'×</button><button type="button" data-mfwords>📚<small>'+nw+'</small></button></div><div class="mfbar"><i></i></div></section>';
     }).join('')+'</div><div class="card mfcard" id="mfCard" hidden></div>';
     var feed=$('mFeed');
@@ -1991,7 +2111,7 @@ var DATA=window.DATA;
     })},{root:feed,threshold:[.6]});
     feed.querySelectorAll('.mslide').forEach(function(sl,i){
       var v=sl.querySelector('video,audio');v.muted=MED.muted;
-      v.addEventListener('timeupdate',function(){feedCap(sl,L[i])});
+      v.addEventListener('timeupdate',function(){feedCap(sl,L[i])});v.addEventListener('loadedmetadata',function(){feedCap(sl,L[i])});
       v.addEventListener('play',function(){sl.classList.add('playing')});v.addEventListener('pause',function(){sl.classList.remove('playing')});
       MED.obs.observe(sl);
     });
@@ -2028,6 +2148,7 @@ var DATA=window.DATA;
       var it2=MED.feed.filter(function(z){return z.id===$('mfCard').dataset.it})[0],n=0;
       it2&&mediaWords(it2).forEach(function(w){if(mediaAdd(w.h))n++});
       if(n){syncSummary(TODAY);toast(T('tAddedN',{n:n}),'cheer');renderAll();feedWordsSheet(it2)}return}
+    if(sl&&(b=t.closest('.mfbar'))){var av=sl.querySelector('video,audio'),rc=b.getBoundingClientRect();if(av.duration)av.currentTime=Math.max(0,Math.min(1,(e.clientX-rc.left)/rc.width))*av.duration;return}
     if(sl&&t.closest('.mfv,.mfcov')){var v=sl.querySelector('video,audio');v.paused?v.play().catch(function(){}):v.pause()}
   });
   function parseLines(txt){
@@ -2059,7 +2180,7 @@ var DATA=window.DATA;
     var d=t.closest('[data-mdel]');if(d&&isOwner&&sb){var x=await sb.from('media').delete().eq('id',d.dataset.mdel);if(!x.error){MED.items=null;renderMediaAdmin()}return}
     if(!t.closest('#p-media'))return;
     var b;
-    if((b=t.closest('[data-mk]'))){MED.kind=b.dataset.mk;renderMedia();return}
+    if((b=t.closest('[data-mk]'))){MED.kind=b.dataset.mk;MED.userK=1;renderMedia();return}
     if((b=t.closest('[data-mi]'))){MED.cur=b.dataset.mi;window.scrollTo(0,0);renderMedia();return}
     if(t.closest('#mBack')){MED.cur=null;MED.quiz=null;renderMedia();return}
     if((b=t.closest('.mw'))){mediaWordCard(b.dataset.h);return}

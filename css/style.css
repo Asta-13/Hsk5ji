@@ -943,3 +943,65 @@ body.hzopen{overflow:hidden}
 .hzcin input{flex:1;min-width:0;font:inherit;padding:10px 12px;border-radius:12px;border:1px solid var(--line,rgba(128,128,128,.4));background:var(--card,#fff);color:inherit}
 .hzchatbtn{margin-top:6px}
 @media (prefers-reduced-motion:reduce){.typing i{animation:none}}
+
+/* ===== Нүүр хуудас: гоё, суръя гэсэн урам өгөх ===== */
+#heroCard .stat{border-radius:14px}
+#heroCard .stat::before{display:block;font-size:1.15rem;line-height:1.2}
+#heroCard .stat:nth-child(1)::before{content:"📚"}#heroCard .stat:nth-child(2)::before{content:"🏆"}#heroCard .stat:nth-child(3)::before{content:"🔥"}
+.quote{display:flex;flex-direction:column;gap:2px;padding:10px 14px;border-radius:14px;border-left:5px solid #facc15;background:rgba(255,255,255,.1)}
+.qlbl{font-size:.7rem;letter-spacing:.08em;font-weight:800;color:#fde68a;text-transform:uppercase}
+.qzh{all:unset;cursor:pointer;font-family:var(--font-han);font-size:1.3rem;font-weight:800;line-height:1.5;color:#fff}
+.qmn{font-size:.88rem;color:rgba(255,255,255,.82)}
+
+/* 🌍 Өнөөдрийн сонин баримт (нүүр) */
+.wcard{position:relative;overflow:hidden;border:0;color:#fff;gap:10px;background:linear-gradient(135deg,#312e81,#0f172a);box-shadow:0 14px 30px -18px rgba(15,23,42,.9)}
+.wcard.w-country{background:linear-gradient(135deg,#0f766e,#0c3b4f)}
+.wcard.w-space{background:linear-gradient(135deg,#4338ca,#0f172a)}
+.wcard.w-culture{background:linear-gradient(135deg,#c2410c,#7c2d12)}
+.wcard.w-history{background:linear-gradient(135deg,#be123c,#4c0519)}
+.wcard .hint{color:rgba(255,255,255,.78)}
+.wbadge{display:inline-block;background:rgba(255,255,255,.18);border-radius:99px;padding:2px 11px;font-size:.78rem;font-weight:700;white-space:nowrap}
+.wt{font-size:1.2rem;color:#fff}
+.wzh{font-family:var(--font-han);font-size:1.5rem;line-height:2.15}
+.wzh ruby rt{font-size:.48em;color:#fde68a;font-family:var(--font-body)}
+.wfw,.wzh .mfw{border:0;background:none;color:inherit;font:inherit;padding:0 1px;cursor:pointer;min-height:32px;border-radius:6px}
+.wfw.new,.wzh .mfw.new{border-bottom:2px solid #facc15;background:none;border-radius:0}
+.wmn{opacity:.93;line-height:1.55}
+.wcard .btn{box-shadow:none;background:#facc15;color:#1b1400}
+.wcard .btn.ghost{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.3)}
+
+/* 🌍 Дэлхий лент (босоо слайд) */
+.wfeed{background:#0f172a}
+.wslide{display:flex;flex-direction:column;justify-content:center;gap:12px;padding:58px 68px 34px 20px;color:#fff;overflow:hidden;background:radial-gradient(circle at 22% 12%,#4338ca,#0f172a 72%)}
+.wslide.w-country{background:radial-gradient(circle at 22% 12%,#14b8a6,#0c3b4f 70%)}
+.wslide.w-space{background:radial-gradient(circle at 22% 12%,#6366f1,#0b1020 72%)}
+.wslide.w-culture{background:radial-gradient(circle at 22% 12%,#f97316,#6b2410 72%)}
+.wslide.w-history{background:radial-gradient(circle at 22% 12%,#e11d48,#3f0618 72%)}
+.wslide.w-wisdom{background:radial-gradient(circle at 22% 12%,#eab308,#5b3a06 72%)}
+.wtop{position:absolute;top:12px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:center}
+.wnum{font-size:.74rem;opacity:.7}
+.wemo{font-size:4rem;line-height:1.1;filter:drop-shadow(0 6px 14px rgba(0,0,0,.4))}
+.wtt{font-size:1.3rem;color:#fff}
+.wslide .wzh{font-size:1.65rem}
+.wslide .mfw{color:#fff}
+.wswipe{position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:.74rem;opacity:.7;animation:wswipe 1.6s ease-in-out infinite}
+@keyframes wswipe{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.wfeed:not(.pin) .mfw rt{display:none}
+
+/* 🎵 mp3 слайд: винил диск, гарчиг, цаг, дарж гүйлгэх зурвас */
+.mslide.aud{background:radial-gradient(circle at 50% 30%,hsl(var(--h,250) 62% 30%),#0b1020 74%)}
+.mslide.aud .mfcov{inset:0 0 38% 0;gap:10px;padding:0 64px 0 18px}
+.mfdisc{position:relative;width:150px;height:150px;font-size:0;background:conic-gradient(from 0deg,hsl(var(--h,250) 90% 62%),hsl(calc(var(--h,250) + 70) 90% 60%),hsl(calc(var(--h,250) + 140) 90% 62%),hsl(var(--h,250) 90% 62%));box-shadow:0 0 0 6px rgba(255,255,255,.08),0 18px 44px -10px hsl(var(--h,250) 90% 55%/.6)}
+.mfdisc::before{content:"";position:absolute;inset:0;border-radius:50%;background:repeating-radial-gradient(circle,rgba(0,0,0,.16) 0 2px,transparent 2px 6px)}
+.mfdisc span{position:relative;display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:#0b1020;font-size:1.5rem;box-shadow:0 0 0 4px rgba(255,255,255,.18)}
+.mfct{font-size:1.15rem;font-weight:800;color:#fff;text-align:center;overflow-wrap:anywhere;line-height:1.3}
+.mfcz{font-family:var(--font-han);font-size:1rem;color:rgba(255,255,255,.8);text-align:center}
+.mfeq{height:30px}.mfeq i{background:hsl(var(--h,250) 95% 68%)}
+.mfeq i:nth-child(6){animation-delay:.2s}.mfeq i:nth-child(7){animation-delay:.35s}
+.mslide.playing .mfeq i:nth-child(6){animation:mfeq .9s ease-in-out .2s infinite}.mslide.playing .mfeq i:nth-child(7){animation:mfeq .9s ease-in-out .35s infinite}
+.mftime{display:flex;justify-content:space-between;width:min(260px,100%);font-size:.75rem;color:rgba(255,255,255,.75);font-variant-numeric:tabular-nums}
+.mfplay{position:absolute;inset:0 64px 0 0;display:flex;align-items:center;justify-content:center;font-size:3.4rem;color:#fff;text-shadow:0 4px 18px rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:opacity .2s}
+.mslide.aud:not(.playing) .mfplay{opacity:.75}
+.mslide.aud .mfbar{height:12px;cursor:pointer;background:rgba(255,255,255,.18)}
+.mslide.aud .mfbar i{background:hsl(var(--h,250) 95% 66%);border-radius:0 6px 6px 0}
+@media (prefers-reduced-motion:reduce){.wswipe{animation:none}}
