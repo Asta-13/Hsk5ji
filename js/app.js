@@ -1296,6 +1296,21 @@ var DATA=window.DATA;
     var b=e.target.closest('[data-um]');if(!b)return;
     $('fM').value=b.dataset.um;if(!$('fP').value.trim()&&b.dataset.up){$('fP').value=b.dataset.up}$('fM').focus();
   });
+  /* 🧩 үгийн бүтэц: олон үсэгт үгийг үсэг тус бүрийн утгаар, нэг үсгийг бүрэлдэхүүнээр нь задалж харуулна */
+  var RADMAP=null;
+  function shortM(h){var m=hM(h);return m?String(m).split(/[,;，；(（]/)[0].trim().slice(0,16):''}
+  function partsHint(h){
+    var cs=Array.from(String(h||'')),out=[];
+    if(cs.length===1){
+      if(!RADMAP){RADMAP={};try{if(Array.isArray(DATA.RAD))DATA.RAD.forEach(function(c){if(c&&c[0]&&Array.isArray(c[1]))RADMAP[c[0]]=c[1]})}catch(e){}}
+      var d=RADMAP[h];if(!d)return '';
+      d.forEach(function(x){var snd=x.charAt(0)==='~';x=x.replace(/^~/,'');var m=snd?'🔉':shortM(x);out.push('<span class="wpt"><b lang="zh">'+esc(x)+'</b>'+(m?'<small>'+esc(m)+'</small>':'')+'</span>')});
+    }else if(cs.length<=5){
+      cs.forEach(function(c){if(!hskLookup(c))return;var m=shortM(c);if(m)out.push('<span class="wpt"><b lang="zh">'+esc(c)+'</b><small>'+esc(m)+'</small></span>')});
+      if(out.length<2)return '';
+    }else return '';
+    return out.length?'<div class="wparts"><span class="wpl">🧩</span>'+out.join('<span class="wpp">+</span>')+'</div>':'';
+  }
   function renderList(){
     var ws=wordsArr(),c={0:ws.length};ws.forEach(function(w){c[w.l]=(c[w.l]||0)+1});
     lvChips('wlLv',wlLv,true,c);
@@ -1307,8 +1322,8 @@ var DATA=window.DATA;
       var arr=by[d].sort(function(a,b){return a.id<b.id?1:-1});
       return '<div class="day"><h3><span>'+fmt(parseIso(d))+(d===TODAY?' · '+T('todayTag'):'')+'</span><span class="muted">'+T('nWords',{n:arr.length})+'</span></h3>'+
         arr.map(function(w){
-          return '<div class="w'+(freshIds[w.id]?' fresh':'')+'"><span class="h" lang="zh">'+hl(w.h,wlQ)+'</span><span><span class="p">'+hl(w.p,wlQ)+'</span> <span class="badge">HSK '+w.l+'</span><br><span class="m">'+hl(w.m,wlQ)+'</span></span>'+
-            '<button class="x'+(sureId===w.id?' sure':'')+'" type="button" data-del="'+esc(w.id)+'">'+T(sureId===w.id?'delSure':'del')+'</button></div>';
+          return '<div class="w wc lv'+w.l+(freshIds[w.id]?' fresh':'')+'"><span class="h" lang="zh">'+hl(w.h,wlQ)+'</span><span><span class="p">'+(wlQ?hl(w.p,wlQ):tonePy(w.p))+'</span> <span class="badge">HSK '+w.l+'</span><br><span class="m">'+hl(w.m,wlQ)+'</span>'+partsHint(w.h)+(w.e?'<div class="wex" lang="zh">💬 '+hl(w.e,wlQ)+'</div>':'')+'</span>'+
+            '<span class="wca"><button class="btn small ghost" type="button" data-speak="'+esc(w.h)+'" aria-label="Audio">🔊</button><button class="btn small ghost" type="button" data-write="'+esc(w.h)+'" aria-label="Write">✍</button><button class="x'+(sureId===w.id?' sure':'')+'" type="button" data-del="'+esc(w.id)+'">'+T(sureId===w.id?'delSure':'del')+'</button></span></div>';
         }).join('')+'</div>';
     }).join('');
     freshIds={};
@@ -1703,7 +1718,7 @@ var DATA=window.DATA;
     $('hskInfo').textContent=T('hskProg',{a:added,b:tot});
     $('hskCnt').textContent=items.length+' / '+tot;
     var h2=items.slice(0,hLim).map(function(x){
-      return '<div class="w"><span class="h" lang="zh">'+hl(x.h,hQ)+'</span><span><span class="p">'+esc(x.p)+'</span>'+(hLv&&!q&&!x.o?'':' <span class="badge">HSK '+x.l+(x.o?' · '+x.o:'')+'</span>')+'<br><span class="m">'+(x.m?hl(x.m,hQ):'<span class="hint">'+T('hskNoTr')+'</span>')+'</span></span><span>'+
+      return '<div class="w wc lv'+x.l+(x.got?' got':'')+'"><span class="h" lang="zh">'+hl(x.h,hQ)+'</span><span><span class="p">'+tonePy(x.p)+'</span> <span class="badge">HSK '+x.l+(x.o?' · '+x.o:'')+'</span><br><span class="m">'+(x.m?hl(x.m,hQ):'<span class="hint">'+T('hskNoTr')+'</span>')+'</span>'+partsHint(x.h)+'</span><span class="wca">'+
         '<button class="btn small ghost" type="button" data-speak="'+esc(x.h)+'" aria-label="Audio">🔊</button> <button class="btn small ghost star" type="button" data-fav="'+esc(x.h)+'" aria-pressed="'+(isFav(x.h)?'true':'false')+'" aria-label="Favorite">'+(isFav(x.h)?'★':'☆')+'</button> <button class="btn small ghost" type="button" data-write="'+esc(x.h)+'" aria-label="Write">✍</button> '+(isOwner?'<button class="btn small ghost" type="button" data-hedit="'+esc(x.h)+'">✎</button> ':'')+
         (x.m?'<button class="btn small ghost'+(hJust===x.h?' pop':'')+'" type="button" data-hadd="'+esc(x.h)+'"'+(x.got?' disabled':'')+'>'+(x.got?'✓':'+')+'</button>':'')+'</span>'+exHtml(x.h)+'</div>';
     }).join('');
@@ -2345,7 +2360,7 @@ var DATA=window.DATA;
     var ks=lsTab==='miss'?mk:fk,mp=lsTab==='miss'?ms:fs;
     ks.sort(function(a,b){if(lsTab==='miss'&&(mp[b].n||0)!==(mp[a].n||0))return(mp[b].n||0)-(mp[a].n||0);return String(mp[b].t).localeCompare(String(mp[a].t))});
     $('lsList').innerHTML=ks.map(function(h){var x=mp[h],m=hM(h)||x.m;
-      return '<div class="w"><span class="h" lang="zh">'+esc(h)+'</span><span><span class="p">'+esc(x.p||'')+'</span>'+(lsTab==='miss'&&x.n>1?' <span class="badge">'+(x.n>=4?'🔥 ':'')+'×'+x.n+'</span>':'')+'<br><span class="m">'+esc(m)+'</span></span><span>'+
+      return '<div class="w wc'+(x.l?' lv'+x.l:'')+'"><span class="h" lang="zh">'+esc(h)+'</span><span><span class="p">'+tonePy(x.p||'')+'</span>'+(lsTab==='miss'&&x.n>1?' <span class="badge">'+(x.n>=4?'🔥 ':'')+'×'+x.n+'</span>':'')+'<br><span class="m">'+esc(m)+'</span>'+partsHint(h)+'</span><span class="wca">'+
         '<button class="btn small ghost" type="button" data-speak="'+esc(h)+'" aria-label="Audio">🔊</button> '+
         (lsTab==='fav'?'<button class="btn small ghost star" type="button" data-fav="'+esc(h)+'" aria-label="Favorite">★</button>':'<button class="btn small ghost" type="button" data-missdel="'+esc(h)+'" aria-label="Remove">✕</button>')+'</span></div>'
     }).join('')||'<div class="empty">'+esc(T(lsTab==='miss'?'lsEmptyMiss':'lsEmptyFav'))+'</div>';
@@ -3476,6 +3491,7 @@ var DATA=window.DATA;
   var TONE_CH={};
   [['āēīōūǖ',1],['áéíóúǘń',2],['ǎěǐǒǔǚň',3],['àèìòùǜǹ',4]].forEach(function(g){Array.from(g[0]).forEach(function(c){TONE_CH[c]=g[1]})});
   function toneOfStr(s){for(var c of s){if(TONE_CH[c])return TONE_CH[c]}return 0}
+  function tonePy(p){try{return toneHtml(p)}catch(e){return esc(p)}}
   function toneHtml(src){
     var parts=String(src).normalize('NFC').split(/([A-Za-zÀ-ɏḿ]+)/);
     return parts.map(function(p,k){

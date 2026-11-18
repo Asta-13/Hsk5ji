@@ -1005,3 +1005,21 @@ body.hzopen{overflow:hidden}
 .mslide.aud .mfbar{height:12px;cursor:pointer;background:rgba(255,255,255,.18)}
 .mslide.aud .mfbar i{background:hsl(var(--h,250) 95% 66%);border-radius:0 6px 6px 0}
 @media (prefers-reduced-motion:reduce){.wswipe{animation:none}}
+
+/* ===== Үгийн карт: товчнууд доор, тон өнгөтэй пиньинь, түвшний өнгө, үгийн бүтэц ===== */
+.w.wc{grid-template-columns:auto minmax(0,1fr);align-items:start;gap:6px 12px;border-left:5px solid var(--lvc,var(--line));background:var(--surface);box-shadow:0 8px 20px -18px rgba(0,0,0,.6)}
+.w.lv1{--lvc:#2E7D4F}.w.lv2{--lvc:#2A8C9B}.w.lv3{--lvc:#2F57C9}.w.lv4{--lvc:#7B3FA8}.w.lv5{--lvc:#D07A0F}.w.lv6{--lvc:#C23B22}
+.w.wc.got{background:linear-gradient(90deg,color-mix(in srgb,var(--ok) 10%,var(--surface)),var(--surface))}
+.w.wc .h{font-size:1.75rem;max-width:4.6em;overflow-wrap:anywhere;line-height:1.15}
+.w.wc .p{font-size:1rem;font-weight:700;overflow-wrap:anywhere}
+.w.wc .m{font-size:.95rem;line-height:1.45;margin-top:2px}
+.w.wc .wca{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.w.wc .wca .btn.small{min-height:38px;padding:6px 12px}
+.wparts{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;margin-top:6px;padding:5px 8px;border-radius:10px;background:var(--bg);font-size:.8rem}
+.wpl{font-size:.9rem}.wpp{color:var(--muted);font-weight:700}
+.wpt{display:inline-flex;align-items:baseline;gap:4px}
+.wpt b{font-family:var(--font-han);font-size:1.1rem}
+.wpt small{color:var(--muted);font-size:.75rem;overflow-wrap:anywhere}
+.wex{margin-top:6px;padding:5px 9px;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 8px 8px 0;font-size:.95rem}
+.answers .btn{min-width:0;padding-inline:6px;overflow-wrap:anywhere;font-size:.95rem}
+.w .p .tn{overflow-wrap:anywhere}
