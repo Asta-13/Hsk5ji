@@ -50,6 +50,7 @@
   var booted=false;
   window.__bootDone=function(){
     if(booted)return;booted=true;
+    document.body.classList.add('ready');setTimeout(function(){document.body.classList.remove('ready')},2400);
     var b=$('boot');if(!b)return;
     b.classList.add('hide');setTimeout(function(){b.parentNode&&b.parentNode.removeChild(b)},350)};
 

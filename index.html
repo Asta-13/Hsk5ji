@@ -16,8 +16,8 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@700;900&family=Noto+Serif+SC:wght@600;900&family=Noto+Sans:wght@400;500;700&family=Noto+Sans+JP:wght@400;700&display=swap" media="print" data-async-css>
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@700;900&family=Noto+Serif+SC:wght@600;900&family=Noto+Sans:wght@400;500;700&family=Noto+Sans+JP:wght@400;700&display=swap"></noscript>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@700;900&family=Noto+Serif+SC:wght@600;900&family=Noto+Sans:wght@400;500;700&family=Noto+Sans+JP:wght@400;700&family=Ma+Shan+Zheng&display=swap" media="print" data-async-css>
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@700;900&family=Noto+Serif+SC:wght@600;900&family=Noto+Sans:wght@400;500;700&family=Noto+Sans+JP:wght@400;700&family=Ma+Shan+Zheng&display=swap"></noscript>
 <style>
 #boot{position:fixed;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#EDF0F3;color:#131A24;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;transition:opacity .25s}
 @media(prefers-color-scheme:dark){#boot{background:#0F141C;color:#E7ECF3}}
@@ -38,7 +38,29 @@
 
 <!-- TODAY -->
 <div class="pane" id="p-today" role="tabpanel">
-  <div class="banner" id="notice" hidden><b data-i18n="noticeLbl"></b><span id="noticeTx"></span></div>
+  <div class="banner" id="notice" hidden><span class="hzmini" id="noticeHz"></span><div><b data-i18n="noticeLbl"></b><span id="noticeTx"></span></div></div>
+  <div class="card" id="heroCard">
+    <div class="hzhero" data-hz="today"></div>
+    <div class="hero">
+      <div class="seal" id="seal"><span data-i18n="sealA"></span><b id="days">—</b><span data-i18n="sealB"></span></div>
+      <div>
+        <div class="label" id="examLbl"></div>
+        <h1 id="lvTitle"></h1>
+        <div class="muted" id="sub" style="font-size:.9rem"></div>
+        <div class="hint" id="planLine"></div>
+        <button class="chip" type="button" id="taskRemind" hidden></button>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="stToday">0</b><span data-i18n="stToday"></span></div>
+      <div class="stat"><b id="stTotal">0</b><span data-i18n="stTotal"></span></div>
+      <div class="stat"><b id="stStreak">0</b><span data-i18n="stStreak"></span></div>
+    </div>
+    <div>
+      <div class="between"><span class="hint" data-i18n="lvProgLbl"></span><span class="hint" id="lvProgTx"></span></div>
+      <div class="bar" style="margin-top:4px"><i id="lvProg"></i></div>
+    </div>
+  </div>
   <div class="card gs" id="gsCard" hidden>
     <div class="gs-t" data-i18n="gsTitle"></div>
     <form id="gsForm" class="search big" role="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="gsQ" type="search" data-i18n-ph="gsPh" autocomplete="off" enterkeyhint="search"></form>
@@ -55,6 +77,7 @@
   <div class="card" id="lrnCard" hidden><button class="btn" type="button" data-golearn="1" data-i18n="lrnCard"></button></div>
 
   <div class="card" id="auth" hidden>
+    <div class="hzhero" data-hz="auth"></div>
     <h2 data-i18n="authTitle"></h2>
     <div class="hint" data-i18n="authHint"></div>
     <div class="note" data-i18n="authSteps"></div>
@@ -70,6 +93,7 @@
     <button class="btn" id="rcSave" type="button" data-i18n="resetSave"></button>
   </div>
   <div class="card" id="onb" hidden>
+    <div class="hzhero" data-hz="onb"></div>
     <h2 data-i18n="obTitle"></h2>
     <div class="note" id="obStep" data-i18n="obStep" style="border-left:4px solid var(--seal);font-weight:700"></div>
     <div class="hint" data-i18n="obHint"></div>
@@ -90,28 +114,6 @@
     <div class="chips" id="lvPickChips"></div>
     <div class="hint" data-i18n="lvPickH"></div>
     <button class="btn ghost small" id="lvPickLater" type="button" style="align-self:flex-start" data-i18n="lvPickLater"></button>
-  </div>
-
-  <div class="card" id="heroCard">
-    <div class="hero">
-      <div class="seal" id="seal"><span data-i18n="sealA"></span><b id="days">—</b><span data-i18n="sealB"></span></div>
-      <div>
-        <div class="label" id="examLbl"></div>
-        <h1 id="lvTitle"></h1>
-        <div class="muted" id="sub" style="font-size:.9rem"></div>
-        <div class="hint" id="planLine"></div>
-        <button class="chip" type="button" id="taskRemind" hidden></button>
-      </div>
-    </div>
-    <div class="stats">
-      <div class="stat"><b id="stToday">0</b><span data-i18n="stToday"></span></div>
-      <div class="stat"><b id="stTotal">0</b><span data-i18n="stTotal"></span></div>
-      <div class="stat"><b id="stStreak">0</b><span data-i18n="stStreak"></span></div>
-    </div>
-    <div>
-      <div class="between"><span class="hint" data-i18n="lvProgLbl"></span><span class="hint" id="lvProgTx"></span></div>
-      <div class="bar" style="margin-top:4px"><i id="lvProg"></i></div>
-    </div>
   </div>
 
   <div class="card">
@@ -435,9 +437,10 @@
 <div id="menuSheet" class="msheet" hidden><div class="mback" data-menuclose="1"></div>
   <div class="mpanel" role="dialog" aria-modal="true" aria-labelledby="menuTtl"><div class="mgrip"></div><div class="between"><h3 id="menuTtl" data-i18n="menuTtl"></h3><button class="btn small ghost" type="button" data-menuclose="1" aria-label="×">×</button></div>
   <div class="mgrid"><button class="tab mi" role="tab" data-t="media" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><path d="M10 9.5l5 2.5-5 2.5z"/></svg><b data-i18n="tabMedia"></b><small data-i18n="mdMedia"></small></button><button class="tab mi" role="tab" data-t="list" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.8 6.8 19.6l1-5.8L3.5 9.7l5.9-.9z"/></svg><b data-i18n="tabList"></b><small data-i18n="mdList"></small></button><button class="tab mi" role="tab" data-t="words" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><b data-i18n="tabWords"></b><small data-i18n="mdWords"></small></button><button class="tab mi" role="tab" data-t="hsk" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 4h10a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M9 9h5"/></svg><b data-i18n="tabHsk"></b><small data-i18n="mdHsk"></small></button><button class="tab mi" role="tab" data-t="gram" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h9"/></svg><b data-i18n="tabGram"></b><small data-i18n="mdGram"></small></button><button class="tab mi" role="tab" data-t="cards" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="2"/><path d="M8 3.5h8"/></svg><b data-i18n="tabCards"></b><small data-i18n="mdCards"></small></button><button class="tab mi" role="tab" data-t="play" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></svg><b data-i18n="tabPlay"></b><small data-i18n="mdPlay"></small></button></div></div></div>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="hzbox" id="toast" role="status" aria-live="polite"></div>
 
 <script src="js/hw-lite.js"></script>
+<script src="js/hanzi.js"></script>
 <script src="js/loader.js"></script>
 <script src="js/sw-register.js"></script>
 </body>
