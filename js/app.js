@@ -70,6 +70,10 @@ var DATA=window.DATA;
     catTech:["Технологи","Tech & inventions","Технологии","技術"],
     wOutHsk:["HSK-д ороогүй дан үсэг — 🔊 дарж сонс","Not in the HSK list — tap 🔊 to hear it","Нет в списке HSK — нажмите 🔊","HSK外の字 — 🔊で聞く"],
     wOutShort:["Нэмэлт үг","Extra word","Доп. слово","追加語"],
+    catNewsw:["Шинэ мэдээ · Дэлхий","News · World","Новости · Мир","ニュース・世界"],
+    catNewss:["Шинэ мэдээ · Шинжлэх ухаан","News · Science","Новости · Наука","ニュース・科学"],
+    catNewst:["Шинэ мэдээ · Технологи","News · Tech","Новости · Технологии","ニュース・技術"],
+    wSrc:["Эх сурвалж (хятад)","Source (Chinese)","Источник","出典"],
     catAll:["Бүгд","All","Все","すべて"],
     catHistory:["Түүх","History","История","歴史"],
     mFeedEmpty:["Богино бичлэг (mp4/mp3) одоохондоо алга. media/ хавтсанд оруулна уу.","No short videos (mp4/mp3) yet. Add them to media/.","Нет коротких видео (mp4/mp3). Добавьте в media/.","短い動画(mp4/mp3)がまだありません。media/ に追加してください。"],
@@ -2005,7 +2009,7 @@ var DATA=window.DATA;
   function worldLoad(){
     if(WLD.items)return Promise.resolve(WLD.items);
     if(WLD.loading)return WLD.loading;
-    WLD.loading=Promise.all([fetch('data/world.json').then(function(r){return r.ok?r.json():{items:[]}}),fetch('data/world-dict.json').then(function(r){return r.ok?r.json():{}}).catch(function(){return {}})]).then(function(a){WDICT=a[1]||{};WLD.items=a[0].items||[];return WLD.items}).catch(function(){WLD.loading=null;return []});
+    WLD.loading=Promise.all([fetch('data/world.json').then(function(r){return r.ok?r.json():{items:[]}}),fetch('data/world-dict.json').then(function(r){return r.ok?r.json():{}}).catch(function(){return {}}),fetch('data/news.json').then(function(r){return r.ok?r.json():{items:[]}}).catch(function(){return {items:[]}})]).then(function(a){WDICT=a[1]||{};WLD.news=(a[2]&&a[2].items)||[];WLD.items=(a[0].items||[]).concat(WLD.news);return WLD.items}).catch(function(){WLD.loading=null;return []});
     return WLD.loading;
   }
   function dayNum(){return Math.floor((Date.parse(TODAY)-Date.parse(TODAY.slice(0,4)+'-01-01'))/864e5)}
@@ -2013,7 +2017,7 @@ var DATA=window.DATA;
   function worldPool(){
     var md=TODAY.slice(5),it=WLD.items||[];
     var hist=it.filter(function(x){return x.cat==='history'&&x.d===md});
-    var rest=it.filter(function(x){return x.cat!=='wisdom'&&x.cat!=='history'});
+    var rest=it.filter(function(x){return x.cat!=='wisdom'&&x.cat!=='history'&&!/^news/.test(x.cat)});
     var k=rest.length?dayNum()%rest.length:0;
     return hist.concat(rest.slice(k),rest.slice(0,k));
   }
@@ -2023,13 +2027,14 @@ var DATA=window.DATA;
     var hist=it.filter(function(x){return x.cat==='history'&&x.d===md});
     var mid=it.filter(function(x){return x.cat!=='wisdom'&&!(x.cat==='history'&&x.d===md)});
     for(var i=mid.length-1;i>0;i--){var j=Math.floor(rnd()*(i+1)),tmp=mid[i];mid[i]=mid[j];mid[j]=tmp}
-    var all=hist.concat(mid,it.filter(function(x){return x.cat==='wisdom'}));
+    var nws=mid.filter(function(x){return /^news/.test(x.cat)}).sort(function(p,q){return (q.ts||'')<(p.ts||'')?-1:1});mid=mid.filter(function(x){return !/^news/.test(x.cat)});
+    var all=nws.concat(hist,mid,it.filter(function(x){return x.cat==='wisdom'}));
     return WLD.cat&&WLD.cat!=='all'?all.filter(function(x){return x.cat===WLD.cat}):all;
   }
-  var WCATS=['all','country','space','nature','science','history','culture','food','tech','wisdom'];
+  var WCATS=['all','newsw','newss','newst','country','space','nature','science','history','culture','food','tech','wisdom'];
   function wCatBar(){
     var it=WLD.items||[],cnt={all:it.length};it.forEach(function(x){cnt[x.cat]=(cnt[x.cat]||0)+1});
-    var ic={all:'✨',country:'🌏',space:'🪐',nature:'🌿',science:'🔬',history:'📜',culture:'🎎',food:'🍜',tech:'💡',wisdom:'💬'};
+    var ic={newsw:'📰',newss:'🔭',newst:'🤖',all:'✨',country:'🌏',space:'🪐',nature:'🌿',science:'🔬',history:'📜',culture:'🎎',food:'🍜',tech:'💡',wisdom:'💬'};
     return '<div class="wcats" id="wCats" role="group">'+WCATS.filter(function(k){return cnt[k]}).map(function(k){
       return '<button type="button" class="chip" data-wc="'+k+'" aria-pressed="'+(WLD.cat===k)+'">'+ic[k]+' '+esc(T(k==='all'?'catAll':'cat'+k.charAt(0).toUpperCase()+k.slice(1)))+' <small>'+cnt[k]+'</small></button>';
     }).join('')+'</div>';
@@ -2064,8 +2069,9 @@ var DATA=window.DATA;
   }
   function wMeta(x){
     if(x.cat==='history')return T('wHist')+(x.y?' · '+x.y:(x.d?' · '+x.d:''));
-    return T('cat'+x.cat.charAt(0).toUpperCase()+x.cat.slice(1));
+    return T('cat'+x.cat.charAt(0).toUpperCase()+x.cat.slice(1))+(x.nd?' · '+x.nd:'');
   }
+  function wTail(x){return x.mn?esc(x.mn):(x.u?'<a class="wsrc" href="'+esc(x.u)+'" target="_blank" rel="noopener">'+esc(T('wSrc'))+' ↗</a>':'')}
   function wLevel(x){var m=0;mediaWords({lines:[{zh:x.zh}]}).forEach(function(w){if(w.l>m)m=w.l});return m}
   function wKeys(x,hv){
     var ws=mediaWords({lines:[{zh:x.zh}]}).filter(function(w){return w.m});
@@ -2081,7 +2087,7 @@ var DATA=window.DATA;
       var pool=worldPool(),x=pool[WLD.off%pool.length],hv=haveSet(),nw=wNewWords(x).length;
       c.hidden=false;c.className='card wcard w-'+x.cat;
       c.innerHTML='<div class="between"><span class="wbadge">'+x.e+' '+esc(wMeta(x))+'</span><span class="hint">'+esc(T('wHome'))+'</span></div>'+
-        '<h3 class="wt">'+esc(x.t)+'</h3><div class="wzh" lang="zh">'+zhRuby(x.zh,hv,'wfw')+'</div><div class="wmn">'+esc(x.mn)+'</div>'+
+        '<h3 class="wt">'+esc(x.t)+'</h3><div class="wzh" lang="zh">'+zhRuby(x.zh,hv,'wfw')+'</div><div class="wmn">'+wTail(x)+'</div>'+
         '<div class="row"><button class="btn small" type="button" data-wsay="'+x.id+'" aria-label="sound">🔊</button>'+(nw?'<button class="btn small ghost" type="button" data-wadd="'+x.id+'">'+esc(T('wAdd',{n:nw}))+'</button>':'')+
         '<button class="btn small ghost" type="button" data-wnext>'+esc(T('wNext'))+'</button><button class="btn small ghost" type="button" data-wopen>'+esc(T('wOpen'))+'</button></div>';
       var qt=worldQuote();
@@ -2102,7 +2108,7 @@ var DATA=window.DATA;
       box.innerHTML=wCatBar()+'<div class="mfeed wfeed pin" id="wFeed">'+L.map(function(x,i){
         var nw=wNewWords(x).length;
         return '<section class="mslide wslide w-'+x.cat+'" data-wi="'+x.id+'"><div class="wtop"><span class="wbadge">'+x.e+' '+esc(wMeta(x))+'</span><span class="wnum">'+(i+1)+' / '+L.length+'</span></div>'+
-          '<div class="wmid"><div class="wemo">'+x.e+'</div><h3 class="wtt">'+esc(x.t)+(wLevel(x)?' <span class="badge">HSK '+wLevel(x)+'</span>':'')+'</h3><div class="wzh" lang="zh">'+zhRuby(x.zh,hv,'mfw')+'</div><div class="wmn" data-wsay="'+x.id+'">'+esc(x.mn)+'</div>'+wKeys(x,hv)+'</div>'+
+          '<div class="wmid"><div class="wemo">'+x.e+'</div><h3 class="wtt" data-wsay="'+x.id+'">'+esc(x.t)+(wLevel(x)?' <span class="badge">HSK '+wLevel(x)+'</span>':'')+'</h3><div class="wzh" lang="zh">'+zhRuby(x.zh,hv,'mfw')+'</div><div class="wmn" data-wsay="'+x.id+'">'+wTail(x)+'</div>'+wKeys(x,hv)+'</div>'+
           '<div class="mfside"><button type="button" data-wsay="'+x.id+'" aria-label="sound">🔊</button><button type="button" data-wpy aria-label="pinyin">拼</button><button type="button" data-wwords="'+x.id+'">📚<small>'+nw+'</small></button></div>'+
           (i===0?'<div class="wswipe">'+esc(T('wGuide'))+'<br>'+esc(T('wSwipe'))+'</div>':'')+'</section>';
       }).join('')+'</div><div class="card mfcard" id="wfCard" hidden></div>';
