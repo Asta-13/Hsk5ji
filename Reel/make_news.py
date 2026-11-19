@@ -8,7 +8,7 @@ from datetime import datetime, timezone, timedelta
 from email.utils import parsedate_to_datetime
 
 OUT = sys.argv[1] if len(sys.argv) > 1 else 'data/news.json'
-KEEP = 60
+KEEP = 300
 PER_RUN = {'newsw': 4, 'newss': 4, 'newst': 4}
 FEEDS = [('https://www.chinanews.com.cn/rss/world.xml', 'newsw'),
          ('https://www.chinanews.com.cn/rss/scroll-news.xml', None)]

@@ -46,6 +46,7 @@ var DATA=window.DATA;
     tabMedia:["Бичлэг·Дуу","Videos·Songs","Видео·Песни","動画・歌"],
     mdMedia:["Хадмал дээрх үгийг товшиж сур","Tap words in subtitles to learn","Нажимайте слова в субтитрах","字幕の単語をタップして学ぶ"],
     mVideo:["📺 Бичлэг","📺 Videos","📺 Видео","📺 動画"],
+    mNews:["📰 Мэдээ","📰 News","📰 Новости","📰 ニュース"],
     mSong:["🎵 Дуу","🎵 Songs","🎵 Песни","🎵 歌"],
     mMeta:["{n} мөр · {w} шинэ үг","{n} lines · {w} new words","{n} строк · {w} новых слов","{n}行 · 新しい単語{w}"],
     mAuto:["Автомат хадмал (алдаатай байж болно)","Auto subtitles (may contain errors)","Автосубтитры (возможны ошибки)","自動字幕（誤りあり）"],
@@ -563,7 +564,7 @@ var DATA=window.DATA;
   var LEVELS=[1,2,3,4,5,6];
   function NW(lv){return ((HSKRAW[lv]||'').split(',').length)} /* words per level in the merged list */
   var INT=[1,3,7,14,30];
-  var HSKD=null,LESSONS=null,CI18N=null,WLD={items:null,loading:null,off:0,cat:'all'},WDICT={};
+  var HSKD=null,LESSONS=null,CI18N=null,WLD={items:null,loading:null,off:0,cat:'all',ncat:'all'},WDICT={};
   function LT(x){if(lang==='mn'||!CI18N)return x;var a=CI18N[x];return a&&a[LI[lang]-1]||x}
   try{localStorage.removeItem('hskStd')}catch(e){}
   function HR(){return HSKRAW}
@@ -1946,9 +1947,10 @@ var DATA=window.DATA;
   function renderMediaList(items){
     var k=MED.kind;
     if(k==='feed'&&!MED.userK&&!feedItems(items).length)k=MED.kind='world';
-    $('mKinds').innerHTML=['feed','world','video','song'].map(function(x){return '<button class="chip" type="button" data-mk="'+x+'" aria-pressed="'+(k===x)+'">'+T(x==='feed'?'mFeed':x==='world'?'mWorld':x==='video'?'mVideo':'mSong')+'</button>'}).join('');
+    $('mKinds').innerHTML=['feed','news','world','video'].map(function(x){return '<button class="chip" type="button" data-mk="'+x+'" aria-pressed="'+(k===x)+'">'+T(x==='feed'?'mFeed':x==='news'?'mNews':x==='world'?'mWorld':x==='video'?'mVideo':'mSong')+'</button>'}).join('');
     if(k==='feed'){renderMediaFeed(items);return}
-    if(k==='world'){renderWorldFeed();return}
+    if(k==='song')k=MED.kind='feed';
+    if(k==='world'||k==='news'){renderWorldFeed();return}
     mediaStop();
     var L=items.filter(function(x){return x.kind===k}),hv=haveSet();
     $('mBody').innerHTML=L.length?'<div class="list">'+L.map(function(x){
@@ -2029,14 +2031,16 @@ var DATA=window.DATA;
     for(var i=mid.length-1;i>0;i--){var j=Math.floor(rnd()*(i+1)),tmp=mid[i];mid[i]=mid[j];mid[j]=tmp}
     var nws=mid.filter(function(x){return /^news/.test(x.cat)}).sort(function(p,q){return (q.ts||'')<(p.ts||'')?-1:1});mid=mid.filter(function(x){return !/^news/.test(x.cat)});
     var all=nws.concat(hist,mid,it.filter(function(x){return x.cat==='wisdom'}));
-    return WLD.cat&&WLD.cat!=='all'?all.filter(function(x){return x.cat===WLD.cat}):all;
+    var nw=MED.kind==='news',cc=nw?WLD.ncat:WLD.cat;
+    all=all.filter(function(x){return nw===/^news/.test(x.cat)});
+    return cc&&cc!=='all'?all.filter(function(x){return x.cat===cc}):all;
   }
-  var WCATS=['all','newsw','newss','newst','country','space','nature','science','history','culture','food','tech','wisdom'];
+  var NCATS=['all','newsw','newss','newst'],WCATS=['all','country','space','nature','science','history','culture','food','tech','wisdom'];
   function wCatBar(){
-    var it=WLD.items||[],cnt={all:it.length};it.forEach(function(x){cnt[x.cat]=(cnt[x.cat]||0)+1});
+    var nw=MED.kind==='news',it=(WLD.items||[]).filter(function(x){return nw===/^news/.test(x.cat)}),cnt={all:it.length},cur=nw?WLD.ncat:WLD.cat;it.forEach(function(x){cnt[x.cat]=(cnt[x.cat]||0)+1});
     var ic={newsw:'📰',newss:'🔭',newst:'🤖',all:'✨',country:'🌏',space:'🪐',nature:'🌿',science:'🔬',history:'📜',culture:'🎎',food:'🍜',tech:'💡',wisdom:'💬'};
-    return '<div class="wcats" id="wCats" role="group">'+WCATS.filter(function(k){return cnt[k]}).map(function(k){
-      return '<button type="button" class="chip" data-wc="'+k+'" aria-pressed="'+(WLD.cat===k)+'">'+ic[k]+' '+esc(T(k==='all'?'catAll':'cat'+k.charAt(0).toUpperCase()+k.slice(1)))+' <small>'+cnt[k]+'</small></button>';
+    return '<div class="wcats" id="wCats" role="group">'+(nw?NCATS:WCATS).filter(function(k){return cnt[k]}).map(function(k){
+      return '<button type="button" class="chip" data-wc="'+k+'" aria-pressed="'+(cur===k)+'">'+ic[k]+' '+esc(T(k==='all'?'catAll':'cat'+k.charAt(0).toUpperCase()+k.slice(1)))+' <small>'+cnt[k]+'</small></button>';
     }).join('')+'</div>';
   }
   function worldQuote(){var q=(WLD.items||[]).filter(function(x){return x.cat==='wisdom'});return q.length?q[dayNum()%q.length]:null}
@@ -2101,7 +2105,7 @@ var DATA=window.DATA;
     mediaStop();
     var box=$('mBody');
     worldLoad().then(function(){
-      if(MED.kind!=='world'||MED.cur)return;
+      if((MED.kind!=='world'&&MED.kind!=='news')||MED.cur)return;
       var L=worldFeedList();
       if(!L.length){box.innerHTML=wCatBar()+'<div class="empty">'+T('mEmpty')+'</div>';return}
       var hv=haveSet();
@@ -2129,7 +2133,7 @@ var DATA=window.DATA;
   document.addEventListener('click',function(e){
     var t=e.target;if(!t.closest)return;
     var b;
-    if((b=t.closest('[data-wc]'))){WLD.cat=b.dataset.wc;renderWorldFeed();return}
+    if((b=t.closest('[data-wc]'))){if(MED.kind==='news')WLD.ncat=b.dataset.wc;else WLD.cat=b.dataset.wc;renderWorldFeed();return}
     if((b=t.closest('[data-wsay]'))){var x=wById(b.dataset.wsay);x&&speak(x.zh);return}
     if(t.closest('[data-wnext]')){WLD.off++;worldCardRender();return}
     if(t.closest('[data-wopen]')){MED.kind='world';MED.userK=1;MED.cur=null;showTab('media');return}
@@ -2151,7 +2155,7 @@ var DATA=window.DATA;
     if((b=t.closest('[data-wfa]'))){if(mediaAdd(b.dataset.wfa)){syncSummary(TODAY);toast(T('tAdded'),'cheer');renderAll();wWordCard(b.dataset.wfa)}return}
     if(t.closest('[data-wfx]')){$('wfCard').hidden=true}
   });
-  function feedItems(items){var L=items.filter(function(x){return x.srcType==='file'&&/\.(mp4|webm|mp3|m4a|wav|ogg)$/i.test(x.src||'')});return L.filter(function(x){return x.story}).reverse().concat(L.filter(function(x){return !x.story}))}
+  function feedItems(items){var L=items.filter(function(x){return x.srcType==='file'&&/\.(mp4|webm)$/i.test(x.src||'')});return L.filter(function(x){return x.story}).reverse().concat(L.filter(function(x){return !x.story}))}
   function mediaStop(){document.querySelectorAll('#mBody video,#mBody audio').forEach(function(v){try{v.pause()}catch(e){}});if(MED.obs){MED.obs.disconnect();MED.obs=null}}
   function isAud(x){return /\.(mp3|m4a|wav|ogg)$/i.test(x.src||'')}
   function lineEnd(L,i){var l=L[i];return l.e!=null?l.e:(L[i+1]&&L[i+1].t!=null?L[i+1].t:l.t+4)}
