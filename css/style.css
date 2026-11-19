@@ -1162,3 +1162,5 @@ body{padding-bottom:96px}
   .mpanel.mdrop{left:auto;right:max(24px,calc((100vw - 1080px)/2));width:min(720px,calc(100vw - 48px));max-width:none}
   .footbar{width:min(calc(100vw - 40px),720px)}
 }
+.wslide .xc{background:none;border:0;color:inherit;font:inherit;padding:0;cursor:pointer;border-bottom:1px dotted rgba(255,255,255,.35)}
+.wslide .wtt[data-wsay],.wslide .wmn[data-wsay]{cursor:pointer}

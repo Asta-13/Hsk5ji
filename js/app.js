@@ -68,6 +68,7 @@ var DATA=window.DATA;
     catScience:["Шинжлэх ухаан","Science","Наука","科学"],
     catFood:["Хоол, ундаа","Food & drink","Еда","食べ物"],
     catTech:["Технологи","Tech & inventions","Технологии","技術"],
+    wOutHsk:["HSK-д ороогүй дан үсэг — 🔊 дарж сонс","Not in the HSK list — tap 🔊 to hear it","Нет в списке HSK — нажмите 🔊","HSK外の字 — 🔊で聞く"],
     catAll:["Бүгд","All","Все","すべて"],
     catHistory:["Түүх","History","История","歴史"],
     mFeedEmpty:["Богино бичлэг (mp4/mp3) одоохондоо алга. media/ хавтсанд оруулна уу.","No short videos (mp4/mp3) yet. Add them to media/.","Нет коротких видео (mp4/mp3). Добавьте в media/.","短い動画(mp4/mp3)がまだありません。media/ に追加してください。"],
@@ -2035,7 +2036,10 @@ var DATA=window.DATA;
   function worldQuote(){var q=(WLD.items||[]).filter(function(x){return x.cat==='wisdom'});return q.length?q[dayNum()%q.length]:null}
   function zhRuby(s,hv,cls){
     return segZh(s).map(function(x){
-      if(!x.h)return esc(x.t);
+      if(!x.h){
+        if(cls==='mfw'&&/[一-鿿]/.test(x.t))return '<button type="button" class="'+cls+' xc" data-x="'+esc(x.t)+'" lang="zh">'+esc(x.t)+'</button>';
+        return esc(x.t);
+      }
       var hit=hskLookup(x.h),nw=hv&&!hv[x.h]&&hM(x.h);
       return '<button type="button" class="'+cls+(nw?' new':'')+'" data-h="'+esc(x.h)+'" lang="zh"><ruby>'+esc(x.h)+'<rt>'+esc(hP(x.h,hit.p))+'</rt></ruby></button>';
     }).join('');
@@ -2080,11 +2084,15 @@ var DATA=window.DATA;
       box.innerHTML=wCatBar()+'<div class="mfeed wfeed pin" id="wFeed">'+L.map(function(x,i){
         var nw=wNewWords(x).length;
         return '<section class="mslide wslide w-'+x.cat+'" data-wi="'+x.id+'"><div class="wtop"><span class="wbadge">'+x.e+' '+esc(wMeta(x))+'</span><span class="wnum">'+(i+1)+' / '+L.length+'</span></div>'+
-          '<div class="wmid"><div class="wemo">'+x.e+'</div><h3 class="wtt">'+esc(x.t)+(wLevel(x)?' <span class="badge">HSK '+wLevel(x)+'</span>':'')+'</h3><div class="wzh" lang="zh">'+zhRuby(x.zh,hv,'mfw')+'</div><div class="wmn">'+esc(x.mn)+'</div>'+wKeys(x,hv)+'</div>'+
+          '<div class="wmid"><div class="wemo">'+x.e+'</div><h3 class="wtt">'+esc(x.t)+(wLevel(x)?' <span class="badge">HSK '+wLevel(x)+'</span>':'')+'</h3><div class="wzh" lang="zh">'+zhRuby(x.zh,hv,'mfw')+'</div><div class="wmn" data-wsay="'+x.id+'">'+esc(x.mn)+'</div>'+wKeys(x,hv)+'</div>'+
           '<div class="mfside"><button type="button" data-wsay="'+x.id+'" aria-label="sound">🔊</button><button type="button" data-wpy aria-label="pinyin">拼</button><button type="button" data-wwords="'+x.id+'">📚<small>'+nw+'</small></button></div>'+
           (i===0?'<div class="wswipe">'+esc(T('wGuide'))+'<br>'+esc(T('wSwipe'))+'</div>':'')+'</section>';
       }).join('')+'</div><div class="card mfcard" id="wfCard" hidden></div>';
     });
+  }
+  function wCharCard(ch){
+    var c=$('wfCard');if(!c)return;c.hidden=false;
+    c.innerHTML='<div class="between"><span class="h big" lang="zh">'+esc(ch)+'</span></div><div class="hint">'+esc(T('wOutHsk'))+'</div><div class="row"><button class="btn ghost small" type="button" data-msp="'+esc(ch)+'">🔊</button></div>';
   }
   function wWordCard(h){
     var hit=hskLookup(h),m=hM(h),has=haveSet()[h],c=$('wfCard');if(!c||!hit)return;
@@ -2113,7 +2121,7 @@ var DATA=window.DATA;
       if(n3){syncSummary(TODAY);toast(T('tAddedN',{n:n3}),'cheer');renderAll();var sl=b.closest('.wslide');sl.querySelectorAll('.mfw.new').forEach(function(z){z.classList.remove('new')});b.querySelector('small').textContent='0'}
       else toast(T('mAllKnown'));
       return}
-    if((b=t.closest('.mfw'))){wWordCard(b.dataset.h);return}
+    if((b=t.closest('.mfw'))){if(b.dataset.x){wCharCard(b.dataset.x);return}wWordCard(b.dataset.h);return}
     if((b=t.closest('[data-wfa]'))){if(mediaAdd(b.dataset.wfa)){syncSummary(TODAY);toast(T('tAdded'),'cheer');renderAll();wWordCard(b.dataset.wfa)}return}
     if(t.closest('[data-wfx]')){$('wfCard').hidden=true}
   });
