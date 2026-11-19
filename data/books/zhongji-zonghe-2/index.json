@@ -1,5 +1,7 @@
 {
- "book": "中级综合 II (Intermediate Comprehensive Course II)",
+ "id": "zhongji-zonghe-2",
+ "title": "中级综合 II",
+ "title_mn": "Дунд шатны цогц хичээл II",
  "lessons": [
   {
    "lesson": 1,
