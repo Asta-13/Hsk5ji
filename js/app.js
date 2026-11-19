@@ -69,6 +69,7 @@ var DATA=window.DATA;
     catFood:["Хоол, ундаа","Food & drink","Еда","食べ物"],
     catTech:["Технологи","Tech & inventions","Технологии","技術"],
     wOutHsk:["HSK-д ороогүй дан үсэг — 🔊 дарж сонс","Not in the HSK list — tap 🔊 to hear it","Нет в списке HSK — нажмите 🔊","HSK外の字 — 🔊で聞く"],
+    wOutShort:["Нэмэлт үг","Extra word","Доп. слово","追加語"],
     catAll:["Бүгд","All","Все","すべて"],
     catHistory:["Түүх","History","История","歴史"],
     mFeedEmpty:["Богино бичлэг (mp4/mp3) одоохондоо алга. media/ хавтсанд оруулна уу.","No short videos (mp4/mp3) yet. Add them to media/.","Нет коротких видео (mp4/mp3). Добавьте в media/.","短い動画(mp4/mp3)がまだありません。media/ に追加してください。"],
@@ -558,7 +559,7 @@ var DATA=window.DATA;
   var LEVELS=[1,2,3,4,5,6];
   function NW(lv){return ((HSKRAW[lv]||'').split(',').length)} /* words per level in the merged list */
   var INT=[1,3,7,14,30];
-  var HSKD=null,LESSONS=null,CI18N=null,WLD={items:null,loading:null,off:0,cat:'all'};
+  var HSKD=null,LESSONS=null,CI18N=null,WLD={items:null,loading:null,off:0,cat:'all'},WDICT={};
   function LT(x){if(lang==='mn'||!CI18N)return x;var a=CI18N[x];return a&&a[LI[lang]-1]||x}
   try{localStorage.removeItem('hskStd')}catch(e){}
   function HR(){return HSKRAW}
@@ -2004,7 +2005,7 @@ var DATA=window.DATA;
   function worldLoad(){
     if(WLD.items)return Promise.resolve(WLD.items);
     if(WLD.loading)return WLD.loading;
-    WLD.loading=fetch('data/world.json').then(function(r){return r.ok?r.json():{items:[]}}).then(function(j){WLD.items=j.items||[];return WLD.items}).catch(function(){WLD.loading=null;return []});
+    WLD.loading=Promise.all([fetch('data/world.json').then(function(r){return r.ok?r.json():{items:[]}}),fetch('data/world-dict.json').then(function(r){return r.ok?r.json():{}}).catch(function(){return {}})]).then(function(a){WDICT=a[1]||{};WLD.items=a[0].items||[];return WLD.items}).catch(function(){WLD.loading=null;return []});
     return WLD.loading;
   }
   function dayNum(){return Math.floor((Date.parse(TODAY)-Date.parse(TODAY.slice(0,4)+'-01-01'))/864e5)}
@@ -2034,8 +2035,25 @@ var DATA=window.DATA;
     }).join('')+'</div>';
   }
   function worldQuote(){var q=(WLD.items||[]).filter(function(x){return x.cat==='wisdom'});return q.length?q[dayNum()%q.length]:null}
+  function segW(s){
+    if(!HSKD)HSKD=buildD(HSKRAW);
+    var out=[],i=0,a=Array.from(String(s||''));
+    while(i<a.length){
+      var done=false;
+      if(/[一-鿿]/.test(a[i])){
+        for(var n=Math.min(6,a.length-i);n>=1;n--){
+          var w=a.slice(i,i+n).join('');
+          if(WDICT[w]){out.push({d:w});i+=n;done=true;break}
+          if(HSKD&&HSKD[w]){out.push({h:w});i+=n;done=true;break}
+        }
+      }
+      if(!done){out.push({t:a[i]});i++}
+    }
+    return out;
+  }
   function zhRuby(s,hv,cls){
-    return segZh(s).map(function(x){
+    return (cls==='mfw'?segW(s):segZh(s)).map(function(x){
+      if(x.d)return '<button type="button" class="mfw xd" data-x="'+esc(x.d)+'" lang="zh"><ruby>'+esc(x.d)+'<rt>'+esc(WDICT[x.d][0])+'</rt></ruby></button>';
       if(!x.h){
         if(cls==='mfw'&&/[一-鿿]/.test(x.t))return '<button type="button" class="'+cls+' xc" data-x="'+esc(x.t)+'" lang="zh">'+esc(x.t)+'</button>';
         return esc(x.t);
@@ -2092,6 +2110,8 @@ var DATA=window.DATA;
   }
   function wCharCard(ch){
     var c=$('wfCard');if(!c)return;c.hidden=false;
+    var d=WDICT[ch];
+    if(d){c.innerHTML='<div class="between"><span class="h big" lang="zh">'+esc(ch)+'</span><span class="badge">'+esc(T('wOutShort'))+'</span></div><div class="p">'+esc(d[0])+'</div><div class="m"><b>'+esc(d[1])+'</b></div>'+(d[2]?'<div class="hint">'+esc(d[2])+'</div>':'')+'<div class="row"><button class="btn ghost small" type="button" data-msp="'+esc(ch)+'">🔊</button></div>';return}
     c.innerHTML='<div class="between"><span class="h big" lang="zh">'+esc(ch)+'</span></div><div class="hint">'+esc(T('wOutHsk'))+'</div><div class="row"><button class="btn ghost small" type="button" data-msp="'+esc(ch)+'">🔊</button></div>';
   }
   function wWordCard(h){
