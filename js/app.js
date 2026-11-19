@@ -421,6 +421,12 @@ var DATA=window.DATA;
     tabWords:["Үг","Words","Слова","単語"],
     tabCards:["Карт","Cards","Карточки","カード"],
     tabGroup:["Бүлэг","Group","Группа","みんな"],
+    daysUnit:["өдөр","days","дн.","日"],
+    mdToday:["Өнөөдрийн төлөвлөгөө, ахиц","Today's plan & progress","План дня и прогресс","今日のプランと進み具合"],
+    mdDraw:["Иероглифыг гараар бич","Write characters by hand","Пиши иероглифы от руки","手書きで練習"],
+    mdGroup:["Бүлэг, найзуудтайгаа өрсө","Group & friends","Группа и друзья","グループ・友達"],
+    mdMe:["Миний мэдээлэл, тохиргоо","My profile & settings","Мой профиль и настройки","プロフィール・設定"],
+    mdAdmin:["Удирдлага","Administration","Управление","管理"],
     tabMenu:["Цэс","Menu","Меню","メニュー"],
     menuTtl:["Суралцах цэс","Study menu","Меню обучения","学習メニュー"],
     tabPlay:["Тоглоом","Games","Игры","ゲーム"],
@@ -537,7 +543,7 @@ var DATA=window.DATA;
   function applyStatic(){
     document.documentElement.lang={mn:'mn',en:'en',ru:'ru',ja:'ja'}[lang];
     document.querySelectorAll('[data-i18n]').forEach(function(e){e.textContent=T(e.dataset.i18n)});
-    decorateMenu();
+    decorateMenu();tbTitleUpdate();
     document.querySelectorAll('[data-i18n-html]').forEach(function(e){e.innerHTML=T(e.dataset.i18nHtml)});
     document.querySelectorAll('[data-i18n-ph]').forEach(function(e){e.placeholder=T(e.dataset.i18nPh)});
     document.querySelectorAll('[data-i18n-aria]').forEach(function(e){e.setAttribute('aria-label',T(e.dataset.i18nAria))});
@@ -675,7 +681,7 @@ var DATA=window.DATA;
     if(!hasProfile()&&GUEST_TABS.indexOf(n)<0)n='today';
     TABS.forEach(function(k){$('p-'+k).hidden=k!==n});
     tabs.forEach(function(b){b.setAttribute('aria-selected',b.dataset.t===n?'true':'false')});
-    $('menuBtn').classList.toggle('on',SUBT.indexOf(n)>-1);closeMenu();
+    $('menuBtn').classList.toggle('on',SUBT.indexOf(n)>-1);closeMenu();tbTitleUpdate();
     window.scrollTo(0,0);
     if(n==='cards')renderModes();
     if(n==='list')renderLs();
@@ -685,8 +691,9 @@ var DATA=window.DATA;
     if(n==='media')renderMedia();else mediaStop();
   }
   tabs.forEach(function(b){b.addEventListener('click',function(){showTab(b.dataset.t)})});
-  function openMenu(){if(!hasProfile()&&!isGuest()){showTab('today');return}$('menuSheet').hidden=false;$('menuBtn').setAttribute('aria-expanded','true');var a=document.querySelector('#menuSheet .tab[aria-selected="true"]')||document.querySelector('#menuSheet .tab');a&&a.focus()}
-  function closeMenu(){var m=$('menuSheet');if(m&&!m.hidden){m.hidden=true;$('menuBtn').setAttribute('aria-expanded','false')}}
+  function tbTitleUpdate(){var t=$('tbTitle'),a=document.querySelector('#menuSheet .tab[aria-selected="true"] b');if(t)t.textContent=a?a.textContent:''}
+  function openMenu(){if(!hasProfile()&&!isGuest()){showTab('today');return}$('menuSheet').hidden=false;document.body.classList.add('menuopen');$('menuBtn').setAttribute('aria-expanded','true');var a=document.querySelector('#menuSheet .tab[aria-selected="true"]')||document.querySelector('#menuSheet .tab');a&&a.focus()}
+  function closeMenu(){var m=$('menuSheet');if(m&&!m.hidden){m.hidden=true;document.body.classList.remove('menuopen');$('menuBtn').setAttribute('aria-expanded','false')}}
   $('menuBtn').addEventListener('click',function(){$('menuSheet').hidden?openMenu():closeMenu()});
   document.addEventListener('click',function(e){if(e.target.closest('[data-menuclose]'))closeMenu()});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMenu()});
@@ -747,6 +754,13 @@ var DATA=window.DATA;
     $('progBars').innerHTML=ws.map(function(v,i){return '<div><b>'+(v||'')+'</b><i style="height:'+Math.round(v*80/mx)+'px"></i><span>'+(i===7?T('progNow'):'-'+(7-i))+'</span></div>'}).join('');
     $('progSum').textContent=T('progSum',{a:wordsArr().length,b:tot,s:streakNow()});
   }
+  function todayTopRender(){
+    var d=$('dateTx'),f=$('flameTx');if(!d||!f)return;
+    var dt=new Date();
+    if(lang==='mn'){d.textContent=(dt.getMonth()+1)+'-р сарын '+dt.getDate()+' · '+['Ням','Даваа','Мягмар','Лхагва','Пүрэв','Баасан','Бямба'][dt.getDay()]+' гараг'}
+    else try{d.textContent=dt.toLocaleDateString({en:'en-US',ru:'ru-RU',ja:'ja-JP'}[lang]||'en-US',{weekday:'long',month:'long',day:'numeric'})}catch(e){d.textContent=TODAY}
+    var n=+($('stStreak').textContent)||0;f.textContent='🔥 '+n+' '+T('daysUnit');f.className='flamepill'+(n>0?' lit':'');
+  }
   function renderToday(){
     updateRemind();
     var p=S.profile,lv=lvOf();
@@ -779,6 +793,7 @@ var DATA=window.DATA;
     if(nt&&window.Hanzi&&!$('noticeHz').firstChild)Hanzi.mount($('noticeHz'),'hi');
     hzRender();
     try{worldCardRender()}catch(e){console.error('world',e)}
+    try{todayTopRender()}catch(e){}
   }
   /* Ханзи багш: Өнөөдөр / нэвтрэх / бүртгэл хуудсан дээрх мэндчилгээ */
   var hzTapN=0;
