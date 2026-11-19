@@ -64,6 +64,11 @@ var DATA=window.DATA;
     catSpace:["Сансар","Space","Космос","宇宙"],
     catCulture:["Соёл · байгаль","Culture · nature","Культура · природа","文化・自然"],
     catWisdom:["Урам зориг","Wisdom","Мудрость","名言"],
+    catNature:["Байгаль, амьтан","Nature & animals","Природа","自然"],
+    catScience:["Шинжлэх ухаан","Science","Наука","科学"],
+    catFood:["Хоол, ундаа","Food & drink","Еда","食べ物"],
+    catTech:["Технологи","Tech & inventions","Технологии","技術"],
+    catAll:["Бүгд","All","Все","すべて"],
     catHistory:["Түүх","History","История","歴史"],
     mFeedEmpty:["Богино бичлэг (mp4/mp3) одоохондоо алга. media/ хавтсанд оруулна уу.","No short videos (mp4/mp3) yet. Add them to media/.","Нет коротких видео (mp4/mp3). Добавьте в media/.","短い動画(mp4/mp3)がまだありません。media/ に追加してください。"],
     mEmpty:["Одоохондоо алга","Nothing here yet","Пока ничего нет","まだありません"],
@@ -552,7 +557,7 @@ var DATA=window.DATA;
   var LEVELS=[1,2,3,4,5,6];
   function NW(lv){return ((HSKRAW[lv]||'').split(',').length)} /* words per level in the merged list */
   var INT=[1,3,7,14,30];
-  var HSKD=null,LESSONS=null,CI18N=null,WLD={items:null,loading:null,off:0};
+  var HSKD=null,LESSONS=null,CI18N=null,WLD={items:null,loading:null,off:0,cat:'all'};
   function LT(x){if(lang==='mn'||!CI18N)return x;var a=CI18N[x];return a&&a[LI[lang]-1]||x}
   try{localStorage.removeItem('hskStd')}catch(e){}
   function HR(){return HSKRAW}
@@ -2016,7 +2021,16 @@ var DATA=window.DATA;
     var hist=it.filter(function(x){return x.cat==='history'&&x.d===md});
     var mid=it.filter(function(x){return x.cat!=='wisdom'&&!(x.cat==='history'&&x.d===md)});
     for(var i=mid.length-1;i>0;i--){var j=Math.floor(rnd()*(i+1)),tmp=mid[i];mid[i]=mid[j];mid[j]=tmp}
-    return hist.concat(mid,it.filter(function(x){return x.cat==='wisdom'}));
+    var all=hist.concat(mid,it.filter(function(x){return x.cat==='wisdom'}));
+    return WLD.cat&&WLD.cat!=='all'?all.filter(function(x){return x.cat===WLD.cat}):all;
+  }
+  var WCATS=['all','country','space','nature','science','history','culture','food','tech','wisdom'];
+  function wCatBar(){
+    var it=WLD.items||[],cnt={all:it.length};it.forEach(function(x){cnt[x.cat]=(cnt[x.cat]||0)+1});
+    var ic={all:'✨',country:'🌏',space:'🪐',nature:'🌿',science:'🔬',history:'📜',culture:'🎎',food:'🍜',tech:'💡',wisdom:'💬'};
+    return '<div class="wcats" id="wCats" role="group">'+WCATS.filter(function(k){return cnt[k]}).map(function(k){
+      return '<button type="button" class="chip" data-wc="'+k+'" aria-pressed="'+(WLD.cat===k)+'">'+ic[k]+' '+esc(T(k==='all'?'catAll':'cat'+k.charAt(0).toUpperCase()+k.slice(1)))+' <small>'+cnt[k]+'</small></button>';
+    }).join('')+'</div>';
   }
   function worldQuote(){var q=(WLD.items||[]).filter(function(x){return x.cat==='wisdom'});return q.length?q[dayNum()%q.length]:null}
   function zhRuby(s,hv,cls){
@@ -2061,9 +2075,9 @@ var DATA=window.DATA;
     worldLoad().then(function(){
       if(MED.kind!=='world'||MED.cur)return;
       var L=worldFeedList();
-      if(!L.length){box.innerHTML='<div class="empty">'+T('mEmpty')+'</div>';return}
+      if(!L.length){box.innerHTML=wCatBar()+'<div class="empty">'+T('mEmpty')+'</div>';return}
       var hv=haveSet();
-      box.innerHTML='<div class="mfeed wfeed pin" id="wFeed">'+L.map(function(x,i){
+      box.innerHTML=wCatBar()+'<div class="mfeed wfeed pin" id="wFeed">'+L.map(function(x,i){
         var nw=wNewWords(x).length;
         return '<section class="mslide wslide w-'+x.cat+'" data-wi="'+x.id+'"><div class="wtop"><span class="wbadge">'+x.e+' '+esc(wMeta(x))+'</span><span class="wnum">'+(i+1)+' / '+L.length+'</span></div>'+
           '<div class="wmid"><div class="wemo">'+x.e+'</div><h3 class="wtt">'+esc(x.t)+(wLevel(x)?' <span class="badge">HSK '+wLevel(x)+'</span>':'')+'</h3><div class="wzh" lang="zh">'+zhRuby(x.zh,hv,'mfw')+'</div><div class="wmn">'+esc(x.mn)+'</div>'+wKeys(x,hv)+'</div>'+
@@ -2081,6 +2095,7 @@ var DATA=window.DATA;
   document.addEventListener('click',function(e){
     var t=e.target;if(!t.closest)return;
     var b;
+    if((b=t.closest('[data-wc]'))){WLD.cat=b.dataset.wc;renderWorldFeed();return}
     if((b=t.closest('[data-wsay]'))){var x=wById(b.dataset.wsay);x&&speak(x.zh);return}
     if(t.closest('[data-wnext]')){WLD.off++;worldCardRender();return}
     if(t.closest('[data-wopen]')){MED.kind='world';MED.userK=1;MED.cur=null;showTab('media');return}
@@ -3439,7 +3454,7 @@ var DATA=window.DATA;
   function renderLearn(){
     var el=$('lrnList');if(!el||!LESSONS)return;
     $('lrnCard').hidden=!hasProfile();
-    if($('gsCard'))$('gsCard').hidden=!hasProfile();
+    if($('footbar'))$('footbar').hidden=!hasProfile()&&!isGuest();
     $('cyrTog').setAttribute('aria-pressed',cyrOn()?'true':'false');
     var done=lrnDoneArr();
     $('lrnProg').textContent=T('lrnProg',{a:done.length,b:LESSONS.length});$('lrnBar').style.width=Math.round(done.length*100/LESSONS.length)+'%';

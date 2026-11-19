@@ -99,15 +99,6 @@
     </div>
     <div class="quote" id="quote" hidden></div>
   </div>
-  <div class="card" id="planCard">
-    <div class="between"><h2 data-i18n="todayPlan"></h2><span class="label" id="todayLabel"></span></div>
-    <div class="prog-ring">
-      <svg class="ring" viewBox="0 0 64 64" aria-hidden="true"><circle class="bg" cx="32" cy="32" r="26"/><circle class="fg" id="ringFg" cx="32" cy="32" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"/><text x="32" y="33" id="ringTx">0%</text></svg>
-      <div><b id="doneTxt"></b><div class="hint" id="doneMsg"></div></div>
-    </div>
-    <ul id="tasks"></ul>
-    <button class="btn ghost small" id="reset" type="button" style="align-self:flex-start" data-i18n="resetChecks"></button>
-  </div>
   <div class="card" id="dueCard" hidden><button class="btn" type="button" id="dueBtn" hidden></button> <button class="btn" type="button" id="missDueBtn" hidden></button> <button class="btn" type="button" id="srsBtn" hidden></button></div>
   <div class="card" id="taskCard" hidden></div>
   <div class="card" id="instCard" hidden><button class="btn" type="button" id="instBtn" data-i18n="instBtn"></button><div class="hint" data-i18n="instHint"></div></div>
@@ -117,12 +108,6 @@
   <div class="card hero" id="dayCard" hidden>
     <div class="between"><span class="badge" data-i18n="dayWord"></span><button class="btn small" type="button" data-goplay="1" data-i18n="plGoBtn"></button></div>
     <div id="dayBody"></div>
-  </div>
-  <div class="card gs" id="gsCard" hidden>
-    <div class="gs-t" data-i18n="gsTitle"></div>
-    <form id="gsForm" class="search big" role="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="gsQ" type="search" data-i18n-ph="gsPh" autocomplete="off" enterkeyhint="search"></form>
-    <div class="chips" id="gsEg"><button class="chip" type="button" data-gsq="爱">爱</button><button class="chip" type="button" data-gsq="谢谢">谢谢</button><button class="chip" type="button" data-gsq="学习">学习</button><button class="chip" type="button" data-gsq="xuexi">xuexi</button><button class="chip" type="button" data-gsq="ном">ном</button></div>
-    <div class="hint" data-i18n="gsHint"></div>
   </div>
   <div class="card" id="phaseCard">
     <div class="label" data-i18n="phaseLbl"></div>
@@ -317,6 +302,15 @@
 
 <!-- ME -->
 <div class="pane" id="p-me" role="tabpanel" hidden>
+  <div class="card" id="planCard">
+    <div class="between"><h2 data-i18n="todayPlan"></h2><span class="label" id="todayLabel"></span></div>
+    <div class="prog-ring">
+      <svg class="ring" viewBox="0 0 64 64" aria-hidden="true"><circle class="bg" cx="32" cy="32" r="26"/><circle class="fg" id="ringFg" cx="32" cy="32" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"/><text x="32" y="33" id="ringTx">0%</text></svg>
+      <div><b id="doneTxt"></b><div class="hint" id="doneMsg"></div></div>
+    </div>
+    <ul id="tasks"></ul>
+    <button class="btn ghost small" id="reset" type="button" style="align-self:flex-start" data-i18n="resetChecks"></button>
+  </div>
   <div class="card" id="progCard" hidden>
     <h2 data-i18n="progTitle"></h2>
     <div id="progBars" class="progchart"></div>
@@ -426,10 +420,11 @@
   </div>
 </div>
 
+<nav class="footbar" id="footbar" aria-label="Quick"><button id="hwTab" class="fbdraw" type="button" aria-haspopup="dialog"><svg viewBox="0 0 24 24"><path d="M4 20l4.5-1 10-10a2.1 2.1 0 00-3-3l-10 10z"/><path d="M13.5 7.5l3 3"/></svg><span data-i18n="tabDraw"></span></button><form id="gsForm" class="fbsearch" role="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="gsQ" type="search" data-i18n-ph="gsPh" autocomplete="off" enterkeyhint="search"></form></nav>
 <div id="menuSheet" class="msheet" hidden><div class="mback" data-menuclose="1"></div>
   <div class="mpanel mdrop" role="dialog" aria-modal="true" aria-labelledby="menuTtl">
     <div class="mdhead"><h3 id="menuTtl" data-i18n="menuTtl"></h3><button class="tbmenu open" type="button" data-menuclose="1" aria-label="×"><span class="tbburger"><i></i><i></i><i></i></span></button></div>
-    <div class="mgrid"><button class="tab mi" role="tab" data-t="today" aria-selected="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 9.5"/></svg><span class="mit"><b data-i18n="tabToday"></b><small data-i18n="mdToday"></small></span></button><button class="tab mi" role="tab" data-t="cards" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="2"/><path d="M8 3.5h8"/></svg><span class="mit"><b data-i18n="tabCards"></b><small data-i18n="mdCards"></small></span></button><button class="tab mi" role="tab" data-t="play" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></svg><span class="mit"><b data-i18n="tabPlay"></b><small data-i18n="mdPlay"></small></span></button><button class="tab mi" id="hwTab" type="button" aria-haspopup="dialog"><svg viewBox="0 0 24 24"><path d="M4 20l4.5-1 10-10a2.1 2.1 0 00-3-3l-10 10z"/><path d="M13.5 7.5l3 3"/></svg><span class="mit"><b data-i18n="tabDraw"></b><small data-i18n="mdDraw"></small></span></button><button class="tab mi" role="tab" data-t="words" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span class="mit"><b data-i18n="tabWords"></b><small data-i18n="mdWords"></small></span></button><button class="tab mi" role="tab" data-t="hsk" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 4h10a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M9 9h5"/></svg><span class="mit"><b data-i18n="tabHsk"></b><small data-i18n="mdHsk"></small></span></button><button class="tab mi" role="tab" data-t="gram" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h9"/></svg><span class="mit"><b data-i18n="tabGram"></b><small data-i18n="mdGram"></small></span></button><button class="tab mi" role="tab" data-t="list" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.8 6.8 19.6l1-5.8L3.5 9.7l5.9-.9z"/></svg><span class="mit"><b data-i18n="tabList"></b><small data-i18n="mdList"></small></span></button><button class="tab mi" role="tab" data-t="media" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><path d="M10 9.5l5 2.5-5 2.5z"/></svg><span class="mit"><b data-i18n="tabMedia"></b><small data-i18n="mdMedia"></small></span></button><button class="tab mi" role="tab" data-t="group" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.3"/><path d="M3.5 19c.6-3 2.6-4.5 5.5-4.5s4.9 1.5 5.5 4.5M15.5 14.7c2.4-.3 4.3.8 5 3.3"/></svg><span class="mit"><b data-i18n="tabGroup"></b><small data-i18n="mdGroup"></small></span></button><button class="tab mi" role="tab" data-t="me" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.7-3.7 3.4-5.5 7-5.5s6.3 1.8 7 5.5"/></svg><span class="mit"><b data-i18n="tabMe"></b><small data-i18n="mdMe"></small></span></button><button class="tab mi" role="tab" data-t="admin" aria-selected="false" hidden><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg><span class="mit"><b data-i18n="tabAdmin"></b><small data-i18n="mdAdmin"></small></span></button></div>
+    <div class="mgrid"><button class="tab mi" role="tab" data-t="today" aria-selected="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 9.5"/></svg><span class="mit"><b data-i18n="tabToday"></b><small data-i18n="mdToday"></small></span></button><button class="tab mi" role="tab" data-t="cards" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="2"/><path d="M8 3.5h8"/></svg><span class="mit"><b data-i18n="tabCards"></b><small data-i18n="mdCards"></small></span></button><button class="tab mi" role="tab" data-t="play" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></svg><span class="mit"><b data-i18n="tabPlay"></b><small data-i18n="mdPlay"></small></span></button><button class="tab mi" role="tab" data-t="words" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span class="mit"><b data-i18n="tabWords"></b><small data-i18n="mdWords"></small></span></button><button class="tab mi" role="tab" data-t="hsk" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 4h10a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M9 9h5"/></svg><span class="mit"><b data-i18n="tabHsk"></b><small data-i18n="mdHsk"></small></span></button><button class="tab mi" role="tab" data-t="gram" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h9"/></svg><span class="mit"><b data-i18n="tabGram"></b><small data-i18n="mdGram"></small></span></button><button class="tab mi" role="tab" data-t="list" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.8 6.8 19.6l1-5.8L3.5 9.7l5.9-.9z"/></svg><span class="mit"><b data-i18n="tabList"></b><small data-i18n="mdList"></small></span></button><button class="tab mi" role="tab" data-t="media" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><path d="M10 9.5l5 2.5-5 2.5z"/></svg><span class="mit"><b data-i18n="tabMedia"></b><small data-i18n="mdMedia"></small></span></button><button class="tab mi" role="tab" data-t="group" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.3"/><path d="M3.5 19c.6-3 2.6-4.5 5.5-4.5s4.9 1.5 5.5 4.5M15.5 14.7c2.4-.3 4.3.8 5 3.3"/></svg><span class="mit"><b data-i18n="tabGroup"></b><small data-i18n="mdGroup"></small></span></button><button class="tab mi" role="tab" data-t="me" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.7-3.7 3.4-5.5 7-5.5s6.3 1.8 7 5.5"/></svg><span class="mit"><b data-i18n="tabMe"></b><small data-i18n="mdMe"></small></span></button><button class="tab mi" role="tab" data-t="admin" aria-selected="false" hidden><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg><span class="mit"><b data-i18n="tabAdmin"></b><small data-i18n="mdAdmin"></small></span></button></div>
     <div class="mfoot"><label class="mlang" for="lang"><span aria-hidden="true">🌐</span><select id="lang" aria-label="Language"><option value="mn">Монгол</option><option value="en">English</option><option value="ru">Русский</option><option value="ja">日本語</option></select></label></div>
   </div></div>
 <div id="hzChat" class="hzc" hidden><div class="hzcback" data-hzcclose="1"></div>

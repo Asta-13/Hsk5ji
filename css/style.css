@@ -1129,3 +1129,36 @@ body{padding-block:10px 40px}
 #planCard .task .t small{display:block;margin-top:2px;line-height:1.35}
 .mdrop .mit b{overflow-wrap:anywhere}
 #heroCard .hzchatbtn{color:var(--bubfg,#1a2340);background:#fff;border:1px solid rgba(20,30,60,.2)}
+/* footbar: draw + search */
+body{padding-bottom:96px}
+.footbar{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:25;display:flex;align-items:center;gap:8px;width:min(calc(100vw - 20px),680px);padding:7px;border-radius:22px;background:var(--surface);background:color-mix(in srgb,var(--surface) 88%,transparent);-webkit-backdrop-filter:blur(14px) saturate(1.5);backdrop-filter:blur(14px) saturate(1.5);border:1px solid var(--line);box-shadow:0 14px 34px -14px rgba(19,32,79,.6)}
+.footbar[hidden]{display:none}
+.fbdraw{flex:none;display:flex;align-items:center;gap:7px;min-height:46px;padding:0 15px;border:0;border-radius:16px;background:linear-gradient(135deg,#c8402a,#e0623f);color:#fff;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 4px 0 rgba(120,30,15,.5)}
+.fbdraw:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(120,30,15,.5)}
+.fbdraw svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.fbsearch{flex:1;min-width:0;display:flex;align-items:center;gap:8px;min-height:46px;padding:0 14px;border-radius:16px;background:var(--bg);border:1.5px solid var(--line)}
+.fbsearch:focus-within{border-color:var(--accent,#3857c8)}
+.fbsearch svg{flex:none;width:19px;height:19px;fill:none;stroke:var(--muted);stroke-width:2;stroke-linecap:round}
+.fbsearch input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--fg);font:inherit;font-size:1rem;padding:8px 0}
+@media (max-width:380px){.fbdraw span{display:none}.fbdraw{padding:0 13px}}
+.hzbox{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+.mfeed{height:calc(100dvh - 310px);min-height:380px}
+.wfeed{height:calc(100dvh - 300px);min-height:380px}
+/* media categories */
+.wcats{display:flex;gap:7px;overflow-x:auto;padding:2px 2px 10px;margin-bottom:2px;scrollbar-width:none}
+.wcats::-webkit-scrollbar{display:none}
+.wcats .chip{flex:none;white-space:nowrap}
+.wcats .chip small{opacity:.65;margin-left:2px}
+.wcats .chip[aria-pressed="true"]{background:var(--accent,#3857c8);color:#fff;border-color:transparent}
+/* desktop */
+@media (min-width:900px){
+  body{padding-left:32px;padding-right:32px}
+  .wrap,.topbar{max-width:1080px}
+  .topbar{margin-inline:auto;width:100%;box-sizing:border-box}
+  #p-today:not([hidden]){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:start}
+  #p-today>:is(#heroCard,#notice,#guestCard,#recov,#onb,#lvPick,#phaseCard){grid-column:1/-1}
+  #p-media .mfeed,#p-media .wfeed{max-width:560px;margin-inline:auto}
+  #p-media .wcats{justify-content:center;flex-wrap:wrap;overflow:visible}
+  .mpanel.mdrop{left:auto;right:max(24px,calc((100vw - 1080px)/2));width:min(720px,calc(100vw - 48px));max-width:none}
+  .footbar{width:min(calc(100vw - 40px),720px)}
+}
