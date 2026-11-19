@@ -56,6 +56,8 @@ var DATA=window.DATA;
     wQuote:["Өдрийн урам","Daily motivation","Мотивация дня","今日のひとこと"],
     wOpen:["🌍 Бүгдийг үзэх","🌍 See all","🌍 Смотреть все","🌍 すべて見る"],
     wNext:["Дараагийнх ▶","Next ▶","Далее ▶","次へ ▶"],
+    wGuide:["👆 Үг дээр дар = утга · 🔊 сонс · 📚 үгсийг нэм","👆 Tap a word = meaning · 🔊 listen · 📚 add words","👆 Нажми на слово = значение · 🔊 слушай · 📚 добавь слова","👆 単語をタップ＝意味 · 🔊 聞く · 📚 追加"],
+    wKeys:["Гол үгс","Key words","Ключевые слова","重要単語"],
     wSwipe:["↑ дээш гүйлгэ","↑ swipe up","↑ листай вверх","↑ 上へスワイプ"],
     wAdd:["📚 +{n} шинэ үг","📚 +{n} new words","📚 +{n} новых слов","📚 +{n} 新出単語"],
     catCountry:["Улс орон","Countries","Страны","国"],
@@ -2013,6 +2015,13 @@ var DATA=window.DATA;
     if(x.cat==='history')return T('wHist')+(x.y?' · '+x.y:(x.d?' · '+x.d:''));
     return T('cat'+x.cat.charAt(0).toUpperCase()+x.cat.slice(1));
   }
+  function wLevel(x){var m=0;mediaWords({lines:[{zh:x.zh}]}).forEach(function(w){if(w.l>m)m=w.l});return m}
+  function wKeys(x,hv){
+    var ws=mediaWords({lines:[{zh:x.zh}]}).filter(function(w){return w.m});
+    ws.sort(function(a,b){return (hv[a.h]?1:0)-(hv[b.h]?1:0)||a.l-b.l});
+    ws=ws.slice(0,3);if(!ws.length)return '';
+    return '<div class="wkeys"><span class="wkl">🔑 '+esc(T('wKeys'))+'</span>'+ws.map(function(w){return '<button type="button" class="mfw wkw'+(hv[w.h]?' have':'')+'" data-h="'+esc(w.h)+'"><b lang="zh">'+esc(w.h)+'</b><i>'+esc(w.p)+'</i><small>= '+esc(String(w.m).split(/[,;，；(（]/)[0].trim().slice(0,22))+'</small></button>'}).join('')+'</div>';
+  }
   function wNewWords(x){var hv=haveSet();return mediaWords({lines:[{zh:x.zh}]}).filter(function(w){return !hv[w.h]&&w.m})}
   function worldCardRender(){
     var c=$('worldCard'),q=$('quote');if(!c)return;
@@ -2042,9 +2051,9 @@ var DATA=window.DATA;
       box.innerHTML='<div class="mfeed wfeed pin" id="wFeed">'+L.map(function(x,i){
         var nw=wNewWords(x).length;
         return '<section class="mslide wslide w-'+x.cat+'" data-wi="'+x.id+'"><div class="wtop"><span class="wbadge">'+x.e+' '+esc(wMeta(x))+'</span><span class="wnum">'+(i+1)+' / '+L.length+'</span></div>'+
-          '<div class="wmid"><div class="wemo">'+x.e+'</div><h3 class="wtt">'+esc(x.t)+'</h3><div class="wzh" lang="zh">'+zhRuby(x.zh,hv,'mfw')+'</div><div class="wmn">'+esc(x.mn)+'</div></div>'+
+          '<div class="wmid"><div class="wemo">'+x.e+'</div><h3 class="wtt">'+esc(x.t)+(wLevel(x)?' <span class="badge">HSK '+wLevel(x)+'</span>':'')+'</h3><div class="wzh" lang="zh">'+zhRuby(x.zh,hv,'mfw')+'</div><div class="wmn">'+esc(x.mn)+'</div>'+wKeys(x,hv)+'</div>'+
           '<div class="mfside"><button type="button" data-wsay="'+x.id+'" aria-label="sound">🔊</button><button type="button" data-wpy aria-label="pinyin">拼</button><button type="button" data-wwords="'+x.id+'">📚<small>'+nw+'</small></button></div>'+
-          (i===0?'<div class="wswipe">'+esc(T('wSwipe'))+'</div>':'')+'</section>';
+          (i===0?'<div class="wswipe">'+esc(T('wGuide'))+'<br>'+esc(T('wSwipe'))+'</div>':'')+'</section>';
       }).join('')+'</div><div class="card mfcard" id="wfCard" hidden></div>';
     });
   }

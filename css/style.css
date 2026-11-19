@@ -1023,3 +1023,27 @@ body.hzopen{overflow:hidden}
 .wex{margin-top:6px;padding:5px 9px;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 8px 8px 0;font-size:.95rem}
 .answers .btn{min-width:0;padding-inline:6px;overflow-wrap:anywhere;font-size:.95rem}
 .w .p .tn{overflow-wrap:anywhere}
+
+/* 🔑 Гол үгс: дээр дарахгүйгээр ч ойлгох */
+.wkeys{display:flex;flex-wrap:wrap;gap:6px;align-items:stretch;margin-top:4px}
+.wkl{flex:0 0 100%;font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;opacity:.8}
+.wkw{display:flex;flex-direction:column;align-items:flex-start;gap:0;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.12);color:#fff;border-radius:12px;padding:5px 10px;font:inherit;cursor:pointer;text-align:left;min-width:0;max-width:100%}
+.wkw b{font-family:var(--font-han);font-size:1.15rem;line-height:1.25}
+.wkw i{font-style:normal;font-size:.76rem;color:#fde68a}
+.wkw small{font-size:.76rem;opacity:.9;overflow-wrap:anywhere}
+.wkw.have{background:rgba(74,222,128,.18);border-color:rgba(74,222,128,.5)}
+.wslide{justify-content:safe center;overflow-y:auto}
+.wswipe{line-height:1.5}
+.wtt .badge{vertical-align:middle;font-size:.7rem;background:rgba(255,255,255,.2);color:#fff}
+
+/* жижигрүүлсэн: слайд дэлгэцэнд багтана */
+.wslide{padding:44px 66px 14px 16px;gap:8px}
+.wemo{font-size:2.6rem}
+.wtt{font-size:1.1rem;margin:0}
+.wslide .wzh{font-size:1.4rem;line-height:2.05}
+.wslide .wmn{font-size:.95rem;line-height:1.45}
+.wkw{flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:2px 6px;padding:4px 10px;border-radius:99px;width:auto}
+.wkw b{font-size:1.05rem}
+.wkw small{flex:1 1 auto}
+.wslide .wswipe{position:static;margin-top:6px;font-size:.72rem;text-align:left}
+.wfeed{height:calc(100dvh - 230px);min-height:440px}
