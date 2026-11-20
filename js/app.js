@@ -54,6 +54,10 @@ var DATA=window.DATA;
     bkPages:["Ном (хуудас)","Book pages","Страницы книги","本のページ"],
     bkPage:["{n}-р хуудас","Page {n}","Стр. {n}","{n}ページ"],
     bkLoadErr:["Ном ачаалж чадсангүй. Интернэтээ шалгаад дахин оролд.","Could not load the book. Check your connection.","Не удалось загрузить книгу.","本を読み込めません。"],
+    bkLib:["Номын сан (PDF)","Library (PDF)","Библиотека (PDF)","ライブラリ (PDF)"],
+    libHint:["PDF сурах бичгээ сонгоод нээ. Файл том тул эхний удаа удаан ачаалж магадгүй.","Pick a PDF textbook to open. Files are large, so the first load can take a while.","Выберите PDF-учебник. Файлы большие, первая загрузка может быть долгой.","PDF教材を選んで開きます。ファイルが大きいため初回は時間がかかることがあります。"],
+    libPart:["Хэсэг {n}","Part {n}","Часть {n}","第{n}部"],
+    libPg:["х. {a}–{b}","p. {a}–{b}","стр. {a}–{b}","{a}–{b}頁"],
     tabMedia:["Бичлэг·Дуу","Videos·Songs","Видео·Песни","動画・歌"],
     mdMedia:["Хадмал дээрх үгийг товшиж сур","Tap words in subtitles to learn","Нажимайте слова в субтитрах","字幕の単語をタップして学ぶ"],
     mVideo:["📺 Бичлэг","📺 Videos","📺 Видео","📺 動画"],
@@ -1777,7 +1781,7 @@ var DATA=window.DATA;
   });
 
   /* ---------- books: data/books/index.json → <dir>/index.json → <dir>/lesson-XX.json (олон ном дэмжинэ) ---------- */
-  var BK={cat:null,bid:null,idx:null,les:1,cache:{},q:'',busy:false,err:false,mode:'words',pg:0,pgs:[]};
+  var BK={cat:null,bid:null,idx:null,les:1,cache:{},q:'',busy:false,err:false,mode:'words',pg:0,pgs:[],lib:null,libBusy:false,libErr:false,lv:''};
   function bkGet(u){return fetch(u).then(function(r){if(!r.ok)throw new Error(u);return r.json()})}
   function bkDir(){var b=BK.cat&&BK.cat.filter(function(x){return x.id===BK.bid})[0];return b?'data/books/'+b.dir+'/':''}
   function bkLoad(done){
@@ -1827,8 +1831,42 @@ var DATA=window.DATA;
   }
   function bkZoom(f){var im=$('bkVi'),w=parseFloat(im.style.width)||100;w=Math.max(100,Math.min(400,w*f));im.style.width=w+'%'}
   function bkClose(){$('bkView').hidden=true;$('bkVi').removeAttribute('src');document.body.style.overflow=''}
+
+  /* ---------- PDF номын сан: data/books/library.json → Hugging Face dataset (Byambaa13/Library) дахь PDF линк ---------- */
+  var LIB_LV={'初级':['Анхан шат','Beginner','Начальный','初級'],'中级':['Дунд шат','Intermediate','Средний','中級'],'高级':['Ахисан шат','Advanced','Продвинутый','上級']};
+  var LIB_SK={'综合':['Цогц','Comprehensive','Комплексный','総合'],'口语':['Ярианы','Speaking','Разговорный','会話'],'听力':['Сонсгол','Listening','Аудирование','リスニング'],'读写':['Унших-бичих','Reading & writing','Чтение и письмо','読み書き'],'阅读':['Унших','Reading','Чтение','読解'],'写作':['Бичих','Writing','Письмо','作文']};
+  function libTr(m,k){var a=m[k];return a?(a[LI[lang]]||a[1]):k}
+  function libTitle(b){return libTr(LIB_LV,b.level)+' · '+libTr(LIB_SK,b.skill)+' '+b.title.replace(/^\S+\s*/,'')}
+  function libUrl(f){return (BK.lib.base||'')+encodeURIComponent(f)}
+  function bkModeChips(hasPg){
+    return ['words'].concat(hasPg?['pages']:[]).concat(['lib']).map(function(m){
+      return '<button class="chip" type="button" data-bm="'+m+'" aria-pressed="'+(BK.mode===m)+'">'+T(m==='words'?'bkWords':(m==='pages'?'bkPages':'bkLib'))+'</button>'}).join('');
+  }
+  function renderLib(){
+    $('bkBooks').innerHTML='';$('bkMode').innerHTML=bkModeChips(!!(BK.idx&&BK.idx.pages));
+    $('bkLes').innerHTML='';$('bkAddAll').hidden=true;$('bkSearch').hidden=false;
+    if(!BK.lib){
+      $('bkCnt').textContent='';
+      if(BK.libErr){$('bkList').innerHTML='<div class="empty"><b>'+T('bkLoadErr')+'</b><br><button class="btn small ghost" type="button" id="bkRetry" style="margin-top:10px">↻</button></div>';return}
+      $('bkList').innerHTML='<div class="empty"><b>…</b></div>';
+      if(!BK.libBusy){BK.libBusy=true;
+        bkGet('data/books/library.json').then(function(d){BK.lib=d;BK.libBusy=false;if(BK.mode==='lib')renderBook()},
+          function(){BK.libBusy=false;BK.libErr=true;if(BK.mode==='lib')renderBook()})}
+      return;
+    }
+    var books=BK.lib.books||[],lvs=[];
+    books.forEach(function(b){if(lvs.indexOf(b.level)<0)lvs.push(b.level)});
+    $('bkLes').innerHTML='<button class="chip" type="button" data-ll="" aria-pressed="'+(!BK.lv)+'">'+T('all')+'</button>'+
+      lvs.map(function(l){return '<button class="chip" type="button" data-ll="'+esc(l)+'" aria-pressed="'+(BK.lv===l)+'">'+esc(libTr(LIB_LV,l))+'</button>'}).join('');
+    var q=BK.q,items=books.filter(function(b){return (!BK.lv||b.level===BK.lv)&&(!q||mq(b.title+' '+libTitle(b)+' '+b.level+' '+b.skill,q))});
+    $('bkCnt').textContent=items.length+' / '+books.length;
+    $('bkList').innerHTML='<div class="hint" style="margin:0 2px">'+T('libHint')+'</div>'+items.map(function(b){
+      return '<div class="libbk"><div class="libh"><b lang="zh">'+esc(b.title)+'</b><span class="hint">'+esc(libTitle(b))+'</span></div><div class="libparts">'+
+        b.parts.map(function(p){return '<a class="chip" href="'+esc(libUrl(p.f))+'" target="_blank" rel="noopener">📖 '+T('libPart',{n:p.p})+' · '+T('libPg',{a:p.a,b:p.b})+' · '+p.mb+' MB</a>'}).join('')+'</div></div>'}).join('')||emptyRes(q,'bkQ');
+  }
   function renderBook(){
     if(!$('bkList'))return;
+    if(BK.mode==='lib'){renderLib();return}
     if(!BK.idx||BK.idx.id!==BK.bid||(BK.mode==='words'&&(!BK.cache[BK.bid+'/'+BK.les]&&BK.les!==0))||(BK.mode==='words'&&BK.les===0&&BK.idx.lessons.some(function(l){return !BK.cache[BK.bid+'/'+l.lesson]}))){
       if(!BK.busy&&!BK.err){$('bkList').innerHTML='<div class="empty"><b>…</b></div>';bkLoad(renderBook);return}
     }
@@ -1837,7 +1875,7 @@ var DATA=window.DATA;
     $('bkBooks').innerHTML=cat.length>1?cat.map(function(b){return '<button class="chip" type="button" data-bk="'+esc(b.id)+'" aria-pressed="'+(b.id===BK.bid)+'">'+esc(lang==='mn'?(b.title_mn||b.title):b.title)+'</button>'}).join(''):'';
     var ls=BK.idx?BK.idx.lessons:[];
     var hasPg=!!(BK.idx&&BK.idx.pages);
-    $('bkMode').innerHTML=hasPg?['words','pages'].map(function(m){return '<button class="chip" type="button" data-bm="'+m+'" aria-pressed="'+(BK.mode===m)+'">'+T(m==='words'?'bkWords':'bkPages')+'</button>'}).join(''):'';
+    $('bkMode').innerHTML=bkModeChips(hasPg);
     if(BK.mode==='pages'&&hasPg){
       if(!BK.les)BK.les=1;
       $('bkLes').innerHTML=ls.map(function(l){return '<button class="chip" type="button" data-bl="'+l.lesson+'" aria-pressed="'+(BK.les===l.lesson)+'">'+l.lesson+'</button>'}).join('');
@@ -1875,7 +1913,8 @@ var DATA=window.DATA;
     if(e.target.closest('#bkVp')){bkZoom(1.5);return}
     if(e.target.closest('#bkVm')){bkZoom(1/1.5);return}
     b=e.target.closest('[data-bl]');if(b){BK.les=+b.dataset.bl;BK.err=false;renderBook();return}
-    if(e.target.closest('#bkRetry')){BK.err=false;renderBook();return}
+    b=e.target.closest('[data-ll]');if(b){BK.lv=b.dataset.ll;renderBook();return}
+    if(e.target.closest('#bkRetry')){BK.err=false;BK.libErr=false;renderBook();return}
     b=e.target.closest('[data-bkadd]');
     if(b){if(!hasProfile())return;
       var w=bkWords().filter(function(x){return x.w.zh===b.dataset.bkadd})[0];if(!w)return;
