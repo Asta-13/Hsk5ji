@@ -1178,3 +1178,9 @@ body{padding-bottom:96px}
 .bkbtns{display:flex;gap:6px}
 .bkscroll{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;background:#777;touch-action:pan-x pan-y pinch-zoom}
 .bkscroll img{display:block;margin:0 auto;width:100%;max-width:none;height:auto;background:#fff}
+
+.libbk{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.libh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.libh b{font-size:1.1rem}
+.libparts{display:flex;flex-wrap:wrap;gap:8px}
+.libparts a.chip{text-decoration:none;display:inline-flex;align-items:center;gap:4px;color:var(--fg)}
