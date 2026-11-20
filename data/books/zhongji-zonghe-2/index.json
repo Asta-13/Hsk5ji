@@ -8,63 +8,105 @@
    "title": "故事二则",
    "title_mn": "Хоёр түүх",
    "count": 49,
-   "file": "lesson-01.json"
+   "file": "lesson-01.json",
+   "pages": [
+    1,
+    15
+   ]
   },
   {
    "lesson": 2,
    "title": "测试你的生存技巧",
    "title_mn": "Амьд үлдэх ур чадвараа сорь",
    "count": 52,
-   "file": "lesson-02.json"
+   "file": "lesson-02.json",
+   "pages": [
+    16,
+    30
+   ]
   },
   {
    "lesson": 3,
    "title": "乖乖回家之路",
    "title_mn": "«Гуайгуай»-ийн гэртээ харих зам",
    "count": 57,
-   "file": "lesson-03.json"
+   "file": "lesson-03.json",
+   "pages": [
+    31,
+    44
+   ]
   },
   {
    "lesson": 4,
    "title": "桑兰的微笑",
    "title_mn": "Сан Ланы инээмсэглэл",
    "count": 52,
-   "file": "lesson-04.json"
+   "file": "lesson-04.json",
+   "pages": [
+    45,
+    59
+   ]
   },
   {
    "lesson": 5,
    "title": "再平凡也可以活成一座丰碑",
    "title_mn": "Хичнээн энгийн байсан ч хөшөө болон амьдарч болно",
    "count": 45,
-   "file": "lesson-05.json"
+   "file": "lesson-05.json",
+   "pages": [
+    60,
+    74
+   ]
   },
   {
    "lesson": 6,
    "title": "从“鸡毛换糖”到“世界超市”",
    "title_mn": "«Дэгдэхийн өд сүүлээр чихэр солилцох»-оос «дэлхийн супермаркет» хүртэл",
    "count": 49,
-   "file": "lesson-06.json"
+   "file": "lesson-06.json",
+   "pages": [
+    75,
+    88
+   ]
   },
   {
    "lesson": 7,
    "title": "彩票",
    "title_mn": "Хонжворт сугалаа",
    "count": 45,
-   "file": "lesson-07.json"
+   "file": "lesson-07.json",
+   "pages": [
+    89,
+    103
+   ]
   },
   {
    "lesson": 8,
    "title": "燕子买房记",
    "title_mn": "Яньцзыгийн байр худалдан авсан түүх",
    "count": 53,
-   "file": "lesson-08.json"
+   "file": "lesson-08.json",
+   "pages": [
+    104,
+    119
+   ]
   },
   {
    "lesson": 9,
    "title": "李连杰和他的“壹基金”",
    "title_mn": "Ли Лянжи ба түүний «Нэг сан»",
    "count": 55,
-   "file": "lesson-09.json"
+   "file": "lesson-09.json",
+   "pages": [
+    120,
+    134
+   ]
   }
- ]
+ ],
+ "pages": {
+  "dir": "pages",
+  "count": 134,
+  "ext": "webp",
+  "pad": 3
+ }
 }
