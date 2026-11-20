@@ -32,6 +32,8 @@ permissions:
 
 jobs:
   reel:
+    # Автомат (auto=true) дуудлагыг алгасна: өдөрт зөвхөн words5 · grammar · scene · story гарна.
+    if: ${{ github.event.inputs.auto != 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:

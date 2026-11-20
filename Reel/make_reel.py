@@ -203,6 +203,19 @@ def badge(d, kind, n):
     d.rounded_rectangle([x0, 278, x1, 342], 32, fill=col); d.text((x0 + 22, 284), t, font=f, fill='#0f172a')
     lf = cfont(30); lab = SR.KINDS[kind][1].upper(); d.text((x1 - d.textlength(lab, font=lf), 350), lab, font=lf, fill=col)
 
+TEACHER_MOOD = 'hi'      # hi · cheer · think — дүрийн сэтгэл (Reel/teacher/*.png)
+TEACHER_SIZE = 170
+IG_HANDLE = os.environ.get('IG_HANDLE') or 'hanzilaoshi'
+_TCH = {}
+def teacher(im):
+    """Ханзи багш (汉字老师) — зүүн дээд буланд (Instagram-ын UI-д халхлагдахгүй, гарчгийн зүүн талд)."""
+    m = TEACHER_MOOD
+    if m not in _TCH:
+        try: _TCH[m] = Image.open(os.path.join(HERE, 'teacher', m + '.png')).convert('RGBA').resize((TEACHER_SIZE, int(TEACHER_SIZE * 456 / 464)), Image.LANCZOS)
+        except Exception: _TCH[m] = None
+    t = _TCH[m]
+    if t: im.paste(t, (16, 262), t)
+
 def bg():
     """Градиент дэвсгэр. REEL_DITHER>0 үед маш бага тогтмол «үр» нэмж градиентын зэрэглэлийг (banding) зөөлрүүлнэ."""
     global _BG
@@ -215,6 +228,7 @@ def bg():
         _BG = ImageChops.add(g, Image.effect_noise((W, H), DITHER).convert('RGB'), 1.0, -128) if DITHER > 0 else g
     im = _BG.copy(); d = ImageDraw.Draw(im)
     if BADGE: badge(d, *BADGE)
+    teacher(im)
     return im, d
 
 def center(d, text, y, f, fill='white'):
@@ -243,7 +257,7 @@ def header(d, lv, label):
     d.text(((W - w) / 2, 372), t, font=f, fill='#1e293b')
 
 def footer(d):
-    center(d, SITE, FOOT_Y, cfont(40), '#facc15')
+    center(d, f'@{IG_HANDLE} · {SITE}', FOOT_Y, cfont(36), '#facc15')
 
 _FULL = {',': '，', '?': '？', '!': '！', ';': '；', ':': '：'}
 def zh_punct(t):
@@ -350,6 +364,15 @@ HOOKS = [
     'Үүнийг санаж аваарай 👀',
 ]
 # Instagram одоо 3-5 hashtag-ийг зөвлөдөг; 12 hashtag нь спам шиг харагдаж хүртээмжийг бууруулдаг.
+def segment(tmp, name, imgs, wav):
+    """imgs: секунд тутамд нэг зураг. Видео = хамгийн багадаа аудиотой тэнцүү."""
+    dur = probe(wav); fd = os.path.join(tmp, name); os.makedirs(fd)
+    for i, im in enumerate(imgs): os.replace(im, os.path.join(fd, f'f{i:03d}.png'))
+    mp4 = os.path.join(tmp, name + '.mp4')
+    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', '1', '-i', os.path.join(fd, 'f%03d.png'), '-i', wav, '-r', '30', '-t', f'{dur:.2f}',
+                    '-vf', f'tpad=stop_mode=clone:stop_duration={dur + 2:.2f},{CVF}'] + VQ + AQ + [mp4], check=True)
+    return mp4
+
 TAGS = ['#хятадхэл', '#HSK', '#learnchinese', '#монгол', '#中文']
 
 def make_caption(han, py, mn, lv, ex, ex_py, num, series=''):

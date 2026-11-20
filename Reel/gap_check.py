@@ -14,7 +14,7 @@ def main():
     except Exception:
         pass
     if kind and not last:                       # series.json хараахан байхгүй → хуучин state файл
-        old = {'word': 'state.json', 'grammar': 'grammar-state.json', 'scene': 'scene-state.json', 'tone': 'tone-state.json', 'quiz': 'quiz-state.json'}.get(kind)
+        old = {'word': 'state.json', 'grammar': 'grammar-state.json', 'scene': 'scene-state.json'}.get(kind)
         try: last = float(json.load(open(os.path.join(os.path.dirname(path), old))).get('last', 0))
         except Exception: pass
     age = (time.time() - last) / 60

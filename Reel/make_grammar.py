@@ -4,7 +4,6 @@
 Хэрэглээ: python3 Reel/make_grammar.py [--silent] [--min-gap МИНУТ] [--index N]"""
 import argparse, json, os, re, subprocess, sys, tempfile, time
 import make_reel as M
-import make_quiz as Q
 import series as SR
 from make_reel import W, H, cfont, font, bg, center, wrap, say, join, probe, silence, SITE, ZH_VOICE, MN_VOICE, MN_RATE
 
@@ -80,19 +79,21 @@ def main():
     with tempfile.TemporaryDirectory() as tmp:
         P = lambda n: os.path.join(tmp, n)
         c = lambda t, v, r, i: say(t, v, r, tmp, i, a.silent)
+        a_hi = c('Сайн уу, би Ханзи багш. Өнөөдөр нэг дүрэм тайлбарлая.', MN_VOICE, MN_RATE, 6)
         z_pat = c(spoken(pat), ZH_VOICE, '-15%', 1)
         a_mn = c('Утга нь... ' + mn.replace('...', ',').replace('  ', ' '), MN_VOICE, MN_RATE, 2)
         z_slow, z_norm = c(ex, ZH_VOICE, '-25%', 3), c(ex, ZH_VOICE, '+0%', 4)
         a_tr = c('Орчуулбал... ' + ex_mn, MN_VOICE, MN_RATE, 5)
         if M.TTS_FAIL and not a.silent: sys.exit('Дуу үүсгэж чадсангүй: ' + ', '.join(M.TTS_FAIL))
         gap = P('g.wav'); silence(gap, 0.5)
-        stages = [('hook', [z_pat, gap, z_pat]), ('meaning', [a_mn]), ('example', [z_slow, gap, z_norm, gap, a_tr]), ('repeat', [z_norm, gap, z_slow])]
+        stages = [('hook', [a_hi, gap, z_pat, gap, z_pat]), ('meaning', [a_mn]), ('example', [z_slow, gap, z_norm, gap, a_tr]), ('repeat', [z_norm, gap, z_slow])]
         segs = []
         for n, (stg, ws) in enumerate(stages):
             aud = P(f'a{n}.wav'); join(ws, 0, aud); k = int(probe(aud)) + 1; imgs = []
+            M.TEACHER_MOOD = {'hook': 'hi', 'meaning': 'think', 'example': 'think', 'repeat': 'cheer'}[stg]
             for i in range(k): panel(P(f'p{n}_{i}.png'), lv, stg, pat, py, mn, ex, ex_py, ex_mn); imgs.append(P(f'p{n}_{i}.png'))
-            segs.append(Q.segment(tmp, f's{n}', imgs, aud))
-        cta(P('cta.png')); ac = P('ac.wav'); silence(ac, 3); segs.append(Q.segment(tmp, 'cta', [P('cta.png')], ac))
+            segs.append(M.segment(tmp, f's{n}', imgs, aud))
+        M.TEACHER_MOOD = 'cheer'; cta(P('cta.png')); ac = P('ac.wav'); silence(ac, 3); segs.append(M.segment(tmp, 'cta', [P('cta.png')], ac))
         lst = P('l.txt'); open(lst, 'w').write(''.join(f"file '{s}'\n" for s in segs))
         out = os.path.join(OUT, SR.file_name('grammar', num) if num else f'grammar-manual-{a.index + 1:04d}.mp4')
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c:v', 'copy', '-af', M.LOUDNORM,

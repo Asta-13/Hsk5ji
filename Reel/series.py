@@ -3,7 +3,7 @@
 
 Дугаарлалт
   Төрөл бүр өөрийн #1, #2, #3 … дугаартай (файлын нэр, дэлгэцийн баруун дээд булан, тайлбар дээр):
-    word (Үг) · group (Энгийн үг, 5-аар) · grammar (Дүрэм) · scene (Яриа) · tone (Тон) · quiz (Шалгалт)
+    word (Үг) · group (Энгийн үг, 5-аар) · grammar (Дүрэм) · scene (Яриа)
   Дугаар нь `reels` салбар дахь `series.json`-д хадгалагдана; видео АМЖИЛТТАЙ үүссэний дараа л нэмэгдэнэ.
   Анх удаа ажиллахад хуучин state файлуудаас (state.json, grammar-state.json …) дугаараа үргэлжлүүлнэ.
 
@@ -30,12 +30,9 @@ KINDS = {
     'group':   ('words5',  'Шинэ үгс',  '#a78bfa'),
     'grammar': ('grammar', 'Дүрэм',     '#4ade80'),
     'scene':   ('scene',   'Яриа',      '#fb923c'),
-    'tone':    ('tone',    'Тон',       '#f472b6'),
-    'quiz':    ('quiz',    'Шалгалт',   '#fde047'),
 }
-ORDER = ('word', 'group', 'grammar', 'scene', 'tone', 'quiz')
-OLD_STATE = {'word': 'state.json', 'grammar': 'grammar-state.json', 'scene': 'scene-state.json',
-             'tone': 'tone-state.json', 'quiz': 'quiz-state.json'}
+ORDER = ('word', 'group', 'grammar', 'scene')
+OLD_STATE = {'word': 'state.json', 'grammar': 'grammar-state.json', 'scene': 'scene-state.json'}
 GROUP_SIZE = 5
 SIMPLE_MAX_LEN = 99         # бүх үг «энгийн» → 5-аар нэг видеонд (олон үсэгт үг ч орно)
 
@@ -166,7 +163,7 @@ def file_name(kind, n, ext='mp4'): return f'{KINDS[kind][0]}-{n:04d}.{ext}'
 
 def series_line(st, kind, n):
     """Тайлбарын «Цуврал» мөр: энэ видео + бусад төрлийн сүүлд гарсан дугаар.
-    Жишээ: 📚 Цуврал · HSK 2 — Үг №109 · Дүрэм №7 · Яриа №32 · Тон №8 · Шалгалт №43"""
+    Жишээ: 📚 Цуврал · HSK 2 — Үг №109 · Дүрэм №7 · Яриа №32"""
     bits = []
     for k in ORDER:
         c = n if k == kind else st['n'].get(k, 0)

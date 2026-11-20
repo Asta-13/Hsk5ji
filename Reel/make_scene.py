@@ -172,13 +172,13 @@ def card(sc, kind, path):
         center(d, 'Чи хэдийг нь ойлгов?', 1250, cfont(52), '#bfdbfe')
     else:
         center(d, 'Дахин сонсъё', 200, cfont(64), '#93c5fd')
-        y = 340
+        y = 470
         for who, zh, mn in sc['lines'][:6]:
             col = COL[who]
             for l in wrap(d, zh, font(54), W - 160)[:1]: d.text((80, y), l, font=font(54), fill='white'); y += 70
             for l in wrap(d, mn, cfont(36), W - 160)[:2]: d.text((80, y), l, font=cfont(36), fill='#fde68a'); y += 50
             y += 22
-        center(d, 'Ойлгосон бол комментдоо 1 гэж бичээрэй', 1560, cfont(46), '#facc15')
+        center(d, 'Ойлгосон бол комментдоо 1 гэж бичээрэй', 1580, cfont(38), '#facc15')
         center(d, SITE, 1775, cfont(42), '#facc15')
     im.save(path)
 
@@ -201,11 +201,16 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     with tempfile.TemporaryDirectory() as tmp:
         segs = []
-        for kind in ('hook',):
-            img = os.path.join(tmp, kind + '.png'); card(sc, kind, img); aud = os.path.join(tmp, kind + '.wav'); silence(aud, 2.2)
-            mp4 = os.path.join(tmp, kind + '.mp4')
-            subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-loop', '1', '-framerate', '30', '-i', img, '-i', aud, '-t', '2.2', '-vf', M.CVF] + M.VQ + M.AQ + ['-shortest', mp4], check=True)
+        def still(kind, wav_text, mood, tail):
+            """Ханзи багш ярьж буй карт: wav_text-ийг монголоор уншина, tail сек үлдээнэ."""
+            M.TEACHER_MOOD = mood
+            img = os.path.join(tmp, kind + '.png'); card(sc, kind, img)
+            v = say(wav_text, M.MN_VOICE, M.MN_RATE, tmp, 90 + len(segs), a.silent)
+            aud = os.path.join(tmp, kind + '.wav'); pad = os.path.join(tmp, kind + '_pad.wav'); silence(pad, tail); join([v, pad], 0, aud)
+            d = probe(aud); mp4 = os.path.join(tmp, kind + '.mp4')
+            subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-loop', '1', '-framerate', '30', '-i', img, '-i', aud, '-t', f'{d:.2f}', '-vf', M.CVF] + M.VQ + M.AQ + ['-shortest', mp4], check=True)
             segs.append(mp4)
+        still('hook', 'Сайн уу, би Ханзи багш. Өнөөдрийн яриаг хамт сонсъё.', 'hi', 0.6)
         # Эхлээд бүх дууг үүсгэнэ: сервис доголдвол зураг зурахаас өмнө түргэн зогсоно.
         wavs = [say(zh, VOICE[who], '-6%', tmp, i, a.silent) for i, (who, zh, mn) in enumerate(sc['lines'])]
         if M.TTS_FAIL and not a.silent: sys.exit('Дуу үүсгэж чадсангүй: ' + ', '.join(M.TTS_FAIL))
@@ -220,9 +225,9 @@ def main():
             subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', str(FPS), '-i', os.path.join(fd, 'f%03d.png'), '-i', aud, '-r', '30', '-vf', M.CVF] + M.VQ + M.AQ + ['-shortest', mp4], check=True)
             segs.append(mp4)
             for f in os.listdir(fd): os.remove(os.path.join(fd, f))
-        img = os.path.join(tmp, 'end.png'); card(sc, 'end', img); aud = os.path.join(tmp, 'end.wav'); silence(aud, 5.0); mp4 = os.path.join(tmp, 'end.mp4')
-        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-loop', '1', '-framerate', '30', '-i', img, '-i', aud, '-t', '5', '-vf', M.CVF] + M.VQ + M.AQ + ['-shortest', mp4], check=True)
-        segs.append(mp4)
+        M.TEACHER_MOOD = 'think'     # багш орчуулгыг тайлбарлаж өгнө
+        tr = ' '.join(m.rstrip('.!?') + '.' for _, _, m in sc['lines'])
+        still('end', 'Орчуулбал. ' + tr + ' Ойлгосон бол комментдоо нэг гэж бичээрэй.', 'cheer', 2.0)
         lst = os.path.join(tmp, 'l.txt'); open(lst, 'w').write(''.join(f"file '{s}'\n" for s in segs))
         out = os.path.join(OUT, SR.file_name('scene', sn) if sn else f'scene-manual-{num + 1:04d}.mp4')
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c:v', 'copy', '-af', M.LOUDNORM, '-c:a', 'aac', '-b:a', '192k', '-ar', '44100', '-movflags', '+faststart', out], check=True)

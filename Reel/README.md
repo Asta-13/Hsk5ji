@@ -1,9 +1,24 @@
 # Reel бот
 
-GitHub Actions өдөрт олон удаа HSK видео (reel) үүсгэж `reels` салбарт хадгална.
+GitHub Actions өдөрт **8 видео** үүсгэж Instagram (@hanzilaoshi) руу автоматаар нийтэлнэ, мөн `reels` салбарт хадгална.
 
-- **Daily reel** — HSK үг тус бүрийн видео (удаан → хэвийн дуудлага → монгол тайлбар → жишээ → давталт).
-- **Daily scene** — 40 богино харилцан яриа (амьд ярианы хэв маяг, дүрүүд ярихад ам нь дуутай хамт хөдөлнө).
+| Төрөл | Өдөрт | Workflow |
+|---|---|---|
+| 5 шинэ үг (words5) | 5 | `daily-words5.yml` |
+| Түүх (story) | 1 | `daily-story.yml` |
+| Дүрэм (grammar) | 1 | `daily-grammar.yml` |
+| Яриа (scene) | 1 | `daily-scene.yml` |
+
+Тон, шалгалт (quiz) видео устгагдсан. `daily-reel.yml` (нэг үг = нэг видео) автоматаар ажиллахгүй, гараар л ажиллуулж болно.
+Видео бүрт **Ханзи багш (汉字老师)** — аппын сахиус — зүүн дээд буланд гарч, монголоор хичээлээ тайлбарлана (`Reel/teacher/`).
+
+## Instagram тохиргоо (нэг удаа)
+GitHub → Settings → Secrets and variables → Actions → New repository secret:
+- `IG_ACCESS_TOKEN` — Instagram access token (`instagram_business_content_publish` эрхтэй)
+- `IG_USER_ID` — Instagram professional account ID
+
+Secret байхгүй бол нийтлэх алхам алгасагдана. Туршихдаа: `python3 Reel/post_instagram.py <хавтас> --dry-run`.
+Long-lived token 60 хоногт дуусдаг тул шинэчилнэ.
 
 ## Файлууд хаана байх вэ
 `reels` салбар → `days/ӨӨӨӨ-СС-ӨӨ/` (Улаанбаатарын өдөр) дотор тухайн өдрийн бүх видео + `.txt` тайлбар,

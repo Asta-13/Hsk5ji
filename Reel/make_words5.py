@@ -5,7 +5,6 @@
 Хэрэглээ: python3 Reel/make_words5.py [--silent] [--min-gap МИНУТ] [--level N]"""
 import argparse, os, re, subprocess, sys, tempfile
 import make_reel as M
-import make_quiz as Q
 import series as SR
 from make_reel import W, H, PAD, FOOT_Y, cfont, font, bg, center, say, join, probe, silence, header, footer, SITE, ZH_VOICE, MN_VOICE, MN_RATE
 
@@ -76,25 +75,25 @@ def main():
     with tempfile.TemporaryDirectory() as tmp:
         P = lambda n: os.path.join(tmp, n)
         c = lambda t, v, r, i: say(t, v, r, tmp, i, a.silent)
-        intro = c('Өнөөдөр таван шинэ үг сурцгаая.', MN_VOICE, MN_RATE, 1)
+        intro = c('Сайн уу, би Ханзи багш. Өнөөдөр таван шинэ үг хамт сурцгаая.', MN_VOICE, MN_RATE, 1)
         zs = [c(w[0], ZH_VOICE, '-30%', 10 + i) for i, w in enumerate(ws)]
         zn = [c(w[0], ZH_VOICE, '+0%', 20 + i) for i, w in enumerate(ws)]
         ms = [c(short(w[2], 40), MN_VOICE, MN_RATE, 30 + i) for i, w in enumerate(ws)]
         if M.TTS_FAIL and not a.silent: sys.exit('Дуу үүсгэж чадсангүй: ' + ', '.join(M.TTS_FAIL))
         gap = P('g.wav'); silence(gap, 0.45); segs = []
-        hook(P('h0.png'), lv, ws); ai = P('ai.wav'); join([intro], 0, ai)
-        segs.append(Q.segment(tmp, 'hook', [P('h0.png')], ai))
+        M.TEACHER_MOOD = 'hi'; hook(P('h0.png'), lv, ws); ai = P('ai.wav'); join([intro], 0, ai)
+        segs.append(M.segment(tmp, 'hook', [P('h0.png')], ai))
         for i in range(len(ws)):
             aud = P(f'a{i}.wav'); join([zs[i], gap, zn[i], gap, ms[i]], 0, aud)
-            panel(P(f'p{i}.png'), lv, ws, i + 1, i)               # нэг зураг, аудио дуустал барина (давхар зурахгүй)
-            segs.append(Q.segment(tmp, f's{i}', [P(f'p{i}.png')], aud))
+            M.TEACHER_MOOD = 'think'; panel(P(f'p{i}.png'), lv, ws, i + 1, i)               # нэг зураг, аудио дуустал барина (давхар зурахгүй)
+            segs.append(M.segment(tmp, f's{i}', [P(f'p{i}.png')], aud))
         # давталт: 5-ыг хурдан дараалан (хариуг мэдэх)
         g2 = P('g2.wav'); silence(g2, 0.4); parts = []
         for i, z in enumerate(zn): parts += [z] + ([g2] if i < len(zn) - 1 else [])
         rep = P('rep.wav'); join(parts, 0, rep)
-        panel(P('r.png'), lv, ws, len(ws), -1)
-        segs.append(Q.segment(tmp, 'rep', [P('r.png')], rep))
-        cta(P('cta.png'), lv); ac = P('ac.wav'); silence(ac, 3); segs.append(Q.segment(tmp, 'cta', [P('cta.png')], ac))
+        M.TEACHER_MOOD = 'cheer'; panel(P('r.png'), lv, ws, len(ws), -1)
+        segs.append(M.segment(tmp, 'rep', [P('r.png')], rep))
+        M.TEACHER_MOOD = 'cheer'; cta(P('cta.png'), lv); ac = P('ac.wav'); silence(ac, 3); segs.append(M.segment(tmp, 'cta', [P('cta.png')], ac))
         lst = P('l.txt'); open(lst, 'w').write(''.join(f"file '{s}'\n" for s in segs))
         out = os.path.join(OUT, SR.file_name('group', num))
         subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lst, '-c:v', 'copy', '-af', M.LOUDNORM,
