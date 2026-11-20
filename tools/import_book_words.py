@@ -138,16 +138,17 @@ def _strip_tone(t):
 
 
 def eng_map(eng):
-    """eng-давхрын мөрүүдээс {n: [токенууд]} (хятад үг латин хогоор солигдсон байдаг)."""
+    """eng-давхрын мөрүүдээс {n: [токенуудын жагсаалт, ...]}. Нэг хуудсанд дугаар (1,2,..) дахин эхэлдэг тул
+    давтагдсан тоо бүрийн орлогыг дарааллаар нь хадгална."""
     mp, last = {}, None
     for line in eng.splitlines():
         m = RX_NUM.match(line)
         toks = m.group(2).split() if m else []
-        if m and len(toks) >= 3 and int(m.group(1)) not in mp:
-            mp[int(m.group(1))] = toks
+        if m and len(toks) >= 3:
             last = int(m.group(1))
-        elif last and RX_LATIN.match(line.strip()) and 0 < len(line.strip()) < 60:
-            mp[last] = mp[last] + line.split()  # ээлжлэн дараагийн мөрөнд шилжсэн англи тайлбар
+            mp.setdefault(last, []).append(toks)
+        elif last and mp.get(last) and RX_LATIN.match(line.strip()) and 0 < len(line.strip()) < 60:
+            mp[last][-1] = mp[last][-1] + line.split()  # ээлжлэн дараагийн мөрөнд шилжсэн англи тайлбар
         else:
             last = None
     return mp
@@ -189,10 +190,16 @@ def parse_pages(texts):
     rows, last_n, block, sect, extra_pg = [], 0, 0, None, -9
     for pno, chi, eng in texts:
         em = eng_map(eng) if eng else {}
+        occ = {}
         for raw in chi.splitlines():
             line = collapse(raw)
             if not line.strip():
                 continue
+            k = None
+            mn = RX_NUM.match(line)
+            if mn and len(mn.group(2).split()) >= 3:
+                k = occ.get(int(mn.group(1)), 0)
+                occ[int(mn.group(1))] = k + 1
             hit = None
             for key, name in SECT_KEYS:
                 if key in line.replace(" ", ""):
@@ -226,7 +233,9 @@ def parse_pages(texts):
                 if n == 1:
                     block += 1
                 last_n = n
-                en = (eng_from(em[n], zh, len(zh) + 2, len(zh)) if n in em else eng_from(toks, zh, 2, 0))
+                et = em.get(n, [])
+                en = (eng_from(et[k], zh, len(zh) + 2, len(zh)) if (k is not None and k < len(et))
+                      else eng_from(toks, zh, 2, 0))
                 rows.append({"lesson": block, "n": n, "zh": zh, "pos": pos, "en": en, "page": pno + 1,
                              "sect": sect or "", "raw": rest})
                 continue
