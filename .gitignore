@@ -2,3 +2,8 @@ __pycache__/
 *.pyc
 .DS_Store
 reels-out/
+
+# book-word import cache (large)
+tools/_pdfs/
+tools/_ocr/
+tools/book_words/
