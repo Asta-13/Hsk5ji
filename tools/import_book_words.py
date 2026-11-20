@@ -35,7 +35,16 @@ OCRC = ROOT / "tools" / "_ocr"
 OUT = ROOT / "tools" / "book_words"
 LEVELS = ["初级", "中级", "高级"]
 POS = "名动形副助介连代量数叹拟象"
-RX_ENTRY = re.compile(r"^\s*(\d{1,3})\s*[.,，。、:：]*\s*([\u4e00-\u9fff]{1,6})\s+(.*)$")
+RX_ENTRY = re.compile(r"^\s*(\d{1,3})[^\w\u4e00-\u9fff]*([\u4e00-\u9fff]{1,8})\s+(.*)$")
+RX_EXTRA = re.compile(r"([\u4e00-\u9fff]{1,8})\s+([A-Za-z\u00c0-\u024f]{2,14})\s+([^\u4e00-\u9fff]{0,60})")
+RX_CJKGAP = re.compile(r"(?<=[\u4e00-\u9fff])[ \t]+(?=[\u4e00-\u9fff])")
+
+
+def collapse(line):
+    """OCR хятад тэмдэгтүүдийн хооронд зай нэмдэг ("马 丁") — арилгана."""
+    return RX_CJKGAP.sub("", line.rstrip())
+
+
 RX_POS = re.compile(r"(?:^|\s)([%s])(?:\s|$)" % POS)
 RX_LATIN = re.compile(r"^[A-Za-z0-9\s'’,.;:()/\-–\u00c0-\u024f]+$")
 _cfg = {"dpi": 170}
@@ -92,7 +101,7 @@ def ocr_page(args):
     eng = ""
     if ef.exists():
         eng = ef.read_text(encoding="utf8")
-    elif sum(1 for ln in chi.splitlines() if RX_ENTRY.match(ln)) >= 3:
+    elif sum(1 for ln in chi.splitlines() if RX_ENTRY.match(collapse(ln))) >= 2:
         img = img or _pix(pdf, pno, _cfg["dpi"])
         eng = pytesseract.image_to_string(img, lang="eng", config="--psm 6")
         ef.write_text(eng, encoding="utf8")
@@ -120,7 +129,7 @@ def download(url, dest):
     tmp.rename(dest)
 
 
-RX_NUM = re.compile(r"^\s*(\d{1,3})\s*[.,，。、:：]*\s*(.*)$")
+RX_NUM = re.compile(r"^\s*(\d{1,3})[^\w]*(.*)$")
 
 
 def _strip_tone(t):
@@ -144,52 +153,91 @@ def eng_map(eng):
     return mp
 
 
-def eng_from(toks, zh):
-    """Pinyin-тай хамгийн ойр токеныг олж, түүний (POS-ийн) дараах хэсгийг англи тайлбар болгоно."""
+def eng_from(toks, zh, window=2, default=0):
+    """Pinyin-тай хамгийн ойр токеныг (эхний `window` токены дотор) олж, түүний (POS-ийн) дараах хэсгийг англи тайлбар болгоно."""
     import difflib
     from pypinyin import lazy_pinyin
     want = "".join(lazy_pinyin(zh))
     best, bi = 0.0, -1
-    for i, t in enumerate(toks[:4]):
+    for i, t in enumerate(toks[:window]):
         r = difflib.SequenceMatcher(None, want, _strip_tone(t)).ratio()
         if r > best:
             best, bi = r, i
     if bi < 0 or best < 0.45:
-        bi = 1 if len(toks) > 2 else 0
+        bi = min(default, max(len(toks) - 1, 0))
     rest = toks[bi + 1:]
     if rest and len(rest[0]) <= 2 and len(rest) > 1:  # POS багана (хятад тэмдэгт латин хог болсон)
         rest = rest[1:]
     return " ".join(rest).strip()
 
 
+SECT_KEYS = [("生词", "words"), ("词语学习", "words"), ("专名", "names"), ("补充词", "extra")]
+SECT_END = ("课文", "综合注释", "综合练习", "课堂活动", "课堂用语", "汉字知识", "写汉字", "语音练习", "语音知识",
+            "部分学习", "部分学写", "练习", "Exercises", "Notes")
+
+
+def _pin_ratio(zh, toks):
+    import difflib
+    from pypinyin import lazy_pinyin
+    want = "".join(lazy_pinyin(zh))
+    return max([difflib.SequenceMatcher(None, want, _strip_tone(t)).ratio() for t in toks[:6]] or [0])
+
+
 def parse_pages(texts):
-    """texts: [(page_no, chi, eng)] → [{lesson,n,zh,pos,en,page,raw}]"""
-    rows, last_n, lesson = [], 0, 0
+    """texts: [(page_no, chi, eng)] → [{lesson,n,zh,pos,en,page,sect,raw}]
+    Номын 2 хэлбэрийг дэмжинэ: 中级 ("1. 词 pinyin 名 English") болон 初级 ("1 “ 你 n pron. you", нумгүй 补充词语)."""
+    rows, last_n, block, sect, extra_pg = [], 0, 0, None, -9
     for pno, chi, eng in texts:
         em = eng_map(eng) if eng else {}
-        page_rows = []
-        for line in chi.splitlines():
-            m = RX_ENTRY.match(line.rstrip())
-            if not m:
+        for raw in chi.splitlines():
+            line = collapse(raw)
+            if not line.strip():
                 continue
-            n, zh, rest = int(m.group(1)), m.group(2), m.group(3).strip()
-            parts = re.split(r"\s{2,}", rest)
-            if len(parts) < 3 and not RX_POS.search(" " + rest + " "):
+            hit = None
+            for key, name in SECT_KEYS:
+                if key in line.replace(" ", ""):
+                    hit = name
+            m = RX_ENTRY.match(line)
+            if hit and not m:
+                sect = hit
+                last_n = 0
+                if hit == "extra":
+                    extra_pg = pno
                 continue
-            if not (n == 1 or last_n < n <= last_n + 8):
+            if not m and not hit and any(k in line for k in SECT_END):
+                sect = None
                 continue
-            pos = ""
-            for t in parts[1:3]:
-                t = t.strip()
-                if len(t) == 1 and t in POS:
-                    pos = t
-            if n == 1:
-                lesson += 1
-            last_n = n
-            page_rows.append({"lesson": lesson, "n": n, "zh": zh, "pos": pos,
-                              "en": eng_from(em[n], zh) if n in em else "", "page": pno + 1, "raw": rest})
-        # хуудас хоорондын сүүлийн мөр: eng хуудсанд n давхцаагүй бол хоосон үлдээнэ
-        rows.extend(page_rows)
+            if m:
+                n, zh, rest = int(m.group(1)), m.group(2), m.group(3).strip()
+                toks = rest.split()
+                if not toks or not (n == 1 or last_n < n <= last_n + 8):
+                    continue
+                parts = re.split(r"\s{2,}", rest)
+                pos = ""
+                for t in toks[:4]:
+                    if len(t) == 1 and t in POS:
+                        pos = t
+                ratio = _pin_ratio(zh, toks)
+                loose = sect in ("words", "names") and (n == 1 or n == last_n + 1) and re.search(r"[A-Za-z]{3}", rest)
+                if not pos and ratio < 0.4 and not loose:
+                    continue  # pinyin-тай төстэй токен байхгүй → дасгалын мөр
+                if sect is None and not pos:
+                    continue  # 生词 хэсгээс гадуурх дугаарласан мөр (дасгал г.м.)
+                if n == 1:
+                    block += 1
+                last_n = n
+                en = (eng_from(em[n], zh, len(zh) + 2, len(zh)) if n in em else eng_from(toks, zh, 2, 0))
+                rows.append({"lesson": block, "n": n, "zh": zh, "pos": pos, "en": en, "page": pno + 1,
+                             "sect": sect or "", "raw": rest})
+                continue
+            if sect == "extra" and pno - extra_pg <= 1:
+                for e in RX_EXTRA.finditer(line):
+                    zh, py, tail = e.group(1), e.group(2), e.group(3).strip(" :：")
+                    if _pin_ratio(zh, [py]) < 0.6 or not re.search(r"[A-Za-z]{3}", tail):
+                        continue
+                    rows.append({"lesson": block, "n": 0, "zh": zh, "pos": "", "en": tail, "page": pno + 1,
+                                 "sect": "extra", "raw": line.strip()})
+                continue
     return rows
 
 
@@ -240,7 +288,7 @@ def write_book_tsv(name, level, bno, rows, known):
     f = OUT / ("%s-%s.tsv" % (str(bno).zfill(2), re.sub(r"\s+", "", name)))
     seen = set()
     with open(f, "w", encoding="utf8") as o:
-        o.write("level\tbook\tlesson\tn\tzh\tpy\tpos\ten\tpage\tstatus\traw_ocr\n")
+        o.write("level\tbook\tlesson\tn\tzh\tpy\tpos\ten\tpage\tstatus\tsect\traw_ocr\n")
         for r in rows:
             py = " ".join(x[0] for x in pinyin(r["zh"], style=Style.TONE))
             if r["zh"] in known:
@@ -251,7 +299,7 @@ def write_book_tsv(name, level, bno, rows, known):
                 st = "new"
             seen.add(r["zh"])
             o.write("\t".join([level, name, str(r["lesson"]), str(r["n"]), r["zh"], py, r["pos"],
-                               r["en"].replace("\t", " "), str(r["page"]), st, r["raw"].replace("\t", " ")]) + "\n")
+                               r["en"].replace("\t", " "), str(r["page"]), st, r.get("sect", ""), r["raw"].replace("\t", " ")]) + "\n")
     return f
 
 
@@ -263,7 +311,7 @@ def merge_all():
         lines = f.read_text(encoding="utf8").splitlines()[1:]
         for ln in lines:
             c = ln.split("\t")
-            if len(c) >= 10:
+            if len(c) >= 11:
                 recs.append(c)
     recs.sort(key=lambda c: (LEVELS.index(c[0]) if c[0] in LEVELS else 9, c[1], int(c[2] or 0), int(c[3] or 0)))
     seen, out, dup = {}, [], 0
@@ -279,9 +327,9 @@ def merge_all():
         seen[c[4]] = [c, None, c[1]]
         out.append(c)
     with open(OUT / "ALL_new.tsv", "w", encoding="utf8") as o:
-        o.write("level\tbook\tlesson\tn\tzh\tpy\tpos\ten\tpage\talso_in\n")
+        o.write("level\tbook\tlesson\tn\tzh\tpy\tpos\ten\tpage\tsect\talso_in\n")
         for c in out:
-            o.write("\t".join(c[:9] + [seen[c[4]][2].replace(c[1], "", 1).strip("; ")]) + "\n")
+            o.write("\t".join(c[:9] + [c[10], seen[c[4]][2].replace(c[1], "", 1).strip("; ")]) + "\n")
     by = {}
     for c in out:
         by[c[0]] = by.get(c[0], 0) + 1
