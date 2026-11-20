@@ -43,6 +43,14 @@ var DATA=window.DATA;
     days:["өдөр","days","дн.","日"],
     dayWord:["Өнөөдрийн үг","Word of the day","Слово дня","今日の単語"],
     plGoBtn:["🎮 Тоглох","🎮 Play","🎮 Играть","🎮 プレイ"],
+    tabBook:["Ном","Books","Книги","教科書"],
+    mdBook:["Номын хичээл бүрийн шинэ үг","New words from each book lesson","Новые слова из уроков учебника","教科書の各課の新出単語"],
+    bkTitle:["Номын шинэ үгс","Book new words","Новые слова из книг","教科書の新出単語"],
+    bkHint:["Ном, хичээлээ сонгоод шинэ үгсийг монгол тайлбартай нь үз. + дарж өөрийн үгэнд нэм.","Pick a book and lesson, read new words with Mongolian notes. Tap + to add to your words.","Выберите книгу и урок. Нажмите +, чтобы добавить слово.","本と課を選び、新出単語を見る。+で自分の単語に追加。"],
+    bkAddAll:["Энэ хичээлийн бүх үгийг нэмэх","Add all words of this lesson","Добавить все слова урока","この課の全単語を追加"],
+    bkLesson:["{n}-р хичээл","Lesson {n}","Урок {n}","第{n}課"],
+    bkAdded:["{n} үг нэмлээ","{n} words added","Добавлено слов: {n}","{n}語を追加"],
+    bkLoadErr:["Ном ачаалж чадсангүй. Интернэтээ шалгаад дахин оролд.","Could not load the book. Check your connection.","Не удалось загрузить книгу.","本を読み込めません。"],
     tabMedia:["Бичлэг·Дуу","Videos·Songs","Видео·Песни","動画・歌"],
     mdMedia:["Хадмал дээрх үгийг товшиж сур","Tap words in subtitles to learn","Нажимайте слова в субтитрах","字幕の単語をタップして学ぶ"],
     mVideo:["📺 Бичлэг","📺 Videos","📺 Видео","📺 動画"],
@@ -663,7 +671,7 @@ var DATA=window.DATA;
   function weekWords(act){var n=0;for(var i=0;i<7;i++){var a=act&&act[iso(plus(today,-i))];if(a)n+=a.w||0}return n}
 
   /* ---------- tabs ---------- */
-  var tabs=document.querySelectorAll('.tab[data-t]'),SUBT=['words','hsk','gram','cards','play','list','media'],TABS=['today','words','hsk','gram','play','learn','cards','list','group','me','admin','media'];
+  var tabs=document.querySelectorAll('.tab[data-t]'),SUBT=['words','hsk','gram','book','cards','play','list','media'],TABS=['today','words','hsk','gram','book','play','learn','cards','list','group','me','admin','media'];
   /* ---------- зочин (нэвтрээгүй) горим: зөвхөн HSK 1-6 үгийн сан + дүрэм ---------- */
   var GUEST_TABS=['today','hsk','gram'];
   function isGuest(){return needAuth&&!uid&&authReady}
@@ -700,6 +708,7 @@ var DATA=window.DATA;
     if(n==='play')renderPlay();
     if(n==='group'){renderGroup();refresh()}
     if(n==='admin'){renderAdmin();refresh();renderMediaAdmin()}
+    if(n==='book')renderBook();
     if(n==='media')renderMedia();else mediaStop();
   }
   tabs.forEach(function(b){b.addEventListener('click',function(){showTab(b.dataset.t)})});
@@ -1763,6 +1772,87 @@ var DATA=window.DATA;
     if(wordsArr().some(function(w){return w.h===h})){toast(T('tDupMine'),'oops');return}
     hJust=h;addWord(h,hP(h,hit.p),m,'',TODAY,hit.l);syncSummary(TODAY);toast(T('tAdded'),'cheer');renderAll();
   });
+
+  /* ---------- books: data/books/index.json → <dir>/index.json → <dir>/lesson-XX.json (олон ном дэмжинэ) ---------- */
+  var BK={cat:null,bid:null,idx:null,les:1,cache:{},q:'',busy:false,err:false};
+  function bkGet(u){return fetch(u).then(function(r){if(!r.ok)throw new Error(u);return r.json()})}
+  function bkDir(){var b=BK.cat&&BK.cat.filter(function(x){return x.id===BK.bid})[0];return b?'data/books/'+b.dir+'/':''}
+  function bkLoad(done){
+    if(BK.busy)return;
+    var go=function(){
+      var key=BK.bid+'/'+BK.les;
+      if(BK.les===0){ /* бүх хичээл */
+        var ls=BK.idx.lessons,miss=ls.filter(function(l){return !BK.cache[BK.bid+'/'+l.lesson]});
+        if(!miss.length)return done();
+        BK.busy=true;
+        Promise.all(miss.map(function(l){return bkGet(bkDir()+l.file).then(function(d){BK.cache[BK.bid+'/'+l.lesson]=d})}))
+          .then(function(){BK.busy=false;BK.err=false;done()},function(){BK.busy=false;BK.err=true;done()});
+        return;
+      }
+      if(BK.cache[key])return done();
+      var f=BK.idx.lessons.filter(function(l){return l.lesson===BK.les})[0];
+      if(!f){BK.les=BK.idx.lessons[0].lesson;return go()}
+      BK.busy=true;
+      bkGet(bkDir()+f.file).then(function(d){BK.cache[key]=d;BK.busy=false;BK.err=false;done()},function(){BK.busy=false;BK.err=true;done()});
+    };
+    if(BK.idx&&BK.idx.id===BK.bid)return go();
+    if(!BK.cat){BK.busy=true;
+      bkGet('data/books/index.json').then(function(c){BK.cat=c.books||[];BK.busy=false;if(!BK.bid&&BK.cat[0])BK.bid=BK.cat[0].id;bkLoad(done)},function(){BK.busy=false;BK.err=true;done()});return}
+    if(!BK.bid){BK.bid=BK.cat[0]&&BK.cat[0].id}
+    if(!BK.bid)return done();
+    BK.busy=true;
+    bkGet(bkDir()+'index.json').then(function(i){BK.idx=i;BK.busy=false;go()},function(){BK.busy=false;BK.err=true;done()});
+  }
+  function bkWords(){
+    if(!BK.idx)return [];
+    var ls=BK.les===0?BK.idx.lessons.map(function(l){return l.lesson}):[BK.les],out=[];
+    ls.forEach(function(n){var d=BK.cache[BK.bid+'/'+n];if(d)d.words.forEach(function(w){out.push({w:w,les:n})})});
+    return out;
+  }
+  function bkAddOne(w,d){
+    if(wordsArr().some(function(x){return x.h===w.zh}))return false;
+    var hit=hskLookup(w.zh);
+    addWord(w.zh,w.py,w.mn,'',d,hit?hit.l:6);return true;
+  }
+  function renderBook(){
+    if(!$('bkList'))return;
+    if(!BK.idx||BK.idx.id!==BK.bid||(!BK.cache[BK.bid+'/'+BK.les]&&BK.les!==0)||(BK.les===0&&BK.idx.lessons.some(function(l){return !BK.cache[BK.bid+'/'+l.lesson]}))){
+      if(!BK.busy&&!BK.err){$('bkList').innerHTML='<div class="empty"><b>…</b></div>';bkLoad(renderBook);return}
+    }
+    if(BK.err&&!BK.idx){$('bkList').innerHTML='<div class="empty"><b>'+T('bkLoadErr')+'</b><br><button class="btn small ghost" type="button" id="bkRetry" style="margin-top:10px">↻</button></div>';return}
+    var cat=BK.cat||[];
+    $('bkBooks').innerHTML=cat.length>1?cat.map(function(b){return '<button class="chip" type="button" data-bk="'+esc(b.id)+'" aria-pressed="'+(b.id===BK.bid)+'">'+esc(lang==='mn'?(b.title_mn||b.title):b.title)+'</button>'}).join(''):'';
+    var ls=BK.idx?BK.idx.lessons:[];
+    $('bkLes').innerHTML=(ls.length?'<button class="chip" type="button" data-bl="0" aria-pressed="'+(BK.les===0)+'">'+T('all')+'</button>':'')+ls.map(function(l){return '<button class="chip" type="button" data-bl="'+l.lesson+'" aria-pressed="'+(BK.les===l.lesson)+'">'+l.lesson+'<small>'+l.count+'</small></button>'}).join('');
+    var cur=BK.les?ls.filter(function(l){return l.lesson===BK.les})[0]:null,items=bkWords(),have={};
+    wordsArr().forEach(function(w){have[w.h]=1});
+    var q=BK.q,all=items.length;
+    if(q)items=items.filter(function(x){var w=x.w;return mq(w.zh+' '+w.py+' '+w.mn+' '+w.en+' '+w.note,q)});
+    $('bkCnt').textContent=(cur?T('bkLesson',{n:cur.lesson})+' · '+(lang==='mn'?(cur.title_mn||''):'')+' '+cur.title+' · ':'')+items.length+' / '+all;
+    $('bkAddAll').hidden=!BK.les;
+    var lastL=null;
+    $('bkList').innerHTML=items.map(function(x){
+      var w=x.w,got=!!have[w.zh],hd='';
+      if(BK.les===0&&x.les!==lastL){lastL=x.les;var li=ls.filter(function(l){return l.lesson===x.les})[0];hd='<div class="hint" style="margin:10px 2px 0"><b>'+T('bkLesson',{n:x.les})+'</b> '+(li?esc(li.title):'')+'</div>'}
+      return hd+'<div class="w wc'+(got?' got':'')+'"><span class="h" lang="zh">'+hl(w.zh,q)+'</span><span><span class="p">'+tonePy(w.py)+'</span> <span class="badge">'+(w.n)+(w.pos_mn&&lang==='mn'?' · '+esc(w.pos_mn):(w.pos?' · '+esc(w.pos):''))+'</span><br><span class="m">'+hl(w.mn,q)+'</span>'+(lang!=='mn'&&w.en?'<br><span class="hint">'+hl(w.en,q)+'</span>':'')+(w.note?'<br><span class="hint">'+hl(w.note,q)+'</span>':'')+'</span><span class="wca">'+
+        '<button class="btn small ghost" type="button" data-speak="'+esc(w.zh)+'" aria-label="Audio">🔊</button> <button class="btn small ghost star" type="button" data-fav="'+esc(w.zh)+'" aria-pressed="'+(isFav(w.zh)?'true':'false')+'" aria-label="Favorite">'+(isFav(w.zh)?'★':'☆')+'</button> <button class="btn small ghost" type="button" data-write="'+esc(w.zh)+'" aria-label="Write">✍</button> '+
+        '<button class="btn small ghost" type="button" data-bkadd="'+esc(w.zh)+'"'+(got?' disabled':'')+'>'+(got?'✓':'+')+'</button></span></div>';
+    }).join('')||emptyRes(q,'bkQ');
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-bk]');if(b){BK.bid=b.dataset.bk;BK.idx=null;BK.les=1;BK.err=false;renderBook();return}
+    b=e.target.closest('[data-bl]');if(b){BK.les=+b.dataset.bl;BK.err=false;renderBook();return}
+    if(e.target.closest('#bkRetry')){BK.err=false;renderBook();return}
+    b=e.target.closest('[data-bkadd]');
+    if(b){if(!hasProfile())return;
+      var w=bkWords().filter(function(x){return x.w.zh===b.dataset.bkadd})[0];if(!w)return;
+      if(!bkAddOne(w.w,TODAY)){toast(T('tDupMine'),'oops');return}
+      syncSummary(TODAY);toast(T('tAdded'),'cheer');renderAll();return}
+    if(e.target.closest('#bkAddAll')){if(!hasProfile())return;
+      var n=0;bkWords().forEach(function(x){if(bkAddOne(x.w,TODAY))n++});
+      if(n){syncSummary(TODAY);toast(T('bkAdded',{n:n}),'cheer');renderAll()}else toast(T('tDupMine'),'oops');return}
+  });
+  if($('bkQ'))$('bkQ').addEventListener('input',function(){var v=this.value.trim();clearTimeout(BK.t);BK.t=setTimeout(function(){BK.q=v;renderBook()},120)});
   /* admin-only: fix pinyin / Mongolian meaning, saved to Supabase table hsk_edits */
   function editHsk(h){
     if(!isOwner||!sb)return;
@@ -1856,7 +1946,7 @@ var DATA=window.DATA;
   $('gmConn').addEventListener('click',function(){gConn=!gConn;this.setAttribute('aria-pressed',gConn?'true':'false');renderGram()});
   $('gmQ').addEventListener('input',function(){var v=this.value.trim();clearTimeout(gT);gT=setTimeout(function(){gQ=v;renderGram()},120)});
   function renderAll(){
-    renderOnb();renderToday();renderProg();renderList();renderHsk();renderGram();renderPlay();renderLs();renderCls();renderClasses();renderLearn();renderMe();
+    renderOnb();renderToday();renderProg();renderList();renderHsk();renderGram();if($('p-book')&&!$('p-book').hidden&&BK.idx)renderBook();renderPlay();renderLs();renderCls();renderClasses();renderLearn();renderMe();
     $('storeNote').textContent=T(mode==='db'?'storeDb':'storeLocal');
     fillSelect('fL',false,+($('fL').value||lvOf()));fillSelect('cLv',true,F.lv);
     tabs.forEach(function(b){if(b.dataset.t==='admin')b.hidden=!isOwner;else b.disabled=!hasProfile()&&!isGuest()&&b.dataset.t!=='today'});$('menuBtn').disabled=!hasProfile()&&!isGuest();
