@@ -41,8 +41,34 @@ RX_LATIN = re.compile(r"^[A-Za-z0-9\s'’,.;:()/\-–\u00c0-\u024f]+$")
 _cfg = {"dpi": 170}
 
 
+def _init_worker(dpi, tess):
+    _cfg["dpi"] = dpi
+    _setup_tess(tess)
+
+
+def _setup_tess(tess=None):
+    import shutil, pytesseract
+    cands = [tess, os.environ.get("TESSERACT_CMD"), shutil.which("tesseract"),
+             r"C:\Program Files\Tesseract-OCR\tesseract.exe",
+             r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe"]
+    for c in cands:
+        if c and Path(c).exists():
+            pytesseract.pytesseract.tesseract_cmd = str(c)
+            return str(c)
+    return None
+
+
+def _fitz():
+    try:
+        import pymupdf as fitz
+    except ImportError:
+        import fitz
+    return fitz
+
+
 def _pix(pdf, pno, dpi):
-    import fitz, io
+    import io
+    fitz = _fitz()
     from PIL import Image
     doc = fitz.open(pdf)
     pix = doc[pno].get_pixmap(dpi=dpi, colorspace=fitz.csGRAY)
@@ -171,12 +197,11 @@ def process_pdfs(pdfs, workers):
     """Нэг номын бүх хэсгийг (PDF жагсаалт) OCR хийж, мөрүүдийг нэгтгэн буцаана."""
     texts = []
     for pdf in pdfs:
-        import fitz
-        n = len(fitz.open(pdf))
+        n = len(_fitz().open(pdf))
         cdir = OCRC / Path(pdf).stem
         jobs = [(str(pdf), i, str(cdir / ("%04d.txt" % i))) for i in range(n)]
         print("   OCR: %s (%d хуудас)" % (Path(pdf).name, n), flush=True)
-        with Pool(workers) as p:
+        with Pool(workers, initializer=_init_worker, initargs=(_cfg["dpi"], _cfg.get("tess"))) as p:
             done = 0
             res = []
             for r in p.imap(ocr_page, jobs, chunksize=2):
@@ -279,9 +304,18 @@ def main():
     ap.add_argument("--merge-only", action="store_true")
     a = ap.parse_args()
     _cfg["dpi"] = a.dpi
-    if a.tesseract:
-        import pytesseract
-        pytesseract.pytesseract.tesseract_cmd = a.tesseract
+    _cfg["tess"] = a.tesseract
+    found = _setup_tess(a.tesseract)
+    if not found:
+        sys.exit("Tesseract олдсонгүй. Суулгаад --tesseract \"C:\\Program Files\\Tesseract-OCR\\tesseract.exe\" гэж заа.")
+    import pytesseract
+    try:
+        langs = pytesseract.get_languages()
+    except Exception:
+        langs = []
+    if langs and "chi_sim" not in langs:
+        sys.exit("Tesseract-д chi_sim хэл алга. tessdata хавтсанд chi_sim.traineddata нэм.")
+    print("Tesseract:", found)
     if a.merge_only:
         merge_all()
         return
