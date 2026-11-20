@@ -1862,8 +1862,25 @@ var DATA=window.DATA;
     $('bkCnt').textContent=items.length+' / '+books.length;
     $('bkList').innerHTML='<div class="hint" style="margin:0 2px">'+T('libHint')+'</div>'+items.map(function(b){
       return '<div class="libbk"><div class="libh"><b lang="zh">'+esc(b.title)+'</b><span class="hint">'+esc(libTitle(b))+'</span></div><div class="libparts">'+
-        b.parts.map(function(p){return '<a class="chip" href="'+esc(libUrl(p.f))+'" target="_blank" rel="noopener">📖 '+T('libPart',{n:p.p})+' · '+T('libPg',{a:p.a,b:p.b})+' · '+p.mb+' MB</a>'}).join('')+'</div></div>'}).join('')||emptyRes(q,'bkQ');
+        b.parts.map(function(p){return '<a class="chip" data-pdf="1" href="'+esc(libUrl(p.f))+'" target="_blank" rel="noopener">📖 '+T('libPart',{n:p.p})+' · '+T('libPg',{a:p.a,b:p.b})+' · '+p.mb+' MB</a>'}).join('')+'</div></div>'}).join('')||emptyRes(q,'bkQ');
   }
+  /* PDF-ийг сайтаас гаралгүй дотор нь нээх (iframe давхарга). Нээгдэхгүй бол "↗" товчоор шинэ tab. */
+  function pdfClose(){var o=document.getElementById('pdfView');if(o)o.remove();document.body.style.overflow=''}
+  function pdfOpen(url,title){
+    pdfClose();
+    var o=document.createElement('div');o.id='pdfView';o.className='pdfview';
+    o.innerHTML='<div class="pdfbar"><b class="pdft">'+esc(title||'PDF')+'</b><a class="btn small ghost" href="'+esc(url)+'" target="_blank" rel="noopener" aria-label="open in new tab">↗</a><button class="btn small" type="button" id="pdfX" aria-label="close">✕</button></div>'+
+      '<iframe class="pdfframe" src="'+esc(url)+'" title="'+esc(title||'PDF')+'" referrerpolicy="no-referrer"></iframe>';
+    document.body.appendChild(o);document.body.style.overflow='hidden';
+    document.getElementById('pdfX').addEventListener('click',pdfClose);
+  }
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')pdfClose()});
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[data-pdf]');if(!a)return;
+    e.preventDefault();
+    var bk=a.closest('.libbk'),h=bk&&bk.querySelector('.libh b');
+    pdfOpen(a.getAttribute('href'),(h?h.textContent+' · ':'')+a.textContent.replace(/^📖\s*/,''));
+  });
   function renderBook(){
     if(!$('bkList'))return;
     if(BK.mode==='lib'){renderLib();return}

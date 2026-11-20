@@ -1184,3 +1184,9 @@ body{padding-bottom:96px}
 .libh b{font-size:1.1rem}
 .libparts{display:flex;flex-wrap:wrap;gap:8px}
 .libparts a.chip{text-decoration:none;display:inline-flex;align-items:center;gap:4px;color:var(--fg)}
+
+.pdfview{position:fixed;inset:0;z-index:90;background:var(--bg,#fff);display:flex;flex-direction:column}
+.pdfbar{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--line)}
+.pdft{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.95rem}
+.pdfbar .btn{text-decoration:none}
+.pdfframe{flex:1;width:100%;border:0;background:#fff}
