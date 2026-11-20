@@ -50,6 +50,9 @@ var DATA=window.DATA;
     bkAddAll:["Энэ хичээлийн бүх үгийг нэмэх","Add all words of this lesson","Добавить все слова урока","この課の全単語を追加"],
     bkLesson:["{n}-р хичээл","Lesson {n}","Урок {n}","第{n}課"],
     bkAdded:["{n} үг нэмлээ","{n} words added","Добавлено слов: {n}","{n}語を追加"],
+    bkWords:["Үгс","Words","Слова","単語"],
+    bkPages:["Ном (хуудас)","Book pages","Страницы книги","本のページ"],
+    bkPage:["{n}-р хуудас","Page {n}","Стр. {n}","{n}ページ"],
     bkLoadErr:["Ном ачаалж чадсангүй. Интернэтээ шалгаад дахин оролд.","Could not load the book. Check your connection.","Не удалось загрузить книгу.","本を読み込めません。"],
     tabMedia:["Бичлэг·Дуу","Videos·Songs","Видео·Песни","動画・歌"],
     mdMedia:["Хадмал дээрх үгийг товшиж сур","Tap words in subtitles to learn","Нажимайте слова в субтитрах","字幕の単語をタップして学ぶ"],
@@ -1774,7 +1777,7 @@ var DATA=window.DATA;
   });
 
   /* ---------- books: data/books/index.json → <dir>/index.json → <dir>/lesson-XX.json (олон ном дэмжинэ) ---------- */
-  var BK={cat:null,bid:null,idx:null,les:1,cache:{},q:'',busy:false,err:false};
+  var BK={cat:null,bid:null,idx:null,les:1,cache:{},q:'',busy:false,err:false,mode:'words',pg:0,pgs:[]};
   function bkGet(u){return fetch(u).then(function(r){if(!r.ok)throw new Error(u);return r.json()})}
   function bkDir(){var b=BK.cat&&BK.cat.filter(function(x){return x.id===BK.bid})[0];return b?'data/books/'+b.dir+'/':''}
   function bkLoad(done){
@@ -1814,15 +1817,38 @@ var DATA=window.DATA;
     var hit=hskLookup(w.zh);
     addWord(w.zh,w.py,w.mn,'',d,hit?hit.l:6);return true;
   }
+  function bkImg(n){var p=BK.idx.pages,s=String(n);while(s.length<p.pad)s='0'+s;return bkDir()+p.dir+'/p'+s+'.'+p.ext}
+  function bkShow(i){
+    if(i<0||i>=BK.pgs.length)return;
+    BK.pg=i;var n=BK.pgs[i];
+    $('bkVi').src=bkImg(n);$('bkVn').textContent=n+' · '+(i+1)+'/'+BK.pgs.length;
+    $('bkVs').scrollTop=0;$('bkVs').scrollLeft=0;
+    [1,-1].forEach(function(d){var j=i+d;if(j>=0&&j<BK.pgs.length)(new Image()).src=bkImg(BK.pgs[j])});
+  }
+  function bkZoom(f){var im=$('bkVi'),w=parseFloat(im.style.width)||100;w=Math.max(100,Math.min(400,w*f));im.style.width=w+'%'}
+  function bkClose(){$('bkView').hidden=true;$('bkVi').removeAttribute('src');document.body.style.overflow=''}
   function renderBook(){
     if(!$('bkList'))return;
-    if(!BK.idx||BK.idx.id!==BK.bid||(!BK.cache[BK.bid+'/'+BK.les]&&BK.les!==0)||(BK.les===0&&BK.idx.lessons.some(function(l){return !BK.cache[BK.bid+'/'+l.lesson]}))){
+    if(!BK.idx||BK.idx.id!==BK.bid||(BK.mode==='words'&&(!BK.cache[BK.bid+'/'+BK.les]&&BK.les!==0))||(BK.mode==='words'&&BK.les===0&&BK.idx.lessons.some(function(l){return !BK.cache[BK.bid+'/'+l.lesson]}))){
       if(!BK.busy&&!BK.err){$('bkList').innerHTML='<div class="empty"><b>…</b></div>';bkLoad(renderBook);return}
     }
     if(BK.err&&!BK.idx){$('bkList').innerHTML='<div class="empty"><b>'+T('bkLoadErr')+'</b><br><button class="btn small ghost" type="button" id="bkRetry" style="margin-top:10px">↻</button></div>';return}
     var cat=BK.cat||[];
     $('bkBooks').innerHTML=cat.length>1?cat.map(function(b){return '<button class="chip" type="button" data-bk="'+esc(b.id)+'" aria-pressed="'+(b.id===BK.bid)+'">'+esc(lang==='mn'?(b.title_mn||b.title):b.title)+'</button>'}).join(''):'';
     var ls=BK.idx?BK.idx.lessons:[];
+    var hasPg=!!(BK.idx&&BK.idx.pages);
+    $('bkMode').innerHTML=hasPg?['words','pages'].map(function(m){return '<button class="chip" type="button" data-bm="'+m+'" aria-pressed="'+(BK.mode===m)+'">'+T(m==='words'?'bkWords':'bkPages')+'</button>'}).join(''):'';
+    if(BK.mode==='pages'&&hasPg){
+      if(!BK.les)BK.les=1;
+      $('bkLes').innerHTML=ls.map(function(l){return '<button class="chip" type="button" data-bl="'+l.lesson+'" aria-pressed="'+(BK.les===l.lesson)+'">'+l.lesson+'</button>'}).join('');
+      var cl=ls.filter(function(l){return l.lesson===BK.les})[0];
+      $('bkSearch').hidden=true;$('bkAddAll').hidden=true;
+      $('bkCnt').textContent=cl?T('bkLesson',{n:cl.lesson})+' · '+(lang==='mn'?(cl.title_mn||'')+' ':'')+cl.title:'';
+      BK.pgs=[];if(cl&&cl.pages)for(var i=cl.pages[0];i<=cl.pages[1];i++)BK.pgs.push(i);
+      $('bkList').innerHTML='<div class="bkpg">'+BK.pgs.map(function(n,i){return '<button type="button" data-bp="'+i+'" aria-label="'+T('bkPage',{n:n})+'"><img loading="lazy" decoding="async" alt="" src="'+bkImg(n)+'"><b>'+n+'</b></button>'}).join('')+'</div>';
+      return;
+    }
+    $('bkSearch').hidden=false;
     $('bkLes').innerHTML=(ls.length?'<button class="chip" type="button" data-bl="0" aria-pressed="'+(BK.les===0)+'">'+T('all')+'</button>':'')+ls.map(function(l){return '<button class="chip" type="button" data-bl="'+l.lesson+'" aria-pressed="'+(BK.les===l.lesson)+'">'+l.lesson+'<small>'+l.count+'</small></button>'}).join('');
     var cur=BK.les?ls.filter(function(l){return l.lesson===BK.les})[0]:null,items=bkWords(),have={};
     wordsArr().forEach(function(w){have[w.h]=1});
@@ -1841,6 +1867,13 @@ var DATA=window.DATA;
   }
   document.addEventListener('click',function(e){
     var b=e.target.closest('[data-bk]');if(b){BK.bid=b.dataset.bk;BK.idx=null;BK.les=1;BK.err=false;renderBook();return}
+    b=e.target.closest('[data-bm]');if(b){BK.mode=b.dataset.bm;if(BK.mode==='pages'&&!BK.les)BK.les=1;BK.err=false;renderBook();return}
+    b=e.target.closest('[data-bp]');if(b){$('bkVi').style.width='100%';$('bkView').hidden=false;document.body.style.overflow='hidden';bkShow(+b.dataset.bp);return}
+    if(e.target.closest('#bkVx')){bkClose();return}
+    if(e.target.closest('#bkVa')){bkShow(BK.pg-1);return}
+    if(e.target.closest('#bkVb')){bkShow(BK.pg+1);return}
+    if(e.target.closest('#bkVp')){bkZoom(1.5);return}
+    if(e.target.closest('#bkVm')){bkZoom(1/1.5);return}
     b=e.target.closest('[data-bl]');if(b){BK.les=+b.dataset.bl;BK.err=false;renderBook();return}
     if(e.target.closest('#bkRetry')){BK.err=false;renderBook();return}
     b=e.target.closest('[data-bkadd]');
@@ -1852,6 +1885,7 @@ var DATA=window.DATA;
       var n=0;bkWords().forEach(function(x){if(bkAddOne(x.w,TODAY))n++});
       if(n){syncSummary(TODAY);toast(T('bkAdded',{n:n}),'cheer');renderAll()}else toast(T('tDupMine'),'oops');return}
   });
+  document.addEventListener('keydown',function(e){if($('bkView')&&!$('bkView').hidden){if(e.key==='Escape')bkClose();else if(e.key==='ArrowLeft')bkShow(BK.pg-1);else if(e.key==='ArrowRight')bkShow(BK.pg+1)}});
   if($('bkQ'))$('bkQ').addEventListener('input',function(){var v=this.value.trim();clearTimeout(BK.t);BK.t=setTimeout(function(){BK.q=v;renderBook()},120)});
   /* admin-only: fix pinyin / Mongolian meaning, saved to Supabase table hsk_edits */
   function editHsk(h){

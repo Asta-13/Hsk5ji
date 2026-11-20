@@ -272,12 +272,17 @@
     <h2 data-i18n="bkTitle"></h2>
     <div class="hint" data-i18n="bkHint"></div>
     <div class="chips" id="bkBooks"></div>
+    <div class="chips" id="bkMode"></div>
     <div class="chips" id="bkLes"></div>
-    <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="bkQ" type="search" data-i18n-ph="hskSearch" autocomplete="off" enterkeyhint="search"><button type="button" class="sx" data-clear="bkQ" aria-label="×" hidden>×</button></div>
+    <div class="search" id="bkSearch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="bkQ" type="search" data-i18n-ph="hskSearch" autocomplete="off" enterkeyhint="search"><button type="button" class="sx" data-clear="bkQ" aria-label="×" hidden>×</button></div>
     <div class="hint" id="bkCnt"></div>
     <div class="row"><button class="btn small ghost" type="button" id="bkAddAll" data-i18n="bkAddAll"></button></div>
   </div>
   <div id="bkList" class="list"></div>
+  <div id="bkView" class="bkview" role="dialog" aria-modal="true" hidden>
+    <div class="bkbar"><button class="btn small ghost" type="button" id="bkVx" aria-label="×">×</button><span id="bkVn"></span><span class="bkbtns"><button class="btn small ghost" type="button" id="bkVm">−</button><button class="btn small ghost" type="button" id="bkVp">+</button><button class="btn small ghost" type="button" id="bkVa">‹</button><button class="btn small ghost" type="button" id="bkVb">›</button></span></div>
+    <div class="bkscroll" id="bkVs"><img id="bkVi" alt=""></div>
+  </div>
 </div>
 
 <div class="pane" id="p-media" role="tabpanel" hidden>
