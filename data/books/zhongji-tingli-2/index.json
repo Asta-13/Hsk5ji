@@ -1,0 +1,49 @@
+{
+ "id": "zhongji-tingli-2",
+ "title": "中级听力 II",
+ "title_mn": "Дунд шатны сонсгол II",
+ "lessons": [
+  {
+   "lesson": 1,
+   "title": "",
+   "title_mn": "村民–指甲油",
+   "count": 20,
+   "file": "lesson-01.json"
+  },
+  {
+   "lesson": 2,
+   "title": "",
+   "title_mn": "全职太太–干部",
+   "count": 20,
+   "file": "lesson-02.json"
+  },
+  {
+   "lesson": 3,
+   "title": "",
+   "title_mn": "三好学生–乡下",
+   "count": 20,
+   "file": "lesson-03.json"
+  },
+  {
+   "lesson": 4,
+   "title": "",
+   "title_mn": "精明–经济学",
+   "count": 20,
+   "file": "lesson-04.json"
+  },
+  {
+   "lesson": 5,
+   "title": "",
+   "title_mn": "流动性–失物招领处",
+   "count": 20,
+   "file": "lesson-05.json"
+  },
+  {
+   "lesson": 6,
+   "title": "",
+   "title_mn": "车管局–狂奔",
+   "count": 19,
+   "file": "lesson-06.json"
+  }
+ ]
+}

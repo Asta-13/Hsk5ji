@@ -1,0 +1,208 @@
+{
+ "lesson": 5,
+ "title": "",
+ "title_mn": "流动性–失物招领处",
+ "book": "中级听力 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "流动性",
+   "py": "liúdòngxìng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "mobility, liquidity",
+   "mn": "хөдөлгөөнт чанар, гүйлгээ",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "晚年",
+   "py": "wǎnnián",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "later years",
+   "mn": "хөгшрөлтийн үе",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "孔雀",
+   "py": "kǒngquè",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "peacock",
+   "mn": "тогос",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "探险",
+   "py": "tànxiǎn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to explore, adventure",
+   "mn": "аялан судлах, адал явдал хийх",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "不出所料",
+   "py": "bùchūsuǒliào",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "as expected",
+   "mn": "санасны дагуу",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "意味",
+   "py": "yìwèi",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to imply",
+   "mn": "утга илэрхийлэх, гэсэн үг",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "不以为然",
+   "py": "bùyǐwéirán",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "to disapprove",
+   "mn": "зөвшөөрөхгүй",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "侧卧",
+   "py": "cèwò",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to lie on one's side",
+   "mn": "хажуугаараа хэвтэх",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "仰卧",
+   "py": "yǎngwò",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to lie on one's back",
+   "mn": "нуруугаараа хэвтэх",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "失眠症",
+   "py": "shīmiánzhèng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "insomnia",
+   "mn": "нойргүйдэл",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "臀部",
+   "py": "túnbù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "buttocks",
+   "mn": "өгзөг",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "曲线",
+   "py": "qūxiàn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "curve",
+   "mn": "муруй шугам",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "化妆品",
+   "py": "huàzhuāngpǐn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "cosmetics",
+   "mn": "гоо сайхны бүтээгдэхүүн",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "口红",
+   "py": "kǒuhóng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "lipstick",
+   "mn": "уруулын будаг",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "眼圈",
+   "py": "yǎnquān",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "eye socket ring",
+   "mn": "нүдний тойрог",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "看上",
+   "py": "kànshàng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to take a fancy to",
+   "mn": "таалагдах, дурлах",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "拾金不昧",
+   "py": "shíjīnbùmèi",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "return found money",
+   "mn": "олсон мөнгийг буцааж өгөх",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "派出所",
+   "py": "pàichūsuǒ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "police station",
+   "mn": "цагдаагийн хэлтэс",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "报案",
+   "py": "bàoàn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to report a case",
+   "mn": "гомдол мэдүүлэх",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "失物招领处",
+   "py": "shīwùzhāolǐngchù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "lost and found",
+   "mn": "гээгдэл олдворын газар",
+   "note": ""
+  }
+ ]
+}

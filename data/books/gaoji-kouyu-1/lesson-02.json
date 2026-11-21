@@ -1,0 +1,208 @@
+{
+ "lesson": 2,
+ "title": "",
+ "title_mn": "公立–书评",
+ "book": "高级口语 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "公立",
+   "py": "gōnglì",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "public (institution)",
+   "mn": "төрийн, улсын",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "私立",
+   "py": "sīlì",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "private (institution)",
+   "mn": "хувийн",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "进度",
+   "py": "jìndù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "progress, pace",
+   "mn": "явц, хөгжлийн хурд",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "备案",
+   "py": "bèiàn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "file for the record",
+   "mn": "бүртгүүлэх, бүртгэлд авах",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "官员",
+   "py": "guānyuán",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "official",
+   "mn": "албан тушаалтан",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "抽查",
+   "py": "chōuchá",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "spot check",
+   "mn": "түүвэрлэн шалгах",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "馆藏",
+   "py": "guǎncáng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "library holdings",
+   "mn": "номын сангийн сан хөмрөг",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "口述",
+   "py": "kǒushù",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "dictate orally",
+   "mn": "аман хэлэх, аман өгүүлэх",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "自传",
+   "py": "zìzhuàn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "autobiography",
+   "mn": "намтар, амьдралын түүх",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "判定",
+   "py": "pàndìng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "determine, judge",
+   "mn": "тодорхойлох, шийдэх",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "借阅",
+   "py": "jièyuè",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "borrow (books)",
+   "mn": "ном зээлж унших",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "首位",
+   "py": "shǒuwèi",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "first place",
+   "mn": "эхний байр, тэргүүн байр",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "黑社会",
+   "py": "hēishèhuì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "underworld, mafia",
+   "mn": "хар ертөнц, мафи",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "有幸",
+   "py": "yǒuxìng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "fortunate",
+   "mn": "азтай, завшаантай",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "限定",
+   "py": "xiàndìng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "limit, restrict",
+   "mn": "хязгаарлах, тогтоох",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "消防员",
+   "py": "xiāofángyuán",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "firefighter",
+   "mn": "гал сөнөөгч",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "冒犯",
+   "py": "màofàn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "offend",
+   "mn": "доромжлох, гомдоох",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "标签",
+   "py": "biāoqiān",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "label, tag",
+   "mn": "шошго",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "流程",
+   "py": "liúchéng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "procedure, workflow",
+   "mn": "үйл явц, дараалал",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "书评",
+   "py": "shūpíng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "book review",
+   "mn": "номын тоймлол, шүүмж",
+   "note": ""
+  }
+ ]
+}

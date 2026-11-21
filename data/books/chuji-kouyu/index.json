@@ -1,0 +1,28 @@
+{
+ "id": "chuji-kouyu",
+ "title": "初级口语",
+ "title_mn": "Анхан шатны яриа",
+ "lessons": [
+  {
+   "lesson": 1,
+   "title": "",
+   "title_mn": "没问题–红绿灯",
+   "count": 20,
+   "file": "lesson-01.json"
+  },
+  {
+   "lesson": 2,
+   "title": "",
+   "title_mn": "十字路口–歌舞",
+   "count": 20,
+   "file": "lesson-02.json"
+  },
+  {
+   "lesson": 3,
+   "title": "",
+   "title_mn": "头饰–登机口",
+   "count": 11,
+   "file": "lesson-03.json"
+  }
+ ]
+}

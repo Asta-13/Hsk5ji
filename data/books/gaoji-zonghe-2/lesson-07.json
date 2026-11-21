@@ -1,0 +1,208 @@
+{
+ "lesson": 7,
+ "title": "",
+ "title_mn": "宰相–冷落",
+ "book": "高级综合 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "宰相",
+   "py": "zǎixiàng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "prime minister (ancient)",
+   "mn": "канцлер, ерөнхий сайд",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "托付",
+   "py": "tuōfù",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "entrust",
+   "mn": "даатгах, итгэн үлдээх",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "锦缎",
+   "py": "jǐnduàn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "brocade",
+   "mn": "торгон хатгамал",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "请便",
+   "py": "qǐngbiàn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "please do as you like",
+   "mn": "дураараа байгаарай",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "搜查",
+   "py": "sōuchá",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "search, raid",
+   "mn": "нэгжлэг хийх",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "展翅",
+   "py": "zhǎnchì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "spread wings",
+   "mn": "далавчаа дэлгэх",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "梧桐",
+   "py": "wútóng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "Chinese parasol tree",
+   "mn": "утун мод",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "栖",
+   "py": "qī",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "perch, dwell",
+   "mn": "орших, амьдрах",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "吓唬",
+   "py": "xiàhǔ",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "scare, frighten",
+   "mn": "айлгах, сүрдүүлэх",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "斧头",
+   "py": "fǔtóu",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "axe",
+   "mn": "сүх",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "损伤",
+   "py": "sǔnshāng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "damage, injure",
+   "mn": "гэмтээх, гэмтэх",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "剑眉",
+   "py": "jiànméi",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "sword-shaped eyebrows",
+   "mn": "сэлэм хэлбэрийн хөмсөг",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "飞扬",
+   "py": "fēiyáng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "fly up, flutter",
+   "mn": "дээш хөөрөх, үлбэх",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "奋力",
+   "py": "fènlì",
+   "pos": "副",
+   "pos_mn": "дайвар үг",
+   "en": "with all one's might",
+   "mn": "хүчээ дайчлан, чадлаараа",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "镂刻",
+   "py": "lòukè",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "engrave, carve",
+   "mn": "сийлэх",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "郁郁",
+   "py": "yùyù",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "gloomy, lush",
+   "mn": "гунигтай, шигүү",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "嬗变",
+   "py": "shànbiàn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "evolve, transform",
+   "mn": "өөрчлөгдөн хувирах",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "人选",
+   "py": "rénxuǎn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "candidate",
+   "mn": "нэр дэвшигч, сонгогдсон хүн",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "心声",
+   "py": "xīnshēng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "heartfelt voice",
+   "mn": "сэтгэлийн дуу хоолой",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "冷落",
+   "py": "lěngluò",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "desolate, neglected",
+   "mn": "эзгүйрсэн, үл хайхрагдсан",
+   "note": ""
+  }
+ ]
+}

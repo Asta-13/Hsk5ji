@@ -1,0 +1,108 @@
+{
+ "lesson": 11,
+ "title": "",
+ "title_mn": "配料–豁出去",
+ "book": "高级听力 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "配料",
+   "py": "pèiliào",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "mix ingredients",
+   "mn": "найрлага хийх, найрлага",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "清亮",
+   "py": "qīngliàng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "clear, bright",
+   "mn": "тунгалаг, тод",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "纳木错",
+   "py": "nàmùcuò",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Namtso lake",
+   "mn": "Намцо нуур",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "星斗",
+   "py": "xīngdǒu",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "stars",
+   "mn": "од, одод",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "絮语",
+   "py": "xùyǔ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "murmured chatter",
+   "mn": "шивэгнэх яриа",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "榻榻米",
+   "py": "tàtàmǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "tatami",
+   "mn": "татами",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "绵延",
+   "py": "miányán",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "stretch continuously",
+   "mn": "үргэлжлэн сунах",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "苍茫",
+   "py": "cāngmáng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "vast and hazy",
+   "mn": "уудам бүрхэг",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "健壮",
+   "py": "jiànzhuàng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "strong, robust",
+   "mn": "чийрэг, бяр тэнхээтэй",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "豁出去",
+   "py": "huōchūqù",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "go all out",
+   "mn": "зориглох, юу ч болтугай гэж шийдэх",
+   "note": ""
+  }
+ ]
+}

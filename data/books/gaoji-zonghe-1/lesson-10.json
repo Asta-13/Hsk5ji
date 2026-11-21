@@ -1,0 +1,208 @@
+{
+ "lesson": 10,
+ "title": "",
+ "title_mn": "徒然–折腰",
+ "book": "高级综合 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "徒然",
+   "py": "túrán",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "in vain, futile",
+   "mn": "дэмий, хоосон",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "零乱",
+   "py": "língluàn",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "disordered, messy",
+   "mn": "эмх замбараагүй, замбараагүй",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "悬崖",
+   "py": "xuányá",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "cliff, precipice",
+   "mn": "хад хавцал, хавцал",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "露水",
+   "py": "lùshuǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "dew",
+   "mn": "шүүдэр",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "步履",
+   "py": "bùlǚ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "footsteps, gait",
+   "mn": "алхаа, нүүдэл",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "征兆",
+   "py": "zhēngzhào",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "omen, sign",
+   "mn": "шинж, илрэл",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "甘霖",
+   "py": "gānlín",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "welcome rain",
+   "mn": "ашигтай борооны ус, сайхан бороо",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "轰轰烈烈",
+   "py": "hōnghōnglièliè",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "grand, vigorous",
+   "mn": "хүчтэй их, дэгдэмтгий",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "真谛",
+   "py": "zhēndì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "true essence",
+   "mn": "жинхэнэ утга, мөн чанар",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "闪耀",
+   "py": "shǎnyào",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "glitter, shine",
+   "mn": "гялалзах, гэрэлтэх",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "患难",
+   "py": "huànnàn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "adversity, hardship",
+   "mn": "зовлон бэрх, хүндрэл",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "酷似",
+   "py": "kùsì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "closely resemble",
+   "mn": "их төстэй, яг адил",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "矿石",
+   "py": "kuàngshí",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "ore, mineral",
+   "mn": "хүдэр",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "守候",
+   "py": "shǒuhòu",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "wait for; watch over",
+   "mn": "хүлээх, манах",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "同步",
+   "py": "tóngbù",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "synchronize",
+   "mn": "давхацах, ижил хурдтай явах",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "秘诀",
+   "py": "mìjué",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "secret, knack",
+   "mn": "нууц арга, түлхүүр",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "贫贱",
+   "py": "pínjiàn",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "poor and lowly",
+   "mn": "ядуу ба доод давхаргын",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "谄媚",
+   "py": "chǎnmèi",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "flatter, fawn",
+   "mn": "зальжин магтах, дагалдах",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "正装",
+   "py": "zhèngzhuāng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "formal attire",
+   "mn": "албан ёсны хувцас",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "折腰",
+   "py": "zhéyāo",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "bow, bend the back",
+   "mn": "мөргөх, бөхийх",
+   "note": ""
+  }
+ ]
+}

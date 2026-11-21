@@ -1,0 +1,208 @@
+{
+ "lesson": 4,
+ "title": "",
+ "title_mn": "周而复始–糊弄",
+ "book": "高级听力 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "周而复始",
+   "py": "zhōuérfùshǐ",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "go round and round",
+   "mn": "эргэж давтагдах",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "势不可当",
+   "py": "shìbùkědāng",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "irresistible",
+   "mn": "няцаашгүй, зогсоох аргагүй",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "放养",
+   "py": "fàngyǎng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "raise free-range",
+   "mn": "бэлчээрлэн тэжээх",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "牧草",
+   "py": "mùcǎo",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "forage grass",
+   "mn": "бэлчээрийн өвс",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "疏松",
+   "py": "shūsōng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "loose, porous",
+   "mn": "сул, сэвсгэр",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "陷",
+   "py": "xiàn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "sink, cave in",
+   "mn": "живэх, суулт болох",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "物力",
+   "py": "wùlì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "material resources",
+   "mn": "материаллаг нөөц",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "围困",
+   "py": "wéikùn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "besiege, surround",
+   "mn": "бүслэх, бүслэн давамгайлах",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "四通八达",
+   "py": "sìtōngbādá",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "extending in all directions",
+   "mn": "бүх чиглэлд шулуун зам нээлттэй",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "昆虫学",
+   "py": "kūnchóngxué",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "entomology",
+   "mn": "шавьж судлал",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "如获至宝",
+   "py": "rúhuòzhìbǎo",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "treat as a treasure",
+   "mn": "үнэт эрдэнэ олсон мэт",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "发狂",
+   "py": "fākuáng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "go mad",
+   "mn": "галзуурах, солиорох",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "缺失",
+   "py": "quēshī",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "lack, be missing",
+   "mn": "дутагдах, алга болох",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "相融",
+   "py": "xiāngróng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "blend with each other",
+   "mn": "хоорондоо нэгдэх, уусах",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "导电",
+   "py": "dǎodiàn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "conduct electricity",
+   "mn": "цахилгаан дамжуулах",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "质疑",
+   "py": "zhìyí",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "question, doubt",
+   "mn": "эргэлзэх, асуулт тавих",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "降解",
+   "py": "jiàngjiě",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "degrade, decompose",
+   "mn": "задрах, задлах",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "话儿",
+   "py": "huàér",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "talk, words",
+   "mn": "яриа, үг",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "小聪明",
+   "py": "xiǎocōngmíng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "petty cleverness",
+   "mn": "заль, ухаантай царай",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "糊弄",
+   "py": "hùnòng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "fool, cheat",
+   "mn": "хуурах, дэмий дүүргэх",
+   "note": ""
+  }
+ ]
+}

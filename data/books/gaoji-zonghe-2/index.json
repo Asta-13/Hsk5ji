@@ -1,0 +1,70 @@
+{
+ "id": "gaoji-zonghe-2",
+ "title": "高级综合 II",
+ "title_mn": "Ахисан шатны цогц хичээл II",
+ "lessons": [
+  {
+   "lesson": 1,
+   "title": "",
+   "title_mn": "前沿–狂热",
+   "count": 20,
+   "file": "lesson-01.json"
+  },
+  {
+   "lesson": 2,
+   "title": "",
+   "title_mn": "更改–黯然",
+   "count": 20,
+   "file": "lesson-02.json"
+  },
+  {
+   "lesson": 3,
+   "title": "",
+   "title_mn": "遗嘱–替补",
+   "count": 20,
+   "file": "lesson-03.json"
+  },
+  {
+   "lesson": 4,
+   "title": "",
+   "title_mn": "梁–抒情",
+   "count": 20,
+   "file": "lesson-04.json"
+  },
+  {
+   "lesson": 5,
+   "title": "",
+   "title_mn": "浓郁–杰作",
+   "count": 20,
+   "file": "lesson-05.json"
+  },
+  {
+   "lesson": 6,
+   "title": "",
+   "title_mn": "唱腔–学识",
+   "count": 20,
+   "file": "lesson-06.json"
+  },
+  {
+   "lesson": 7,
+   "title": "",
+   "title_mn": "宰相–冷落",
+   "count": 20,
+   "file": "lesson-07.json"
+  },
+  {
+   "lesson": 8,
+   "title": "",
+   "title_mn": "没落–徒",
+   "count": 20,
+   "file": "lesson-08.json"
+  },
+  {
+   "lesson": 9,
+   "title": "",
+   "title_mn": "先烈–劫波",
+   "count": 12,
+   "file": "lesson-09.json"
+  }
+ ]
+}

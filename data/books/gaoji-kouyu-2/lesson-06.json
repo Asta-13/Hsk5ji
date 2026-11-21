@@ -1,0 +1,208 @@
+{
+ "lesson": 6,
+ "title": "",
+ "title_mn": "反省–法则",
+ "book": "高级口语 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "反省",
+   "py": "fǎnxǐng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "reflect on oneself",
+   "mn": "өөрийгөө эргэн харах",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "沸沸扬扬",
+   "py": "fèifèiyángyáng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "much talked-about",
+   "mn": "шуугиан дэгдэх",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "比率",
+   "py": "bǐlǜ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "ratio, rate",
+   "mn": "харьцаа, хувь",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "细腻",
+   "py": "xìnì",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "delicate, fine",
+   "mn": "нарийн, нарийн мэдрэмжтэй",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "共通",
+   "py": "gòngtōng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "common, shared",
+   "mn": "нийтлэг",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "功利",
+   "py": "gōnglì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "utility, material gain",
+   "mn": "ашиг тус, хувиа хичээсэн",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "资质",
+   "py": "zīzhì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "qualification, aptitude",
+   "mn": "чадамж, байгалийн авьяас",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "致富",
+   "py": "zhìfù",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "become rich",
+   "mn": "баяжих",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "原罪",
+   "py": "yuánzuì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "original sin",
+   "mn": "анхдагч нүгэл",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "与生俱来",
+   "py": "yǔshēngjùlái",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "inborn",
+   "mn": "төрмөл, төрөхөөс заяасан",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "玩物丧志",
+   "py": "wánwùsàngzhì",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "trifling loses ambition",
+   "mn": "тоглоомонд умбан хүсэл эрмэлзлээ алдах",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "玩世不恭",
+   "py": "wánshìbùgōng",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "cynical, unserious",
+   "mn": "амьдралд хайнга хандах",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "灌输",
+   "py": "guànshū",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "instill, impart",
+   "mn": "суулгах, сургаж оруулах",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "闯荡",
+   "py": "chuǎngdàng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "venture out into world",
+   "mn": "гадуур явж амьдрал туулах",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "底蕴",
+   "py": "dǐyùn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "inner meaning, depth",
+   "mn": "гүн агуулга, суурь соёл",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "木屐",
+   "py": "mùjī",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "wooden clogs",
+   "mn": "модон гутал, гэта",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "传宗接代",
+   "py": "chuánzōngjiēdài",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "continue family line",
+   "mn": "угсаа залгамжлах",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "毁誉参半",
+   "py": "huǐyùcānbàn",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "praised and criticized",
+   "mn": "магтаал, шүүмжлэл хосолсон",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "花天酒地",
+   "py": "huātiānjiǔdì",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "dissolute revelry",
+   "mn": "архи дарсанд умбах, дэмий зугаа цэнгэх",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "法则",
+   "py": "fǎzé",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "law, rule",
+   "mn": "хууль зүй, дүрэм",
+   "note": ""
+  }
+ ]
+}

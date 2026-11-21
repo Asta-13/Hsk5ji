@@ -1,0 +1,208 @@
+{
+ "lesson": 3,
+ "title": "",
+ "title_mn": "三好学生–乡下",
+ "book": "中级听力 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "三好学生",
+   "py": "sānhǎoxuéshēng",
+   "pos": "短语",
+   "pos_mn": "хэллэг",
+   "en": "merit student",
+   "mn": "«гурван сайн» шилдэг сурагч",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "钟点工",
+   "py": "zhōngdiǎngōng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "hourly worker",
+   "mn": "цагийн ажилтан",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "加重",
+   "py": "jiāzhòng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to make heavier",
+   "mn": "хүндрүүлэх",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "张望",
+   "py": "zhāngwàng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to look around",
+   "mn": "шагайх, ширтэх",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "欢呼",
+   "py": "huānhū",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to cheer",
+   "mn": "баярлан хашгирах",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "优",
+   "py": "yōu",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "excellent",
+   "mn": "онц, маш сайн",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "书呆子",
+   "py": "shūdāizi",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "bookworm",
+   "mn": "номын хорхой",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "西服",
+   "py": "xīfú",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "Western suit",
+   "mn": "барууны костюм",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "红火",
+   "py": "hónghuǒ",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "flourishing",
+   "mn": "цэцэглэн хөгжсөн, дэгдэмхий",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "布料",
+   "py": "bùliào",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "cloth material",
+   "mn": "даавуу, эдийн материал",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "裁缝店",
+   "py": "cáiféngdiàn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "tailor shop",
+   "mn": "оёдлын газар",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "扣子",
+   "py": "kòuzi",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "button",
+   "mn": "товч",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "扣眼",
+   "py": "kòuyǎn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "buttonhole",
+   "mn": "товчны нүх",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "缝",
+   "py": "fèng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to sew",
+   "mn": "оёх",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "存折",
+   "py": "cúnzhé",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "bankbook",
+   "mn": "хадгаламжийн дэвтэр",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "破解",
+   "py": "pòjiě",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to crack",
+   "mn": "задлах, нууц үг тайлах",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "户口本",
+   "py": "hùkǒuběn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "household register",
+   "mn": "өрхийн бүртгэлийн дэвтэр",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "费心",
+   "py": "fèixīn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to take trouble",
+   "mn": "санаа тавих, зовох",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "亲情",
+   "py": "qīnqíng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "family affection",
+   "mn": "ураг төрлийн хайр",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "乡下",
+   "py": "xiāngxià",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "countryside",
+   "mn": "хөдөө, тосгон",
+   "note": ""
+  }
+ ]
+}

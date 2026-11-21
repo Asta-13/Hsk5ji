@@ -1,0 +1,128 @@
+{
+ "lesson": 3,
+ "title": "",
+ "title_mn": "深浅–喜好",
+ "book": "中级口语 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "深浅",
+   "py": "shēnqiǎn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "sense of propriety",
+   "mn": "хэм хэмжээ, зохистой байдал",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "蜗居",
+   "py": "wōjū",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "live in cramped quarters",
+   "mn": "явцуу байранд амьдрах",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "诡计",
+   "py": "guǐjì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "trick; scheme",
+   "mn": "заль мэх",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "穿着",
+   "py": "chuānzhe",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "dress; attire",
+   "mn": "хувцаслалт",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "草坪",
+   "py": "cǎopíng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "lawn",
+   "mn": "зүлэг",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "扣除",
+   "py": "kòuchú",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "deduct",
+   "mn": "хасах, суутгах",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "丑话",
+   "py": "chǒuhuà",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "blunt warning",
+   "mn": "хатуу үг, урьдчилсан сануулга",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "硬性",
+   "py": "yìngxìng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "rigid; mandatory",
+   "mn": "хатуу, заавал биелүүлэх",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "批改",
+   "py": "pīgǎi",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "mark; correct",
+   "mn": "засаж үнэлэх",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "醒目",
+   "py": "xǐngmù",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "eye-catching",
+   "mn": "нүд булаам, тод",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "几率",
+   "py": "jīlǜ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "probability",
+   "mn": "магадлал",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "喜好",
+   "py": "xǐhào",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "liking; preference",
+   "mn": "дуртай зүйл, сонирхол",
+   "note": ""
+  }
+ ]
+}

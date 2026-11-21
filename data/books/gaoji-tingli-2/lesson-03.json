@@ -1,0 +1,208 @@
+{
+ "lesson": 3,
+ "title": "",
+ "title_mn": "埋头–倒退",
+ "book": "高级听力 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "埋头",
+   "py": "máitóu",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "bury oneself in work",
+   "mn": "шамдан ажиллах, шигдэх",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "光阴",
+   "py": "guāngyīn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "time",
+   "mn": "цаг хугацаа, он жилүүд",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "携",
+   "py": "xié",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to carry, take along",
+   "mn": "авч явах, барьж явах",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "笔芯",
+   "py": "bǐxīn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "pen refill, lead",
+   "mn": "үзгийн гол, бал",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "蒸",
+   "py": "zhēng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to steam",
+   "mn": "жигнэх, ууршуулах",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "笔杆",
+   "py": "bǐgǎn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "pen shaft",
+   "mn": "үзгийн иш",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "理性",
+   "py": "lǐxìng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "reason, rationality",
+   "mn": "оновчтой байдал, оюун ухаан",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "餐具",
+   "py": "cānjù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "tableware",
+   "mn": "хоолны хэрэгсэл",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "油墨",
+   "py": "yóumò",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "printing ink",
+   "mn": "хэвлэлийн бэх",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "商家",
+   "py": "shāngjiā",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "merchant, business",
+   "mn": "худалдаачин, компани",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "白血病",
+   "py": "báixuèbìng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "leukemia",
+   "mn": "цусны хорт хавдар",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "衣物",
+   "py": "yīwù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "clothing and things",
+   "mn": "хувцас хунар",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "邮戳",
+   "py": "yóuchuō",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "postmark",
+   "mn": "шуудангийн тамга",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "手帕",
+   "py": "shǒupà",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "handkerchief",
+   "mn": "алчуур",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "发潮",
+   "py": "fācháo",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to become damp",
+   "mn": "чийгших",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "相貌",
+   "py": "xiàngmào",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "looks, appearance",
+   "mn": "царай төрх",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "前妻",
+   "py": "qiánqī",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "ex-wife",
+   "mn": "хуучин эхнэр",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "瞬息万变",
+   "py": "shùnxīwànbiàn",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "change rapidly",
+   "mn": "агшин зуур өөрчлөгдөх",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "出发点",
+   "py": "chūfādiǎn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "starting point, motive",
+   "mn": "гарааны цэг, үндсэн зорилго",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "倒退",
+   "py": "dàotuì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to retreat, regress",
+   "mn": "ухрах, хойш ухрах",
+   "note": ""
+  }
+ ]
+}

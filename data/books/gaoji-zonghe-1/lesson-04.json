@@ -1,0 +1,208 @@
+{
+ "lesson": 4,
+ "title": "",
+ "title_mn": "怯生生–未曾",
+ "book": "高级综合 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "怯生生",
+   "py": "qièshēngshēng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "timid, shy",
+   "mn": "ичимхий, аймхай",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "自首",
+   "py": "zìshǒu",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "surrender to police",
+   "mn": "буруугаа хүлээн өгөх",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "附加",
+   "py": "fùjiā",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "add, attach",
+   "mn": "нэмэх, хавсаргах",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "匿名",
+   "py": "nìmíng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "be anonymous",
+   "mn": "нэрээ нууцлах",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "持",
+   "py": "chí",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "hold, grasp",
+   "mn": "барих, атгах",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "判处",
+   "py": "pànchǔ",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "sentence (to)",
+   "mn": "ял оноох",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "徒刑",
+   "py": "túxíng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "prison sentence",
+   "mn": "хорих ял",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "牵涉",
+   "py": "qiānshè",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "involve, implicate",
+   "mn": "холбогдох, татагдан орох",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "从宽",
+   "py": "cóngkuān",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "treat leniently",
+   "mn": "хөнгөрүүлэх, өршөөх",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "浪子",
+   "py": "làngzi",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "prodigal, wastrel",
+   "mn": "тэнүүлч, залуу хөнгөмсөг",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "颤",
+   "py": "chàn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "tremble, shiver",
+   "mn": "чичрэх, сэгсрэх",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "试探",
+   "py": "shìtàn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "probe, sound out",
+   "mn": "туршиж үзэх, шалгах",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "声张",
+   "py": "shēngzhāng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "make public, spread word",
+   "mn": "цуурхал тарах, мэдүүлэх",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "死刑",
+   "py": "sǐxíng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "death penalty",
+   "mn": "цаазын ял",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "赴约",
+   "py": "fùyuē",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "keep an appointment",
+   "mn": "уулзалтад очих, цаг тохиролцсон газарт очих",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "伤痕",
+   "py": "shānghén",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "scar, wound mark",
+   "mn": "сорви, шарх",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "浙江",
+   "py": "zhèjiāng",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Zhejiang",
+   "mn": "Жэжян",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "温岭",
+   "py": "wēnlǐng",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Wenling (city)",
+   "mn": "Вэньлин",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "虚幻",
+   "py": "xūhuàn",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "illusory, unreal",
+   "mn": "хуурмаг, үнэнд нийцэхгүй",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "未曾",
+   "py": "wèicéng",
+   "pos": "副",
+   "pos_mn": "дайвар үг",
+   "en": "have not yet",
+   "mn": "хэзээ ч, хараахан",
+   "note": ""
+  }
+ ]
+}

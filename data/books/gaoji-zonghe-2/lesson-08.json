@@ -1,0 +1,208 @@
+{
+ "lesson": 8,
+ "title": "",
+ "title_mn": "没落–徒",
+ "book": "高级综合 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "没落",
+   "py": "mòluò",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "decline, decay",
+   "mn": "уналтад орох, доройтох",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "心仪",
+   "py": "xīnyí",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "admire, be fond of",
+   "mn": "сэтгэл татагдах, хайрлах",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "做作",
+   "py": "zuòzuò",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "affected, unnatural",
+   "mn": "хуурамч, зохиомол",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "思潮",
+   "py": "sīcháo",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "trend of thought",
+   "mn": "үзэл санааны урсгал",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "修正案",
+   "py": "xiūzhèngàn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "amendment",
+   "mn": "нэмэлт өөрчлөлт",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "迷茫",
+   "py": "mímáng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "confused, lost",
+   "mn": "төөрөлдсөн, мухардсан",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "失落",
+   "py": "shīluò",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "disappointed, lost",
+   "mn": "урам хугарсан, гутарсан",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "承载",
+   "py": "chéngzài",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "bear, carry",
+   "mn": "даах, дааж авах",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "悉数",
+   "py": "xīshù",
+   "pos": "副",
+   "pos_mn": "дайвар үг",
+   "en": "all, in full",
+   "mn": "бүгдийг, цөм",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "考量",
+   "py": "kǎoliáng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "consider, weigh",
+   "mn": "тооцох, харгалзах",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "终极",
+   "py": "zhōngjí",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "ultimate, final",
+   "mn": "эцсийн, дээд зэргийн",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "诉求",
+   "py": "sùqiú",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "appeal, demand",
+   "mn": "шаардлага, хүсэлт",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "择偶",
+   "py": "zéǒu",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "choose a spouse",
+   "mn": "хань сонгох",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "斐然",
+   "py": "fěirán",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "brilliant, notable",
+   "mn": "гайхамшигтай, онцгой",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "咫尺",
+   "py": "zhǐchǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "very close distance",
+   "mn": "маш ойр зай",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "青史",
+   "py": "qīngshǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "annals of history",
+   "mn": "түүх, түүхийн сэтгүүл",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "悖谬",
+   "py": "bèimiù",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "absurd, contradictory",
+   "mn": "эсрэг маргаантай, утгагүй",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "局促",
+   "py": "júcù",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "cramped, constrained",
+   "mn": "нарийн, давчуу",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "了然",
+   "py": "liǎorán",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "clear, understood",
+   "mn": "тодорхой, ойлгомжтой",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "徒",
+   "py": "tú",
+   "pos": "副",
+   "pos_mn": "дайвар үг",
+   "en": "merely, in vain",
+   "mn": "дэмий, зөвхөн",
+   "note": ""
+  }
+ ]
+}

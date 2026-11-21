@@ -8,11 +8,95 @@
    "level": "初级"
   },
   {
+   "id": "chuji-tingli",
+   "dir": "chuji-tingli",
+   "title": "初级听力",
+   "title_mn": "Анхан шатны сонсгол",
+   "level": "初级"
+  },
+  {
+   "id": "chuji-kouyu",
+   "dir": "chuji-kouyu",
+   "title": "初级口语",
+   "title_mn": "Анхан шатны яриа",
+   "level": "初级"
+  },
+  {
+   "id": "zhongji-zonghe-1",
+   "dir": "zhongji-zonghe-1",
+   "title": "中级综合 I",
+   "title_mn": "Дунд шатны цогц хичээл I",
+   "level": "中级"
+  },
+  {
    "id": "zhongji-zonghe-2",
    "dir": "zhongji-zonghe-2",
    "title": "中级综合 II",
    "title_mn": "Дунд шатны цогц хичээл II",
    "level": "中级"
+  },
+  {
+   "id": "zhongji-tingli-1",
+   "dir": "zhongji-tingli-1",
+   "title": "中级听力 I",
+   "title_mn": "Дунд шатны сонсгол I",
+   "level": "中级"
+  },
+  {
+   "id": "zhongji-tingli-2",
+   "dir": "zhongji-tingli-2",
+   "title": "中级听力 II",
+   "title_mn": "Дунд шатны сонсгол II",
+   "level": "中级"
+  },
+  {
+   "id": "zhongji-kouyu-2",
+   "dir": "zhongji-kouyu-2",
+   "title": "中级口语 II",
+   "title_mn": "Дунд шатны яриа II",
+   "level": "中级"
+  },
+  {
+   "id": "gaoji-zonghe-1",
+   "dir": "gaoji-zonghe-1",
+   "title": "高级综合 I",
+   "title_mn": "Ахисан шатны цогц хичээл I",
+   "level": "高级"
+  },
+  {
+   "id": "gaoji-zonghe-2",
+   "dir": "gaoji-zonghe-2",
+   "title": "高级综合 II",
+   "title_mn": "Ахисан шатны цогц хичээл II",
+   "level": "高级"
+  },
+  {
+   "id": "gaoji-tingli-1",
+   "dir": "gaoji-tingli-1",
+   "title": "高级听力 I",
+   "title_mn": "Ахисан шатны сонсгол I",
+   "level": "高级"
+  },
+  {
+   "id": "gaoji-tingli-2",
+   "dir": "gaoji-tingli-2",
+   "title": "高级听力 II",
+   "title_mn": "Ахисан шатны сонсгол II",
+   "level": "高级"
+  },
+  {
+   "id": "gaoji-kouyu-1",
+   "dir": "gaoji-kouyu-1",
+   "title": "高级口语 I",
+   "title_mn": "Ахисан шатны яриа I",
+   "level": "高级"
+  },
+  {
+   "id": "gaoji-kouyu-2",
+   "dir": "gaoji-kouyu-2",
+   "title": "高级口语 II",
+   "title_mn": "Ахисан шатны яриа II",
+   "level": "高级"
   }
  ]
 }

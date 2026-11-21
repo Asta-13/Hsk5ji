@@ -1,0 +1,208 @@
+{
+ "lesson": 2,
+ "title": "",
+ "title_mn": "免不了–乖乖",
+ "book": "高级综合 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "免不了",
+   "py": "miǎnbùliǎo",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "unavoidable",
+   "mn": "зайлшгүй, дутахгүй",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "风尚",
+   "py": "fēngshàng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "prevailing custom, trend",
+   "mn": "хэв маяг, зан заншил",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "旧社会",
+   "py": "jiùshèhuì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "old society (pre-1949)",
+   "mn": "хуучин нийгэм",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "滑稽",
+   "py": "huájī",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "funny, comical",
+   "mn": "инээдтэй, хөгжилтэй",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "赌气",
+   "py": "dǔqì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "act out of pique",
+   "mn": "ууртай харьцах, өөрийгөө барих",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "三流",
+   "py": "sānliú",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "third-rate",
+   "mn": "гуравдахь зэрэглэлийн, муу чанартай",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "留心",
+   "py": "liúxīn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "take care, be mindful",
+   "mn": "анхаарах, болгоомжлох",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "雷同",
+   "py": "léitóng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "identical, duplicated",
+   "mn": "ижил төстэй, давхцсан",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "撞车",
+   "py": "zhuàngchē",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "car collision; clash",
+   "mn": "мөргөлдөх, давхцах",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "挂钩",
+   "py": "guàgōu",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "link up with",
+   "mn": "холбох, холбогдох",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "货色",
+   "py": "huòsè",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "goods; sort (derog.)",
+   "mn": "бараа, төрөл",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "心地",
+   "py": "xīndì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "disposition, heart",
+   "mn": "сэтгэл, зан чанар",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "将就",
+   "py": "jiāngjiù",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "make do with",
+   "mn": "тааруухан зөвшөөрөх, сэтгэл ханах",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "余地",
+   "py": "yúdì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "leeway, room",
+   "mn": "завсар, боломж",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "迢迢",
+   "py": "tiáotiáo",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "far, distant",
+   "mn": "хол, холын",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "山胞",
+   "py": "shānbāo",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "mountain compatriot (Taiwan)",
+   "mn": "уулын нутгийн иргэн, уугуул иргэн",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "绞",
+   "py": "jiǎo",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "twist, wring",
+   "mn": "мушгих, шахах",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "塑胶",
+   "py": "sùjiāo",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "plastic",
+   "mn": "хуванцар",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "名堂",
+   "py": "míngtáng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "trick; achievement",
+   "mn": "арга ухаан, амжилт",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "乖乖",
+   "py": "guāiguāi",
+   "pos": "叹",
+   "pos_mn": "аялга үг",
+   "en": "my goodness",
+   "mn": "хөөрхий, аргагүй",
+   "note": ""
+  }
+ ]
+}

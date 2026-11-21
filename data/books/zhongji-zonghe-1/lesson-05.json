@@ -1,0 +1,208 @@
+{
+ "lesson": 5,
+ "title": "",
+ "title_mn": "人际关系–耗子",
+ "book": "中级综合 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "人际关系",
+   "py": "rénjìguānxì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "interpersonal relations",
+   "mn": "хүмүүсийн харилцаа",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "谎言",
+   "py": "huǎngyán",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "lie",
+   "mn": "худал үг",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "今生",
+   "py": "jīnshēng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "this life",
+   "mn": "энэ насан",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "悦耳",
+   "py": "yuèěr",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "pleasant to the ear",
+   "mn": "чих тааламжтай",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "来生",
+   "py": "láishēng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "afterlife",
+   "mn": "дараа насан",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "敲打",
+   "py": "qiāodǎ",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "tap; strike",
+   "mn": "цохих, товших",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "达",
+   "py": "dá",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "reach",
+   "mn": "хүрэх",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "辞",
+   "py": "cí",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "resign",
+   "mn": "огцрох, ажлаас гарах",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "稿费",
+   "py": "gǎofèi",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "author's remuneration",
+   "mn": "зохиолын хөлс",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "汇单",
+   "py": "huìdān",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "remittance slip",
+   "mn": "мөнгөн шилжүүлгийн хуудас",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "发脾气",
+   "py": "fāpíqì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "lose one's temper",
+   "mn": "уурлах",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "拇指",
+   "py": "mǔzhǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "thumb",
+   "mn": "эрхий хуруу",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "接听",
+   "py": "jiētīng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "answer (a call)",
+   "mn": "утас авах",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "按动",
+   "py": "àndòng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "press",
+   "mn": "дарах",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "热衷",
+   "py": "rèzhōng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "be keen on",
+   "mn": "маш их дуртай байх, шимтэх",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "新新人类",
+   "py": "xīnxīnrénlèi",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "new generation",
+   "mn": "шинэ үеийнхэн",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "简称",
+   "py": "jiǎnchēng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "abbreviate",
+   "mn": "товчилж нэрлэх",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "酸痛",
+   "py": "suāntòng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "sore; aching",
+   "mn": "өвдөх, чилэх",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "乐此不疲",
+   "py": "lècǐbùpí",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "never tire of it",
+   "mn": "дуртайяа үл ядрах",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "耗子",
+   "py": "hàozi",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "rat; mouse",
+   "mn": "хулгана",
+   "note": ""
+  }
+ ]
+}

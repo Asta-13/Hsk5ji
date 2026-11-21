@@ -1,0 +1,208 @@
+{
+ "lesson": 6,
+ "title": "",
+ "title_mn": "胶–心灰意冷",
+ "book": "中级综合 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "胶",
+   "py": "jiāo",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "glue",
+   "mn": "цавуу",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "花样",
+   "py": "huāyàng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "variety; pattern",
+   "mn": "олон янзын хэлбэр",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "登门",
+   "py": "dēngmén",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "visit someone's home",
+   "mn": "гэрт нь очих",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "邮寄",
+   "py": "yóujì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "send by post",
+   "mn": "шуудангаар илгээх",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "寻呼",
+   "py": "xúnhū",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "page someone",
+   "mn": "пейжерээр дуудах",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "串门儿",
+   "py": "chuànménér",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "drop in on neighbors",
+   "mn": "айлчлах, зочлох",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "人类学",
+   "py": "rénlèixué",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "anthropology",
+   "mn": "хүн судлал",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "关节",
+   "py": "guānjié",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "joint",
+   "mn": "үе мөч",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "创造力",
+   "py": "chuàngzàolì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "creativity",
+   "mn": "бүтээлч чадвар",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "手腕",
+   "py": "shǒuwàn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "wrist",
+   "mn": "бугуй",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "通病",
+   "py": "tōngbìng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "common fault",
+   "mn": "нийтлэг дутагдал",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "紧巴巴",
+   "py": "jǐnbābā",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "tight; hard up",
+   "mn": "явцуу, дутагдалтай",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "稿纸",
+   "py": "gǎozhǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "manuscript paper",
+   "mn": "гар бичмэлийн цаас",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "校庆",
+   "py": "xiàoqìng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "school anniversary",
+   "mn": "сургуулийн ойн баяр",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "笔迹",
+   "py": "bǐjì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "handwriting",
+   "mn": "гар бичмэл",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "涌",
+   "py": "yǒng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "well up; surge",
+   "mn": "бялхах, оргилох",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "字条",
+   "py": "zìtiáo",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "brief note",
+   "mn": "жижиг тэмдэглэл",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "晕头转向",
+   "py": "yūntóuzhuànxiàng",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "confused and disoriented",
+   "mn": "толгой эргэх, будилах",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "速冻",
+   "py": "sùdòng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "quick-freeze",
+   "mn": "хурдан хөлдөөх",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "心灰意冷",
+   "py": "xīnhuīyìlěng",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "dispirited",
+   "mn": "сэтгэл гундах, урам хугарах",
+   "note": ""
+  }
+ ]
+}

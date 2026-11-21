@@ -1,0 +1,208 @@
+{
+ "lesson": 4,
+ "title": "",
+ "title_mn": "梁–抒情",
+ "book": "高级综合 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "梁",
+   "py": "liáng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "beam",
+   "mn": "дам, хөндлөн мод",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "题刻",
+   "py": "tíkè",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "inscribe, carve inscription",
+   "mn": "бичээс сийлэх",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "尾",
+   "py": "wěi",
+   "pos": "量",
+   "pos_mn": "тоологч үг",
+   "en": "(measure word for fish)",
+   "mn": "ширхэг (загасны тоон нэр)",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "瑰宝",
+   "py": "guībǎo",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "treasure",
+   "mn": "үнэт эрдэнэ, үнэт өв",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "碑林",
+   "py": "bēilín",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "forest of steles",
+   "mn": "хөшөө чулууны цуглуулга, Бэйлин",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "可谓",
+   "py": "kěwèi",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "may be called",
+   "mn": "гэж хэлж болно",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "兴致",
+   "py": "xìngzhì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "interest, mood",
+   "mn": "сонирхол, урам",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "梁柱",
+   "py": "liángzhù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "beams and pillars",
+   "mn": "дам, багана",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "示",
+   "py": "shì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "show, indicate",
+   "mn": "харуулах, илэрхийлэх",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "书写",
+   "py": "shūxiě",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "write",
+   "mn": "бичих",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "精湛",
+   "py": "jīngzhàn",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "exquisite, superb",
+   "mn": "нарийн чамин, мэргэшсэн",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "选定",
+   "py": "xuǎndìng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "select, choose",
+   "mn": "сонгон тогтоох",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "刻度",
+   "py": "kèdù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "scale marking",
+   "mn": "хуваарь, тэмдэглэгээ",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "标尺",
+   "py": "biāochǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "ruler, scale",
+   "mn": "масштаб шугам, хэмжүүр",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "佐证",
+   "py": "zuǒzhèng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "supporting evidence",
+   "mn": "нотлох баримт, дэмжих гэрч",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "芳容",
+   "py": "fāngróng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "beautiful face",
+   "mn": "гоё царай, үзэсгэлэнт төрх",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "廊道",
+   "py": "lángdào",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "corridor",
+   "mn": "коридор, гаднах гудамж",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "斗胆",
+   "py": "dǒudǎn",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "bold, daring",
+   "mn": "зоригтой, зүрх гарган",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "生前",
+   "py": "shēngqián",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "during one's lifetime",
+   "mn": "амьд цагт",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "抒情",
+   "py": "shūqíng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "express emotion",
+   "mn": "сэтгэл хөдлөлөө илэрхийлэх",
+   "note": ""
+  }
+ ]
+}

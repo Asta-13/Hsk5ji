@@ -1,0 +1,148 @@
+{
+ "lesson": 5,
+ "title": "",
+ "title_mn": "双人间–芝加哥大学",
+ "book": "初级听力",
+ "words": [
+  {
+   "n": 1,
+   "zh": "双人间",
+   "py": "shuāngrénjiān",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "double room",
+   "mn": "хоёр хүний өрөө",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "桂林",
+   "py": "guìlín",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Guilin",
+   "mn": "Гуйлин",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "澳大利亚",
+   "py": "àodàlìyà",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Australia",
+   "mn": "Австрали",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "凉菜",
+   "py": "liángcài",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "cold dish",
+   "mn": "хүйтэн зууш",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "热菜",
+   "py": "rècài",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "hot dish",
+   "mn": "халуун хоол",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "遥控器",
+   "py": "yáokòngqì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "remote control",
+   "mn": "алсын удирдлага",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "中央电视台",
+   "py": "zhōngyāngdiànshìtái",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "CCTV",
+   "mn": "Хятадын Төв телевиз",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "中央音乐学院",
+   "py": "zhōngyāngyīnyuèxuéyuàn",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Central Conservatory of Music",
+   "mn": "Төв хөгжмийн дээд сургууль",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "红灯笼",
+   "py": "hóngdēnglóng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "red lantern",
+   "mn": "улаан дэнлүү",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "经济管理",
+   "py": "jīngjìguǎnlǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "economic management",
+   "mn": "эдийн засгийн менежмент",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "转学",
+   "py": "zhuǎnxué",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to transfer schools",
+   "mn": "сургууль шилжих",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "针灸",
+   "py": "zhēnjiǔ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "acupuncture",
+   "mn": "зүү төөнө",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "进修",
+   "py": "jìnxiū",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to pursue further study",
+   "mn": "мэргэжил дээшлүүлэх",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "芝加哥大学",
+   "py": "zhījiāgēdàxué",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "University of Chicago",
+   "mn": "Чикагогийн их сургууль",
+   "note": ""
+  }
+ ]
+}

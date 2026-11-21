@@ -1,0 +1,208 @@
+{
+ "lesson": 4,
+ "title": "",
+ "title_mn": "受理–共赢",
+ "book": "高级口语 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "受理",
+   "py": "shòulǐ",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "accept (a case)",
+   "mn": "хүлээн авч шийдвэрлэх",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "时不时",
+   "py": "shíbùshí",
+   "pos": "副",
+   "pos_mn": "дайвар үг",
+   "en": "from time to time",
+   "mn": "үе үе, хааяа",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "税务",
+   "py": "shuìwù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "tax affairs",
+   "mn": "татварын хэрэг, татвар",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "低廉",
+   "py": "dīlián",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "cheap, low-priced",
+   "mn": "хямд",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "罪过",
+   "py": "zuìguò",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "sin, fault",
+   "mn": "гэм, буруу",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "杀手",
+   "py": "shāshǒu",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "killer, assassin",
+   "mn": "алуурчин",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "无底洞",
+   "py": "wúdǐdòng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "bottomless pit",
+   "mn": "ёроолгүй нүх",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "益处",
+   "py": "yìchù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "benefit",
+   "mn": "ашиг тус",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "便捷",
+   "py": "biànjié",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "convenient, quick",
+   "mn": "тохиромжтой, хурдан",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "青睐",
+   "py": "qīnglài",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "favor, prefer",
+   "mn": "таалагдах, дэмжих",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "定论",
+   "py": "dìnglùn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "final conclusion",
+   "mn": "эцсийн дүгнэлт",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "克隆",
+   "py": "kèlóng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "clone",
+   "mn": "клончлох",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "伦理",
+   "py": "lúnlǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "ethics",
+   "mn": "ёс зүй",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "衍生",
+   "py": "yǎnshēng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "derive, evolve from",
+   "mn": "үүсэх, салбарлан гарах",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "缩略",
+   "py": "suōlüè",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "abbreviate",
+   "mn": "товчлох",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "消亡",
+   "py": "xiāowáng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "die out, perish",
+   "mn": "устах, мөхөх",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "折射",
+   "py": "zhéshè",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "refract, reflect",
+   "mn": "хугарах, туссан байх",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "拼凑",
+   "py": "pīncòu",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "piece together",
+   "mn": "угсарч нийлүүлэх, хэсэг нийлүүлэх",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "拼合",
+   "py": "pīnhé",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "join together",
+   "mn": "хослуулах, нийлүүлэх",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "共赢",
+   "py": "gòngyíng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "win-win",
+   "mn": "харилцан ашигтай байх",
+   "note": ""
+  }
+ ]
+}

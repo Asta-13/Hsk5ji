@@ -1,0 +1,208 @@
+{
+ "lesson": 6,
+ "title": "",
+ "title_mn": "唱腔–学识",
+ "book": "高级综合 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "唱腔",
+   "py": "chàngqiāng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "vocal style (opera)",
+   "mn": "дуулах хэв, аялгуу",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "揭示",
+   "py": "jiēshì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "reveal, disclose",
+   "mn": "илчлэх, илрүүлэх",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "同党",
+   "py": "tóngdǎng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "fellow member, accomplice",
+   "mn": "нэг намын гишүүн, хамсаатан",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "诬告",
+   "py": "wūgào",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "falsely accuse",
+   "mn": "гүтгэн мэдүүлэх",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "物色",
+   "py": "wùsè",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "look for, seek out",
+   "mn": "хайх, сонгон шалгаруулах",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "侍卫",
+   "py": "shìwèi",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "guard, bodyguard",
+   "mn": "хамгаалагч, сахиул",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "启用",
+   "py": "qǐyòng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "start using",
+   "mn": "ашиглаж эхлэх, нэвтрүүлэх",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "延展",
+   "py": "yánzhǎn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "extend, stretch",
+   "mn": "сунгах, дэлгэх",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "风声",
+   "py": "fēngshēng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "rumor, news",
+   "mn": "цуурхал, мэдээ",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "逼近",
+   "py": "bījìn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "close in on",
+   "mn": "ойртох, шахах",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "萌生",
+   "py": "méngshēng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "sprout, emerge",
+   "mn": "төрөх, гарч ирэх",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "误区",
+   "py": "wùqū",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "misconception",
+   "mn": "алдаатай ойлголт, төөрөгдөл",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "赏识",
+   "py": "shǎngshí",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "appreciate, value",
+   "mn": "үнэлэх, тэтгэх",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "霸权",
+   "py": "bàquán",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "hegemony",
+   "mn": "давамгайлал",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "奥妙",
+   "py": "àomiào",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "profound mystery",
+   "mn": "нууц гүн ухаан, нууцлаг учир",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "贴心",
+   "py": "tiēxīn",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "intimate, close",
+   "mn": "дотны, ойр дотно",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "达观",
+   "py": "dáguān",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "optimistic, open-minded",
+   "mn": "өөдрөг, өргөн цав",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "操持",
+   "py": "cāochí",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "manage, handle",
+   "mn": "зохион байгуулах, хариуцах",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "专注",
+   "py": "zhuānzhù",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "focused, devoted",
+   "mn": "анхаарал төвлөрсөн, чин сэтгэлийн",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "学识",
+   "py": "xuéshí",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "knowledge, learning",
+   "mn": "мэдлэг боловсрол",
+   "note": ""
+  }
+ ]
+}

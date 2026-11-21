@@ -1,0 +1,258 @@
+{
+ "lesson": 8,
+ "title": "",
+ "title_mn": "输血–第三产业",
+ "book": "高级听力 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "输血",
+   "py": "shūxuè",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to transfuse blood",
+   "mn": "цус сэлбэх",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "刺痛",
+   "py": "cìtòng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to feel stinging pain",
+   "mn": "хатгуулж өвдөх",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "创伤",
+   "py": "chuāngshāng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "wound, trauma",
+   "mn": "гэмтэл, зүрх сэтгэлийн шарх",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "扭曲",
+   "py": "niǔqū",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to twist, distort",
+   "mn": "мушгих, гуйвуулах",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "文楼村",
+   "py": "wénlóucūn",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Wenlou Village",
+   "mn": "Вэнлоу тосгон",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "郑州市",
+   "py": "zhèngzhōushì",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Zhengzhou City",
+   "mn": "Жэнчжоу хот",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "网名",
+   "py": "wǎngmíng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "online username",
+   "mn": "сүлжээний нэр, хоч нэр",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "交际花",
+   "py": "jiāojìhuā",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "socialite (derogatory)",
+   "mn": "нийгмийн гоо бүсгүй",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "色情",
+   "py": "sèqíng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "pornography, eroticism",
+   "mn": "порно, дур тачаал",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "代言人",
+   "py": "dàiyánrén",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "spokesperson",
+   "mn": "төлөөлөгч, сурталчлагч",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "恶毒",
+   "py": "èdú",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "vicious, malicious",
+   "mn": "муу санаат, хорон санаатай",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "电信",
+   "py": "diànxìn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "telecommunications",
+   "mn": "цахилгаан холбоо",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "证人",
+   "py": "zhèngrén",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "witness",
+   "mn": "гэрч",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "大跃进",
+   "py": "dàyuèjìn",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Great Leap Forward",
+   "mn": "Их үсрэлт",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "华容道",
+   "py": "huáróngdào",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Huarong Dao (sliding puzzle)",
+   "mn": "Хуажун зам",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "民法通则",
+   "py": "mínfǎtōngzé",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "General Principles of Civil Law",
+   "mn": "Иргэний хуулийн ерөнхий зарчим",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "全国人大",
+   "py": "quánguóréndà",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "National People's Congress",
+   "mn": "Бүх ард түмний төлөөлөгчдийн их хурал",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "成年",
+   "py": "chéngnián",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to come of age",
+   "mn": "насанд хүрэх",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "经济体",
+   "py": "jīngjìtǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "economy, economic entity",
+   "mn": "эдийн засгийн нэгж",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "制造业",
+   "py": "zhìzàoyè",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "manufacturing industry",
+   "mn": "боловсруулах үйлдвэр",
+   "note": ""
+  },
+  {
+   "n": 21,
+   "zh": "从业",
+   "py": "cóngyè",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to be employed in",
+   "mn": "мэргэжлээр ажиллах",
+   "note": ""
+  },
+  {
+   "n": 22,
+   "zh": "情绪化",
+   "py": "qíngxùhuà",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "emotional, moody",
+   "mn": "сэтгэл хөдлөлдөө автсан",
+   "note": ""
+  },
+  {
+   "n": 23,
+   "zh": "外在",
+   "py": "wàizài",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "external, extrinsic",
+   "mn": "гадаад, гаднын",
+   "note": ""
+  },
+  {
+   "n": 24,
+   "zh": "服务业",
+   "py": "fúwùyè",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "service industry",
+   "mn": "үйлчилгээний салбар",
+   "note": ""
+  },
+  {
+   "n": 25,
+   "zh": "第三产业",
+   "py": "dìsānchǎnyè",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "tertiary industry",
+   "mn": "гуравдагч салбар, үйлчилгээний салбар",
+   "note": ""
+  }
+ ]
+}

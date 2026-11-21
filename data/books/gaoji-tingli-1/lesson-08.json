@@ -1,0 +1,208 @@
+{
+ "lesson": 8,
+ "title": "",
+ "title_mn": "电工–联合国环境规划署",
+ "book": "高级听力 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "电工",
+   "py": "diàngōng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "electrician",
+   "mn": "цахилгаанчин",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "知足",
+   "py": "zhīzú",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "content with what one has",
+   "mn": "сэтгэл хангалуун, хангалуун",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "前卫",
+   "py": "qiánwèi",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "avant-garde",
+   "mn": "тэргүүний, авангард",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "青春期",
+   "py": "qīngchūnqī",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "puberty, adolescence",
+   "mn": "өсвөр нас, бэлгийн бойжилт",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "杵",
+   "py": "chǔ",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "stand stupidly, poke",
+   "mn": "гөлийн зогсох, түлхэх",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "揪",
+   "py": "jiū",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "grab, pull",
+   "mn": "барьж татах, зулгаах",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "利索",
+   "py": "lìsuǒ",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "nimble, neat",
+   "mn": "цэвэрхэн, хурдан самбаатай",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "悲壮",
+   "py": "bēizhuàng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "solemn and stirring",
+   "mn": "эмгэнэлтэй сүр жавхлантай",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "引发",
+   "py": "yǐnfā",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "trigger, give rise to",
+   "mn": "үүсгэх, өдөөх",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "导购",
+   "py": "dǎogòu",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "shopping guide, sales assistant",
+   "mn": "худалдааны зөвлөх",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "追问",
+   "py": "zhuīwèn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "question closely",
+   "mn": "нэхэн асуух",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "冤枉钱",
+   "py": "yuānwǎngqián",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "wasted money",
+   "mn": "дэмий зардал, хэрэггүй мөнгө",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "景观",
+   "py": "jǐngguān",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "landscape, scenery",
+   "mn": "байгалийн үзэмж, ландшафт",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "航海",
+   "py": "hánghǎi",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "sail the seas",
+   "mn": "далайгаар аялах",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "重负",
+   "py": "zhòngfù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "heavy burden",
+   "mn": "хүнд ачаа",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "输送",
+   "py": "shūsòng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "transport, convey",
+   "mn": "тээвэрлэх, дамжуулах",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "漂",
+   "py": "piāo",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "float, drift",
+   "mn": "хөвөх, урсах",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "误食",
+   "py": "wùshí",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "eat by mistake",
+   "mn": "андуурч идэх",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "旺季",
+   "py": "wàngjì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "peak season",
+   "mn": "оргил улирал",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "联合国环境规划署",
+   "py": "liánhéguóhuánjìngguīhuàshǔ",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "UN Environment Programme",
+   "mn": "НҮБ-ын Байгаль орчны хөтөлбөр",
+   "note": ""
+  }
+ ]
+}

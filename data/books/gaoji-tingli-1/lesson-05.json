@@ -1,0 +1,208 @@
+{
+ "lesson": 5,
+ "title": "",
+ "title_mn": "敢情–酒香不怕巷子深",
+ "book": "高级听力 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "敢情",
+   "py": "gǎnqíng",
+   "pos": "副",
+   "pos_mn": "дайвар үг",
+   "en": "so it turns out",
+   "mn": "мөн байжээ, мэдээж",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "一通",
+   "py": "yítòng",
+   "pos": "量",
+   "pos_mn": "тоологч үг",
+   "en": "a bout, a spell",
+   "mn": "нэг дор, нэг хэсэг",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "常言",
+   "py": "chángyán",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "common saying",
+   "mn": "ардын хэлцүүд, зүйр үг",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "咔嚓",
+   "py": "kāchā",
+   "pos": "拟声",
+   "pos_mn": "дуурайх үг",
+   "en": "click, snap sound",
+   "mn": "шаржигнах, шарсхийх",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "棉裤",
+   "py": "miánkù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "cotton-padded trousers",
+   "mn": "хөвөн өмд",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "后怕",
+   "py": "hòupà",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "fear after the event",
+   "mn": "дараа нь айх",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "无辜",
+   "py": "wúgū",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "innocent",
+   "mn": "гэм зэмгүй",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "求助",
+   "py": "qiúzhù",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "ask for help",
+   "mn": "тусламж гуйх",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "帖",
+   "py": "tiē",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "forum post",
+   "mn": "форумын нийтлэл",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "走访",
+   "py": "zǒufǎng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "visit, call on",
+   "mn": "айлчлан уулзах",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "车位",
+   "py": "chēwèi",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "parking space",
+   "mn": "машины зогсоол",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "围观",
+   "py": "wéiguān",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "gather to watch",
+   "mn": "хүрээлэн харах",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "不治身亡",
+   "py": "bùzhìshēnwáng",
+   "pos": "短语",
+   "pos_mn": "хэллэг",
+   "en": "die despite treatment",
+   "mn": "эмчлэгдэж чадалгүй нас барах",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "过错",
+   "py": "guòcuò",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "fault, mistake",
+   "mn": "буруу, алдаа",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "讲理",
+   "py": "jiǎnglǐ",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "reasonable",
+   "mn": "учир зүйтэй, оновчтой",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "对等",
+   "py": "duìděng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "equal, on par",
+   "mn": "тэнцүү, эн тэнцүү",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "强者",
+   "py": "qiángzhě",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "the strong",
+   "mn": "хүчтэн, хүчтэй хүн",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "离谱儿",
+   "py": "lípǔér",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "outrageous, off the mark",
+   "mn": "хэтэрхий, хэмжээ хэтэрсэн",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "感叹",
+   "py": "gǎntàn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "sigh with feeling",
+   "mn": "санаа алдах, гайхан дуу алдах",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "酒香不怕巷子深",
+   "py": "jiǔxiāngbùpàxiàngzishēn",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "good wine needs no advertising",
+   "mn": "сайн бараа өөрөө л сурталчилна",
+   "note": ""
+  }
+ ]
+}

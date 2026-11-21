@@ -1,0 +1,56 @@
+{
+ "id": "gaoji-kouyu-2",
+ "title": "高级口语 II",
+ "title_mn": "Ахисан шатны яриа II",
+ "lessons": [
+  {
+   "lesson": 1,
+   "title": "",
+   "title_mn": "充斥–传承",
+   "count": 20,
+   "file": "lesson-01.json"
+  },
+  {
+   "lesson": 2,
+   "title": "",
+   "title_mn": "捎带脚儿–限度",
+   "count": 20,
+   "file": "lesson-02.json"
+  },
+  {
+   "lesson": 3,
+   "title": "",
+   "title_mn": "换乘–基于",
+   "count": 20,
+   "file": "lesson-03.json"
+  },
+  {
+   "lesson": 4,
+   "title": "",
+   "title_mn": "漩涡–优裕",
+   "count": 20,
+   "file": "lesson-04.json"
+  },
+  {
+   "lesson": 5,
+   "title": "",
+   "title_mn": "守口如瓶–追踪",
+   "count": 20,
+   "file": "lesson-05.json"
+  },
+  {
+   "lesson": 6,
+   "title": "",
+   "title_mn": "反省–法则",
+   "count": 20,
+   "file": "lesson-06.json"
+  },
+  {
+   "lesson": 7,
+   "title": "",
+   "title_mn": "诀窍–液态",
+   "count": 11,
+   "file": "lesson-07.json"
+  }
+ ]
+}

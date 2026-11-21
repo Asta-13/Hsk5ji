@@ -1,0 +1,208 @@
+{
+ "lesson": 3,
+ "title": "",
+ "title_mn": "情调–水土",
+ "book": "高级听力 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "情调",
+   "py": "qíngdiào",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "ambience, mood",
+   "mn": "уур амьсгал, өнгө аяс",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "用武之地",
+   "py": "yòngwǔzhīdì",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "scope to use one's talents",
+   "mn": "чадвараа харуулах газар",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "正餐",
+   "py": "zhèngcān",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "main meal",
+   "mn": "үндсэн хоол",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "甜品",
+   "py": "tiánpǐn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "dessert",
+   "mn": "амттан",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "时令",
+   "py": "shílìng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "season",
+   "mn": "улирал",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "清爽",
+   "py": "qīngshuǎng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "fresh, refreshing",
+   "mn": "сэрүүн, сэргэг",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "苍老",
+   "py": "cānglǎo",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "aged-looking",
+   "mn": "хөгшин төрхтэй, өтөл",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "老泪纵横",
+   "py": "lǎolèizònghéng",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "old tears streaming",
+   "mn": "хөгшин нулимс асгарах",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "茫茫人海",
+   "py": "mángmángrénhǎi",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "vast sea of people",
+   "mn": "хүн олонд, олон хүмүүсийн дунд",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "风雨历程",
+   "py": "fēngyǔlìchéng",
+   "pos": "短语",
+   "pos_mn": "хэллэг",
+   "en": "journey through hardships",
+   "mn": "хүнд хэцүү замнал",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "平淡",
+   "py": "píngdàn",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "ordinary, plain",
+   "mn": "энгийн, жирийн",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "任凭",
+   "py": "rènpíng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "let, no matter",
+   "mn": "дураар нь орхих, хамаагүй",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "遮风挡雨",
+   "py": "zhēfēngdǎngyǔ",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "shelter from wind and rain",
+   "mn": "салхи борооноос хамгаалах",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "情投意合",
+   "py": "qíngtóuyìhé",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "be congenial",
+   "mn": "бие биедээ сэтгэл нийлэх",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "病危",
+   "py": "bìngwēi",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "critically ill",
+   "mn": "биеийн байдал хүнд",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "称王称霸",
+   "py": "chēngwángchēngbà",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "lord it over others",
+   "mn": "эзэн хаан шиг аашлах",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "痛恨",
+   "py": "tònghèn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "hate bitterly",
+   "mn": "үзэн ядах",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "淀粉",
+   "py": "diànfěn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "starch",
+   "mn": "цардуул",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "饲料",
+   "py": "sìliào",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "feed, fodder",
+   "mn": "тэжээл",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "水土",
+   "py": "shuǐtǔ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "soil and water",
+   "mn": "ус шороо, байгалийн орчин",
+   "note": ""
+  }
+ ]
+}

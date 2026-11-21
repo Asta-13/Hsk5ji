@@ -1,0 +1,208 @@
+{
+ "lesson": 1,
+ "title": "",
+ "title_mn": "变幻–谐音",
+ "book": "高级综合 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "变幻",
+   "py": "biànhuàn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "change unpredictably",
+   "mn": "хувьсах, хувирч өөрчлөгдөх",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "难关",
+   "py": "nánguān",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "difficult hurdle",
+   "mn": "бэрх хүндрэл, хүнд даваа",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "泥泞",
+   "py": "nínìng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "muddy",
+   "mn": "шавранцар, балчиртай",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "兴冲冲",
+   "py": "xìngchōngchōng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "elated, in high spirits",
+   "mn": "догдолсон, баяр хөөртэй",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "闭门羹",
+   "py": "bìméngēng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "shut-door snub",
+   "mn": "хаалга хаах, үүдээр буцаах",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "忧伤",
+   "py": "yōushāng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "sorrowful",
+   "mn": "гуниглан, гунигтай",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "提防",
+   "py": "dīfáng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "guard against",
+   "mn": "болгоомжлох, сэрэмжилэх",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "留意",
+   "py": "liúyì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "pay attention",
+   "mn": "анхаарах, сэргийлэх",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "情侣",
+   "py": "qínglǚ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "lovers, couple",
+   "mn": "дурлагчид, амраг хосууд",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "硬邦邦",
+   "py": "yìngbāngbāng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "stiff, rock-hard",
+   "mn": "хатуу, хөшүүн",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "宽大",
+   "py": "kuāndà",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "spacious; lenient",
+   "mn": "өргөн дэлгэр, өршөөнгүй",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "随笔",
+   "py": "suíbǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "essay, informal notes",
+   "mn": "өгүүллэг, тэмдэглэл, эссэ",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "兆",
+   "py": "zhào",
+   "pos": "数",
+   "pos_mn": "тооны нэр",
+   "en": "trillion; million",
+   "mn": "их наяд, сая",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "落空",
+   "py": "luòkōng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "come to nothing",
+   "mn": "бүтэлгүйтэх, хоосон үлдэх",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "学名",
+   "py": "xuémíng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "school name",
+   "mn": "сургуулийн нэр, албан ёсны нэр",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "小名",
+   "py": "xiǎomíng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "childhood nickname",
+   "mn": "багын нэр",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "顺口",
+   "py": "shùnkǒu",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "easy to say, smooth",
+   "mn": "хэлэхэд эвтэйхэн, аяндаа гарсан",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "省事",
+   "py": "shěngshì",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "convenient, simple",
+   "mn": "хялбар, амар",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "典故",
+   "py": "diǎngù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "allusion, classical reference",
+   "mn": "домог, уламжлалт эшлэл",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "谐音",
+   "py": "xiéyīn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "homophone, pun",
+   "mn": "ижил дуудлага, дуудлагын тоглоом",
+   "note": ""
+  }
+ ]
+}

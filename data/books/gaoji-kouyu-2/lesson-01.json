@@ -1,0 +1,208 @@
+{
+ "lesson": 1,
+ "title": "",
+ "title_mn": "充斥–传承",
+ "book": "高级口语 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "充斥",
+   "py": "chōngchì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "be full of, flood",
+   "mn": "дүүрэх, цутгах, дүүрэн байх",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "蛊惑",
+   "py": "gǔhuò",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "beguile, mislead",
+   "mn": "увайдах, мэхлэн уруу татах",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "捏造",
+   "py": "niēzào",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "fabricate, make up",
+   "mn": "зохиох, худлаа зохиох",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "博得",
+   "py": "bódé",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "win, earn (praise)",
+   "mn": "хүртэх, олж авах",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "诸侯",
+   "py": "zhūhóu",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "feudal lords",
+   "mn": "гүн, вангууд, феодал ноёд",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "矫正",
+   "py": "jiǎozhèng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "correct, rectify",
+   "mn": "засах, залруулах",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "周幽王",
+   "py": "zhōuyōuwáng",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "King You of Zhou",
+   "mn": "Жоу Ю-ван",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "西周",
+   "py": "xīzhōu",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Western Zhou",
+   "mn": "Баруун Жоу гүрэн",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "民政",
+   "py": "mínzhèng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "civil affairs",
+   "mn": "иргэний хэрэг, нийгмийн халамж",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "磕磕绊绊",
+   "py": "kēkēbànbàn",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "stumbling, bumpy",
+   "mn": "бүдэрч сүүдэрсэн, саад тотгортой",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "垂死",
+   "py": "chuísǐ",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "dying, moribund",
+   "mn": "үхэх дөхсөн, үхэл дөхсөн",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "破裂",
+   "py": "pòliè",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "rupture, break down",
+   "mn": "хагарах, цуцрах",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "续签",
+   "py": "xùqiān",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "renew (contract)",
+   "mn": "гэрээг сунгах",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "散伙",
+   "py": "sànhuǒ",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "break up, disband",
+   "mn": "тарах, салах",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "单亲",
+   "py": "dānqīn",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "single-parent",
+   "mn": "ганц бие эцэг эхтэй",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "残害",
+   "py": "cánhài",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "maim, persecute",
+   "mn": "зодож хөнөөх, хэрцгийлэн хөнөөх",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "崇尚",
+   "py": "chóngshàng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "esteem, hold in esteem",
+   "mn": "дээдлэх, шүтэх",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "营造",
+   "py": "yíngzào",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "create (atmosphere)",
+   "mn": "бүрдүүлэх, бий болгох",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "乏味",
+   "py": "fáwèi",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "dull, insipid",
+   "mn": "уйтгартай, хоосон, амтгүй",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "传承",
+   "py": "chuánchéng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "pass on, inherit",
+   "mn": "залгамжлах, өвлүүлэх",
+   "note": ""
+  }
+ ]
+}

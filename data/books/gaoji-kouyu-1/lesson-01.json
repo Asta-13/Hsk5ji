@@ -1,0 +1,208 @@
+{
+ "lesson": 1,
+ "title": "",
+ "title_mn": "期刊–学龄",
+ "book": "高级口语 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "期刊",
+   "py": "qīkān",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "periodical, journal",
+   "mn": "тогтмол хэвлэл, сэтгүүл",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "社交",
+   "py": "shèjiāo",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "social interaction",
+   "mn": "нийгмийн харилцаа, найз нөхдийн харилцаа",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "酷爱",
+   "py": "kùài",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "love passionately",
+   "mn": "маш их хайрлах, шимтэх",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "告状",
+   "py": "gàozhuàng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "complain to authority",
+   "mn": "гомдол мэдүүлэх, нэхэмжлэх",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "支取",
+   "py": "zhīqǔ",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "withdraw money",
+   "mn": "мөнгө авах, татах",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "存单",
+   "py": "cúndān",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "deposit certificate",
+   "mn": "хадгаламжийн баримт",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "遗忘",
+   "py": "yíwàng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "forget",
+   "mn": "мартах",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "征集",
+   "py": "zhēngjí",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "solicit, collect",
+   "mn": "цуглуулах, бүртгэх",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "同龄",
+   "py": "tónglíng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "be of the same age",
+   "mn": "үеэл байх, ижил настай байх",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "理科",
+   "py": "lǐkē",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "natural sciences track",
+   "mn": "байгалийн ухааны чиглэл",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "文科",
+   "py": "wénkē",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "liberal arts track",
+   "mn": "нийгэм, хүмүүнлэгийн ухааны чиглэл",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "国学",
+   "py": "guóxué",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "traditional Chinese learning",
+   "mn": "Хятадын уламжлалт ухаан",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "典籍",
+   "py": "diǎnjí",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "classic texts",
+   "mn": "эртний ном зохиол, сонгодог бичиг",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "退学",
+   "py": "tuìxué",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "drop out of school",
+   "mn": "сургуулиас гарах, сургуулиа орхих",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "全职",
+   "py": "quánzhí",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "full-time",
+   "mn": "бүтэн цагийн",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "何尝",
+   "py": "hécháng",
+   "pos": "副",
+   "pos_mn": "дайвар үг",
+   "en": "rhetorical: when/did ever",
+   "mn": "яалаа гэж, хэзээ ч ... биш",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "私塾",
+   "py": "sīshú",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "old-style private school",
+   "mn": "хуучин хувийн сургууль",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "多元",
+   "py": "duōyuán",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "diverse, pluralistic",
+   "mn": "олон талт, олон төрлийн",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "但凡",
+   "py": "dànfán",
+   "pos": "副",
+   "pos_mn": "дайвар үг",
+   "en": "if only, in general",
+   "mn": "хэрэв ... л бол, ямар ч бол",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "学龄",
+   "py": "xuélíng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "school age",
+   "mn": "сургуулийн нас",
+   "note": ""
+  }
+ ]
+}

@@ -1,0 +1,208 @@
+{
+ "lesson": 5,
+ "title": "",
+ "title_mn": "触摸–受贿",
+ "book": "高级综合 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "触摸",
+   "py": "chùmō",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "touch, feel",
+   "mn": "хүрэх, барих",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "知己",
+   "py": "zhījǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "close friend",
+   "mn": "дотны найз, сэтгэл нэгт нөхөр",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "对劲儿",
+   "py": "duìjìnér",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "satisfactory; compatible",
+   "mn": "таарсан, сайн",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "留言板",
+   "py": "liúyánbǎn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "message board",
+   "mn": "сэтгэгдлийн самбар, зурвасын самбар",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "客套话",
+   "py": "kètàohuà",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "polite formula, pleasantries",
+   "mn": "эелдэг үг, ёс жаягийн үг",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "追查",
+   "py": "zhuīchá",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "trace, investigate",
+   "mn": "мөрдөх, мөрдөн шалгах",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "拘谨",
+   "py": "jūjǐn",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "reserved, overcautious",
+   "mn": "эвгүй, дэндүү болгоомжтой",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "注目",
+   "py": "zhùmù",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "fix eyes on, watch",
+   "mn": "анхаарал хандуулах, ширтэх",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "新奇",
+   "py": "xīnqí",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "novel, new and strange",
+   "mn": "шинэлэг, сонин",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "急于",
+   "py": "jíyú",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "be anxious to",
+   "mn": "яарах, тэсэж ядах",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "表白",
+   "py": "biǎobái",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "explain oneself; confess love",
+   "mn": "тайлбарлах, сэтгэлээ илчлэх",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "世俗",
+   "py": "shìsú",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "worldly, secular",
+   "mn": "ертөнцийн, энгийн ард түмний",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "消磨",
+   "py": "xiāomó",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "while away, wear down",
+   "mn": "цаг үрэх, элэгдэх",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "陀螺",
+   "py": "tuóluó",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "spinning top",
+   "mn": "эргэдэг тоглоом",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "切磋",
+   "py": "qiēcuō",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "exchange views, learn from",
+   "mn": "харилцан суралцах, санал солилцох",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "水准",
+   "py": "shuǐzhǔn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "level, standard",
+   "mn": "түвшин, зэрэг",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "帮凶",
+   "py": "bāngxiōng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "accomplice",
+   "mn": "хамсаатан, түнш",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "主犯",
+   "py": "zhǔfàn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "principal offender",
+   "mn": "гол гэмт этгээд",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "未来学",
+   "py": "wèiláixué",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "futurology",
+   "mn": "ирээдүйн судлал, футурологи",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "受贿",
+   "py": "shòuhuì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "accept bribes",
+   "mn": "авилга авах",
+   "note": ""
+  }
+ ]
+}

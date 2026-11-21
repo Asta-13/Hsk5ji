@@ -1,0 +1,208 @@
+{
+ "lesson": 1,
+ "title": "",
+ "title_mn": "前沿–狂热",
+ "book": "高级综合 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "前沿",
+   "py": "qiányán",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "frontier, forefront",
+   "mn": "тэргүүн шугам, шинэ чиглэл",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "得益",
+   "py": "déyì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "benefit, profit",
+   "mn": "ашиг хүртэх",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "主义",
+   "py": "zhǔyì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "-ism, doctrine",
+   "mn": "үзэл, үзэл баримтлал",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "进军",
+   "py": "jìnjūn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "march on",
+   "mn": "давших, довтлон орох",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "鼓吹",
+   "py": "gǔchuī",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "advocate, tout",
+   "mn": "сурталчлах, магтан дэмжих",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "排挤",
+   "py": "páijǐ",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "squeeze out, push out",
+   "mn": "гадуурхах, шахан гаргах",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "非凡",
+   "py": "fēifán",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "extraordinary",
+   "mn": "ер бусын, гайхалтай",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "胆略",
+   "py": "dǎnlüè",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "courage and resourcefulness",
+   "mn": "зориг ухаан, тэмцэх зориг",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "顶用",
+   "py": "dǐngyòng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "useful, effective",
+   "mn": "хэрэг болох, үр дүнтэй",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "津贴",
+   "py": "jīntiē",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "allowance, subsidy",
+   "mn": "тэтгэлэг, нэмэгдэл цалин",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "料理",
+   "py": "liàolǐ",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "manage, take care of",
+   "mn": "зохицуулах, арчлах",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "电钮",
+   "py": "diànniǔ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "button, switch",
+   "mn": "товчлуур",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "晃荡",
+   "py": "huàngdàng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "sway, shake",
+   "mn": "найгах, хөдлөх",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "多事",
+   "py": "duōshì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "meddle, be eventful",
+   "mn": "хэрэг тарих, завгүй үе",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "学长",
+   "py": "xuézhǎng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "senior schoolmate",
+   "mn": "ахлах курсын оюутан, ах",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "通史",
+   "py": "tōngshǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "general history",
+   "mn": "ерөнхий түүх",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "感召",
+   "py": "gǎnzhào",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "inspire, appeal to",
+   "mn": "урамшуулан татах",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "宿命",
+   "py": "sùmìng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "fate, destiny",
+   "mn": "заяа, хувь тавилан",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "微妙",
+   "py": "wēimiào",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "subtle, delicate",
+   "mn": "нарийн, нандин, нарийн мэдрэмжтэй",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "狂热",
+   "py": "kuángrè",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "fanatical, fervent",
+   "mn": "галзуурсан шүтэлцсэн, ширүүн хүсэлтэй",
+   "note": ""
+  }
+ ]
+}

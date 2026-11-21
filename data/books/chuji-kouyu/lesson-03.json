@@ -1,0 +1,118 @@
+{
+ "lesson": 3,
+ "title": "",
+ "title_mn": "头饰–登机口",
+ "book": "初级口语",
+ "words": [
+  {
+   "n": 1,
+   "zh": "头饰",
+   "py": "tóushì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "headgear",
+   "mn": "толгойн чимэглэл",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "开演",
+   "py": "kāiyǎn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "begin (performance)",
+   "mn": "эхлэх, тоглолт эхлэх",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "售票处",
+   "py": "shòupiàochù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "ticket office",
+   "mn": "тасалбар борлуулах газар",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "垃圾箱",
+   "py": "lājīxiāng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "rubbish bin",
+   "mn": "хогийн сав",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "百分之",
+   "py": "bǎifēnzhī",
+   "pos": "数",
+   "pos_mn": "тооны нэр",
+   "en": "percent",
+   "mn": "хувь",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "空运",
+   "py": "kōngyùn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "transport by air",
+   "mn": "агаараар тээвэрлэх",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "海运",
+   "py": "hǎiyùn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "transport by sea",
+   "mn": "далайгаар тээвэрлэх",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "过道",
+   "py": "guòdào",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "aisle, passage",
+   "mn": "коридор, гарц",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "传送带",
+   "py": "chuánsòngdài",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "conveyor belt",
+   "mn": "дамжуулагч тууз",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "超重",
+   "py": "chāozhòng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "be overweight",
+   "mn": "жин хэтрэх",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "登机口",
+   "py": "dēngjīkǒu",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "boarding gate",
+   "mn": "онгоцонд суух гарц",
+   "note": ""
+  }
+ ]
+}

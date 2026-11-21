@@ -1,0 +1,208 @@
+{
+ "lesson": 3,
+ "title": "",
+ "title_mn": "气喘吁吁–阿根廷",
+ "book": "中级综合 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "气喘吁吁",
+   "py": "qìchuǎnxūxū",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "panting",
+   "mn": "амьсгаадах",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "护身符",
+   "py": "hùshēnfú",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "amulet",
+   "mn": "хамгаалах сахиус",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "穷鬼",
+   "py": "qióngguǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "poor wretch",
+   "mn": "ядуу зүдүү, ядмаг",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "优雅",
+   "py": "yōuyǎ",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "elegant",
+   "mn": "дэгжин",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "价签",
+   "py": "jiàqiān",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "price tag",
+   "mn": "үнийн шошго",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "花招",
+   "py": "huāzhāo",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "trick",
+   "mn": "заль, мэх",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "人均",
+   "py": "rénjūn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "per capita",
+   "mn": "нэг хүнд ногдох",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "疯子",
+   "py": "fēngzi",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "madman",
+   "mn": "галзуу хүн",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "诗集",
+   "py": "shījí",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "poetry collection",
+   "mn": "шүлгийн түүвэр",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "册子",
+   "py": "cèzi",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "booklet",
+   "mn": "товхимол",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "拨通",
+   "py": "bōtōng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "get through by phone",
+   "mn": "утсаар холбогдох",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "天书",
+   "py": "tiānshū",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "illegible writing",
+   "mn": "ойлгомжгүй бичвэр",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "围棋",
+   "py": "wéiqí",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "game of go",
+   "mn": "вэйчи, го",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "迷宫",
+   "py": "mígōng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "maze; labyrinth",
+   "mn": "лабиринт, төөрдөг",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "拉丁文",
+   "py": "lādīngwén",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "Latin",
+   "mn": "латин хэл",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "爱丁堡大学",
+   "py": "àidīngbǎodàxué",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "University of Edinburgh",
+   "mn": "Эдинбургийн их сургууль",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "生物钟",
+   "py": "shēngwùzhōng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "biological clock",
+   "mn": "биологийн цаг",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "黄海",
+   "py": "huánghǎi",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Yellow Sea",
+   "mn": "Шар тэнгис",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "南非",
+   "py": "nánfēi",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "South Africa",
+   "mn": "Өмнөд Африк",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "阿根廷",
+   "py": "āgēntíng",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Argentina",
+   "mn": "Аргентин",
+   "note": ""
+  }
+ ]
+}

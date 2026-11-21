@@ -1,0 +1,208 @@
+{
+ "lesson": 1,
+ "title": "",
+ "title_mn": "村民–指甲油",
+ "book": "中级听力 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "村民",
+   "py": "cūnmín",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "villager",
+   "mn": "тосгоны хүн",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "好笑",
+   "py": "hǎoxiào",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "funny",
+   "mn": "инээдтэй",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "模模糊糊",
+   "py": "mómóhúhú",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "vague, blurry",
+   "mn": "бүдэг бадаг",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "身影",
+   "py": "shēnyǐng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "figure, silhouette",
+   "mn": "сүүдэр, дүр төрх",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "车祸",
+   "py": "chēhuò",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "traffic accident",
+   "mn": "авто осол",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "忧郁症",
+   "py": "yōuyùzhèng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "depression",
+   "mn": "гутралын өвчин, уйтгар",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "分神",
+   "py": "fēnshén",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to be distracted",
+   "mn": "анхаарал сарнин",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "美梦",
+   "py": "měimèng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "sweet dream",
+   "mn": "сайхан зүүд",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "吵醒",
+   "py": "chǎoxǐng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to wake by noise",
+   "mn": "чимээгээр сэрээх",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "心跳",
+   "py": "xīntiào",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "heartbeat",
+   "mn": "зүрхний цохилт",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "入选",
+   "py": "rùxuǎn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to be selected",
+   "mn": "сонгогдох",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "提成",
+   "py": "tíchéng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "commission",
+   "mn": "хувь, комисс",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "团团转",
+   "py": "tuántuánzhuàn",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "run around in circles",
+   "mn": "эргэлдэх, ажилдаа дарагдах",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "餐桌",
+   "py": "cānzhuō",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "dining table",
+   "mn": "хоолны ширээ",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "酒杯",
+   "py": "jiǔbēi",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "wine glass",
+   "mn": "дарсны хундага",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "斗牛",
+   "py": "dòuniú",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "bullfight",
+   "mn": "бухтай тулалдах",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "无地自容",
+   "py": "wúdìzìróng",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "too ashamed to face anyone",
+   "mn": "ичсэндээ газар оронгоор",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "颜料",
+   "py": "yánliào",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "pigment, dye",
+   "mn": "будаг",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "趾甲",
+   "py": "zhǐjiǎ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "toenail",
+   "mn": "хөлийн хумс",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "指甲油",
+   "py": "zhǐjiǎyóu",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "nail polish",
+   "mn": "хумсны будаг",
+   "note": ""
+  }
+ ]
+}

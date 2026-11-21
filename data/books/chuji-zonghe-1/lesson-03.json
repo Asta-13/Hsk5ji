@@ -1,0 +1,58 @@
+{
+ "lesson": 3,
+ "title": "",
+ "title_mn": "的时候–问好",
+ "book": "初级综合 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "的时候",
+   "py": "deshíhòu",
+   "pos": "短语",
+   "pos_mn": "хэллэг",
+   "en": "when, while",
+   "mn": "үед, цагт",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "西北部",
+   "py": "xīběibù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "northwest region",
+   "mn": "баруун хойд хэсэг",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "入乡随俗",
+   "py": "rùxiāngsuísú",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "when in Rome do as Romans",
+   "mn": "очсон газрынхаа заншлаар",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "懒虫",
+   "py": "lǎnchóng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "lazybones",
+   "mn": "залхуу хүн",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "问好",
+   "py": "wènhǎo",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to say hello",
+   "mn": "мэндлэх",
+   "note": ""
+  }
+ ]
+}

@@ -1,0 +1,208 @@
+{
+ "lesson": 7,
+ "title": "",
+ "title_mn": "离群索居–殷勤",
+ "book": "高级听力 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "离群索居",
+   "py": "líqúnsuǒjū",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "live in isolation",
+   "mn": "хүмүүсээс тусгаарлан ганцаараа амьдрах",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "源",
+   "py": "yuán",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "source, origin",
+   "mn": "эх, эх үүсвэр",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "一口价",
+   "py": "yīkǒujià",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "fixed price",
+   "mn": "тогтмол үнэ, нэг үнэ",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "不外乎",
+   "py": "bùwàihū",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "be nothing more than",
+   "mn": "-аас өөр зүйл биш, зөвхөн",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "山河",
+   "py": "shānhé",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "mountains and rivers",
+   "mn": "уул ус, нутаг орон",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "风景如画",
+   "py": "fēngjǐngrúhuà",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "picturesque scenery",
+   "mn": "зураг шиг үзэсгэлэнтэй",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "度假村",
+   "py": "dùjiàcūn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "holiday resort",
+   "mn": "амралтын газар, амралтын төв",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "可想而知",
+   "py": "kěxiǎngérzhī",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "can well be imagined",
+   "mn": "ойлгомжтой, тодорхой",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "侥幸",
+   "py": "jiǎoxìng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "lucky, by luck",
+   "mn": "азаар, азтай",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "管用",
+   "py": "guǎnyòng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "effective, useful",
+   "mn": "үр дүнтэй, хэрэг болох",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "祖传",
+   "py": "zǔchuán",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "handed down from ancestors",
+   "mn": "өвөг дээдсээс уламжилсан",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "器械",
+   "py": "qìxiè",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "apparatus, equipment",
+   "mn": "багаж, төхөөрөмж",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "定时器",
+   "py": "dìngshíqì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "timer",
+   "mn": "цаг тохируулагч, таймер",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "过头",
+   "py": "guòtóu",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "excessive, overdone",
+   "mn": "хэтэрсэн, хэтрүүлсэн",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "一刀切",
+   "py": "yīdāoqiē",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "one-size-fits-all approach",
+   "mn": "бүгдийг нэг хэмжүүрээр шийдэх",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "读后感",
+   "py": "dúhòugǎn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "reflections after reading",
+   "mn": "уншсаны дараах сэтгэгдэл",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "乌鸡",
+   "py": "wūjī",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "black-boned chicken",
+   "mn": "хар тахиа",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "精疲力尽",
+   "py": "jīngpílìjìn",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "utterly exhausted",
+   "mn": "туйлдаж ядрах",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "回头客",
+   "py": "huítóukè",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "repeat customer",
+   "mn": "байнгын үйлчлүүлэгч",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "殷勤",
+   "py": "yīnqín",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "solicitous, attentive",
+   "mn": "найрсаг, халамжтай",
+   "note": ""
+  }
+ ]
+}

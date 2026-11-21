@@ -1,0 +1,198 @@
+{
+ "lesson": 6,
+ "title": "",
+ "title_mn": "车管局–狂奔",
+ "book": "中级听力 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "车管局",
+   "py": "chēguǎnjú",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "vehicle administration",
+   "mn": "тээврийн хэрэгслийн удирдах газар",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "隐私权",
+   "py": "yǐnsīquán",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "right to privacy",
+   "mn": "хувийн нууцын эрх",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "简朴",
+   "py": "jiǎnpiáo",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "simple, plain",
+   "mn": "энгийн даруу",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "信物",
+   "py": "xìnwù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "keepsake, token",
+   "mn": "бэлгэдэл эд, дурсгал",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "西式",
+   "py": "xīshì",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "Western-style",
+   "mn": "барууны маягийн",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "中式",
+   "py": "zhōngshì",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "Chinese-style",
+   "mn": "хятад маягийн",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "拜天地",
+   "py": "bàitiāndì",
+   "pos": "短语",
+   "pos_mn": "хэллэг",
+   "en": "bow to heaven and earth",
+   "mn": "тэнгэр газарт мөргөх",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "交杯酒",
+   "py": "jiāobēijiǔ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "wedding toast wine",
+   "mn": "хуримын дарс",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "婚纱",
+   "py": "hūnshā",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "wedding dress",
+   "mn": "хуримын даашинз",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "喜宴",
+   "py": "xǐyàn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "wedding banquet",
+   "mn": "хуримын найр",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "敬酒",
+   "py": "jìngjiǔ",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to propose a toast",
+   "mn": "хундага өргөх",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "皇历",
+   "py": "huánglì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "almanac",
+   "mn": "хуучин хуанли",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "导盲犬",
+   "py": "dǎomángquǎn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "guide dog",
+   "mn": "сохор хүний хөтөч нохой",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "地狱",
+   "py": "dìyù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "hell",
+   "mn": "тамын, там",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "鄙视",
+   "py": "bǐshì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to despise",
+   "mn": "басамжлах, жигших",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "肉体",
+   "py": "ròutǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "human body",
+   "mn": "бие махбод",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "献出",
+   "py": "xiànchū",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to dedicate",
+   "mn": "өргөх, зориулах",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "羽毛",
+   "py": "yǔmáo",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "feather",
+   "mn": "өд",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "狂奔",
+   "py": "kuángbēn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to run wildly",
+   "mn": "тэрүү давхих",
+   "note": ""
+  }
+ ]
+}

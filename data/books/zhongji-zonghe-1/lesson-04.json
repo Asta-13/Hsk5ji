@@ -1,0 +1,208 @@
+{
+ "lesson": 4,
+ "title": "",
+ "title_mn": "虫–考勤",
+ "book": "中级综合 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "虫",
+   "py": "chóng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "insect; worm",
+   "mn": "шавьж, хорхой",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "驴",
+   "py": "lǘ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "donkey",
+   "mn": "илжиг",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "周期性",
+   "py": "zhōuqīxìng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "periodicity",
+   "mn": "үелэх шинж",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "体温",
+   "py": "tǐwēn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "body temperature",
+   "mn": "биеийн халуун",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "升降",
+   "py": "shēngjiàng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "rise and fall",
+   "mn": "өсөж буурах",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "心率",
+   "py": "xīnlǜ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "heart rate",
+   "mn": "зүрхний цохилт",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "微生物",
+   "py": "wēishēngwù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "microorganism",
+   "mn": "бичил биетэн",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "照射",
+   "py": "zhàoshè",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "shine on; irradiate",
+   "mn": "тусах, цацрах",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "福音",
+   "py": "fúyīn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "good news; gospel",
+   "mn": "сайн мэдээ",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "记忆力",
+   "py": "jìyìlì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "memory ability",
+   "mn": "ой тогтоолт",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "激素",
+   "py": "jīsù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "hormone",
+   "mn": "даавар",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "日光浴",
+   "py": "rìguāngyù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "sunbathing",
+   "mn": "нарны шарлага",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "缩写",
+   "py": "suōxiě",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "abbreviation",
+   "mn": "товчилсон хэлбэр, товчлол",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "结结巴巴",
+   "py": "jiējiēbābā",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "stammering",
+   "mn": "гацан ярих",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "代名词",
+   "py": "dàimíngcí",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "pronoun; byword",
+   "mn": "төлөөний үг",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "顺心",
+   "py": "shùnxīn",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "satisfactory",
+   "mn": "сэтгэл хангалуун",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "遗言",
+   "py": "yíyán",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "last words",
+   "mn": "гэрээслэсэн үг",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "撰稿",
+   "py": "zhuàngǎo",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "write an article",
+   "mn": "нийтлэл бичих",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "说谎",
+   "py": "shuōhuǎng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "tell a lie",
+   "mn": "худлаа ярих",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "考勤",
+   "py": "kǎoqín",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "check attendance",
+   "mn": "ирц шалгах",
+   "note": ""
+  }
+ ]
+}

@@ -1,0 +1,208 @@
+{
+ "lesson": 6,
+ "title": "",
+ "title_mn": "拜别–熟女",
+ "book": "高级听力 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "拜别",
+   "py": "bàibié",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to take leave respectfully",
+   "mn": "салах ёс хийх, ёсолж салах",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "心怀",
+   "py": "xīnhuái",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to harbor in mind",
+   "mn": "сэтгэлдээ тээх, санаархах",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "气盛",
+   "py": "qìshèng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "hot-tempered, arrogant",
+   "mn": "омголон, зантай",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "编造",
+   "py": "biānzào",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to fabricate, make up",
+   "mn": "зохиох, зохион бичих",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "悲欢",
+   "py": "bēihuān",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "joys and sorrows",
+   "mn": "баяр гуниг",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "汪",
+   "py": "wāng",
+   "pos": "量",
+   "pos_mn": "тоологч үг",
+   "en": "measure for pools of liquid",
+   "mn": "нэг нуур, тогтсон шингэний хэмжих нэгж",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "李白",
+   "py": "lǐbái",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Li Bai (Tang poet)",
+   "mn": "Ли Бай",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "哈姆雷特",
+   "py": "hāmǔléitè",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Hamlet",
+   "mn": "Гамлет",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "翻飞",
+   "py": "fānfēi",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to flutter, flap",
+   "mn": "дэгдэх, хийсэх",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "清秀",
+   "py": "qīngxiù",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "delicate, fine-featured",
+   "mn": "цовоо, гоолиг царайтай",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "坎坷",
+   "py": "kǎnkě",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "bumpy, rough, frustrated",
+   "mn": "овгор товгор, хүнд хэцүү",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "音符",
+   "py": "yīnfú",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "musical note",
+   "mn": "нот",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "厚待",
+   "py": "hòudài",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to treat generously",
+   "mn": "эелдэг хүндэтгэх, сайн хүлээн авах",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "万能",
+   "py": "wànnéng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "all-purpose, omnipotent",
+   "mn": "бүхнийг чадах, бүх нийтийн",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "贵贱",
+   "py": "guìjiàn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "noble and humble",
+   "mn": "язгууртан ба жирийн, чинээлэг ба ядуу",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "安全性",
+   "py": "ānquánxìng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "safety, security",
+   "mn": "аюулгүй байдал",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "预知",
+   "py": "yùzhī",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to know in advance",
+   "mn": "урьдчилан мэдэх",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "多样化",
+   "py": "duōyànghuà",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to diversify",
+   "mn": "олон янз болгох",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "弯路",
+   "py": "wānlù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "detour, wrong path",
+   "mn": "тойруу зам, алдаатай зам",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "熟女",
+   "py": "shúnǚ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "mature woman",
+   "mn": "боловсорсон эмэгтэй",
+   "note": ""
+  }
+ ]
+}

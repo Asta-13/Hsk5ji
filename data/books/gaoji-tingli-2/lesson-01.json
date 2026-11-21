@@ -1,0 +1,208 @@
+{
+ "lesson": 1,
+ "title": "",
+ "title_mn": "风波–曲别针",
+ "book": "高级听力 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "风波",
+   "py": "fēngbō",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "disturbance, upheaval",
+   "mn": "хэрүүл шуугиан, үймээн самуун",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "武断",
+   "py": "wǔduàn",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "arbitrary, subjective",
+   "mn": "нэг талыг барьсан, үндэслэлгүй",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "特质",
+   "py": "tèzhì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "distinctive quality",
+   "mn": "онцлог шинж, өвөрмөц чанар",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "消协",
+   "py": "xiāoxié",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "consumers' association",
+   "mn": "хэрэглэгчдийн эрхийн холбоо",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "咽不下这口气",
+   "py": "yànbùxiàzhèkǒuqì",
+   "pos": "短语",
+   "pos_mn": "хэллэг",
+   "en": "cannot swallow the insult",
+   "mn": "гомдлыг тэвчихгүй байх",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "出气",
+   "py": "chūqì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "vent one's anger",
+   "mn": "уур хилэнгээ гаргах",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "山西",
+   "py": "shānxī",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Shanxi",
+   "mn": "Шаньси",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "澳门",
+   "py": "àomén",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Macao",
+   "mn": "Аомэнь, Макао",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "班次",
+   "py": "bāncì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "scheduled trip, service",
+   "mn": "нислэг, чиглэлийн хуваарь, рейс",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "严实",
+   "py": "yánshí",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "tight, closely sealed",
+   "mn": "битүү, чанга",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "候船室",
+   "py": "hòuchuánshì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "ship waiting room",
+   "mn": "усан онгоцны хүлээлгийн танхим",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "候车室",
+   "py": "hòuchēshì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "waiting room (station)",
+   "mn": "галт тэрэгний хүлээлгийн танхим",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "花生米",
+   "py": "huāshēngmǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "shelled peanuts",
+   "mn": "газрын самарны үр",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "嚼",
+   "py": "jué",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to chew",
+   "mn": "зажлах",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "咂",
+   "py": "zā",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to smack lips, sip",
+   "mn": "амсах, зажлах",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "下意识",
+   "py": "xiàyìshí",
+   "pos": "副",
+   "pos_mn": "дайвар үг",
+   "en": "subconsciously",
+   "mn": "ухамсаргүйгээр, өөрийн эрхгүй",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "虾仁",
+   "py": "xiārén",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "shelled shrimp",
+   "mn": "хальсалсан сам хорхой",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "犯不着",
+   "py": "fànbùzháo",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "not worth it",
+   "mn": "үнэ цэнэгүй, хэрэггүй",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "飞黄腾达",
+   "py": "fēihuángténgdá",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "rise rapidly in career",
+   "mn": "албан тушаалд хурдан дэвших",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "曲别针",
+   "py": "qūbiézhēn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "paper clip",
+   "mn": "цаасны хавчаар",
+   "note": ""
+  }
+ ]
+}

@@ -1,0 +1,208 @@
+{
+ "lesson": 5,
+ "title": "",
+ "title_mn": "携手–境地",
+ "book": "高级听力 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "携手",
+   "py": "xiéshǒu",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to join hands",
+   "mn": "гар зөрүүлэх, хамтран ажиллах",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "质朴",
+   "py": "zhìpiáo",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "simple, unadorned",
+   "mn": "энгийн, даруу",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "悟性",
+   "py": "wùxìng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "understanding ability",
+   "mn": "ойлгох чадвар",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "荒山",
+   "py": "huāngshān",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "barren mountain",
+   "mn": "хад чулуун уул, хоосон уул",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "山沟",
+   "py": "shāngōu",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "mountain gully",
+   "mn": "хавцал, жалга",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "滑坡",
+   "py": "huápō",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "landslide",
+   "mn": "хөрс гулсах, нуралт",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "石块儿",
+   "py": "shíkuàiér",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "stone chunk",
+   "mn": "чулууны хэлтэрхий",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "成活率",
+   "py": "chénghuólǜ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "survival rate",
+   "mn": "амьдрах хувь, ургах хувь",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "虚",
+   "py": "xū",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "empty, weak",
+   "mn": "хоосон, сул",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "流失",
+   "py": "liúshī",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to be lost, drain away",
+   "mn": "алдагдах, урсан алга болох",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "太原",
+   "py": "tàiyuán",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Taiyuan",
+   "mn": "Тайюань",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "黄河",
+   "py": "huánghé",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Yellow River",
+   "mn": "Шар мөрөн",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "青海",
+   "py": "qīnghǎi",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Qinghai",
+   "mn": "Чинхай",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "似",
+   "py": "shì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to resemble, seem",
+   "mn": "төстэй байх, адил",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "羞涩",
+   "py": "xiūsè",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "shy, bashful",
+   "mn": "ичимтгий, зовхи",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "乱糟糟",
+   "py": "luànzāozāo",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "messy, chaotic",
+   "mn": "эмх замбараагүй, шуугиантай",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "吵闹",
+   "py": "chǎonào",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to make noise, quarrel",
+   "mn": "шуугиулах, хэрэлдэх",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "纯真",
+   "py": "chúnzhēn",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "innocent, pure",
+   "mn": "гэнэхэн, цэвэр ариун",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "天性",
+   "py": "tiānxìng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "nature, innate temperament",
+   "mn": "төрөлх зан, угийн зан",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "境地",
+   "py": "jìngdì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "situation, plight",
+   "mn": "байдал, нөхцөл",
+   "note": ""
+  }
+ ]
+}

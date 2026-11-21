@@ -1,0 +1,208 @@
+{
+ "lesson": 3,
+ "title": "",
+ "title_mn": "期中考试–本科生",
+ "book": "初级听力",
+ "words": [
+  {
+   "n": 1,
+   "zh": "期中考试",
+   "py": "qīzhōngkǎoshì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "mid-term exam",
+   "mn": "дундын шалгалт",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "非洲",
+   "py": "fēizhōu",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Africa",
+   "mn": "Африк",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "郊外",
+   "py": "jiāowài",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "suburb",
+   "mn": "хотын захын газар",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "汉堡包",
+   "py": "hànbǎobāo",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "hamburger",
+   "mn": "гамбургер",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "照相馆",
+   "py": "zhàoxiàngguǎn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "photo studio",
+   "mn": "гэрэл зургийн газар",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "洗照片",
+   "py": "xǐzhàopiān",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to print photos",
+   "mn": "гэрэл зураг угаах",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "洗发水",
+   "py": "xǐfàshuǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "shampoo",
+   "mn": "шампунь",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "下决心",
+   "py": "xiàjuéxīn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to make up one's mind",
+   "mn": "шийдэх",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "亲爱的",
+   "py": "qīnàide",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "dear",
+   "mn": "хайрт, эрхэм",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "纸条儿",
+   "py": "zhǐtiáoér",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "slip of paper",
+   "mn": "цаасан хэрчим, тэмдэглэл",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "理发店",
+   "py": "lǐfàdiàn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "barbershop",
+   "mn": "үсчин",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "退烧",
+   "py": "tuìshāo",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to bring down fever",
+   "mn": "халуун буулгах",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "流鼻涕",
+   "py": "liúbítì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to have a runny nose",
+   "mn": "нус гоожих",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "拉肚子",
+   "py": "lādùzi",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to have diarrhea",
+   "mn": "гэдэс суулгах",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "得病",
+   "py": "débìng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to get sick",
+   "mn": "өвчин туслах, өвдөх",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "通气",
+   "py": "tōngqì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to ventilate",
+   "mn": "агааржуулах",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "活期",
+   "py": "huóqī",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "current (deposit)",
+   "mn": "хугацаагүй (хадгаламж)",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "重庆",
+   "py": "chóngqìng",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Chongqing",
+   "mn": "Чунцин",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "交通卡",
+   "py": "jiāotōngkǎ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "transport card",
+   "mn": "тээврийн карт",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "本科生",
+   "py": "běnkēshēng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "undergraduate student",
+   "mn": "бакалаврын оюутан",
+   "note": ""
+  }
+ ]
+}

@@ -1,0 +1,208 @@
+{
+ "lesson": 2,
+ "title": "",
+ "title_mn": "十字路口–歌舞",
+ "book": "初级口语",
+ "words": [
+  {
+   "n": 1,
+   "zh": "十字路口",
+   "py": "shízìlùkǒu",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "crossroads",
+   "mn": "уулзвар",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "鸡蛋炒西红柿",
+   "py": "jīdànchǎoxīhóngshì",
+   "pos": "短语",
+   "pos_mn": "хэллэг",
+   "en": "stir-fried eggs with tomato",
+   "mn": "улаан лооль өндөгтэй шарсан хоол",
+   "note": "西红柿炒鸡蛋 гэж бас хэлнэ."
+  },
+  {
+   "n": 3,
+   "zh": "麻婆豆腐",
+   "py": "mápódòufǔ",
+   "pos": "短语",
+   "pos_mn": "хэллэг",
+   "en": "mapo tofu",
+   "mn": "Мапо тофу",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "鱼香肉丝",
+   "py": "yúxiāngròusī",
+   "pos": "短语",
+   "pos_mn": "хэллэг",
+   "en": "fish-flavored shredded pork",
+   "mn": "загасны амттай гахайн мах",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "宫保鸡丁",
+   "py": "gōngbǎojīdīng",
+   "pos": "短语",
+   "pos_mn": "хэллэг",
+   "en": "kung pao chicken",
+   "mn": "Гунбао тахианы мах",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "东坡肉",
+   "py": "dōngpōròu",
+   "pos": "短语",
+   "pos_mn": "хэллэг",
+   "en": "Dongpo braised pork belly",
+   "mn": "Дунпо гахайн мах",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "会议室",
+   "py": "huìyìshì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "meeting room",
+   "mn": "хурлын өрөө",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "五星级",
+   "py": "wǔxīngjí",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "five-star",
+   "mn": "таван одтой",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "标准间",
+   "py": "biāozhǔnjiān",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "standard room",
+   "mn": "стандарт өрөө",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "接送",
+   "py": "jiēsòng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "pick up and drop off",
+   "mn": "угтаж үдэх",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "住宿",
+   "py": "zhùsù",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "stay, lodging",
+   "mn": "байр, буудаллах",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "硬卧",
+   "py": "yìngwò",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "hard sleeper",
+   "mn": "хатуу ор",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "软卧",
+   "py": "ruǎnwò",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "soft sleeper",
+   "mn": "зөөлөн ор",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "下铺",
+   "py": "xiàpù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "lower berth",
+   "mn": "доод ор",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "上铺",
+   "py": "shàngpù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "upper berth",
+   "mn": "дээд ор",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "硬座",
+   "py": "yìngzuò",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "hard seat",
+   "mn": "хатуу суудал",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "人山人海",
+   "py": "rénshānrénhǎi",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "huge crowds of people",
+   "mn": "хүн бөөгнөрөх, хүн дүүрэн",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "山水",
+   "py": "shānshuǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "mountains and rivers, scenery",
+   "mn": "уул ус, байгалийн үзэсгэлэн",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "少数民族",
+   "py": "shǎoshùmínzú",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "ethnic minority",
+   "mn": "цөөнх үндэстэн",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "歌舞",
+   "py": "gēwǔ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "song and dance",
+   "mn": "дуу бүжиг",
+   "note": ""
+  }
+ ]
+}

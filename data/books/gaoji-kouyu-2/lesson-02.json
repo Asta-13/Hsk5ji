@@ -1,0 +1,208 @@
+{
+ "lesson": 2,
+ "title": "",
+ "title_mn": "捎带脚儿–限度",
+ "book": "高级口语 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "捎带脚儿",
+   "py": "shāodàijiǎoér",
+   "pos": "副",
+   "pos_mn": "дайвар үг",
+   "en": "in passing, while at it",
+   "mn": "дашрамд, зэрэгцээд",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "砝码",
+   "py": "fámǎ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "weight; bargaining chip",
+   "mn": "жин, жингийн чулуу",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "入行",
+   "py": "rùháng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "enter a profession",
+   "mn": "мэргэжилд орох, салбарт орох",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "效应",
+   "py": "xiàoyìng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "effect",
+   "mn": "нөлөө, үр нөлөө",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "下马威",
+   "py": "xiàmǎwēi",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "show of strength at the start",
+   "mn": "эхний цохилт, айлгах дохио",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "远古",
+   "py": "yuǎngǔ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "remote antiquity",
+   "mn": "эртний, эрт дээр үе",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "取信于",
+   "py": "qǔxìnyú",
+   "pos": "短语",
+   "pos_mn": "хэллэг",
+   "en": "win trust of",
+   "mn": "итгэл олох",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "摇动",
+   "py": "yáodòng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "shake, sway",
+   "mn": "найгах, сэгсрэх",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "才智",
+   "py": "cáizhì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "talent and wisdom",
+   "mn": "авъяас ухаан, ухаалаг байдал",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "取悦",
+   "py": "qǔyuè",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "curry favor, please",
+   "mn": "таалагдах, таалал татах",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "经受",
+   "py": "jīngshòu",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "endure, withstand",
+   "mn": "тэсвэрлэх, давах",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "骚扰",
+   "py": "sāorǎo",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "harass, disturb",
+   "mn": "дарамтлах, түгшээх",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "乘务",
+   "py": "chéngwù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "train/flight attendant duty",
+   "mn": "зорчигч үйлчилгээ",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "费劲",
+   "py": "fèijìn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "take effort, strenuous",
+   "mn": "хүч дайчлах, зовлонтой",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "紧要",
+   "py": "jǐnyào",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "critical, vital",
+   "mn": "чухал, яаралтай",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "写照",
+   "py": "xiězhào",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "portrayal, depiction",
+   "mn": "дүрслэл, тусгал",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "假定",
+   "py": "jiǎdìng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "assume, suppose",
+   "mn": "таамаглах, ингэж үзэх",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "揩油",
+   "py": "kāiyóu",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "take petty advantage",
+   "mn": "хахуульдах, бусдын юмыг завших",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "国情",
+   "py": "guóqíng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "national conditions",
+   "mn": "улс орны нөхцөл байдал",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "限度",
+   "py": "xiàndù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "limit, bounds",
+   "mn": "хязгаар",
+   "note": ""
+  }
+ ]
+}

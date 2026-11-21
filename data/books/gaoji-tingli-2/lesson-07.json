@@ -1,0 +1,208 @@
+{
+ "lesson": 7,
+ "title": "",
+ "title_mn": "彷徨–购销单",
+ "book": "高级听力 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "彷徨",
+   "py": "pánghuáng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to hesitate, wander aimlessly",
+   "mn": "эргэлзэх, тэнэх",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "较劲",
+   "py": "jiàojìn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to contend, be at odds",
+   "mn": "хэрэлдэх, өрсөлдөх, тэмцэлдэх",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "成名",
+   "py": "chéngmíng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to become famous",
+   "mn": "нэр барих, алдартай болох",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "打成一片",
+   "py": "dǎchéngyīpiàn",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "to become one with",
+   "mn": "нэгдэн нийлэх, нэг болох",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "私下",
+   "py": "sīxià",
+   "pos": "副",
+   "pos_mn": "дайвар үг",
+   "en": "in private, privately",
+   "mn": "нууцаар, хувиараа",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "板着脸",
+   "py": "bǎnzheliǎn",
+   "pos": "短语",
+   "pos_mn": "хэллэг",
+   "en": "with a stern face",
+   "mn": "царайгаа хүнсийлгэх",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "课件",
+   "py": "kèjiàn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "courseware",
+   "mn": "хичээлийн материал, цахим хичээл",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "板报",
+   "py": "bǎnbào",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "blackboard newspaper",
+   "mn": "ханын сонин",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "仙女",
+   "py": "xiānnǚ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "fairy, goddess",
+   "mn": "дагина, тэнгэрийн охин",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "粉红色",
+   "py": "fěnhóngsè",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "pink",
+   "mn": "ягаан өнгө",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "魔杖",
+   "py": "mózhàng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "magic wand",
+   "mn": "шидэт саваа",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "音乐剧",
+   "py": "yīnyuèjù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "musical (theatre)",
+   "mn": "мюзикл, хөгжимт жүжиг",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "触动",
+   "py": "chùdòng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to touch, stir emotionally",
+   "mn": "сэтгэлийг хөдөлгөх, хөдөлгөх",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "抵",
+   "py": "dǐ",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to resist; to offset",
+   "mn": "эсэргүүцэх, нөхөх, дийлэх",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "跑调儿",
+   "py": "pǎodiàoér",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to be out of tune",
+   "mn": "аяс алдах, аяа алдах",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "预演",
+   "py": "yùyǎn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to rehearse",
+   "mn": "урьдчилан тоглох, бэлтгэл хийх",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "无师自通",
+   "py": "wúshīzìtōng",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "to master without a teacher",
+   "mn": "багшгүйгээр өөрөө сурах",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "甜瓜",
+   "py": "tiánguā",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "muskmelon",
+   "mn": "амтат гуа",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "采摘",
+   "py": "cǎizhāi",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to pick, pluck",
+   "mn": "түүх, зулгаах",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "购销单",
+   "py": "gòuxiāodān",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "purchase and sales slip",
+   "mn": "худалдан авалт борлуулалтын тасалбар",
+   "note": ""
+  }
+ ]
+}

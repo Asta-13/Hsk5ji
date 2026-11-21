@@ -1,0 +1,208 @@
+{
+ "lesson": 3,
+ "title": "",
+ "title_mn": "达人–枢纽",
+ "book": "高级口语 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "达人",
+   "py": "dárén",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "expert, master",
+   "mn": "мэргэжээн, мастер",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "检索",
+   "py": "jiǎnsuǒ",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "retrieve, search",
+   "mn": "хайх, лавлах",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "文案",
+   "py": "wénàn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "copywriting, copy",
+   "mn": "сурталчилгааны бичвэр, текст",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "时下",
+   "py": "shíxià",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "at present",
+   "mn": "одоо, энэ үед",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "过关",
+   "py": "guòguān",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "pass a test",
+   "mn": "даваа давах, шалгалтад тэнцэх",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "发泄",
+   "py": "fāxiè",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "vent (emotions)",
+   "mn": "сэтгэлээ гаргах",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "尽情",
+   "py": "jìnqíng",
+   "pos": "副",
+   "pos_mn": "дайвар үг",
+   "en": "to one's heart's content",
+   "mn": "сэтгэл ханатал",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "应试教育",
+   "py": "yìngshìjiàoyù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "exam-oriented education",
+   "mn": "шалгалтад чиглэсэн боловсрол",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "体制",
+   "py": "tǐzhì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "system, institution",
+   "mn": "тогтолцоо, байгууллага",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "自拔",
+   "py": "zìbá",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "extricate oneself",
+   "mn": "өөрийгөө салгах, гарч чадах",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "烦躁",
+   "py": "fánzào",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "irritable, restless",
+   "mn": "уцаартай, тавгүй",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "无异",
+   "py": "wúyì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "be no different from",
+   "mn": "ялгаагүй, адил",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "拥堵",
+   "py": "yōngdǔ",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "be congested",
+   "mn": "түгжирэх, бөөгнөрөх",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "紧缺",
+   "py": "jǐnquē",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "in short supply",
+   "mn": "хомс, дутмаг",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "就餐",
+   "py": "jiùcān",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "dine, have a meal",
+   "mn": "хооллох, хоол идэх",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "分流",
+   "py": "fēnliú",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "divert, split flow",
+   "mn": "урсгал салгах, хувааж чиглүүлэх",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "拓宽",
+   "py": "tuòkuān",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "widen, broaden",
+   "mn": "өргөтгөх, тэлэх",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "轻轨",
+   "py": "qīngguǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "light rail",
+   "mn": "хөнгөн галт тэрэг",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "蜘蛛",
+   "py": "zhīzhū",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "spider",
+   "mn": "аалз",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "枢纽",
+   "py": "shūniǔ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "hub, pivot",
+   "mn": "зангилаа, төв цэг",
+   "note": ""
+  }
+ ]
+}

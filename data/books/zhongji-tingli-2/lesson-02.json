@@ -1,0 +1,208 @@
+{
+ "lesson": 2,
+ "title": "",
+ "title_mn": "全职太太–干部",
+ "book": "中级听力 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "全职太太",
+   "py": "quánzhítàitài",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "full-time housewife",
+   "mn": "бүтэн цагийн гэрийн эзэгтэй",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "早出晚归",
+   "py": "zǎochūwǎnguī",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "leave early return late",
+   "mn": "өглөө эрт гарч орой ирэх",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "清闲",
+   "py": "qīngxián",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "leisurely",
+   "mn": "чөлөөтэй, амгалан",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "能人",
+   "py": "néngrén",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "capable person",
+   "mn": "чадварлаг хүн",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "鸭蛋",
+   "py": "yādàn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "zero score",
+   "mn": "тэг оноо, нүд",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "灭绝",
+   "py": "mièjué",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to die out",
+   "mn": "устах",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "遗迹",
+   "py": "yíjì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "ruins, relics",
+   "mn": "дурсгал, үлдэгдэл",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "绘声绘色",
+   "py": "huìshēnghuìsè",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "vivid and lifelike",
+   "mn": "амьд дүрслэн",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "老鹰",
+   "py": "lǎoyīng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "eagle, hawk",
+   "mn": "тас шувуу",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "成绩单",
+   "py": "chéngjìdān",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "report card",
+   "mn": "дүнгийн хуудас",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "吉他",
+   "py": "jítā",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "guitar",
+   "mn": "гитар",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "前台",
+   "py": "qiántái",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "reception desk",
+   "mn": "хүлээн авах ширээ",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "陪读",
+   "py": "péidú",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to accompany child studying",
+   "mn": "хүүхдийн хажууд байж сургах",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "自理",
+   "py": "zìlǐ",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to take care of oneself",
+   "mn": "өөрийгөө асрах",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "县城",
+   "py": "xiànchéng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "county town",
+   "mn": "шянь хот, сумын төв",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "租房",
+   "py": "zūfáng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to rent housing",
+   "mn": "байр түрээслэх",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "赞助费",
+   "py": "zànzhùfèi",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "sponsorship fee",
+   "mn": "ивээн тэтгэх хураамж",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "好梦成真",
+   "py": "hǎomèngchéngzhēn",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "dreams come true",
+   "mn": "сайхан мөрөөдөл биелэх",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "胡编乱造",
+   "py": "húbiānluànzào",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "to fabricate",
+   "mn": "худал зохиох",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "干部",
+   "py": "gànbù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "cadre, official",
+   "mn": "кадр, албан тушаалтан",
+   "note": ""
+  }
+ ]
+}

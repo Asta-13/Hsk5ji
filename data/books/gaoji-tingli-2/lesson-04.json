@@ -1,0 +1,208 @@
+{
+ "lesson": 4,
+ "title": "",
+ "title_mn": "分担–敬佩",
+ "book": "高级听力 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "分担",
+   "py": "fēndān",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to share (burden)",
+   "mn": "хуваан үүрэх",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "逃出",
+   "py": "táochū",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to escape",
+   "mn": "оргон гарах",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "自省",
+   "py": "zìxǐng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to reflect on oneself",
+   "mn": "өөрийгөө эргэн харах",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "专栏",
+   "py": "zhuānlán",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "special column",
+   "mn": "тусгай булан, цуврал нийтлэл",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "荒诞",
+   "py": "huāngdàn",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "absurd",
+   "mn": "утгагүй, балиар",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "离奇",
+   "py": "líqí",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "bizarre",
+   "mn": "хачирхалтай, үл итгэмээр",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "遗稿",
+   "py": "yígǎo",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "posthumous manuscript",
+   "mn": "нас барсны дараах гар бичмэл",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "零散",
+   "py": "língsǎn",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "scattered",
+   "mn": "тарамдсан, цуглаагүй",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "文坛",
+   "py": "wéntán",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "literary circles",
+   "mn": "утга зохиолын ертөнц",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "佳话",
+   "py": "jiāhuà",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "story widely told, good tale",
+   "mn": "сайхан домог, алдартай түүх",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "受难",
+   "py": "shòunàn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to suffer disaster",
+   "mn": "золгүй явдалд өртөх, зовох",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "忏悔",
+   "py": "chànhuǐ",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to repent",
+   "mn": "наманчлах",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "感化",
+   "py": "gǎnhuà",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to reform by influence",
+   "mn": "сайнаар нөлөөлж засах",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "沈从文",
+   "py": "shěncóngwén",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Shen Congwen (writer)",
+   "mn": "Шэнь Цуньвэнь",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "老小",
+   "py": "lǎoxiǎo",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "old and young",
+   "mn": "өндөр настан ба хүүхэд, том жижиг",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "石膏",
+   "py": "shígāo",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "plaster, gypsum",
+   "mn": "гипс, шохой",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "合唱团",
+   "py": "héchàngtuán",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "choir",
+   "mn": "найрал дууны хамтлаг",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "养病",
+   "py": "yǎngbìng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to recuperate",
+   "mn": "өвчнөө эмчлэн амрах",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "原动力",
+   "py": "yuándònglì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "driving force",
+   "mn": "хөдөлгөгч хүч",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "敬佩",
+   "py": "jìngpèi",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to admire, respect",
+   "mn": "хүндэтгэн биширэх",
+   "note": ""
+  }
+ ]
+}

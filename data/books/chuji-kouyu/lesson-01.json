@@ -1,0 +1,208 @@
+{
+ "lesson": 1,
+ "title": "",
+ "title_mn": "没问题–红绿灯",
+ "book": "初级口语",
+ "words": [
+  {
+   "n": 1,
+   "zh": "没问题",
+   "py": "méiwèntí",
+   "pos": "短语",
+   "pos_mn": "хэллэг",
+   "en": "no problem",
+   "mn": "асуудалгүй",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "小区",
+   "py": "xiǎoqū",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "residential area",
+   "mn": "орон сууцны хороолол",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "什么的",
+   "py": "shénmede",
+   "pos": "助",
+   "pos_mn": "туслах үг",
+   "en": "and so on",
+   "mn": "гэх мэт",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "语伴",
+   "py": "yǔbàn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "language partner",
+   "mn": "хэлний хамтрагч",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "香港",
+   "py": "xiānggǎng",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Hong Kong",
+   "mn": "Хонконг",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "哈尔滨",
+   "py": "hāěrbīn",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Harbin",
+   "mn": "Харбин",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "冰雪节",
+   "py": "bīngxuějié",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Ice and Snow Festival",
+   "mn": "Мөс цасны наадам",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "名胜古迹",
+   "py": "míngshènggǔjì",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "scenic spots and historic sites",
+   "mn": "үзэсгэлэнт газар, түүхийн дурсгал",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "死机",
+   "py": "sǐjī",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "crash (computer)",
+   "mn": "гацах",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "马马虎虎",
+   "py": "mǎmǎhǔhǔ",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "so-so, careless",
+   "mn": "дажгүй, тааруухан",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "对了",
+   "py": "duìle",
+   "pos": "短语",
+   "pos_mn": "хэллэг",
+   "en": "by the way",
+   "mn": "дашрамд хэлэхэд",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "熬夜",
+   "py": "áoyè",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "stay up late",
+   "mn": "шөнөжин сэрүүн байх",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "新加坡",
+   "py": "xīnjiāpō",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Singapore",
+   "mn": "Сингапур",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "剑桥大学",
+   "py": "jiànqiáodàxué",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "University of Cambridge",
+   "mn": "Кембрижийн их сургууль",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "宣传部",
+   "py": "xuānchuánbù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "publicity department",
+   "mn": "суртал ухуулгын хэлтэс",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "脸谱",
+   "py": "liǎnpǔ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "facial make-up (opera)",
+   "mn": "нүүрний будалт",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "天哪",
+   "py": "tiānnǎ",
+   "pos": "叹",
+   "pos_mn": "аялга үг",
+   "en": "oh my god",
+   "mn": "Өө бурхан минь",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "睡懒觉",
+   "py": "shuìlǎnjiào",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "sleep in",
+   "mn": "хожуу босох, нойрсох",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "河边",
+   "py": "hébiān",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "riverside",
+   "mn": "голын эрэг",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "红绿灯",
+   "py": "hónglǜdēng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "traffic lights",
+   "mn": "гэрлэн дохио",
+   "note": ""
+  }
+ ]
+}

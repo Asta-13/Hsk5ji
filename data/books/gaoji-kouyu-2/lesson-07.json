@@ -1,0 +1,118 @@
+{
+ "lesson": 7,
+ "title": "",
+ "title_mn": "诀窍–液态",
+ "book": "高级口语 II",
+ "words": [
+  {
+   "n": 1,
+   "zh": "诀窍",
+   "py": "juéqiào",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "knack, trick",
+   "mn": "арга заль, нууц арга",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "烂醉如泥",
+   "py": "lànzuìrúní",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "dead drunk",
+   "mn": "хэт согтох",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "政见",
+   "py": "zhèngjiàn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "political view",
+   "mn": "улс төрийн үзэл бодол",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "诸如",
+   "py": "zhūrú",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "such as",
+   "mn": "тухайлбал, ялангуяа",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "非议",
+   "py": "fēiyì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "criticize, censure",
+   "mn": "буруушаах, шүүмжлэх",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "直截了当",
+   "py": "zhíjiéliǎodàng",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "straightforward",
+   "mn": "шууд, илээр",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "退化",
+   "py": "tuìhuà",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "degenerate",
+   "mn": "доройтох, ухарч доройтох",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "繁衍",
+   "py": "fányǎn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "multiply, propagate",
+   "mn": "үржих, төрөн ихсэх",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "丑陋",
+   "py": "chǒulòu",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "ugly",
+   "mn": "муухай, ширүүн",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "特权",
+   "py": "tèquán",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "privilege",
+   "mn": "онцгой эрх",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "液态",
+   "py": "yètài",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "liquid state",
+   "mn": "шингэн төлөв",
+   "note": ""
+  }
+ ]
+}

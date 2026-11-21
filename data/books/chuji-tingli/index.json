@@ -1,0 +1,42 @@
+{
+ "id": "chuji-tingli",
+ "title": "初级听力",
+ "title_mn": "Анхан шатны сонсгол",
+ "lessons": [
+  {
+   "lesson": 1,
+   "title": "",
+   "title_mn": "越南–意大利",
+   "count": 20,
+   "file": "lesson-01.json"
+  },
+  {
+   "lesson": 2,
+   "title": "",
+   "title_mn": "欢迎光临–考卷",
+   "count": 20,
+   "file": "lesson-02.json"
+  },
+  {
+   "lesson": 3,
+   "title": "",
+   "title_mn": "期中考试–本科生",
+   "count": 20,
+   "file": "lesson-03.json"
+  },
+  {
+   "lesson": 4,
+   "title": "",
+   "title_mn": "原价–青年旅馆",
+   "count": 20,
+   "file": "lesson-04.json"
+  },
+  {
+   "lesson": 5,
+   "title": "",
+   "title_mn": "双人间–芝加哥大学",
+   "count": 14,
+   "file": "lesson-05.json"
+  }
+ ]
+}

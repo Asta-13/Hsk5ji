@@ -1,0 +1,208 @@
+{
+ "lesson": 6,
+ "title": "",
+ "title_mn": "逆转–描",
+ "book": "高级综合 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "逆转",
+   "py": "nìzhuǎn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "reverse, turn around",
+   "mn": "эргэх, буцаах",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "印证",
+   "py": "yìnzhèng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "corroborate",
+   "mn": "баталгаажуулах, нотлох",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "贪官",
+   "py": "tānguān",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "corrupt official",
+   "mn": "авилгач түшмэл",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "酥油",
+   "py": "sūyóu",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "ghee, butter oil",
+   "mn": "цөцгийн тос, шар тос",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "旺",
+   "py": "wàng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "flourishing, prosperous",
+   "mn": "цэцэглэн хөгжсөн, хүчтэй",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "魔力",
+   "py": "mólì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "magic power, charm",
+   "mn": "ид шид, татах хүч",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "例证",
+   "py": "lìzhèng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "example, illustration",
+   "mn": "жишээ, баримт",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "切换",
+   "py": "qièhuàn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "switch over",
+   "mn": "сэлгэх, шилжүүлэх",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "认知",
+   "py": "rènzhī",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "cognize, perceive",
+   "mn": "танин мэдэх",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "违犯",
+   "py": "wéifàn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "violate, break (law)",
+   "mn": "зөрчих, дүрэм зөрчих",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "有意识",
+   "py": "yǒuyìshí",
+   "pos": "副",
+   "pos_mn": "дайвар үг",
+   "en": "consciously",
+   "mn": "ухамсартайгаар, санаатайгаар",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "梦游",
+   "py": "mèngyóu",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "sleepwalk",
+   "mn": "нойрмоглох, нойрондоо алхах",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "章节",
+   "py": "zhāngjié",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "chapters and sections",
+   "mn": "бүлэг, хэсэг",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "粉碎性",
+   "py": "fěnsuìxìng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "comminuted, shattering",
+   "mn": "бутарсан, бутлагдсан",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "悠然",
+   "py": "yōurán",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "leisurely, carefree",
+   "mn": "тайван, чөлөөтэй",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "依",
+   "py": "yī",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "rely on; comply",
+   "mn": "найдах, тулах",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "绰号",
+   "py": "chuòhào",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "nickname",
+   "mn": "хоч нэр",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "赌咒",
+   "py": "dǔzhòu",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "swear an oath",
+   "mn": "тангараглах",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "誓言",
+   "py": "shìyán",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "oath, pledge",
+   "mn": "тангараг, амлалт",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "描",
+   "py": "miáo",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "trace, depict",
+   "mn": "зурах, дүрслэх",
+   "note": ""
+  }
+ ]
+}

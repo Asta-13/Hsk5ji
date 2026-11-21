@@ -1,0 +1,208 @@
+{
+ "lesson": 2,
+ "title": "",
+ "title_mn": "遐想–吾日三省吾身",
+ "book": "高级听力 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "遐想",
+   "py": "xiáxiǎng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "daydream, reverie",
+   "mn": "мөрөөдөх, төсөөлөх",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "难为",
+   "py": "nánwéi",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "put in a tough spot",
+   "mn": "хэцүү байдалд оруулах",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "节育",
+   "py": "jiéyù",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "birth control",
+   "mn": "төрөлтийг хязгаарлах",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "尽头",
+   "py": "jìntóu",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "end, limit",
+   "mn": "төгсгөл, хязгаар",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "品位",
+   "py": "pǐnwèi",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "taste, grade",
+   "mn": "амт чанар, зэрэглэл",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "见识",
+   "py": "jiànshí",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "knowledge, insight",
+   "mn": "мэдлэг, үзэл бодол",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "加班加点",
+   "py": "jiābānjiādiǎn",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "work overtime",
+   "mn": "илүү цагаар ажиллах",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "所剩无几",
+   "py": "suǒshèngwújǐ",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "very little left",
+   "mn": "бараг үлдсэнгүй",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "短平快",
+   "py": "duǎnpíngkuài",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "short, flat, fast; quick results",
+   "mn": "богино хугацаанд үр дүнд хүрэх",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "马拉松",
+   "py": "mǎlāsōng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "marathon",
+   "mn": "марафон",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "征婚",
+   "py": "zhēnghūn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "advertise for a spouse",
+   "mn": "гэрлэх хүн хайж зар тавих",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "难说",
+   "py": "nánshuō",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "hard to say",
+   "mn": "хэлэхэд хэцүү",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "相提并论",
+   "py": "xiāngtíbìnglùn",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "put on par",
+   "mn": "адилтган авч үзэх",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "愉悦",
+   "py": "yúyuè",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "joyful",
+   "mn": "баяр баясгалантай",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "退居",
+   "py": "tuìjū",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "retreat to, fall back to",
+   "mn": "ухарч байр сууриа өөрчлөх",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "论语",
+   "py": "lúnyǔ",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "The Analects",
+   "mn": "Лүнь юй",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "一家",
+   "py": "yījiā",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "one family",
+   "mn": "нэг гэр бүл",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "百姓",
+   "py": "bǎixìng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "common people",
+   "mn": "ард түмэн, жирийн иргэд",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "苦心",
+   "py": "kǔxīn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "painstaking effort",
+   "mn": "зүтгэл, хичээл зүтгэл",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "吾日三省吾身",
+   "py": "wúrìsānxǐngwúshēn",
+   "pos": "短语",
+   "pos_mn": "хэллэг",
+   "en": "reflect on myself thrice daily",
+   "mn": "өдөр бүр өөрийгөө гурван удаа эргэцүүлдэг",
+   "note": ""
+  }
+ ]
+}

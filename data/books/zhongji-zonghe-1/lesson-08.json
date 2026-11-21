@@ -1,0 +1,88 @@
+{
+ "lesson": 8,
+ "title": "",
+ "title_mn": "农场–闲置",
+ "book": "中级综合 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "农场",
+   "py": "nóngchǎng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "farm",
+   "mn": "ферм",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "临",
+   "py": "lín",
+   "pos": "介",
+   "pos_mn": "угтвар үг",
+   "en": "just before; on the verge of",
+   "mn": "ойртох, тулах",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "欣然",
+   "py": "xīnrán",
+   "pos": "副",
+   "pos_mn": "дайвар үг",
+   "en": "gladly",
+   "mn": "баяртайгаар, дуртайяа",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "以至于",
+   "py": "yǐzhìyú",
+   "pos": "连",
+   "pos_mn": "холбоос",
+   "en": "so that; to the extent that",
+   "mn": "тэр хэмжээнд хүртэл",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "承建",
+   "py": "chéngjiàn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "contract to build",
+   "mn": "гэрээгээр барих",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "名气",
+   "py": "míngqì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "fame; reputation",
+   "mn": "алдар нэр",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "优越性",
+   "py": "yōuyuèxìng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "superiority; advantage",
+   "mn": "давуу тал",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "闲置",
+   "py": "xiánzhì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "leave unused",
+   "mn": "ашиглалгүй орхих, сул байлгах",
+   "note": ""
+  }
+ ]
+}

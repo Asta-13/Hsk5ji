@@ -1,0 +1,158 @@
+{
+ "lesson": 11,
+ "title": "",
+ "title_mn": "官印–东晋",
+ "book": "高级综合 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "官印",
+   "py": "guānyìn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "official seal",
+   "mn": "албан тамга",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "进取",
+   "py": "jìnqǔ",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "be enterprising",
+   "mn": "урагш тэмүүлэх, өсөн дэвжих",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "诚敬",
+   "py": "chéngjìng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "sincere and respectful",
+   "mn": "чин сэтгэл ба хүндэтгэлтэй",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "缺憾",
+   "py": "quēhàn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "regret, imperfection",
+   "mn": "дутагдал, харамсал",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "贤人",
+   "py": "xiánrén",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "wise man, sage",
+   "mn": "мэргэн, ухаант хүн",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "谦恭",
+   "py": "qiāngōng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "modest and courteous",
+   "mn": "даруу, хүндэтгэлтэй",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "纠缠",
+   "py": "jiūchán",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "entangle, pester",
+   "mn": "орооцолдох, дарамтлах",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "不及",
+   "py": "bùjí",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "not as good as",
+   "mn": "дутах, хүрэхгүй",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "仁爱",
+   "py": "rénài",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "benevolence",
+   "mn": "энэрэл, хайр",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "恩德",
+   "py": "ēndé",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "kindness, favor",
+   "mn": "буян, нигүүлсэл",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "率直",
+   "py": "shuàizhí",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "frank, straightforward",
+   "mn": "шулуун, илэн далангүй",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "坦然",
+   "py": "tǎnrán",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "calm, unperturbed",
+   "mn": "тайван, өөдрөг",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "荒芜",
+   "py": "huāngwú",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "overgrown, desolate",
+   "mn": "хоосон, эзгүй",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "儒家",
+   "py": "rújiā",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Confucianism, Confucian school",
+   "mn": "Күнзийн сургаал, Күнзүүд",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "东晋",
+   "py": "dōngjìn",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Eastern Jin dynasty",
+   "mn": "Дорнод Жин улс",
+   "note": ""
+  }
+ ]
+}

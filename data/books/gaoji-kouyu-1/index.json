@@ -1,0 +1,70 @@
+{
+ "id": "gaoji-kouyu-1",
+ "title": "高级口语 I",
+ "title_mn": "Ахисан шатны яриа I",
+ "lessons": [
+  {
+   "lesson": 1,
+   "title": "",
+   "title_mn": "期刊–学龄",
+   "count": 20,
+   "file": "lesson-01.json"
+  },
+  {
+   "lesson": 2,
+   "title": "",
+   "title_mn": "公立–书评",
+   "count": 20,
+   "file": "lesson-02.json"
+  },
+  {
+   "lesson": 3,
+   "title": "",
+   "title_mn": "达人–枢纽",
+   "count": 20,
+   "file": "lesson-03.json"
+  },
+  {
+   "lesson": 4,
+   "title": "",
+   "title_mn": "受理–共赢",
+   "count": 20,
+   "file": "lesson-04.json"
+  },
+  {
+   "lesson": 5,
+   "title": "",
+   "title_mn": "搭车–丰厚",
+   "count": 20,
+   "file": "lesson-05.json"
+  },
+  {
+   "lesson": 6,
+   "title": "",
+   "title_mn": "职场–法宝",
+   "count": 20,
+   "file": "lesson-06.json"
+  },
+  {
+   "lesson": 7,
+   "title": "",
+   "title_mn": "旅伴–想当然",
+   "count": 20,
+   "file": "lesson-07.json"
+  },
+  {
+   "lesson": 8,
+   "title": "",
+   "title_mn": "刻意–代言",
+   "count": 23,
+   "file": "lesson-08.json"
+  },
+  {
+   "lesson": 9,
+   "title": "",
+   "title_mn": "刻意–代言",
+   "count": 23,
+   "file": "lesson-09.json"
+  }
+ ]
+}

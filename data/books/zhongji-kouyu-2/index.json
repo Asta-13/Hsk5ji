@@ -1,0 +1,28 @@
+{
+ "id": "zhongji-kouyu-2",
+ "title": "中级口语 II",
+ "title_mn": "Дунд шатны яриа II",
+ "lessons": [
+  {
+   "lesson": 1,
+   "title": "",
+   "title_mn": "砍伐–理念",
+   "count": 20,
+   "file": "lesson-01.json"
+  },
+  {
+   "lesson": 2,
+   "title": "",
+   "title_mn": "负面–频频",
+   "count": 20,
+   "file": "lesson-02.json"
+  },
+  {
+   "lesson": 3,
+   "title": "",
+   "title_mn": "深浅–喜好",
+   "count": 12,
+   "file": "lesson-03.json"
+  }
+ ]
+}

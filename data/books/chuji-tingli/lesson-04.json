@@ -1,0 +1,208 @@
+{
+ "lesson": 4,
+ "title": "",
+ "title_mn": "原价–青年旅馆",
+ "book": "初级听力",
+ "words": [
+  {
+   "n": 1,
+   "zh": "原价",
+   "py": "yuánjià",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "original price",
+   "mn": "анхны үнэ",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "机场大巴",
+   "py": "jīchǎngdàbā",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "airport bus",
+   "mn": "нисэх буудлын автобус",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "往返票",
+   "py": "wǎngfǎnpiào",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "round-trip ticket",
+   "mn": "хоёр талын тасалбар",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "头等舱",
+   "py": "tóuděngcāng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "first-class cabin",
+   "mn": "нэгдүгээр зэргийн салон",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "单程票",
+   "py": "dānchéngpiào",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "one-way ticket",
+   "mn": "нэг талын тасалбар",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "经济舱",
+   "py": "jīngjìcāng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "economy class",
+   "mn": "эконом зэрэглэлийн салон",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "武汉",
+   "py": "wǔhàn",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Wuhan",
+   "mn": "Ухань",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "软座票",
+   "py": "ruǎnzuòpiào",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "soft seat ticket",
+   "mn": "зөөлөн суудлын тасалбар",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "发车",
+   "py": "fāchē",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to depart (vehicle)",
+   "mn": "хөдлөх, галт тэрэг/автобус явах",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "卧铺票",
+   "py": "wòpùpiào",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "sleeper ticket",
+   "mn": "хэвтэх орны тасалбар",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "餐车",
+   "py": "cānchē",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "dining car",
+   "mn": "хоолны вагон",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "售票员",
+   "py": "shòupiàoyuán",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "ticket seller",
+   "mn": "тасалбар борлуулагч",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "开往",
+   "py": "kāiwǎng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "to head for",
+   "mn": "чиглэн явах",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "古迹",
+   "py": "gǔjì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "historic site",
+   "mn": "түүхэн дурсгалт газар",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "西安",
+   "py": "xīān",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Xi'an",
+   "mn": "Сиань",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "西藏",
+   "py": "xīzàng",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Tibet",
+   "mn": "Түвд",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "布达拉宫",
+   "py": "bùdálāgōng",
+   "pos": "专名",
+   "pos_mn": "тусгай нэр",
+   "en": "Potala Palace",
+   "mn": "Потала ордон",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "稍等",
+   "py": "shāoděng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "wait a moment",
+   "mn": "түр хүлээх",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "单人间",
+   "py": "dānrénjiān",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "single room",
+   "mn": "нэг хүний өрөө",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "青年旅馆",
+   "py": "qīngniánlǚguǎn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "youth hostel",
+   "mn": "залуучуудын зочид буудал",
+   "note": ""
+  }
+ ]
+}

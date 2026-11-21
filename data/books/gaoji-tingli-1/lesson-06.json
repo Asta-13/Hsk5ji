@@ -1,0 +1,208 @@
+{
+ "lesson": 6,
+ "title": "",
+ "title_mn": "起步–坦诚",
+ "book": "高级听力 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "起步",
+   "py": "qǐbù",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "start, set out",
+   "mn": "эхлэх, анхны алхам хийх",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "散装",
+   "py": "sǎnzhuāng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "loose, in bulk",
+   "mn": "задгай",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "演戏",
+   "py": "yǎnxì",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "act, put on a show",
+   "mn": "жүжиглэх",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "充其量",
+   "py": "chōngqíliàng",
+   "pos": "副",
+   "pos_mn": "дайвар үг",
+   "en": "at most",
+   "mn": "дээд тал нь",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "低级",
+   "py": "dījí",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "low-grade, vulgar",
+   "mn": "доод түвшний, бүдүүлэг",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "鬼地方",
+   "py": "guǐdìfāng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "godforsaken place",
+   "mn": "хараал идсэн газар",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "作假",
+   "py": "zuòjiǎ",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "cheat, fake",
+   "mn": "хуурамчаар хийх, хууран мэхлэх",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "宠爱",
+   "py": "chǒngài",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "dote on",
+   "mn": "эрхлүүлэх, хайрлан дэмжих",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "遗体",
+   "py": "yítǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "remains of the deceased",
+   "mn": "цогцос, шарил",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "绝食",
+   "py": "juéshí",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "go on hunger strike",
+   "mn": "өлсгөлөн зарлах",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "首领",
+   "py": "shǒulǐng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "leader, chief",
+   "mn": "удирдагч, толгойлогч",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "荒漠",
+   "py": "huāngmò",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "desert, wasteland",
+   "mn": "цөл",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "地下水",
+   "py": "dìxiàshuǐ",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "groundwater",
+   "mn": "гүний ус",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "枝繁叶茂",
+   "py": "zhīfányèmào",
+   "pos": "成",
+   "pos_mn": "хэлц үг",
+   "en": "luxuriant foliage",
+   "mn": "мөчир навч нь өтгөн",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "幼苗",
+   "py": "yòumiáo",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "seedling",
+   "mn": "нахиа, суулгац",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "领地",
+   "py": "lǐngdì",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "territory",
+   "mn": "нутаг дэвсгэр, эзэмшил газар",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "当众出丑",
+   "py": "dāngzhòngchūchǒu",
+   "pos": "短语",
+   "pos_mn": "хэллэг",
+   "en": "lose face in public",
+   "mn": "олны өмнө ичгүүр сонсох",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "朽",
+   "py": "xiǔ",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "rot, decay",
+   "mn": "ялзрах, муудах",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "难为情",
+   "py": "nánwéiqíng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "embarrassed",
+   "mn": "ичмээр, эвгүй",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "坦诚",
+   "py": "tǎnchéng",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "frank, candid",
+   "mn": "илэн далангүй, шулуун",
+   "note": ""
+  }
+ ]
+}

@@ -1,0 +1,208 @@
+{
+ "lesson": 2,
+ "title": "",
+ "title_mn": "缝补–屏",
+ "book": "中级综合 I",
+ "words": [
+  {
+   "n": 1,
+   "zh": "缝补",
+   "py": "féngbǔ",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "sew and mend",
+   "mn": "оёж засах",
+   "note": ""
+  },
+  {
+   "n": 2,
+   "zh": "篷布",
+   "py": "péngbù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "tarpaulin",
+   "mn": "брезент",
+   "note": ""
+  },
+  {
+   "n": 3,
+   "zh": "傻小子",
+   "py": "shǎxiǎozi",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "silly boy",
+   "mn": "тэнэг хүү",
+   "note": ""
+  },
+  {
+   "n": 4,
+   "zh": "快件",
+   "py": "kuàijiàn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "express mail",
+   "mn": "шуурхай илгээмж",
+   "note": ""
+  },
+  {
+   "n": 5,
+   "zh": "单子",
+   "py": "dānzi",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "form; list",
+   "mn": "хуудас, жагсаалт",
+   "note": ""
+  },
+  {
+   "n": 6,
+   "zh": "露天",
+   "py": "lùtiān",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "open air",
+   "mn": "задгай, ил газар",
+   "note": ""
+  },
+  {
+   "n": 7,
+   "zh": "签收",
+   "py": "qiānshōu",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "sign for receipt",
+   "mn": "гарын үсэг зурж хүлээн авах",
+   "note": ""
+  },
+  {
+   "n": 8,
+   "zh": "加薪",
+   "py": "jiāxīn",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "raise salary",
+   "mn": "цалин нэмэх",
+   "note": ""
+  },
+  {
+   "n": 9,
+   "zh": "责任心",
+   "py": "zérènxīn",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "sense of responsibility",
+   "mn": "хариуцлагын мэдрэмж",
+   "note": ""
+  },
+  {
+   "n": 10,
+   "zh": "手下",
+   "py": "shǒuxià",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "subordinate",
+   "mn": "доод албан тушаалтан",
+   "note": ""
+  },
+  {
+   "n": 11,
+   "zh": "高等教育",
+   "py": "gāoděngjiàoyù",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "higher education",
+   "mn": "дээд боловсрол",
+   "note": ""
+  },
+  {
+   "n": 12,
+   "zh": "外商",
+   "py": "wàishāng",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "foreign businessman",
+   "mn": "гадаадын бизнесмэн",
+   "note": ""
+  },
+  {
+   "n": 13,
+   "zh": "生怕",
+   "py": "shēngpà",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "fear that",
+   "mn": "айх, болгоомжлох",
+   "note": ""
+  },
+  {
+   "n": 14,
+   "zh": "听话",
+   "py": "tīnghuà",
+   "pos": "形",
+   "pos_mn": "тэмдэг нэр",
+   "en": "obedient",
+   "mn": "дуулгавартай",
+   "note": ""
+  },
+  {
+   "n": 15,
+   "zh": "回请",
+   "py": "huíqǐng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "return a banquet",
+   "mn": "хариу дайлах",
+   "note": ""
+  },
+  {
+   "n": 16,
+   "zh": "用餐",
+   "py": "yòngcān",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "have a meal",
+   "mn": "хооллох",
+   "note": ""
+  },
+  {
+   "n": 17,
+   "zh": "上司",
+   "py": "shàngsī",
+   "pos": "名",
+   "pos_mn": "нэр үг",
+   "en": "superior; boss",
+   "mn": "дарга, дээд албан тушаалтан",
+   "note": ""
+  },
+  {
+   "n": 18,
+   "zh": "微微",
+   "py": "wēiwēi",
+   "pos": "副",
+   "pos_mn": "дайвар үг",
+   "en": "slightly",
+   "mn": "бага зэрэг, жаахан",
+   "note": ""
+  },
+  {
+   "n": 19,
+   "zh": "支支吾吾",
+   "py": "zhīzhīwúwú",
+   "pos": "短语",
+   "pos_mn": "хэллэг",
+   "en": "hem and haw",
+   "mn": "ярихдаа гацах",
+   "note": ""
+  },
+  {
+   "n": 20,
+   "zh": "屏",
+   "py": "píng",
+   "pos": "动",
+   "pos_mn": "үйл үг",
+   "en": "hold (breath)",
+   "mn": "амьсгаагаа түгжих",
+   "note": ""
+  }
+ ]
+}
