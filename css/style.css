@@ -1190,3 +1190,5 @@ body{padding-bottom:96px}
 .pdft{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.95rem}
 .pdfbar .btn{text-decoration:none}
 .pdfframe{flex:1;width:100%;border:0;background:#fff}
+
+.bksep{display:inline-block;width:1px;align-self:stretch;background:var(--line);margin:4px 2px}

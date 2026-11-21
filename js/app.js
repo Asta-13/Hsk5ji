@@ -1889,7 +1889,11 @@ var DATA=window.DATA;
     }
     if(BK.err&&!BK.idx){$('bkList').innerHTML='<div class="empty"><b>'+T('bkLoadErr')+'</b><br><button class="btn small ghost" type="button" id="bkRetry" style="margin-top:10px">↻</button></div>';return}
     var cat=BK.cat||[];
-    $('bkBooks').innerHTML=cat.length>1?cat.map(function(b){return '<button class="chip" type="button" data-bk="'+esc(b.id)+'" aria-pressed="'+(b.id===BK.bid)+'">'+esc(lang==='mn'?(b.title_mn||b.title):b.title)+'</button>'}).join(''):'';
+    var curB=cat.filter(function(b){return b.id===BK.bid})[0],blv=BK.blv||(curB&&curB.level)||'',lvl=[];
+    cat.forEach(function(b){if(b.level&&lvl.indexOf(b.level)<0)lvl.push(b.level)});
+    lvl.sort(function(a,b){return ['初级','中级','高级'].indexOf(a)-['初级','中级','高级'].indexOf(b)});
+    $('bkBooks').innerHTML=cat.length>1?(lvl.length>1?lvl.map(function(l){return '<button class="chip" type="button" data-blv="'+esc(l)+'" aria-pressed="'+(l===blv)+'">'+esc(libTr(LIB_LV,l))+'</button>'}).join('')+'<span class="bksep" aria-hidden="true"></span>':'')+
+      cat.filter(function(b){return !b.level||!blv||b.level===blv}).map(function(b){return '<button class="chip" type="button" data-bk="'+esc(b.id)+'" aria-pressed="'+(b.id===BK.bid)+'">'+esc(lang==='mn'?(b.title_mn||b.title):b.title)+'</button>'}).join(''):'';
     var ls=BK.idx?BK.idx.lessons:[];
     var hasPg=!!(BK.idx&&BK.idx.pages);
     $('bkMode').innerHTML=bkModeChips(hasPg);
@@ -1921,7 +1925,8 @@ var DATA=window.DATA;
     }).join('')||emptyRes(q,'bkQ');
   }
   document.addEventListener('click',function(e){
-    var b=e.target.closest('[data-bk]');if(b){BK.bid=b.dataset.bk;BK.idx=null;BK.les=1;BK.err=false;renderBook();return}
+    var b=e.target.closest('[data-blv]');if(b){BK.blv=b.dataset.blv;var f=(BK.cat||[]).filter(function(x){return x.level===BK.blv})[0];if(f&&f.id!==BK.bid){BK.bid=f.id;BK.idx=null;BK.les=1;BK.err=false}renderBook();return}
+    b=e.target.closest('[data-bk]');if(b){BK.bid=b.dataset.bk;BK.idx=null;BK.les=1;BK.err=false;renderBook();return}
     b=e.target.closest('[data-bm]');if(b){BK.mode=b.dataset.bm;if(BK.mode==='pages'&&!BK.les)BK.les=1;BK.err=false;renderBook();return}
     b=e.target.closest('[data-bp]');if(b){$('bkVi').style.width='100%';$('bkView').hidden=false;document.body.style.overflow='hidden';bkShow(+b.dataset.bp);return}
     if(e.target.closest('#bkVx')){bkClose();return}

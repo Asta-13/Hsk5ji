@@ -1,10 +1,18 @@
 {
  "books": [
   {
+   "id": "chuji-zonghe-1",
+   "dir": "chuji-zonghe-1",
+   "title": "初级综合 I",
+   "title_mn": "Анхан шатны цогц хичээл I",
+   "level": "初级"
+  },
+  {
    "id": "zhongji-zonghe-2",
    "dir": "zhongji-zonghe-2",
    "title": "中级综合 II",
-   "title_mn": "Дунд шатны цогц хичээл II"
+   "title_mn": "Дунд шатны цогц хичээл II",
+   "level": "中级"
   }
  ]
 }

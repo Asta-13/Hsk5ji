@@ -1,0 +1,21 @@
+{
+ "id": "chuji-zonghe-1",
+ "title": "初级综合 I",
+ "title_mn": "Анхан шатны цогц хичээл I",
+ "lessons": [
+  {
+   "lesson": 1,
+   "title": "国家、地方、语言",
+   "title_mn": "Улс орон, газар, хэл",
+   "count": 18,
+   "file": "lesson-01.json"
+  },
+  {
+   "lesson": 2,
+   "title": "其他生词",
+   "title_mn": "Бусад шинэ үгс",
+   "count": 38,
+   "file": "lesson-02.json"
+  }
+ ]
+}
