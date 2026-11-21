@@ -45,8 +45,8 @@ var DATA=window.DATA;
     plGoBtn:["🎮 Тоглох","🎮 Play","🎮 Играть","🎮 プレイ"],
     tabBook:["Ном","Books","Книги","教科書"],
     mdBook:["Номын хичээл бүрийн шинэ үг","New words from each book lesson","Новые слова из уроков учебника","教科書の各課の新出単語"],
-    bkTitle:["Номын шинэ үгс","Book new words","Новые слова из книг","教科書の新出単語"],
-    bkHint:["Ном, хичээлээ сонгоод шинэ үгсийг монгол тайлбартай нь үз. + дарж өөрийн үгэнд нэм.","Pick a book and lesson, read new words with Mongolian notes. Tap + to add to your words.","Выберите книгу и урок. Нажмите +, чтобы добавить слово.","本と課を選び、新出単語を見る。+で自分の単語に追加。"],
+    bkTitle:["Номын сан","Book library","Библиотека книг","教科書ライブラリ"],
+    bkHint:["Сурах бичгүүдийн PDF. Номын шинэ үгс «HSK үгийн сан» дотор 📖 тэмдэгтэй байгаа: 初级 / 中级 / 高级 товчоор шүүнэ, хайлтаар олно.","Textbook PDFs. New words from these books are in the HSK word bank, marked 📖: filter by 初级 / 中级 / 高级 or search.","PDF учебников. Новые слова из них — в словаре HSK с пометкой 📖: фильтр 初级 / 中级 / 高级 или поиск.","教科書のPDF。新出単語はHSK単語帳に📖付きで入っています。初级/中级/高级で絞り込めます。"],
     bkAddAll:["Энэ хичээлийн бүх үгийг нэмэх","Add all words of this lesson","Добавить все слова урока","この課の全単語を追加"],
     bkLesson:["{n}-р хичээл","Lesson {n}","Урок {n}","第{n}課"],
     bkAdded:["{n} үг нэмлээ","{n} words added","Добавлено слов: {n}","{n}語を追加"],
@@ -586,7 +586,8 @@ var DATA=window.DATA;
   function buildD(R){var d={};Object.keys(R).forEach(function(l){R[l].split(',').forEach(function(it){var a=it.split('|');if(!d[a[0]])d[a[0]]={l:+l,p:a[1]}})});return d}
   function hskLookup(h){
     if(!HSKD)HSKD=buildD(HSKRAW);
-    return HSKD[h]||null;
+    if(HSKD[h])return HSKD[h];
+    var b=bkwMap()[h];return b?{l:6,p:b[1],b:1}:null;
   }
   var DEFMIN={1:60,2:60,3:120,4:120,5:180,6:180};
 
@@ -1143,6 +1144,7 @@ var DATA=window.DATA;
   function hzSearch(q){
     var res=[];
     LEVELS.forEach(function(lv){(HR()[lv]||'').split(',').forEach(function(it){var a=it.split('|'),h=a[0];if(!h)return;var p=hP(h,a[1]),m=hM(h);if(mq(h+' '+p+' '+m+' '+hMn(h),q))res.push(h)})});
+    BKW.forEach(function(w){if(mq(w[0]+' '+w[1]+' '+w[3]+' '+w[4],q)&&res.indexOf(w[0])<0)res.push(w[0])});
     if(!res.length){hzBot(HT('searchNone',{q:esc(q)}),'oops');hzChips(hzMain());return}
     res.sort(function(a,b){return a.length-b.length});
     if(res.length===1||nz(hP(res[0],(hskLookup(res[0])||{}).p)).replace(/\s+/g,'')===nz(q).replace(/\s+/g,'')){hzTeach(res[0],true);return}
@@ -1705,13 +1707,16 @@ var DATA=window.DATA;
 
   /* ---------- HSK built-in vocabulary (Mongolian) ---------- */
   var HSKMN_RAW=DATA.HSKMN_RAW;
+  /* Номын шинэ үгс: HSK-д ороогүй, сурах бичгээс авсан үгс. [үг,пиньинь,төрөл,монгол,англи,тэмдэглэл,ном,түвшин(初/中/高)] */
+  var BKW=(DATA.BKW_RAW&&DATA.BKW_RAW.w)||[],BKD=null,BKLV={'初':7,'中':8,'高':9};
+  function bkwMap(){if(!BKD){BKD={};BKW.forEach(function(w){BKD[w[0]]=w})}return BKD}
   var HSKMN=null,hLv=0,hQ='',HSKED={};
   var HSKI=null;
-  function hskI(){if(!HSKI){HSKI={};['en','ru','ja'].forEach(function(l){var o={};(HSKI18N_RAW[l]||'').split('|').forEach(function(x){var i=x.indexOf('=');if(i>0)o[x.slice(0,i)]=x.slice(i+1)});HSKI[l]=o})}return HSKI}
+  function hskI(){if(!HSKI){HSKI={};['en','ru','ja'].forEach(function(l){var o={};(HSKI18N_RAW[l]||'').split('|').forEach(function(x){var i=x.indexOf('=');if(i>0)o[x.slice(0,i)]=x.slice(i+1)});if(l==='en')BKW.forEach(function(w){if(w[4]&&!o[w[0]])o[w[0]]=w[4]});HSKI[l]=o})}return HSKI}
   function hMn(h){return (HSKED[h]&&HSKED[h].m)||hskMn()[h]||''}
   function hM(h){if(lang!=='mn'){var t=hskI()[lang];if(t&&t[h])return t[h]}return hMn(h)}
   function hP(h,d){return (HSKED[h]&&HSKED[h].p)||d||''}
-  function hskMn(){if(!HSKMN){HSKMN={};HSKMN_RAW.split('|').forEach(function(s){var i=s.indexOf('=');if(i>0)HSKMN[s.slice(0,i)]=s.slice(i+1)})}return HSKMN}
+  function hskMn(){if(!HSKMN){HSKMN={};HSKMN_RAW.split('|').forEach(function(s){var i=s.indexOf('=');if(i>0)HSKMN[s.slice(0,i)]=s.slice(i+1)});BKW.forEach(function(w){if(!HSKMN[w[0]])HSKMN[w[0]]=w[3]})}return HSKMN}
   function nz(t){return String(t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()}
   function toks(q){return nz(q).split(/\s+/).filter(Boolean)}
   /* every space-separated token must appear (pinyin also matches without spaces: canjia = cān jiā) */
@@ -1750,20 +1755,31 @@ var DATA=window.DATA;
   function renderHsk(){
     if(!$('hskList'))return;
     var have={};wordsArr().forEach(function(w){have[w.h]=1});
-    var c={0:0};LEVELS.forEach(function(l){c[l]=(HR()[l]||'').split(',').length;c[0]+=c[l]});
+    var c={0:0,7:0,8:0,9:0};LEVELS.forEach(function(l){c[l]=(HR()[l]||'').split(',').length;c[0]+=c[l]});
+    BKW.forEach(function(w){c[BKLV[w[7]]]++});c[0]+=c[7]+c[8]+c[9];
     lvChips('hskLv',hLv,true,c);
-    var q=hQ,items=[],added=0,tot=0;
-    ((hLv&&!q)?[hLv]:LEVELS).forEach(function(lv){(HR()[lv]||'').split(',').forEach(function(it){
+    var bch='';[['初级',7],['中级',8],['高级',9]].forEach(function(b){bch+='<button class="chip" type="button" data-l="'+b[1]+'" aria-pressed="'+(hLv===b[1])+'">📖 '+b[0]+'<small>'+c[b[1]]+'</small></button>'});
+    $('hskLv').insertAdjacentHTML('beforeend',bch);
+    var q=hQ,items=[],added=0,tot=0,inBk=hLv>=7&&!q,shown=0;
+    if(!inBk)((hLv&&!q)?[hLv]:LEVELS).forEach(function(lv){(HR()[lv]||'').split(',').forEach(function(it){
       var a=it.split('|'),h=a[0],p=hP(h,a[1]),m=hM(h);tot++;if(have[h])added++;
       if(hOnly&&have[h])return;
       if(q&&!mq(h+' '+p+' '+m+' '+hMn(h),hQ))return;
       items.push({h:h,p:p,m:m,l:lv,got:!!have[h]});
     })});
+    if(!hLv||q||inBk)BKW.forEach(function(w){
+      var h=w[0];if(inBk&&BKLV[w[7]]!==hLv)return;shown++;
+      var got=!!have[h];if(hOnly&&got)return;
+      var m=hM(h),p=hP(h,w[1]);
+      if(q&&!mq(h+' '+p+' '+m+' '+w[3]+' '+w[4],hQ))return;
+      items.push({h:h,p:p,m:m,l:6,got:got,bk:w[6]});
+    });
+    var allN=tot+shown;if(inBk)tot=0;
     $('hskProg').style.width=(tot?Math.round(added*100/tot):0)+'%';
-    $('hskInfo').textContent=T('hskProg',{a:added,b:tot});
-    $('hskCnt').textContent=items.length+' / '+tot;
+    $('hskInfo').textContent=inBk?'':T('hskProg',{a:added,b:tot});
+    $('hskCnt').textContent=items.length+' / '+allN;
     var h2=items.slice(0,hLim).map(function(x){
-      return '<div class="w wc lv'+x.l+(x.got?' got':'')+'"><span class="h" lang="zh">'+hl(x.h,hQ)+'</span><span><span class="p">'+tonePy(x.p)+'</span> <span class="badge">HSK '+x.l+(x.o?' · '+x.o:'')+'</span><br><span class="m">'+(x.m?hl(x.m,hQ):'<span class="hint">'+T('hskNoTr')+'</span>')+'</span>'+partsHint(x.h)+'</span><span class="wca">'+
+      return '<div class="w wc lv'+x.l+(x.bk?' bkw':'')+(x.got?' got':'')+'"><span class="h" lang="zh">'+hl(x.h,hQ)+'</span><span><span class="p">'+tonePy(x.p)+'</span> <span class="badge">'+(x.bk?'📖 '+esc(x.bk):'HSK '+x.l)+(x.o?' · '+x.o:'')+'</span><br><span class="m">'+(x.m?hl(x.m,hQ):'<span class="hint">'+T('hskNoTr')+'</span>')+'</span>'+partsHint(x.h)+'</span><span class="wca">'+
         '<button class="btn small ghost" type="button" data-speak="'+esc(x.h)+'" aria-label="Audio">🔊</button> <button class="btn small ghost star" type="button" data-fav="'+esc(x.h)+'" aria-pressed="'+(isFav(x.h)?'true':'false')+'" aria-label="Favorite">'+(isFav(x.h)?'★':'☆')+'</button> <button class="btn small ghost" type="button" data-write="'+esc(x.h)+'" aria-label="Write">✍</button> '+(isOwner?'<button class="btn small ghost" type="button" data-hedit="'+esc(x.h)+'">✎</button> ':'')+
         (x.m?'<button class="btn small ghost'+(hJust===x.h?' pop':'')+'" type="button" data-hadd="'+esc(x.h)+'"'+(x.got?' disabled':'')+'>'+(x.got?'✓':'+')+'</button>':'')+'</span>'+exHtml(x.h)+'</div>';
     }).join('');
@@ -1781,7 +1797,7 @@ var DATA=window.DATA;
   });
 
   /* ---------- books: data/books/index.json → <dir>/index.json → <dir>/lesson-XX.json (олон ном дэмжинэ) ---------- */
-  var BK={cat:null,bid:null,idx:null,les:1,cache:{},q:'',busy:false,err:false,mode:'words',pg:0,pgs:[],lib:null,libBusy:false,libErr:false,lv:''};
+  var BK={cat:null,bid:null,idx:null,les:1,cache:{},q:'',busy:false,err:false,mode:'lib',pg:0,pgs:[],lib:null,libBusy:false,libErr:false,lv:''};
   function bkGet(u){return fetch(u).then(function(r){if(!r.ok)throw new Error(u);return r.json()})}
   function bkDir(){var b=BK.cat&&BK.cat.filter(function(x){return x.id===BK.bid})[0];return b?'data/books/'+b.dir+'/':''}
   function bkLoad(done){
@@ -1843,7 +1859,7 @@ var DATA=window.DATA;
       return '<button class="chip" type="button" data-bm="'+m+'" aria-pressed="'+(BK.mode===m)+'">'+T(m==='words'?'bkWords':(m==='pages'?'bkPages':'bkLib'))+'</button>'}).join('');
   }
   function renderLib(){
-    $('bkBooks').innerHTML='';$('bkMode').innerHTML=bkModeChips(!!(BK.idx&&BK.idx.pages));
+    $('bkBooks').innerHTML='';$('bkMode').innerHTML='';
     $('bkLes').innerHTML='';$('bkAddAll').hidden=true;$('bkSearch').hidden=false;
     if(!BK.lib){
       $('bkCnt').textContent='';

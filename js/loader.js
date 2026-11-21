@@ -4,7 +4,7 @@
   var CORE={
     HSKRAW:'data/hsk-words.json',
     HSKMN_RAW:'data/hsk-mongolian.json', GRAM_RAW:'data/grammar.json',
-    LESSONS:'data/course-lessons.json', EXD:'data/examples.json',
+    LESSONS:'data/course-lessons.json', EXD:'data/examples.json', BKW_RAW:'data/book-words.json',
     SCN:'data/scenarios.json', RAD:'data/radicals.json'
   };
   var I18N={
