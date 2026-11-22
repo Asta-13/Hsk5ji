@@ -1,0 +1,57 @@
+{
+ "mail": "hanyukaoshi51@gmail.com",
+ "log": [
+  {
+   "v": "v60",
+   "d": "2026-11-23",
+   "mn": [
+    "Холбоо барих хэсэг, хувилбарын түүх нэмсэн",
+    "Имэйл баталгаажуулах заавар тодорхой болсон (дахин илгээх, буцах, ойлгомжтой алдааны мэдээлэл)",
+    "Тоглоомын алдаа засав, шинэ тоглоом нэмсэн"
+   ],
+   "en": [
+    "Added contact section and version history",
+    "Clearer email confirmation (resend, go back, friendlier errors)",
+    "Fixed game bugs and made games more fun"
+   ]
+  },
+  {
+   "v": "v59",
+   "d": "2026-11-23",
+   "mn": [
+    "Номын сан: 中级综合 2-ыг хуудсаар нь сайт дотор унших боломжтой болсон",
+    "Нэг үсэгт үгийг номын үгсээс хассан",
+    "Харагдах байдал цэгцэлсэн"
+   ],
+   "en": [
+    "Library: read 中级综合 2 page by page inside the site",
+    "Removed single-character book words",
+    "Visual tidy-up"
+   ]
+  },
+  {
+   "v": "v57",
+   "d": "2026-11-22",
+   "mn": [
+    "Сурах бичгүүдийн ~1700 шинэ үг HSK үгийн санд нэмэгдсэн (初/中/高 ангилал, ном заасан, хайж болно)",
+    "Номын сан зөвхөн PDF ном үзүүлдэг болсон"
+   ],
+   "en": [
+    "~1700 textbook words added to the HSK word bank (初/中/高, with source book, searchable)",
+    "Book tab is now the PDF library only"
+   ]
+  },
+  {
+   "v": "v50",
+   "d": "2026-11-21",
+   "mn": [
+    "PDF-г сайт дотор нээдэг болсон",
+    "Номоос үг гаргах OCR хэрэгсэл"
+   ],
+   "en": [
+    "PDFs open inside the site",
+    "OCR tool to extract vocabulary from books"
+   ]
+  }
+ ]
+}

@@ -113,6 +113,10 @@
     <div class="label" data-i18n="phaseLbl"></div>
     <div class="phase-now" id="phaseNow"></div>
   </div>
+  <details class="card" id="aboutCard">
+    <summary style="cursor:pointer;font-weight:700"><span data-i18n="aboutT"></span> <span class="badge" id="aboutVerTx"></span></summary>
+    <div id="aboutBody" style="display:flex;flex-direction:column;gap:8px;margin-top:10px"></div>
+  </details>
 
 </div>
 
@@ -183,6 +187,7 @@
   </div>
   <div class="card" id="plMenu">
     <div class="hint" id="plRes"></div>
+    <div class="plwrong" id="plWrong" hidden></div>
     <div class="label" id="plLvT" data-i18n="plLvT"></div>
     <div class="chips" id="plLv"></div>
     <button class="btn" type="button" data-game="mean" data-i18n="gMean"></button>
@@ -459,6 +464,15 @@
     <button class="btn small ghost aclose" type="button" data-authclose="1" aria-label="×">×</button>
         <h2 id="authTtl" data-i18n="authTitle"></h2>
     <div class="note" id="authWhy" data-i18n="authWhy" hidden></div>
+    <div id="authVerify" hidden>
+      <h3 data-i18n="verTitle"></h3>
+      <div class="note vbody" style="white-space:pre-line"></div>
+      <div class="hint vwhy"></div>
+      <div class="row"><button class="btn" id="verDone" type="button" data-i18n="verDone"></button><button class="btn ghost" id="verResend" type="button" data-i18n="verResend"></button></div>
+      <button class="btn ghost small" id="verBack" type="button" style="align-self:flex-start" data-i18n="verBack"></button>
+      <div class="hint vhelp"></div>
+    </div>
+    <div id="authForm" style="display:contents">
     <div class="hint" data-i18n="authHint"></div>
     <div class="note" data-i18n="authSteps"></div>
     <label class="f" for="auUser"><span data-i18n="loginName"></span><input id="auUser" type="text" inputmode="email" autocapitalize="none" autocorrect="off" autocomplete="username" maxlength="60"></label>
@@ -466,6 +480,7 @@
     <div class="row"><button class="btn" id="auIn" type="button" data-i18n="signIn"></button><button class="btn ghost" id="auUp" type="button" data-i18n="signUp"></button></div>
     <button class="btn ghost small" id="auForgot" type="button" style="align-self:flex-start" data-i18n="forgot"></button>
     <div class="hint" data-i18n="authNote"></div>
+    </div>
   </div>
 </div></div>
 <div class="hzbox" id="toast" role="status" aria-live="polite"></div>

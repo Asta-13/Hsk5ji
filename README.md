@@ -25,3 +25,8 @@ GitHub Pages + Supabase дээр ажилладаг PWA (vanilla JS).
 1. `tools/book-data/<ном>/lesson-XX.json` засна
 2. `python tools/build_book_words.py`
 3. `sw.js` дахь `VER` нэмээд commit/push
+
+## Хувилбар
+`js/app.js` дахь `APP_VER`, `sw.js` дахь `VER`, `data/changelog.json` (Today доод талын «Холбоо барих · Хувилбар») гурвыг хамт шинэчилнэ.
+Холбоо барих имэйл: `CONTACT_MAIL` (app.js).
+> Имэйл баталгаажуулах захидлыг илгээгч (Supabase Auth) нь Supabase → Authentication → SMTP Settings дээр тохирно (код биш).
