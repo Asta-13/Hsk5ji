@@ -7,7 +7,7 @@
    "lesson": 1,
    "title": "故事二则",
    "title_mn": "Хоёр түүх",
-   "count": 49,
+   "count": 40,
    "file": "lesson-01.json",
    "pages": [
     1,
@@ -18,7 +18,7 @@
    "lesson": 2,
    "title": "测试你的生存技巧",
    "title_mn": "Амьд үлдэх ур чадвараа сорь",
-   "count": 52,
+   "count": 42,
    "file": "lesson-02.json",
    "pages": [
     16,
@@ -29,7 +29,7 @@
    "lesson": 3,
    "title": "乖乖回家之路",
    "title_mn": "«Гуайгуай»-ийн гэртээ харих зам",
-   "count": 57,
+   "count": 47,
    "file": "lesson-03.json",
    "pages": [
     31,
@@ -40,7 +40,7 @@
    "lesson": 4,
    "title": "桑兰的微笑",
    "title_mn": "Сан Ланы инээмсэглэл",
-   "count": 52,
+   "count": 45,
    "file": "lesson-04.json",
    "pages": [
     45,
@@ -51,7 +51,7 @@
    "lesson": 5,
    "title": "再平凡也可以活成一座丰碑",
    "title_mn": "Хичнээн энгийн байсан ч хөшөө болон амьдарч болно",
-   "count": 45,
+   "count": 42,
    "file": "lesson-05.json",
    "pages": [
     60,
@@ -62,7 +62,7 @@
    "lesson": 6,
    "title": "从“鸡毛换糖”到“世界超市”",
    "title_mn": "«Дэгдэхийн өд сүүлээр чихэр солилцох»-оос «дэлхийн супермаркет» хүртэл",
-   "count": 49,
+   "count": 33,
    "file": "lesson-06.json",
    "pages": [
     75,
@@ -73,7 +73,7 @@
    "lesson": 7,
    "title": "彩票",
    "title_mn": "Хонжворт сугалаа",
-   "count": 45,
+   "count": 43,
    "file": "lesson-07.json",
    "pages": [
     89,
@@ -84,7 +84,7 @@
    "lesson": 8,
    "title": "燕子买房记",
    "title_mn": "Яньцзыгийн байр худалдан авсан түүх",
-   "count": 53,
+   "count": 38,
    "file": "lesson-08.json",
    "pages": [
     104,
@@ -95,7 +95,7 @@
    "lesson": 9,
    "title": "李连杰和他的“壹基金”",
    "title_mn": "Ли Лянжи ба түүний «Нэг сан»",
-   "count": 55,
+   "count": 47,
    "file": "lesson-09.json",
    "pages": [
     120,
@@ -106,7 +106,7 @@
    "lesson": 10,
    "title": "谁在安排你的生活",
    "title_mn": "Таны амьдралыг хэн зохион байгуулж байна вэ",
-   "count": 49,
+   "count": 39,
    "file": "lesson-10.json",
    "pages": [
     135,
@@ -117,7 +117,7 @@
    "lesson": 11,
    "title": "代沟",
    "title_mn": "Үеийн зөрүү",
-   "count": 45,
+   "count": 37,
    "file": "lesson-11.json",
    "pages": [
     152,
@@ -128,7 +128,7 @@
    "lesson": 12,
    "title": "错觉",
    "title_mn": "Хуурмаг мэдрэмж",
-   "count": 54,
+   "count": 50,
    "file": "lesson-12.json",
    "pages": [
     166,
@@ -139,7 +139,7 @@
    "lesson": 13,
    "title": "你是家养的还是野生的",
    "title_mn": "Чи гэрийн тэжээвэр үү, зэрлэг үү",
-   "count": 44,
+   "count": 36,
    "file": "lesson-13.json",
    "pages": [
     181,
@@ -150,7 +150,7 @@
    "lesson": 14,
    "title": "公说公有理，婆说婆有理",
    "title_mn": "Хадам аав өөрийнхөөрөө зөв, хадам ээж өөрийнхөөрөө зөв",
-   "count": 48,
+   "count": 39,
    "file": "lesson-14.json",
    "pages": [
     196,
@@ -161,7 +161,7 @@
    "lesson": 15,
    "title": "俺爹俺娘",
    "title_mn": "Миний аав, миний ээж",
-   "count": 53,
+   "count": 37,
    "file": "lesson-15.json",
    "pages": [
     211,

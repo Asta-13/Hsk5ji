@@ -207,6 +207,19 @@
    ]
   },
   {
+   "n": 12,
+   "title": "中级综合 2",
+   "level": "中级",
+   "skill": "综合",
+   "parts": [],
+   "pages": {
+    "dir": "data/books/zhongji-zonghe-2/pages",
+    "count": 227,
+    "ext": "webp",
+    "pad": 3
+   }
+  },
+  {
    "n": 13,
    "title": "中级阅读 1",
    "level": "中级",

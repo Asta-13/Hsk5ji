@@ -57,6 +57,8 @@ var DATA=window.DATA;
     bkLib:["Номын сан (PDF)","Library (PDF)","Библиотека (PDF)","ライブラリ (PDF)"],
     libHint:["PDF сурах бичгээ сонгоод нээ. Файл том тул эхний удаа удаан ачаалж магадгүй.","Pick a PDF textbook to open. Files are large, so the first load can take a while.","Выберите PDF-учебник. Файлы большие, первая загрузка может быть долгой.","PDF教材を選んで開きます。ファイルが大きいため初回は時間がかかることがあります。"],
     libPart:["Хэсэг {n}","Part {n}","Часть {n}","第{n}部"],
+    libImgs:["🖼 Хуудсаар · {n} хуудас","🖼 Page by page · {n} pages","🖼 По страницам · {n} стр.","🖼 ページ表示 · {n}頁"],
+    libGo:["Хуудас","Page","Стр.","頁"],
     libPg:["х. {a}–{b}","p. {a}–{b}","стр. {a}–{b}","{a}–{b}頁"],
     tabMedia:["Бичлэг·Дуу","Videos·Songs","Видео·Песни","動画・歌"],
     mdMedia:["Хадмал дээрх үгийг товшиж сур","Tap words in subtitles to learn","Нажимайте слова в субтитрах","字幕の単語をタップして学ぶ"],
@@ -208,7 +210,7 @@ var DATA=window.DATA;
     lrnNextGo:["Хичээл нээх","Open lesson","Открыть урок","レッスンを開く"],
     lrnDaily:["Өдөр тутмын хэллэг","Everyday phrases","Повседневные фразы","日常フレーズ"],
     hskTitle:["HSK үгсийн сан (монгол орчуулгатай)","HSK vocabulary (Mongolian)","Словарь HSK (с монгольским переводом)","HSK単語（モンゴル語訳付き）"],
-    hskSearch:["Хайх: иероглиф, пиньинь, монгол утга","Search: hanzi, pinyin, meaning","Поиск: иероглиф, пиньинь, значение","検索：漢字、ピンイン、意味"],
+    hskSearch:["Хайх: иероглиф, пиньинь, утга","Search: hanzi, pinyin…","Поиск: иероглиф, пиньинь…","検索：漢字・ピンイン・意味"],
     hskNoTr:["орчуулга удахгүй нэмэгдэнэ","translation coming soon","перевод скоро появится","翻訳は近日追加予定"],
     hskCount:["Орчуулгатай: {a} / {b} үг","Translated: {a} / {b} words","С переводом: {a} / {b} слов","翻訳あり：{a} / {b} 語"],
     noticeLbl:["АДМИНЫ МЭДЭГДЭЛ","ADMIN NOTICE","ОБЪЯВЛЕНИЕ АДМИНА","管理者からのお知らせ"],
@@ -1878,7 +1880,8 @@ var DATA=window.DATA;
     $('bkCnt').textContent=items.length+' / '+books.length;
     $('bkList').innerHTML='<div class="hint" style="margin:0 2px">'+T('libHint')+'</div>'+items.map(function(b){
       return '<div class="libbk"><div class="libh"><b lang="zh">'+esc(b.title)+'</b><span class="hint">'+esc(libTitle(b))+'</span></div><div class="libparts">'+
-        b.parts.map(function(p){return '<a class="chip" data-pdf="1" href="'+esc(libUrl(p.f))+'" target="_blank" rel="noopener">📖 '+T('libPart',{n:p.p})+' · '+T('libPg',{a:p.a,b:p.b})+' · '+p.mb+' MB</a>'}).join('')+'</div></div>'}).join('')||emptyRes(q,'bkQ');
+        b.parts.map(function(p){return '<a class="chip" data-pdf="1" href="'+esc(libUrl(p.f))+'" target="_blank" rel="noopener">📖 '+T('libPart',{n:p.p})+' · '+T('libPg',{a:p.a,b:p.b})+' · '+p.mb+' MB</a>'}).join('')+
+        (b.pages?'<button class="chip" type="button" data-imgs="'+b.n+'">'+T('libImgs',{n:b.pages.count})+'</button>':'')+'</div></div>'}).join('')||emptyRes(q,'bkQ');
   }
   /* PDF-ийг сайтаас гаралгүй дотор нь нээх (iframe давхарга). Нээгдэхгүй бол "↗" товчоор шинэ tab. */
   function pdfClose(){var o=document.getElementById('pdfView');if(o)o.remove();document.body.style.overflow=''}
@@ -1890,6 +1893,23 @@ var DATA=window.DATA;
     document.body.appendChild(o);document.body.style.overflow='hidden';
     document.getElementById('pdfX').addEventListener('click',pdfClose);
   }
+  /* Зургаар хадгалсан ном: хуудсуудыг сайт дотор гүйлгэж унших, хуудас руу үсрэх */
+  function imgOpen(b){
+    pdfClose();var g=b.pages,o=document.createElement('div'),h='';
+    o.id='pdfView';o.className='pdfview';
+    for(var i=1;i<=g.count;i++){var n=String(i);while(n.length<g.pad)n='0'+n;
+      h+='<img class="pgimg" id="pg'+i+'" loading="lazy" decoding="async" width="900" height="1200" alt="'+esc(b.title)+' · '+i+'" src="'+esc(g.dir+'/p'+n+'.'+g.ext)+'">'}
+    o.innerHTML='<div class="pdfbar"><b class="pdft">'+esc(b.title)+' · '+esc(libTitle(b))+'</b><label class="pgjump">'+T('libGo')+' <input id="pgGo" type="number" min="1" max="'+g.count+'" value="1" inputmode="numeric"> / '+g.count+'</label><button class="btn small" type="button" id="pdfX" aria-label="close">✕</button></div><div class="pgscroll" id="pgScroll">'+h+'</div>';
+    document.body.appendChild(o);document.body.style.overflow='hidden';
+    document.getElementById('pdfX').addEventListener('click',pdfClose);
+    var go=document.getElementById('pgGo'),sc=document.getElementById('pgScroll');
+    go.addEventListener('change',function(){var v=Math.max(1,Math.min(g.count,parseInt(go.value,10)||1)),el=document.getElementById('pg'+v);go.value=v;if(el)sc.scrollTop=el.offsetTop-sc.offsetTop});
+    var t=0;sc.addEventListener('scroll',function(){clearTimeout(t);t=setTimeout(function(){var imgs=sc.children,y=sc.scrollTop+sc.clientHeight/3;for(var k=0;k<imgs.length;k++){if(imgs[k].offsetTop-sc.offsetTop+imgs[k].offsetHeight>y){go.value=k+1;break}}},120)});
+  }
+  document.addEventListener('click',function(e){
+    var x=e.target.closest&&e.target.closest('[data-imgs]');if(!x||!BK.lib)return;
+    var n=+x.dataset.imgs,b=BK.lib.books.filter(function(k){return k.n===n})[0];if(b&&b.pages)imgOpen(b);
+  });
   document.addEventListener('keydown',function(e){if(e.key==='Escape')pdfClose()});
   document.addEventListener('click',function(e){
     var a=e.target.closest&&e.target.closest('a[data-pdf]');if(!a)return;

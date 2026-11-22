@@ -5,16 +5,6 @@
  "book": "高级综合 II",
  "words": [
   {
-   "n": 1,
-   "zh": "梁",
-   "py": "liáng",
-   "pos": "名",
-   "pos_mn": "нэр үг",
-   "en": "beam",
-   "mn": "дам, хөндлөн мод",
-   "note": ""
-  },
-  {
    "n": 2,
    "zh": "题刻",
    "py": "tíkè",
@@ -22,16 +12,6 @@
    "pos_mn": "үйл үг",
    "en": "inscribe, carve inscription",
    "mn": "бичээс сийлэх",
-   "note": ""
-  },
-  {
-   "n": 3,
-   "zh": "尾",
-   "py": "wěi",
-   "pos": "量",
-   "pos_mn": "тоологч үг",
-   "en": "(measure word for fish)",
-   "mn": "ширхэг (загасны тоон нэр)",
    "note": ""
   },
   {
@@ -82,16 +62,6 @@
    "pos_mn": "нэр үг",
    "en": "beams and pillars",
    "mn": "дам, багана",
-   "note": ""
-  },
-  {
-   "n": 9,
-   "zh": "示",
-   "py": "shì",
-   "pos": "动",
-   "pos_mn": "үйл үг",
-   "en": "show, indicate",
-   "mn": "харуулах, илэрхийлэх",
    "note": ""
   },
   {

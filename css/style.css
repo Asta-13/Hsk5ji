@@ -1194,3 +1194,13 @@ body{padding-bottom:96px}
 .bksep{display:inline-block;width:1px;align-self:stretch;background:var(--line);margin:4px 2px}
 
 .w.lv6.bkw{--lvc:#5B6475}
+
+.pgscroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#e9e9ec;padding:8px 0}
+.pgimg{display:block;width:100%;max-width:900px;height:auto;aspect-ratio:3/4;margin:0 auto 8px;background:#fff}
+.pgjump{display:flex;align-items:center;gap:4px;font-size:.85rem;white-space:nowrap}
+.pgjump input{width:4.2em;padding:4px 6px;border:1px solid var(--line);border-radius:8px;background:transparent;color:inherit;font:inherit}
+
+.chips:empty{display:none}
+.search.big input{padding-right:84px;text-overflow:ellipsis}
+#hskInfo:empty{display:none}
+.card .between{width:100%}

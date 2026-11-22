@@ -7,14 +7,14 @@
    "lesson": 1,
    "title": "",
    "title_mn": "四季–身",
-   "count": 20,
+   "count": 16,
    "file": "lesson-01.json"
   },
   {
    "lesson": 2,
    "title": "",
    "title_mn": "缝补–屏",
-   "count": 20,
+   "count": 19,
    "file": "lesson-02.json"
   },
   {
@@ -28,35 +28,35 @@
    "lesson": 4,
    "title": "",
    "title_mn": "虫–考勤",
-   "count": 20,
+   "count": 18,
    "file": "lesson-04.json"
   },
   {
    "lesson": 5,
    "title": "",
    "title_mn": "人际关系–耗子",
-   "count": 20,
+   "count": 18,
    "file": "lesson-05.json"
   },
   {
    "lesson": 6,
    "title": "",
    "title_mn": "胶–心灰意冷",
-   "count": 20,
+   "count": 18,
    "file": "lesson-06.json"
   },
   {
    "lesson": 7,
    "title": "",
    "title_mn": "亲近–农药",
-   "count": 20,
+   "count": 17,
    "file": "lesson-07.json"
   },
   {
    "lesson": 8,
    "title": "",
    "title_mn": "农场–闲置",
-   "count": 8,
+   "count": 7,
    "file": "lesson-08.json"
   }
  ]
