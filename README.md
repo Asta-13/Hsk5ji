@@ -33,3 +33,7 @@ Today доод талын «Холбоо барих · Хувилбар» кар
 
 ## Номын сан
 PDF-үүд Hugging Face дээр. Сайт дотор `js/vendor/pdf.min.js` (PDF.js)-ээр хуудас хуудсаар нь унших; алдаа гарвал iframe руу буцна.
+
+## Дүрэм (语法) нэмэх
+`data/grammar.json` — мөр бүр `түвшин|хэв маяг|монгол утга|жишээ|жишээний орчуулга`.
+Сурах бичгийн 综合注释 / 语言点-аас түүх: `python tools/import_book_grammar.py --level 中级` → `tools/book_grammar/ALL_grammar.txt`-г Claude-д өгч цэвэрлүүлж нэмүүлнэ.
