@@ -338,6 +338,14 @@ var DATA=window.DATA;
     tourClaim:["🎁 Шагнал авах: +{x} XP","🎁 Claim reward: +{x} XP","🎁 Получить награду: +{x} XP","🎁 報酬を受け取る：+{x} XP"],
     tourGot:["+{x} XP шагнал авлаа! 🎁","+{x} XP reward claimed!","Награда +{x} XP получена!","+{x} XPを獲得！"],
     streakBonus:["🔥 {n} өдөр дараалсан! Урамшуулал +50 XP!","🔥 {n}-day streak! +50 XP","🔥 Серия {n} дн.! +50 XP","🔥 {n}日連続！+50 XP"],
+    talkBtn:["🧑‍🏫 Laoshi-тай ярих (сонгож хариулах)","🧑‍🏫 Talk with Laoshi (choose replies)","🧑‍🏫 Разговор с Лаоши (выбор ответов)","🧑‍🏫 老师と会話（返事を選ぶ）"],
+    talkT:["Laoshi-тай яриа","Chat with Laoshi","Разговор с Лаоши","老师と会話"],
+    talkSub:["Багш асууна — зөв хариултыг сонго. Буруу бол багш тайлбарлана, дахин оролдоно.","Laoshi asks — pick the right reply. If wrong, she explains and you try again.","Лаоши спрашивает — выберите верный ответ. Если неверно — объяснит, и вы попробуете снова.","老师の質問に正しい返事を選びます。間違えたら説明があり、もう一度挑戦します。"],
+    talkRes:["Яриа дууслаа! Эхний оролдлогоор {a} / {b} зөв, +{x} XP","Done! First-try correct: {a} / {b}, +{x} XP","Готово! С первой попытки верно: {a} / {b}, +{x} XP","おしまい！ 一発正解 {a} / {b}、+{x} XP"],
+    talkAgain:["↻ Дахин","↻ Again","↻ Ещё раз","↻ もう一度"],
+    talkBack:["← Жагсаалт","← List","← Список","← 一覧"],
+    talkHint:["Дахин оролдоод үз.","Try again.","Попробуйте ещё раз.","もう一度どうぞ。"],
+    talkLv:["HSK {l}","HSK {l}","HSK {l}","HSK {l}"],
     gSpeak:["🎤 Хэлэх дасгал (микрофон)","🎤 Speaking practice (microphone)","🎤 Тренировка речи (микрофон)","🎤 発音練習（マイク）"],
     micTap:["🎤 дараад хятадаар хэл","Tap 🎤 and say it in Chinese","Нажми 🎤 и скажи по-китайски","🎤 を押して中国語で言おう"],
     micListen:["Сонсож байна…","Listening…","Слушаю…","聞いています…"],
@@ -1934,7 +1942,7 @@ var DATA=window.DATA;
     var x=e.target.closest&&e.target.closest('[data-imgs]');if(!x||!BK.lib)return;
     var n=+x.dataset.imgs,b=BK.lib.books.filter(function(k){return k.n===n})[0];if(b&&b.pages)imgOpen(b);
   });
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')pdfClose()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){pdfClose();if(typeof tkClose==='function')tkClose()}});
   document.addEventListener('click',function(e){
     var a=e.target.closest&&e.target.closest('a[data-pdf]');if(!a)return;
     e.preventDefault();
@@ -2975,6 +2983,77 @@ var DATA=window.DATA;
       else if(GM.mode==='mean'||GM.mode==='listen'){$('plBuilt').style.color='';$('plBuilt').innerHTML=revHtml(GM.q)}
       setTimeout(function(g0){return function(){if(GM!==g0)return;GM.lock=0;GM.i++;nextQ()}}(GM),GM.mode==='sprint'?(ok?150:600):GM.mode==='cloze'?(ok?1700:2700):(ok?900:1700));return;
     }
+  });
+  /* ---------- Laoshi-тай ярих: багш асууна, сурагч зөв хариултыг сонгоно (үнэгүй, AI биш) ---------- */
+  var TKD=null,TK=null,TKS={py:true,tr:true},TKDONE={};
+  try{var _t=JSON.parse(lget('hsk-tk')||'{}');if(typeof _t.py==='boolean')TKS.py=_t.py;if(typeof _t.tr==='boolean')TKS.tr=_t.tr;TKDONE=JSON.parse(lget('hsk-tkdone')||'{}')}catch(e){}
+  function tkSave(){try{localStorage.setItem('hsk-tk',JSON.stringify(TKS));localStorage.setItem('hsk-tkdone',JSON.stringify(TKDONE))}catch(e){}}
+  function tkClose(){var o=$('talkView');if(o)o.remove();document.body.style.overflow='';TK=null;try{window.speechSynthesis&&speechSynthesis.cancel()}catch(e){}}
+  function tkLine(z,p,m){return '<span class="tkz" lang="zh">'+esc(z)+'</span>'+(p?'<span class="tkp">'+esc(p)+'</span>':'')+(m?'<span class="tkm">'+esc(m)+'</span>':'')}
+  function tkView(){
+    var o=$('talkView');if(!o){o=document.createElement('div');o.id='talkView';o.className='pdfview tkview';document.body.appendChild(o);document.body.style.overflow='hidden'}
+    o.classList.toggle('nopy',!TKS.py);o.classList.toggle('notr',!TKS.tr);return o;
+  }
+  function tkBar(title){
+    return '<div class="pdfbar"><b class="pdft">'+esc(title)+'</b><button class="btn small ghost" type="button" data-tkt="py" aria-pressed="'+TKS.py+'">拼</button><button class="btn small ghost" type="button" data-tkt="tr" aria-pressed="'+TKS.tr+'">译</button><button class="btn small" type="button" data-tkx="1" aria-label="close">✕</button></div>';
+  }
+  function tkList(){
+    TK=null;var o=tkView();
+    o.innerHTML=tkBar(T('talkT'))+'<div class="pgscroll tkscroll"><div class="hint" style="padding:4px 2px 10px">'+esc(T('talkSub'))+'</div><div class="tkgrid">'+TKD.map(function(sc){
+      var d=TKDONE[sc.id];
+      return '<button class="tkcard" type="button" data-tks="'+esc(sc.id)+'"><span class="tki">'+sc.i+'</span><b>'+esc(sc.t)+'</b><span class="hint">'+esc(T('talkLv',{l:sc.lv}))+' · '+sc.turns.length+(d!=null?' · ✓ '+d+'/'+sc.turns.length:'')+'</span></button>'}).join('')+'</div></div>';
+  }
+  function tkBub(side,html,cls){
+    var sc=$('tkChat');if(!sc)return null;var d=document.createElement('div');d.className='tkb '+side+(cls?' '+cls:'');d.innerHTML=html;sc.appendChild(d);sc.scrollTop=sc.scrollHeight;return d;
+  }
+  function tkStart(id){
+    var sc=TKD.filter(function(x){return x.id===id})[0];if(!sc)return;
+    TK={sc:sc,i:0,first:0,tries:0,lock:0};var o=tkView();
+    o.innerHTML=tkBar(sc.i+' '+sc.t)+'<div class="pgscroll tkscroll" id="tkChat"></div><div class="tkopts" id="tkOpts"></div>';
+    tkAsk();
+  }
+  function tkAsk(){
+    var t=TK.sc.turns[TK.i];TK.tries=0;TK.lock=0;
+    var b=tkBub('t','<span class="tkav">老师</span><div>'+tkLine(t.z,t.p,t.m)+'<button class="tkspk" type="button" data-tksp="'+esc(t.z)+'" aria-label="listen">🔊</button></div>');
+    try{speak(t.z)}catch(e){}
+    $('tkOpts').innerHTML=shuf(t.o.slice()).map(function(x,k){return '<button class="tkopt" type="button" data-tko="'+(t.o.indexOf(x))+'">'+tkLine(x.z,x.p,x.m)+'</button>'}).join('');
+  }
+  function tkPick(k,btn){
+    if(!TK||TK.lock)return;var t=TK.sc.turns[TK.i],x=t.o[k];
+    if(x.ok){
+      TK.lock=1;if(!TK.tries)TK.first++;
+      tkBub('u',tkLine(x.z,x.p,x.m));$('tkOpts').innerHTML='';
+      var re=['很好！','对了！','说得好！','没错！'][Math.floor(Math.random()*4)];
+      setTimeout(function(){if(!TK)return;
+        tkBub('t','<span class="tkav">老师</span><div>'+tkLine(re,'',TK.tries?'':'👍')+'</div>');
+        setTimeout(function(){if(!TK)return;TK.i++;if(TK.i<TK.sc.turns.length)tkAsk();else tkEnd()},800)},500);
+    }else{
+      TK.tries++;btn.disabled=true;btn.classList.add('bad','gshake');
+      tkBub('t','<span class="tkav">老师</span><div class="tkh">'+esc(x.h||T('talkHint'))+'</div>','hint');
+    }
+  }
+  function tkEnd(){
+    var sc=TK.sc,n=sc.turns.length,a=TK.first,xp=a*10+(a===n?10:0);
+    if(hasProfile())addXp(xp);if(a===n)fxWin('small');
+    if(TKDONE[sc.id]==null||TKDONE[sc.id]<a){TKDONE[sc.id]=a;tkSave()}
+    tkBub('t','<span class="tkav">老师</span><div><b>'+esc(T('talkRes',{a:a,b:n,x:hasProfile()?xp:0}))+'</b></div>');
+    $('tkOpts').innerHTML='<div class="row"><button class="btn" type="button" data-tks="'+esc(sc.id)+'">'+esc(T('talkAgain'))+'</button><button class="btn ghost" type="button" data-tkl="1">'+esc(T('talkBack'))+'</button></div>';
+  }
+  function talkOpen(){
+    var go=function(){tkList()};
+    if(TKD){go();return}
+    fetch('data/talk.json').then(function(r){return r.json()}).then(function(d){TKD=d.sc;go()}).catch(function(){toast(T('tConnErr'),'oops')});
+  }
+  document.addEventListener('click',function(e){
+    var b;
+    if(e.target.closest('[data-talk]')){talkOpen();return}
+    if(!$('talkView'))return;
+    if(e.target.closest('[data-tkx]')){tkClose();return}
+    if(e.target.closest('[data-tkl]')){tkList();return}
+    if((b=e.target.closest('[data-tkt]'))){var k=b.dataset.tkt;TKS[k]=!TKS[k];tkSave();$('talkView').classList.toggle(k==='py'?'nopy':'notr',!TKS[k]);b.setAttribute('aria-pressed',String(TKS[k]));return}
+    if((b=e.target.closest('[data-tks]'))){tkStart(b.dataset.tks);return}
+    if((b=e.target.closest('[data-tksp]'))){try{speak(b.dataset.tksp)}catch(x){}return}
+    if((b=e.target.closest('[data-tko]'))){tkPick(+b.dataset.tko,b)}
   });
   /* гараас хариулах: 1-4 (эсвэл a-d) сонголт, Esc гарах — компьютер дээр хурдан тоглоход */
   document.addEventListener('keydown',function(e){
