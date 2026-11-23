@@ -61,6 +61,9 @@ var DATA=window.DATA;
     libHint:["PDF сурах бичгээ сонгоод нээ. Файл том тул эхний удаа удаан ачаалж магадгүй.","Pick a PDF textbook to open. Files are large, so the first load can take a while.","Выберите PDF-учебник. Файлы большие, первая загрузка может быть долгой.","PDF教材を選んで開きます。ファイルが大きいため初回は時間がかかることがあります。"],
     libPart:["Хэсэг {n}","Part {n}","Часть {n}","第{n}部"],
     libImgs:["🖼 Хуудсаар · {n} хуудас","🖼 Page by page · {n} pages","🖼 По страницам · {n} стр.","🖼 ページ表示 · {n}頁"],
+    rdPh:["Үг хайх: иероглиф, пиньинь, утга","Search word: hanzi, pinyin, meaning","Поиск слова: иероглиф, пиньинь, значение","単語検索：漢字・ピンイン・意味"],
+    rdHint:["Номоо унших зуур үг хайгаарай (HSK + номын үгс).","Look up words while you read (HSK + book words).","Ищите слова прямо во время чтения.","読みながら単語を調べられます。"],
+    rdNone:["«{q}» олдсонгүй.","No match for «{q}».","«{q}» не найдено.","「{q}」は見つかりません。"],
     libGo:["Хуудас","Page","Стр.","頁"],
     libLoading:["Ном ачаалж байна…","Loading book…","Загрузка книги…","読み込み中…"],
     libPg:["х. {a}–{b}","p. {a}–{b}","стр. {a}–{b}","{a}–{b}頁"],
@@ -1916,6 +1919,34 @@ var DATA=window.DATA;
         (b.pages?'<button class="chip" type="button" data-imgs="'+b.n+'">'+T('libImgs',{n:b.pages.count})+'</button>':'')+'</div></div>'}).join('')||emptyRes(q,'bkQ');
   }
   /* PDF-ийг сайтаас гаралгүй дотор нь нээх (iframe давхарга). Нээгдэхгүй бол "↗" товчоор шинэ tab. */
+  /* Ном уншиж байх үедээ үг хайх: HSK + номын үгс (иероглиф / пиньинь / монгол утгаар) */
+  var RD_LV={'初':'初级','中':'中级','高':'高级'};
+  function rdFind(qs){
+    var out=[],seen={};qs=String(qs||'').trim();if(!qs)return out;
+    function add(h,p,m,tag){if(seen[h]||out.length>=40)return;seen[h]=1;out.push({h:h,p:p,m:m,t:tag})}
+    LEVELS.forEach(function(lv){(HR()[lv]||'').split(',').forEach(function(it){var a=it.split('|'),h=a[0];if(!h)return;var p=hP(h,a[1]),m=hMn(h)||hM(h);if(mq(h+' '+p+' '+m,qs))add(h,p,m,'HSK '+lv)})});
+    BKW.forEach(function(w){if(mq(w[0]+' '+w[1]+' '+w[3]+' '+w[4],qs))add(w[0],hP(w[0],w[1]),hMn(w[0])||w[3],'📖 '+(RD_LV[w[7]]||''))});
+    out.sort(function(a,b){var ea=a.h===qs?0:1,eb=b.h===qs?0:1;return ea-eb||a.h.length-b.h.length});
+    return out;
+  }
+  function rdAttach(o){
+    var bar=o.querySelector('.pdfbar');if(!bar)return;
+    var btn=document.createElement('button');btn.className='btn small ghost';btn.type='button';btn.setAttribute('aria-label','search');btn.textContent='🔍';
+    var x=bar.querySelector('#pdfX');bar.insertBefore(btn,x);
+    var sh=document.createElement('div');sh.className='rdsrch';sh.hidden=true;
+    sh.innerHTML='<input type="search" class="rdq" placeholder="'+esc(T('rdPh'))+'" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="search"><div class="rdres"></div>';
+    o.appendChild(sh);
+    var inp=sh.querySelector('.rdq'),res=sh.querySelector('.rdres'),t=0;
+    function run(){
+      var v=inp.value.trim();
+      if(!v){res.innerHTML='<div class="hint" style="padding:8px">'+esc(T('rdHint'))+'</div>';return}
+      var L=rdFind(v);
+      res.innerHTML=L.length?L.map(function(r){return '<div class="rdrow"><span class="h" lang="zh">'+esc(r.h)+'</span><span class="rdm"><span class="p">'+esc(r.p)+'</span><br>'+esc(r.m)+'</span><span class="badge">'+esc(r.t)+'</span><button class="btn small ghost" type="button" data-rdsp="'+esc(r.h)+'" aria-label="listen">🔊</button></div>'}).join(''):'<div class="empty" style="padding:10px">'+esc(T('rdNone',{q:v}))+'</div>';
+    }
+    btn.addEventListener('click',function(){sh.hidden=!sh.hidden;btn.setAttribute('aria-pressed',String(!sh.hidden));if(!sh.hidden){run();setTimeout(function(){try{inp.focus()}catch(e){}},50)}});
+    inp.addEventListener('input',function(){clearTimeout(t);t=setTimeout(run,120)});
+    res.addEventListener('click',function(e){var b=e.target.closest('[data-rdsp]');if(b)try{speak(b.dataset.rdsp)}catch(x){}});
+  }
   function pdfClose(){var o=document.getElementById('pdfView');if(o)o.remove();document.body.style.overflow=''}
   function pdfOpen(url,title){
     pdfClose();
@@ -1923,7 +1954,7 @@ var DATA=window.DATA;
     o.innerHTML='<div class="pdfbar"><b class="pdft">'+esc(title||'PDF')+'</b><a class="btn small ghost" href="'+esc(url)+'" target="_blank" rel="noopener" aria-label="open in new tab">↗</a><button class="btn small" type="button" id="pdfX" aria-label="close">✕</button></div>'+
       '<iframe class="pdfframe" src="'+esc(url)+'" title="'+esc(title||'PDF')+'" referrerpolicy="no-referrer"></iframe>';
     document.body.appendChild(o);document.body.style.overflow='hidden';
-    document.getElementById('pdfX').addEventListener('click',pdfClose);
+    document.getElementById('pdfX').addEventListener('click',pdfClose);rdAttach(o);
   }
   /* Зургаар хадгалсан ном: хуудсуудыг сайт дотор гүйлгэж унших, хуудас руу үсрэх */
   function imgOpen(b){
@@ -1933,7 +1964,7 @@ var DATA=window.DATA;
       h+='<img class="pgimg" id="pg'+i+'" loading="lazy" decoding="async" width="900" height="1200" alt="'+esc(b.title)+' · '+i+'" src="'+esc(g.dir+'/p'+n+'.'+g.ext)+'">'}
     o.innerHTML='<div class="pdfbar"><b class="pdft">'+esc(b.title)+' · '+esc(libTitle(b))+'</b><label class="pgjump">'+T('libGo')+' <input id="pgGo" type="number" min="1" max="'+g.count+'" value="1" inputmode="numeric"> / '+g.count+'</label><button class="btn small" type="button" id="pdfX" aria-label="close">✕</button></div><div class="pgscroll" id="pgScroll">'+h+'</div>';
     document.body.appendChild(o);document.body.style.overflow='hidden';
-    document.getElementById('pdfX').addEventListener('click',pdfClose);
+    document.getElementById('pdfX').addEventListener('click',pdfClose);rdAttach(o);
     var go=document.getElementById('pgGo'),sc=document.getElementById('pgScroll');
     go.addEventListener('change',function(){var v=Math.max(1,Math.min(g.count,parseInt(go.value,10)||1)),el=document.getElementById('pg'+v);go.value=v;if(el)sc.scrollTop=el.offsetTop-sc.offsetTop});
     var t=0;sc.addEventListener('scroll',function(){clearTimeout(t);t=setTimeout(function(){var imgs=sc.children,y=sc.scrollTop+sc.clientHeight/3;for(var k=0;k<imgs.length;k++){if(imgs[k].offsetTop-sc.offsetTop+imgs[k].offsetHeight>y){go.value=k+1;break}}},120)});
@@ -1962,7 +1993,7 @@ var DATA=window.DATA;
     o.innerHTML='<div class="pdfbar"><b class="pdft">'+esc(title)+'</b><label class="pgjump">'+esc(T('libGo'))+' <input id="pgGo" type="number" min="1" value="1" inputmode="numeric"> / <span id="pgN">…</span></label><a class="btn small ghost" href="'+esc(url)+'" target="_blank" rel="noopener" aria-label="open in new tab">↗</a><button class="btn small" type="button" id="pdfX" aria-label="close">✕</button></div>'+
       '<div class="pgscroll" id="pgScroll"><div class="pgload" id="pgLoad">'+esc(T('libLoading'))+'</div></div>';
     document.body.appendChild(o);document.body.style.overflow='hidden';
-    document.getElementById('pdfX').addEventListener('click',pdfClose);
+    document.getElementById('pdfX').addEventListener('click',pdfClose);rdAttach(o);
     var gone=false;
     function fallback(){if(gone||!document.getElementById('pdfView'))return;gone=true;pdfOpen(url,title)}
     pdfjsLoad(function(){
