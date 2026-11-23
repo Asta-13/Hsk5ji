@@ -62,6 +62,7 @@ var DATA=window.DATA;
     libPart:["Хэсэг {n}","Part {n}","Часть {n}","第{n}部"],
     libImgs:["🖼 Хуудсаар · {n} хуудас","🖼 Page by page · {n} pages","🖼 По страницам · {n} стр.","🖼 ページ表示 · {n}頁"],
     libGo:["Хуудас","Page","Стр.","頁"],
+    libLoading:["Ном ачаалж байна…","Loading book…","Загрузка книги…","読み込み中…"],
     libPg:["х. {a}–{b}","p. {a}–{b}","стр. {a}–{b}","{a}–{b}頁"],
     tabMedia:["Бичлэг·Дуу","Videos·Songs","Видео·Песни","動画・歌"],
     mdMedia:["Хадмал дээрх үгийг товшиж сур","Tap words in subtitles to learn","Нажимайте слова в субтитрах","字幕の単語をタップして学ぶ"],
@@ -144,6 +145,8 @@ var DATA=window.DATA;
     aboutLog:["Шинэчлэлтийн түүх","What's new","История обновлений","更新履歴"],
     aboutHow:["Сайтын тухай: HSK 1–6 шалгалтанд бэлдэх үнэгүй сайт. Үг цээжлэх, тоглоом, дүрэм, сурах бичгийн сан нэг дор.","About: a free site for HSK 1–6 prep — vocabulary, games, grammar and a textbook library in one place.","О сайте: бесплатная подготовка к HSK 1–6 — слова, игры, грамматика и библиотека учебников.","このサイトについて：HSK1〜6対策の無料サイト。単語・ゲーム・文法・教材ライブラリをひとつに。"],
     aboutBtn:["Имэйл бичих","Send email","Написать","メールする"],
+    aboutEdit:["Админ: засах","Admin: edit","Админ: редактировать","管理者：編集"],
+    aboutBadMail:["Имэйл хаяг буруу байна.","Invalid email address.","Неверный email.","メールアドレスが正しくありません。"],
     wrAnim:["▶ Зураасны дараалал","▶ Stroke order","▶ Порядок черт","▶ 筆順"],
     wrQuiz:["✍ Би зурна","✍ I will draw","✍ Я напишу","✍ 自分で書く"],
     wrErr:["Зураасны өгөгдөл ачаалж чадсангүй. Интернетээ шалгаарай.","Could not load stroke data. Check your connection.","Не удалось загрузить данные о чертах. Проверьте интернет.","筆画データを読み込めませんでした。接続を確認してください。"],
@@ -1901,7 +1904,7 @@ var DATA=window.DATA;
     $('bkCnt').textContent=items.length+' / '+books.length;
     $('bkList').innerHTML='<div class="hint" style="margin:0 2px">'+T('libHint')+'</div>'+items.map(function(b){
       return '<div class="libbk"><div class="libh"><b lang="zh">'+esc(b.title)+'</b><span class="hint">'+esc(libTitle(b))+'</span></div><div class="libparts">'+
-        b.parts.map(function(p){return '<a class="chip" data-pdf="1" href="'+esc(libUrl(p.f))+'" target="_blank" rel="noopener">📖 '+T('libPart',{n:p.p})+' · '+T('libPg',{a:p.a,b:p.b})+' · '+p.mb+' MB</a>'}).join('')+
+        b.parts.map(function(p){return '<a class="chip" data-pdf="1" data-a="'+p.a+'" href="'+esc(libUrl(p.f))+'" target="_blank" rel="noopener">📖 '+T('libPart',{n:p.p})+' · '+T('libPg',{a:p.a,b:p.b})+' · '+p.mb+' MB</a>'}).join('')+
         (b.pages?'<button class="chip" type="button" data-imgs="'+b.n+'">'+T('libImgs',{n:b.pages.count})+'</button>':'')+'</div></div>'}).join('')||emptyRes(q,'bkQ');
   }
   /* PDF-ийг сайтаас гаралгүй дотор нь нээх (iframe давхарга). Нээгдэхгүй бол "↗" товчоор шинэ tab. */
@@ -1935,9 +1938,56 @@ var DATA=window.DATA;
   document.addEventListener('click',function(e){
     var a=e.target.closest&&e.target.closest('a[data-pdf]');if(!a)return;
     e.preventDefault();
-    var bk=a.closest('.libbk'),h=bk&&bk.querySelector('.libh b');
-    pdfOpen(a.getAttribute('href'),(h?h.textContent+' · ':'')+a.textContent.replace(/^📖\s*/,''));
+    var bk=a.closest('.libbk'),h=bk&&bk.querySelector('.libh b'),ttl=(h?h.textContent+' · ':'')+a.textContent.replace(/^📖\s*/,'');
+    pdfRead(a.getAttribute('href'),ttl,a.dataset.a?+a.dataset.a:0);
   });
+  /* PDF.js: ном шууд сайт дотор, хуудас хуудсаар нь гүйлгэж унших (татаж авах/шинэ tab хэрэггүй). Алдаа гарвал iframe руу буцна. */
+  function pdfjsLoad(cb,err){
+    if(window.pdfjsLib){cb();return}
+    var sc=document.createElement('script');sc.src='js/vendor/pdf.min.js';
+    sc.onload=function(){try{pdfjsLib.GlobalWorkerOptions.workerSrc='js/vendor/pdf.worker.min.js'}catch(e){}cb()};
+    sc.onerror=err;document.head.appendChild(sc);
+  }
+  function pdfRead(url,title,firstPg){
+    pdfClose();
+    var o=document.createElement('div');o.id='pdfView';o.className='pdfview';
+    o.innerHTML='<div class="pdfbar"><b class="pdft">'+esc(title)+'</b><label class="pgjump">'+esc(T('libGo'))+' <input id="pgGo" type="number" min="1" value="1" inputmode="numeric"> / <span id="pgN">…</span></label><a class="btn small ghost" href="'+esc(url)+'" target="_blank" rel="noopener" aria-label="open in new tab">↗</a><button class="btn small" type="button" id="pdfX" aria-label="close">✕</button></div>'+
+      '<div class="pgscroll" id="pgScroll"><div class="pgload" id="pgLoad">'+esc(T('libLoading'))+'</div></div>';
+    document.body.appendChild(o);document.body.style.overflow='hidden';
+    document.getElementById('pdfX').addEventListener('click',pdfClose);
+    var gone=false;
+    function fallback(){if(gone||!document.getElementById('pdfView'))return;gone=true;pdfOpen(url,title)}
+    pdfjsLoad(function(){
+      var task=pdfjsLib.getDocument({url:url,withCredentials:false});
+      task.onProgress=function(p){var l=document.getElementById('pgLoad');if(l&&p.total)l.textContent=T('libLoading')+' '+Math.round(p.loaded*100/p.total)+'%'};
+      task.promise.then(function(doc){
+        if(!document.getElementById('pdfView')||gone)return;
+        var sc=document.getElementById('pgScroll'),go=document.getElementById('pgGo'),N=doc.numPages;
+        document.getElementById('pgN').textContent=N+(firstPg?' ('+firstPg+'–'+(firstPg+N-1)+')':'');go.max=N;
+        doc.getPage(1).then(function(p1){
+          if(!document.getElementById('pdfView'))return;
+          var v=p1.getViewport({scale:1}),ratio=v.height/v.width,boxes=[];sc.innerHTML='';
+          var io=new IntersectionObserver(function(en){en.forEach(function(x){
+            var bx=x.target;if(x.isIntersecting)draw(bx);else drop(bx)})},{root:sc,rootMargin:'120% 0px'});
+          for(var i=1;i<=N;i++){var bx=document.createElement('div');bx.className='pgbox';bx.dataset.i=i;bx.id='pg'+i;bx.style.aspectRatio=(1/ratio).toFixed(4);sc.appendChild(bx);boxes.push(bx);io.observe(bx)}
+          function draw(bx){
+            if(bx._on)return;bx._on=1;var i=+bx.dataset.i;
+            doc.getPage(i).then(function(pg){
+              if(!bx._on||!document.getElementById('pdfView'))return;
+              var w=bx.clientWidth||sc.clientWidth,vp0=pg.getViewport({scale:1}),dpr=Math.min(window.devicePixelRatio||1,2),vp=pg.getViewport({scale:w/vp0.width*dpr}),cv=document.createElement('canvas');
+              cv.width=Math.floor(vp.width);cv.height=Math.floor(vp.height);
+              pg.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise.then(function(){if(bx._on){bx.innerHTML='';bx.appendChild(cv)}}).catch(function(){});
+            }).catch(function(){bx._on=0});
+          }
+          function drop(bx){if(!bx._on)return;bx._on=0;bx.innerHTML=''}
+          go.addEventListener('change',function(){var n=Math.max(1,Math.min(N,parseInt(go.value,10)||1)),el=document.getElementById('pg'+n);go.value=n;if(el)sc.scrollTop=el.offsetTop-sc.offsetTop});
+          var t=0;sc.addEventListener('scroll',function(){clearTimeout(t);t=setTimeout(function(){var y=sc.scrollTop+sc.clientHeight/3;for(var k=0;k<boxes.length;k++){if(boxes[k].offsetTop-sc.offsetTop+boxes[k].offsetHeight>y){go.value=k+1;break}}},120)});
+          try{var sv=JSON.parse(lget('hsk-pdfpos')||'{}')[url];if(sv>1&&sv<=N){go.value=sv;go.dispatchEvent(new Event('change'))}}catch(e){}
+          sc.addEventListener('scroll',function(){clearTimeout(sc._sv);sc._sv=setTimeout(function(){try{var m=JSON.parse(lget('hsk-pdfpos')||'{}');m[url]=+go.value||1;localStorage.setItem('hsk-pdfpos',JSON.stringify(m))}catch(e){}},600)});
+        });
+      }).catch(fallback);
+    },fallback);
+  }
   function renderBook(){
     if(!$('bkList'))return;
     if(BK.mode==='lib'){renderLib();return}
@@ -3878,25 +3928,40 @@ var DATA=window.DATA;
   window.addEventListener('appinstalled',function(){instEv=null;var c=$('instCard');if(c)c.hidden=true});
   $('instBtn').addEventListener('click',function(){if(!instEv)return;instEv.prompt();instEv.userChoice.then(function(){instEv=null;$('instCard').hidden=true}).catch(function(){})});
   var CONTACT_MAIL='hanyukaoshi51@gmail.com',EMRE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/,BASE=location.origin+location.pathname;
-  /* ---------- Холбоо барих · Хувилбар ---------- */
-  var APP_VER='v60',CLOGL=null;
+  /* ---------- Холбоо барих · Хувилбар (админ засна: site хүснэгтийн id='about' мөр) ---------- */
+  var APP_VER='v61',ABOUT={mail:CONTACT_MAIL,ver:APP_VER,text:''};
   (function(){
     var c=$('aboutCard');if(!c)return;
-    var mail='mailto:'+CONTACT_MAIL+'?subject='+encodeURIComponent('HSK app · '+APP_VER);
+    function show(){$('aboutVerTx').textContent=ABOUT.ver||APP_VER}
     function render(){
-      var h='<div class="hint" style="white-space:pre-line">'+esc(T('aboutHow'))+'</div>'+
-        '<div class="hint">'+esc(T('aboutTxt'))+'</div><div class="row"><a class="btn small" href="'+esc(mail)+'">✉ '+esc(CONTACT_MAIL)+'</a></div>'+
-        '<div class="between"><span class="hint">'+esc(T('aboutVer'))+'</span><b>'+esc(APP_VER)+'</b></div>';
-      if(CLOGL){h+='<div class="label" style="margin-top:6px">'+esc(T('aboutLog'))+'</div>'+CLOGL.map(function(x){
-        var items=x[lang]||(lang==='mn'?x.mn:x.en)||[];
-        return '<div class="clog"><div class="between"><b>'+esc(x.v)+'</b><span class="hint">'+esc(x.d)+'</span></div><ul>'+items.map(function(i){return '<li>'+esc(i)+'</li>'}).join('')+'</ul></div>'}).join('')}
+      var mail='mailto:'+ABOUT.mail+'?subject='+encodeURIComponent('HSK app · '+(ABOUT.ver||APP_VER));
+      var h='<div class="hint" style="white-space:pre-line">'+esc(ABOUT.text||T('aboutHow'))+'</div>'+
+        '<div class="hint">'+esc(T('aboutTxt'))+'</div><div class="row"><a class="btn small" href="'+esc(mail)+'">✉ '+esc(ABOUT.mail)+'</a></div>'+
+        '<div class="between"><span class="hint">'+esc(T('aboutVer'))+'</span><b>'+esc(ABOUT.ver||APP_VER)+'</b></div>';
+      if(isOwner)h+='<div class="clog"><div class="label">'+esc(T('aboutEdit'))+'</div>'+
+        '<input type="email" id="abMail" value="'+esc(ABOUT.mail)+'" aria-label="email" placeholder="email">'+
+        '<input type="text" id="abVer" value="'+esc(ABOUT.ver||APP_VER)+'" aria-label="version" placeholder="v61" maxlength="16">'+
+        '<textarea id="abText" rows="3" placeholder="'+esc(T('aboutHow'))+'">'+esc(ABOUT.text||'')+'</textarea>'+
+        '<button class="btn small" type="button" id="abSave">'+esc(T('save'))+'</button></div>';
       $('aboutBody').innerHTML=h;
     }
-    c.addEventListener('toggle',function(){
-      if(!c.open)return;render();
-      if(!CLOGL)fetch('data/changelog.json').then(function(r){return r.json()}).then(function(d){CLOGL=d.log||[];render()}).catch(function(){});
+    async function load(){
+      if(!sb)return;
+      try{var r=await sb.from('site').select('notice').eq('id','about').maybeSingle();
+        if(r.data&&r.data.notice){var j=JSON.parse(r.data.notice);
+          if(j.mail&&EMRE.test(j.mail))ABOUT.mail=j.mail;if(j.ver)ABOUT.ver=String(j.ver).slice(0,16);if(typeof j.text==='string')ABOUT.text=j.text.slice(0,600)}}catch(e){}
+      show();if(c.open)render();
+    }
+    c.addEventListener('toggle',function(){if(c.open){render();load()}});
+    c.addEventListener('click',function(e){
+      if(!e.target.closest('#abSave'))return;
+      var m=$('abMail').value.trim(),v=$('abVer').value.trim(),t=$('abText').value.trim();
+      if(!EMRE.test(m)){toast(T('aboutBadMail'),'oops');return}
+      ABOUT={mail:m,ver:v||APP_VER,text:t};
+      if(sb)q(async function(){var x=await sb.from('site').upsert({id:'about',notice:JSON.stringify(ABOUT)});if(x.error)throw x.error;toast('✓','cheer')});
+      show();render();
     });
-    $('aboutVerTx').textContent=APP_VER;
+    show();setTimeout(load,2500);
   })();
   async function doAuth(up){
     var u=$('auUser').value.trim(),p=$('auPass').value,isMail=u.indexOf('@')>-1;

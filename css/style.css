@@ -1219,3 +1219,7 @@ body{padding-bottom:96px}
 #plOpts [data-opt],#plOpts [data-topt]{counter-increment:o}
 #plOpts [data-opt]::before,#plOpts [data-topt]::before{content:counter(o);display:inline-block;min-width:1.4em;margin-right:8px;opacity:.45;font-size:.78em;font-weight:700}
 @media (pointer:coarse){#plOpts [data-opt]::before,#plOpts [data-topt]::before{display:none}}
+
+.pgbox{position:relative;width:100%;max-width:900px;margin:0 auto 8px;background:#fff;overflow:hidden}
+.pgbox canvas{display:block;width:100%;height:auto}
+.pgload{padding:40px 16px;text-align:center;color:var(--muted,#666);font-weight:600}

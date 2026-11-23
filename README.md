@@ -26,7 +26,10 @@ GitHub Pages + Supabase дээр ажилладаг PWA (vanilla JS).
 2. `python tools/build_book_words.py`
 3. `sw.js` дахь `VER` нэмээд commit/push
 
-## Хувилбар
-`js/app.js` дахь `APP_VER`, `sw.js` дахь `VER`, `data/changelog.json` (Today доод талын «Холбоо барих · Хувилбар») гурвыг хамт шинэчилнэ.
-Холбоо барих имэйл: `CONTACT_MAIL` (app.js).
-> Имэйл баталгаажуулах захидлыг илгээгч (Supabase Auth) нь Supabase → Authentication → SMTP Settings дээр тохирно (код биш).
+## Хувилбар · Холбоо барих
+Today доод талын «Холбоо барих · Хувилбар» карт. Админ нэвтэрсэн үед тэнд шууд имэйл, хувилбар, тайлбарыг засна (Supabase `site` хүснэгт, id=`about`).
+Код дахь анхны утга: `APP_VER`, `CONTACT_MAIL` (app.js). Шинэчлэлт гаргахад `sw.js`-ийн `VER`-ийг нэмнэ.
+> Баталгаажуулах захидлыг илгээгч (Supabase Auth) нь Supabase → Authentication → SMTP Settings дээр тохирно (код биш).
+
+## Номын сан
+PDF-үүд Hugging Face дээр. Сайт дотор `js/vendor/pdf.min.js` (PDF.js)-ээр хуудас хуудсаар нь унших; алдаа гарвал iframe руу буцна.
