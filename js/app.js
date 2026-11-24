@@ -1822,7 +1822,23 @@ var DATA=window.DATA;
     }).join('');
     if(items.length>hLim)h2+='<button class="btn ghost" type="button" data-hmore="1">'+T('more')+' ('+(items.length-hLim)+')</button>';
     $('hskList').innerHTML=h2||emptyRes(hQ,'hskQ');hJust='';
+    hskGramHits();
   }
+  /* grammar patterns matching the HSK search box */
+  function hskGramHits(){
+    var box=$('hskGramHit');if(!box)return;
+    var v=hQ;if(!v||v.length<1){box.innerHTML='';return}
+    var all=gramList().filter(function(g){return mq(g.k+' '+g.m+' '+g.z+' '+g.t+' '+gLoc(g,'m')+' '+gLoc(g,'t'),v)});
+    if(!all.length){box.innerHTML='';return}
+    box.innerHTML='<div class="gm"><div class="between"><b>📐 '+T('gmTitle')+' <span class="badge">'+all.length+'</span></b>'+
+      '<button class="btn small ghost" type="button" data-gsgram="'+esc(v)+'">›</button></div>'+
+      all.slice(0,4).map(function(g){return '<div style="margin-top:8px"><b lang="zh">'+hl(g.k,v)+'</b> <span class="badge">HSK '+g.l+'</span><br><span class="m">'+hl(gLoc(g,'m'),v)+'</span><br><span class="z" lang="zh">'+hl(g.z,v)+'</span></div>'}).join('')+'</div>';
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-gsgram]');if(!b)return;
+    gQ=b.dataset.gsgram;gLv=0;gConn=false;var i=$('gmQ');i.value=gQ;var sx=i.parentNode.querySelector('.sx');if(sx)sx.hidden=false;
+    showTab('gram');renderGram();
+  });
   document.addEventListener('click',function(e){
     var b=e.target.closest('#hskLv [data-l]');if(b){hLv=+b.dataset.l;hLim=60;renderHsk();return}
     b=e.target.closest('[data-hedit]');
