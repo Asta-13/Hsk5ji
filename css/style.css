@@ -1253,3 +1253,16 @@ body{padding-bottom:96px}
 .rdrow .h{font-family:var(--font-han);font-size:1.3rem;font-weight:800;min-width:2.6em}
 .rdm{flex:1;font-size:.9rem}.rdm .p{opacity:.7;font-size:.82rem}
 .pdfbar .btn[aria-pressed="true"]{background:var(--accent,#1f3d8f);color:#fff}
+
+/* ---------- Үсгийн хэмжээ, жин, өнгийг цэгцэлсэн (reading polish) ----------
+   Зорилго: хэт жижиг (11–13px) үсгийг уншигдахуйц болгох, гол агуулга (хятад өгүүлбэр, утга)-ыг тодруулах,
+   туслах мэдээлэл (орчуулга, заавар)-ыг тайвширсан өнгөөр үлдээх. */
+.wc .h{font-size:2rem}
+.wc .m,.gm .m{font-size:1.02rem;font-weight:500;line-height:1.45}
+.wc .p{font-size:1.05rem}
+.badge{font-size:.78rem}
+.exz>span{font-size:1.12rem;line-height:1.55;color:var(--fg)}
+.exm{font-size:.9rem;line-height:1.5}
+.gm .z{font-size:1.15rem;line-height:1.6;color:var(--fg)}
+.gm .hint{font-size:.9rem;line-height:1.5}
+.hint{font-size:.88rem}
