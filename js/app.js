@@ -2354,7 +2354,7 @@ var DATA=window.DATA;
     }).catch(function(){hint.textContent=T('pushHintOff')});
   }
   function pushToggle(){
-    var btn=$('pushBtn');if(!pushOk()){toast(T('pushErr'));return}
+    var btn=$('pushBtn');if(!pushOk()){toast(T('pushErr')+' [ok:'+(!!VAPID_PUB)+(('serviceWorker' in navigator)?'':' nosw')+(('PushManager' in window)?'':' nopush')+(('Notification' in window)?'':' nonotif')+(sb?'':' nosb')+(uid?'':' nouid')+']');return}
     navigator.serviceWorker.ready.then(function(reg){
       return reg.pushManager.getSubscription().then(function(sub){
         if(sub){ /* унтраах */
@@ -2368,7 +2368,7 @@ var DATA=window.DATA;
           return sb.from('push_subs').upsert(pushRow(ns)).then(function(r){if(r.error)throw r.error});
         });
       });
-    }).then(pushRender).catch(function(){toast(T('pushErr'));pushRender()});
+    }).then(pushRender).catch(function(e){var m=e&&(e.name==='Error'?e.message:(e.name||'')+(e.message?': '+e.message:''))||String(e);toast(T('pushErr')+' ['+String(m).slice(0,90)+']');pushRender()});
   }
   document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('#pushBtn'))pushToggle()});
   document.addEventListener('change',function(e){
