@@ -23,3 +23,19 @@ create policy preq_admin_upd on public.premium_requests for update to authentica
 create policy preq_admin_del on public.premium_requests for delete to authenticated using ((select public.is_admin()));
 revoke all on public.premium_requests from anon;
 -- Тохиргоо (хаалт асаах, үнэ, төлбөрийн заавар) нь site хүснэгтийн id='prem' мөрөнд JSON-оор хадгалагдана.
+
+-- 3 хоногийн үнэгүй туршилт: нэг хэрэглэгч насан туршдаа ганц удаа (сервер талд хамгаалсан)
+create table if not exists public.premium_trials (uid uuid primary key references auth.users(id) on delete cascade, claimed_at timestamptz not null default now());
+alter table public.premium_trials enable row level security;
+create policy ptrial_select on public.premium_trials for select to authenticated using (uid = (select auth.uid()) or (select public.is_admin()));
+revoke all on public.premium_trials from anon;
+create or replace function public.claim_premium_trial() returns date language plpgsql security definer set search_path = public as $$
+declare u uuid := auth.uid(); d date;
+begin
+  if u is null then raise exception 'not authenticated'; end if;
+  if exists (select 1 from premium_trials where uid = u) then raise exception 'trial already used'; end if;
+  if exists (select 1 from premium where uid = u) then raise exception 'already premium'; end if;
+  d := current_date + 3; insert into premium_trials(uid) values (u); insert into premium(uid, until, plan) values (u, d, 'trial'); return d;
+end $$;
+revoke all on function public.claim_premium_trial() from public, anon;
+grant execute on function public.claim_premium_trial() to authenticated;
