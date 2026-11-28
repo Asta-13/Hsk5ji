@@ -9,7 +9,9 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY || !VAPID_PUBLIC_KEY || !VAPID_PRIVAT
 }
 webpush.setVapidDetails(VAPID_SUBJECT || 'mailto:admin@example.com', VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY);
 
-const H = { apikey: SUPABASE_SERVICE_KEY, Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`, 'Content-Type': 'application/json' };
+// Шинэ `sb_secret_...` түлхүүр JWT биш тул зөвхөн apikey толгойгоор; хуучин service_role (JWT) бол Authorization-тай нь.
+const H = { apikey: SUPABASE_SERVICE_KEY, 'Content-Type': 'application/json' };
+if (!SUPABASE_SERVICE_KEY.startsWith('sb_')) H.Authorization = `Bearer ${SUPABASE_SERVICE_KEY}`;
 const rest = (path, init = {}) => fetch(`${SUPABASE_URL}/rest/v1/${path}`, { ...init, headers: { ...H, ...(init.headers || {}) } });
 
 const MSG = {
