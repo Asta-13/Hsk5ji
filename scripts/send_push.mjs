@@ -55,7 +55,8 @@ let sent = 0, gone = 0;
 for (const s of subs) {
   const local = new Date(Date.now() + s.tzo * 60000);
   const day = iso(local);
-  if (local.getUTCHours() !== s.hour || s.last_sent === day) continue;
+  const nowM = local.getUTCHours() * 60 + local.getUTCMinutes(), tgt = s.hour * 60 + (s.minute || 0);
+  if (nowM < tgt || nowM >= tgt + 150 || s.last_sent === day) continue; // сонгосон цагаас хойш 2.5 цагийн дотор нэг удаа
   const a = act[s.uid] || {};
   if (on(a, local)) continue; // өнөөдөр аль хэдийн сурсан
   const n = streakBefore(a, local), m = MSG[s.lang] || MSG.mn;
