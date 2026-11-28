@@ -369,6 +369,12 @@
     <label class="f" for="meS" style="max-width:260px"><span data-i18n="prevScore"></span><input id="meS" type="number" inputmode="numeric" min="0" max="300" placeholder="/ 300"></label>
     <div class="row"><button class="btn" id="meSave" type="button" data-i18n="save"></button><button class="btn ghost" id="meRestart" type="button" data-i18n="restart"></button></div>
     <div class="note" id="advice"></div>
+    <div id="pushBox" class="pushbox" hidden>
+      <div class="label" data-i18n="pushTitle"></div>
+      <div class="hint" id="pushHint"></div>
+      <div class="row"><label class="f" for="pushHour" style="max-width:140px"><span data-i18n="pushAt"></span><select id="pushHour"></select></label>
+      <button class="btn" id="pushBtn" type="button"></button></div>
+    </div>
   </div>
   <div class="card" id="acct" hidden>
     <h2 data-i18n="acctTitle"></h2>
