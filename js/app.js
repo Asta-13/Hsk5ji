@@ -74,6 +74,14 @@ var DATA=window.DATA;
     mSong:["🎵 Дуу","🎵 Songs","🎵 Песни","🎵 歌"],
     mMeta:["{n} мөр · {w} шинэ үг","{n} lines · {w} new words","{n} строк · {w} новых слов","{n}行 · 新しい単語{w}"],
     mAuto:["Автомат хадмал (алдаатай байж болно)","Auto subtitles (may contain errors)","Автосубтитры (возможны ошибки)","自動字幕（誤りあり）"],
+    mText:["✍ Өөрийн текст","✍ My text","✍ Мой текст","✍ 自分のテキスト"],
+    txHint:["Хятад текст (WeChat, мэдээ, дууны үг) хуулж тавина уу. Үг бүр дээр дарвал утга, нэмэх боломжтой.","Paste any Chinese text (chat, news, lyrics). Tap a word to see its meaning and add it.","Вставьте китайский текст (чат, новости, песня). Нажмите на слово, чтобы увидеть перевод.","中国語のテキストを貼り付けてください。単語をタップすると意味が出ます。"],
+    txPh:["在这里粘贴中文…","在这里粘贴中文…","在这里粘贴中文…","在这里粘贴中文…"],
+    txGo:["Уншуулах","Read","Читать","読む"],
+    txClr:["Цэвэрлэх","Clear","Очистить","クリア"],
+    txNew:["{n} шинэ HSK үг","{n} new HSK words","Новых слов HSK: {n}","新しいHSK単語 {n}"],
+    txAdd:["+ Бүгдийг нэмэх","+ Add all","+ Добавить все","+ すべて追加"],
+    txNone:["Шинэ HSK үг олдсонгүй","No new HSK words found","Новых слов HSK нет","新しいHSK単語はありません"],
     mFeed:["🔥 Лент","🔥 Feed","🔥 Лента","🔥 フィード"],
     mWorld:["🌍 Дэлхий","🌍 World","🌍 Мир","🌍 世界"],
     wHome:["Өнөөдрийн сонин баримт","Today's fun fact","Интересный факт дня","今日の豆知識"],
@@ -2295,17 +2303,41 @@ var DATA=window.DATA;
   function renderMediaList(items){
     var k=MED.kind;
     if(k==='feed'&&!MED.userK&&!feedItems(items).length)k=MED.kind='world';
-    $('mKinds').innerHTML=['feed','news','world','video'].map(function(x){return '<button class="chip" type="button" data-mk="'+x+'" aria-pressed="'+(k===x)+'">'+T(x==='feed'?'mFeed':x==='news'?'mNews':x==='world'?'mWorld':x==='video'?'mVideo':'mSong')+'</button>'}).join('');
+    $('mKinds').innerHTML=['feed','news','world','video','text'].map(function(x){return '<button class="chip" type="button" data-mk="'+x+'" aria-pressed="'+(k===x)+'">'+T(x==='feed'?'mFeed':x==='news'?'mNews':x==='world'?'mWorld':x==='video'?'mVideo':x==='text'?'mText':'mSong')+'</button>'}).join('');
     if(k==='feed'){renderMediaFeed(items);return}
     if(k==='song')k=MED.kind='feed';
     if(k==='world'||k==='news'){renderWorldFeed();return}
     mediaStop();
+    if(k==='text'){renderTextReader();return}
     var L=items.filter(function(x){return x.kind===k}),hv=haveSet();
     $('mBody').innerHTML=L.length?'<div class="list">'+L.map(function(x){
       var ws=mediaWords(x),nw=ws.filter(function(w){return !hv[w.h]&&w.m}).length;
       return '<button class="card mcard" type="button" data-mi="'+esc(x.id)+'"><div class="between"><b>'+esc(x.title)+'</b>'+(x.level?'<span class="badge">HSK '+x.level+'</span>':'')+'</div>'+
         (x.titleZh?'<span class="m" lang="zh">'+esc(x.titleZh)+'</span>':'')+(x.auto?'<span class="hint">🤖 '+esc(T('mAuto'))+'</span>':'')+(x.story?'<span class="hint">🎬</span>':'')+'<span class="hint">'+esc(T('mMeta',{n:(x.lines||[]).length,w:nw}))+'</span></button>';
     }).join('')+'</div>':'<div class="empty">'+T('mEmpty')+'</div>';
+  }
+  /* ---- Өөрийн текст уншигч: хуулсан хятад текстийн үг бүрийг дарж утга харна ---- */
+  function txGet(){if(MED.tx==null){try{MED.tx=localStorage.getItem('hsk-text')||''}catch(e){MED.tx=''}}return MED.tx}
+  function txSet(v){MED.tx=v;try{localStorage.setItem('hsk-text',v)}catch(e){}}
+  function renderTextReader(){
+    var box=$('mBody');if(!box)return;
+    box.innerHTML='<div class="card txcard"><div class="hint">'+esc(T('txHint'))+'</div>'+
+      '<textarea id="txIn" class="txin" lang="zh" maxlength="2000" placeholder="'+esc(T('txPh'))+'" spellcheck="false"></textarea>'+
+      '<div class="row"><button class="btn small" type="button" data-txgo>'+esc(T('txGo'))+'</button> <button class="btn small ghost" type="button" data-txclr>'+esc(T('txClr'))+'</button></div></div>'+
+      '<div id="txOut"></div>';
+    $('txIn').value=txGet();
+    if(txGet().trim())renderTextOut();
+  }
+  document.addEventListener('input',function(e){if(e.target&&e.target.id==='txIn')txSet(e.target.value)});
+  function renderTextOut(){
+    var out=$('txOut');if(!out)return;
+    var t=txGet().trim();
+    if(!t){out.innerHTML='';return}
+    var hv=haveSet(),nw=mediaWords({lines:[{zh:t}]}).filter(function(w){return !hv[w.h]&&w.m});
+    var body=t.split(/\n+/).map(function(l){return '<p>'+zhRuby(l,hv,'mfw')+'</p>'}).join('');
+    out.innerHTML='<div class="card txres"><div class="between"><span class="hint">'+esc(nw.length?T('txNew',{n:nw.length}):T('txNone'))+'</span>'+
+      (nw.length?'<button class="btn small" type="button" data-txadd>'+esc(T('txAdd'))+'</button>':'')+'</div>'+
+      '<div class="wzh txbody" lang="zh">'+body+'</div></div><div class="card mfcard" id="wfCard" hidden></div>';
   }
   function renderMediaItem(it){
     var hv=haveSet(),ws=mediaWords(it),nw=ws.filter(function(w){return !hv[w.h]&&w.m});
@@ -2484,6 +2516,12 @@ var DATA=window.DATA;
     if((b=t.closest('[data-wc]'))){if(MED.kind==='news')WLD.ncat=b.dataset.wc;else WLD.cat=b.dataset.wc;renderWorldFeed();return}
     if((b=t.closest('[data-wsay]'))){var x=wById(b.dataset.wsay);x&&speak(x.zh);return}
     if(t.closest('[data-wnext]')){WLD.off++;worldCardRender();return}
+    if(t.closest('[data-txgo]')){var ti=$('txIn');if(ti)txSet(ti.value);renderTextOut();return}
+    if(t.closest('[data-txclr]')){txSet('');var tc=$('txIn');if(tc){tc.value='';tc.focus()}renderTextOut();return}
+    if(t.closest('[data-txadd]')){
+      var hv3=haveSet(),n4=0;
+      mediaWords({lines:[{zh:txGet()}]}).filter(function(w){return !hv3[w.h]&&w.m}).forEach(function(w){if(mediaAdd(w.h))n4++});
+      if(n4){syncSummary(TODAY);toast(T('tAddedN',{n:n4}),'cheer');renderAll();renderTextOut()}return}
     if(t.closest('[data-wopen]')){MED.kind='world';MED.userK=1;MED.cur=null;showTab('media');return}
     if((b=t.closest('[data-wadd]'))){
       var x2=wById(b.dataset.wadd),n=0;
@@ -2491,7 +2529,7 @@ var DATA=window.DATA;
       if(n){syncSummary(TODAY);toast(T('tAddedN',{n:n}),'cheer');renderAll()}return}
     if(t.closest('#worldCard')&&(b=t.closest('.wfw'))){
       var h=b.dataset.h,hit=hskLookup(h);speak(h);toast(h+' · '+hP(h,hit&&hit.p)+' — '+(hM(h)||''),'think');return}
-    if(!t.closest('#wFeed')&&!t.closest('#wfCard'))return;
+    if(!t.closest('#wFeed')&&!t.closest('#wfCard')&&!t.closest('#txOut'))return;
     if(t.closest('[data-wpy]')){var f=$('wFeed');f.classList.toggle('pin');return}
     if((b=t.closest('[data-wwords]'))){
       var x3=wById(b.dataset.wwords),n3=0;

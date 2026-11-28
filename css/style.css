@@ -1266,3 +1266,12 @@ body{padding-bottom:96px}
 .gm .z{font-size:1.15rem;line-height:1.6;color:var(--fg)}
 .gm .hint{font-size:.9rem;line-height:1.5}
 .hint{font-size:.88rem}
+/* ---------- Өөрийн текст уншигч ---------- */
+.txcard{display:grid;gap:10px}
+.txin{width:100%;min-height:120px;font-family:var(--font-han);font-size:1.1rem;line-height:1.6}
+.txres{margin-top:12px}
+.txbody{margin-top:10px}
+.txbody p{margin:0 0 .7em}
+.txbody .mfw{color:var(--fg)}
+.txbody ruby rt{color:var(--muted)}
+#txOut #wfCard{position:sticky;bottom:84px;z-index:5;box-shadow:0 8px 28px rgba(0,0,0,.28)}
