@@ -99,6 +99,13 @@ var DATA=window.DATA;
     prAddLim:["Үнэгүй: нэг дор {n} үг хүртэл нэмнэ 💎","Free: add up to {n} words at once 💎","Бесплатно: до {n} слов за раз 💎","無料：一度に{n}語まで 💎"],
     prOpen:["Premium-ийг харах","See Premium","Смотреть Premium","プレミアムを見る"],
     prNeed:["Олон удаагийн сануулга Premium-д байна 💎","Multiple reminders need Premium 💎","Несколько напоминаний — в Premium 💎","複数回のリマインドはプレミアム限定 💎"],
+    prTermsH:["Нөхцөл · баталгаа","Terms & guarantee","Условия и гарантия","条件・保証"],
+    prTermsDef:["• Автоматаар сунгагдахгүй, нууц төлбөр байхгүй.\n• Төлсөн хугацаа бүрэн тооцогдоно. Дуусахаас өмнө сунгавал үлдсэн хоног хасагдахгүй, нэмэгдэнэ.\n• Хүсэлтийг 24 цагийн дотор шалгаж нээнэ.\n• Төлснөөс хойш 7 хоногийн дотор сэтгэл хангалуун бус бол мөнгийг буцаана.\n• Алдаа гарвал эсвэл хариу ирэхгүй бол админтай холбогдоорой.","• No auto-renewal, no hidden charges.\n• Paid time counts fully. Renewing early adds days, nothing is lost.\n• Requests are checked within 24 hours.\n• Not satisfied within 7 days of payment? Full refund.\n• Problem or no reply? Contact the admin.","• Без автопродления и скрытых платежей.\n• Оплаченное время учитывается полностью; при продлении дни складываются.\n• Заявки проверяются в течение 24 часов.\n• Не понравилось в течение 7 дней — вернём деньги.\n• Проблема или нет ответа — напишите админу.","• 自動更新・隠れた請求はありません。\n• 支払った期間は全額有効。早めの更新でも日数は加算されます。\n• 申請は24時間以内に確認します。\n• 支払いから7日以内なら全額返金します。\n• 問題や返信がない場合は管理者へ連絡を。"],
+    prAgree:["Нөхцөлтэй танилцлаа","I read the terms","Я прочитал условия","条件を確認しました"],
+    prNeedAgree:["Нөхцөлтэй танилцсан гэж тэмдэглэнэ үү","Please tick that you read the terms","Отметьте, что прочитали условия","条件の確認にチェックを入れてください"],
+    prThanks:["💎 Premium нээгдлээ! Баярлалаа, сайн сураарай!","💎 Premium unlocked! Thank you, happy studying!","💎 Premium открыт! Спасибо, удачной учёбы!","💎 プレミアム開始！ありがとう、頑張って！"],
+    prLeft:["{n} хоног үлдсэн","{n} days left","осталось {n} дн.","残り{n}日"],
+    prSoon:["Premium {n} хоногийн дараа дуусна. Одоо сунгавал үлдсэн хоног хасагдахгүй.","Premium ends in {n} days. Renewing now keeps every remaining day.","Premium закончится через {n} дн. Продление сейчас сохранит оставшиеся дни.","プレミアムはあと{n}日。今更新しても残り日数は失われません。"],
     prUntil:["Дуусах: {d}","Until {d}","До {d}","期限 {d}"],
     pushErr:["Сануулга асааж чадсангүй","Could not enable reminders","Не удалось включить","オンにできませんでした"],
     mText:["✍ Өөрийн текст","✍ My text","✍ Мой текст","✍ 自分のテキスト"],
@@ -675,7 +682,7 @@ var DATA=window.DATA;
   /* ---------- state ---------- */
   var S={profile:{},words:{},chk:{},act:{}};
   var P={},CFG={notice:'',hidden:{}};
-  var PREM={until:'',cfg:{on:false,info:'',prices:{'30':'','90':'','365':''}},reqs:[],pend:[],act:{}};
+  var PREM={until:'',cfg:{on:false,info:'',terms:'',prices:{'30':'','90':'','365':''}},reqs:[],pend:[],act:{}};
   /* ===== SERVER CONFIG: paste your Supabase project URL and anon/publishable key ===== */
   var SBCFG={url:'https://nyrhcrsylkhdkzahtgnl.supabase.co',key:'sb_publishable_nQd1gT78flu0FR9QmVLEAA_0Nb83DKP'};
   var sb=null,uid=null,mode='local',isOwner=false,needAuth=false,authReady=false,loginName='';
@@ -2417,7 +2424,14 @@ var DATA=window.DATA;
         sb.from('site').select('notice').eq('id','prem').maybeSingle()]);
       PREM.until=(r[0].data&&r[0].data.until)||'';PREM.reqs=r[1].data||[];
       var c={};try{c=JSON.parse((r[2].data&&r[2].data.notice)||'{}')}catch(e){}
-      PREM.cfg={on:!!c.on,info:String(c.info||''),prices:Object.assign({'30':'','90':'','365':''},c.prices||{})};
+      PREM.cfg={on:!!c.on,info:String(c.info||''),terms:String(c.terms||''),prices:Object.assign({'30':'','90':'','365':''},c.prices||{})};
+    }catch(e){}
+    try{
+      var mx=0;PREM.reqs.forEach(function(x){if(x.status==='approved'&&x.id>mx)mx=x.id});
+      var seen=+(lget('hsk-prseen-'+uid)||0);
+      if(mx>seen){if(seen||PREM.until)setTimeout(function(){toast(T('prThanks'),'cheer')},900);lset('hsk-prseen-'+uid,String(mx))}
+      var dl=PREM.cfg.on&&PREM.until?Math.round((parseIso(PREM.until)-parseIso(TODAY))/864e5):-1;
+      if(dl>=0&&dl<=5&&lget('hsk-prwarn')!==TODAY){lset('hsk-prwarn',TODAY);setTimeout(function(){toast(T('prSoon',{n:dl}),'think')},3500)}
     }catch(e){}
   }
   function premLock(){return '<div class="card prlock"><h2>'+esc(T('prLockT'))+'</h2><p>'+esc(T('prLockD'))+'</p><button class="btn" type="button" data-prgo="1">'+esc(T('prOpen'))+'</button></div>'}
@@ -2428,19 +2442,23 @@ var DATA=window.DATA;
     c.hidden=false;
     var has=PREM.until&&PREM.until>=TODAY,pr=PREM.cfg.prices;
     var h='<div class="between"><h2>'+esc(T('prTitle'))+'</h2><span class="badge prb'+(has?' on':'')+'">'+(has?esc(T('prUntil',{d:PREM.until})):'Free')+'</span></div>';
+    if(has){var dl2=Math.round((parseIso(PREM.until)-parseIso(TODAY))/864e5);h+='<div class="hint">'+esc(T('prLeft',{n:dl2}))+(dl2<=5?' · '+esc(T('prSoon',{n:dl2})):'')+'</div>'}
     if(!PREM.cfg.on)h+='<div class="hint">'+esc(T('prOffNote'))+'</div>';
     h+='<ul class="prlist">'+T('prPerks').split('|').map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul><div class="prplans">'+
       ['30','90','365'].map(function(n){return '<button type="button" class="chip" data-prplan="'+n+'" aria-pressed="'+(premPlan===n?'true':'false')+'"><b>'+esc(T('prPlan'+n))+'</b>'+(pr[n]?'<br><small>'+esc(pr[n])+'</small>':'')+'</button>'}).join('')+'</div>';
     if(PREM.cfg.info)h+='<div class="label">'+esc(T('prPayHdr'))+'</div><div class="prpay">'+esc(PREM.cfg.info)+'</div>';
+    h+='<details class="prterms"><summary>'+esc(T('prTermsH'))+'</summary><div class="prpay">'+esc(PREM.cfg.terms||T('prTermsDef'))+'</div></details>';
+    h+='<label class="row" style="gap:8px"><input type="checkbox" id="prAgree"> <span>'+esc(T('prAgree'))+'</span></label>';
     h+='<div class="row"><input type="text" id="prRef" maxlength="160" placeholder="'+esc(T('prRefPh'))+'" style="flex:1;min-width:140px"><button class="btn" type="button" data-prsend="1">'+esc(T('prSend'))+'</button></div>';
     if(PREM.reqs.length)h+='<div class="hint">'+PREM.reqs.map(function(r){return esc(T('prPlan'+r.plan))+' · '+esc(String(r.created_at).slice(0,10))+' · '+esc(T(r.status==='pending'?'prPend':r.status==='approved'?'prOk':'prNo'))}).join('<br>')+'</div>';
-    var keep=$('prRef')&&$('prRef').value;c.innerHTML=h;if(keep)$('prRef').value=keep;
+    var keep=$('prRef')&&$('prRef').value,ag=$('prAgree')&&$('prAgree').checked,op=c.querySelector('.prterms')&&c.querySelector('.prterms').open;c.innerHTML=h;if(keep)$('prRef').value=keep;if(ag)$('prAgree').checked=true;if(op)c.querySelector('.prterms').open=true;
   }
   document.addEventListener('click',function(e){
     var t=e.target.closest&&e.target.closest('[data-prplan],[data-prsend],[data-prgo]');if(!t)return;
     if(t.dataset.prplan){premPlan=t.dataset.prplan;premRender();return}
     if(t.dataset.prgo){showTab('me');setTimeout(function(){var c=$('premCard');if(c&&!c.hidden)c.scrollIntoView({behavior:'smooth',block:'start'})},60);return}
     var ref=($('prRef').value||'').trim();if(!ref){toast(T('prNeedRef'),'oops');return}
+    if(!$('prAgree').checked){toast(T('prNeedAgree'),'oops');return}
     if(!sb||!uid)return;t.disabled=true;
     sb.from('premium_requests').insert({uid:uid,plan:premPlan,ref:ref.slice(0,160)}).then(function(x){
       if(x.error){toast(T('tSaveErr'),'oops');t.disabled=false;return}
@@ -2465,12 +2483,13 @@ var DATA=window.DATA;
     box.innerHTML='<h2>💎 Premium удирдлага</h2>'+
       '<label class="row" style="gap:8px"><input type="checkbox" id="paOn"'+(cf.on?' checked':'')+'> <span>Хаалт идэвхтэй (унтраалттай бол бүгд үнэгүй ашиглана)</span></label>'+
       '<textarea id="paInfo" rows="4" maxlength="600" placeholder="Төлбөрийн заавар: банк, дансны дугаар, нэр, гүйлгээний утга...">'+esc(cf.info)+'</textarea>'+
+      '<textarea id="paTerms" rows="5" maxlength="900" placeholder="Нөхцөл · баталгаа (хоосон бол стандарт нөхцөл харагдана: автоматаар сунгагдахгүй, 7 хоногт буцаалт гэх мэт)">'+esc(cf.terms)+'</textarea>'+
       '<div class="row"><input type="text" id="pa30" maxlength="24" placeholder="30 хоног: үнэ" value="'+esc(pr['30'])+'"><input type="text" id="pa90" maxlength="24" placeholder="90 хоног: үнэ" value="'+esc(pr['90'])+'"><input type="text" id="pa365" maxlength="24" placeholder="1 жил: үнэ" value="'+esc(pr['365'])+'"></div>'+
       '<button class="btn" type="button" id="paSave">Хадгалах</button>'+
       '<div class="label" style="margin-top:14px">Хүлээгдэж буй хүсэлт ('+PREM.pend.length+')</div>'+
-      (PREM.pend.length?PREM.pend.map(function(r){return '<div class="adm"><div class="between"><b>'+esc(nickOf(r.uid))+'</b><span class="badge">'+esc(T('prPlan'+r.plan))+'</span></div><div class="hint">'+esc(r.ref)+' · '+esc(String(r.created_at).slice(0,10))+'</div><div class="row"><button class="btn small" type="button" data-paok="'+r.id+'">Зөвшөөрөх</button><button class="btn ghost small" type="button" data-pano="'+r.id+'">Татгалзах</button></div></div>'}).join(''):'<div class="empty">Хүсэлт алга</div>')+
+      (PREM.pend.length?PREM.pend.map(function(r){return '<div class="adm"><div class="between"><b>'+esc(nickOf(r.uid))+'</b><span class="badge">'+esc(T('prPlan'+r.plan))+'</span></div><div class="hint">'+esc(r.ref)+' · '+esc(String(r.created_at).slice(0,10))+(function(){var hr=Math.round((Date.now()-new Date(r.created_at))/36e5);return hr>=24?' · <b style="color:var(--bad)">⚠ '+hr+' цаг хүлээсэн</b>':' · '+hr+' цаг'})()+'</div><div class="row"><button class="btn small" type="button" data-paok="'+r.id+'">Зөвшөөрөх</button><button class="btn ghost small" type="button" data-pano="'+r.id+'">Татгалзах</button></div></div>'}).join(''):'<div class="empty">Хүсэлт алга</div>')+
       '<div class="label" style="margin-top:14px">Гараар олгох</div><div class="row"><select id="paUser">'+users.map(function(k){return '<option value="'+esc(k)+'">'+esc(nickOf(k))+'</option>'}).join('')+'</select><select id="paDays"><option value="30">30 хоног</option><option value="90">90 хоног</option><option value="365">1 жил</option></select><button class="btn small" type="button" id="paGrantBtn">Олгох</button></div>'+
-      '<div class="hint">Идэвхтэй Premium ('+act.length+'): '+esc(act.map(function(k){return nickOf(k)+' → '+PREM.act[k]}).join(', ')||'—')+'</div>';
+      '<div class="label" style="margin-top:14px">Идэвхтэй Premium ('+act.length+')</div>'+(act.length?act.map(function(k){return '<div class="between"><span>'+esc(nickOf(k))+' → '+esc(PREM.act[k])+'</span><button class="btn ghost small" type="button" data-padel="'+esc(k)+'">Цуцлах / буцаалт</button></div>'}).join(''):'<div class="hint">—</div>')+'<div class="hint">Буцаалт хийхдээ эхлээд мөнгийг буцааж шилжүүлээд, дараа нь "Цуцлах" дарна.</div>';
   }
   async function premGrant(id,days,reqId){
     var base=PREM.act[id]&&PREM.act[id]>=TODAY?PREM.act[id]:TODAY,until=addDaysIso(base,+days);
@@ -2482,13 +2501,16 @@ var DATA=window.DATA;
     var b=e.target.closest&&e.target.closest('#premAdmin button');if(!b||!isOwner||!sb)return;
     var done=function(m){toast(m||'✓','cheer');premAdminLoad()},fail=function(){toast(T('tSaveErr'),'oops')};
     if(b.id==='paSave'){
-      PREM.cfg={on:$('paOn').checked,info:$('paInfo').value.trim(),prices:{'30':$('pa30').value.trim(),'90':$('pa90').value.trim(),'365':$('pa365').value.trim()}};
+      PREM.cfg={on:$('paOn').checked,info:$('paInfo').value.trim(),terms:$('paTerms').value.trim(),prices:{'30':$('pa30').value.trim(),'90':$('pa90').value.trim(),'365':$('pa365').value.trim()}};
       sb.from('site').upsert({id:'prem',notice:JSON.stringify(PREM.cfg)}).then(function(x){x.error?fail():done()});
     }else if(b.dataset.paok){
       var r=PREM.pend.filter(function(x){return String(x.id)===b.dataset.paok})[0];if(!r)return;
       premGrant(r.uid,r.plan,r.id).then(function(){done()}).catch(fail);
     }else if(b.dataset.pano){
       sb.from('premium_requests').update({status:'rejected'}).eq('id',b.dataset.pano).then(function(x){x.error?fail():done()});
+    }else if(b.dataset.padel){
+      if(!confirm('Premium эрхийг цуцлах уу?'))return;
+      sb.from('premium').delete().eq('uid',b.dataset.padel).then(function(x){if(x.error)fail();else{delete PREM.act[b.dataset.padel];done()}});
     }else if(b.id==='paGrantBtn'){
       var u=$('paUser').value;if(u)premGrant(u,$('paDays').value,null).then(function(){done()}).catch(fail);
     }
