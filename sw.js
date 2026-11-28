@@ -2,7 +2,7 @@
    Кэшээс шууд нээгдэнэ (хурдан), ард нь шинэчлэлийг татна → шинэ хувилбар дараагийн нээлтээр гарна.
    Supabase API дуудлагыг хэзээ ч кэшлэхгүй. Бүх зүйлийг шууд шинэчлэхийг хүсвэл VER-ийг нэмж өгнө.
    Татахдаа браузерын HTTP кэшийг тойрч (no-cache / reload) шалгана: GitHub Pages 10 мин кэшлэдэг тул index.html шинэ, app.js хуучин гэсэн үл тохирол гарахаас сэргийлнэ. */
-var VER='hsk-v80',CORE=['./','./index.html','./manifest.json','./icon-192.png','./icon-512.png',
+var VER='hsk-v81',CORE=['./','./index.html','./manifest.json','./icon-192.png','./icon-512.png',
   './css/style.css','./js/loader.js','./js/hanzi.js','./js/hw-lite.js','./js/vendor/supabase.min.js','./js/vendor/hanzi-writer.min.js','./js/app.js','./js/sw-register.js','./data/hsk-words.json','./data/book-words.json','./data/hsk-mongolian.json','./data/grammar.json','./data/course-lessons.json','./data/examples.json','./data/scenarios.json','./data/talk.json','./data/radicals.json','./data/decomp.json'];
 var OPT=['./data/hsk-translations.json','./data/grammar-translations.json','./data/course-translations.json'];
 /* Орчуулгын том файлуудыг offline-д зориулж ард нь (алдаа гарвал үл тоон) кэшлэнэ */
@@ -36,7 +36,7 @@ self.addEventListener('fetch',function(e){
 /* Өдрийн сануулга (Web Push) */
 self.addEventListener('push',function(e){
   var d={};try{d=e.data?e.data.json():{}}catch(x){}
-  e.waitUntil(self.registration.showNotification(d.title||'汉字 HSK',{body:d.body||'',icon:'./icon-192.png',badge:'./icon-192.png',tag:'hsk-daily',data:{url:d.url||'./'}}));
+  e.waitUntil(self.registration.showNotification(d.title||'汉字 HSK',{body:d.body||'',icon:d.icon||'./icons/hz-hi.png',badge:'./icon-192.png',tag:'hsk-daily',renotify:true,vibrate:[120,60,120],data:{url:d.url||'./'}}));
 });
 self.addEventListener('notificationclick',function(e){
   e.notification.close();
