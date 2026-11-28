@@ -106,6 +106,12 @@ var DATA=window.DATA;
     prThanks:["💎 Premium нээгдлээ! Баярлалаа, сайн сураарай!","💎 Premium unlocked! Thank you, happy studying!","💎 Premium открыт! Спасибо, удачной учёбы!","💎 プレミアム開始！ありがとう、頑張って！"],
     prLeft:["{n} хоног үлдсэн","{n} days left","осталось {n} дн.","残り{n}日"],
     prSoon:["Premium {n} хоногийн дараа дуусна. Одоо сунгавал үлдсэн хоног хасагдахгүй.","Premium ends in {n} days. Renewing now keeps every remaining day.","Premium закончится через {n} дн. Продление сейчас сохранит оставшиеся дни.","プレミアムはあと{n}日。今更新しても残り日数は失われません。"],
+    prTrial:["🎁 3 хоног үнэгүй туршиж үзэх","🎁 Try 3 days free","🎁 3 дня бесплатно","🎁 3日間無料で試す"],
+    prTrialNote:["Карт, төлбөр шаардахгүй. Нэг хүнд нэг л удаа.","No card or payment needed. Once per person.","Без карты и оплаты. Один раз на человека.","カード・支払い不要。お一人様1回限り。"],
+    prTrialOk:["🎁 3 хоногийн Premium нээгдлээ! Бүгдийг туршаарай.","🎁 3-day Premium unlocked! Try everything.","🎁 Premium на 3 дня открыт! Пробуйте всё.","🎁 3日間のプレミアム開始！すべて試してね。"],
+    prSub:["Бүх боломжийг хязгааргүй нээнэ","Unlock everything, no limits","Откройте всё без ограничений","すべてを制限なしで解放"],
+    prPop:["Алдартай","Popular","Хит","人気"],prBest:["Хамгийн хямд","Best value","Выгодно","お得"],
+    prLibFree:["Үнэгүй: эхний номын 1-р хэсэг. Бусад хэсэг 🔒 Premium-д.","Free: part 1 of the first book. Other parts are 🔒 Premium.","Бесплатно: часть 1 первой книги. Остальное 🔒 в Premium.","無料：最初の本のパート1。他は🔒プレミアム。"],
     prUntil:["Дуусах: {d}","Until {d}","До {d}","期限 {d}"],
     pushErr:["Сануулга асааж чадсангүй","Could not enable reminders","Не удалось включить","オンにできませんでした"],
     mText:["✍ Өөрийн текст","✍ My text","✍ Мой текст","✍ 自分のテキスト"],
@@ -682,7 +688,7 @@ var DATA=window.DATA;
   /* ---------- state ---------- */
   var S={profile:{},words:{},chk:{},act:{}};
   var P={},CFG={notice:'',hidden:{}};
-  var PREM={until:'',cfg:{on:false,info:'',terms:'',prices:{'30':'','90':'','365':''}},reqs:[],pend:[],act:{}};
+  var PREM={trial:false,until:'',cfg:{on:false,info:'',terms:'',prices:{'30':'','90':'','365':''}},reqs:[],pend:[],act:{}};
   /* ===== SERVER CONFIG: paste your Supabase project URL and anon/publishable key ===== */
   var SBCFG={url:'https://nyrhcrsylkhdkzahtgnl.supabase.co',key:'sb_publishable_nQd1gT78flu0FR9QmVLEAA_0Nb83DKP'};
   var sb=null,uid=null,mode='local',isOwner=false,needAuth=false,authReady=false,loginName='';
@@ -1979,10 +1985,10 @@ var DATA=window.DATA;
       lvs.map(function(l){return '<button class="chip" type="button" data-ll="'+esc(l)+'" aria-pressed="'+(BK.lv===l)+'">'+esc(libTr(LIB_LV,l))+'</button>'}).join('');
     var q=BK.q,items=books.filter(function(b){return (!BK.lv||b.level===BK.lv)&&(!q||mq(b.title+' '+libTitle(b)+' '+b.level+' '+b.skill,q))});
     $('bkCnt').textContent=items.length+' / '+books.length;
-    $('bkList').innerHTML='<div class="hint" style="margin:0 2px">'+T('libHint')+'</div>'+items.map(function(b){
+    $('bkList').innerHTML='<div class="hint" style="margin:0 2px">'+T('libHint')+'</div>'+(isPrem()?'':'<div class="hint prfree" style="margin:6px 2px">🔓 '+esc(T('prLibFree'))+'</div>')+items.map(function(b){
       return '<div class="libbk"><div class="libh"><b lang="zh">'+esc(b.title)+'</b><span class="hint">'+esc(libTitle(b))+'</span></div><div class="libparts">'+
-        b.parts.map(function(p){return '<a class="chip" data-pdf="1" data-a="'+p.a+'" href="'+esc(libUrl(p.f))+'" target="_blank" rel="noopener">📖 '+T('libPart',{n:p.p})+' · '+T('libPg',{a:p.a,b:p.b})+' · '+p.mb+' MB</a>'}).join('')+
-        (b.pages?'<button class="chip" type="button" data-imgs="'+b.n+'">'+T('libImgs',{n:b.pages.count})+'</button>':'')+'</div></div>'}).join('')||emptyRes(q,'bkQ');
+        b.parts.map(function(p,pi){if(!isPrem()&&!(b===books[0]&&pi===0))return '<button class="chip prlk" type="button" data-prgo="1">🔒 '+T('libPart',{n:p.p})+' · '+T('libPg',{a:p.a,b:p.b})+'</button>';return '<a class="chip" data-pdf="1" data-a="'+p.a+'" href="'+esc(libUrl(p.f))+'" target="_blank" rel="noopener">📖 '+T('libPart',{n:p.p})+' · '+T('libPg',{a:p.a,b:p.b})+' · '+p.mb+' MB</a>'}).join('')+
+        (b.pages?(isPrem()?'<button class="chip" type="button" data-imgs="'+b.n+'">'+T('libImgs',{n:b.pages.count})+'</button>':'<button class="chip prlk" type="button" data-prgo="1">🔒 '+T('libImgs',{n:b.pages.count})+'</button>'):'')+'</div></div>'}).join('')||emptyRes(q,'bkQ');
   }
   /* PDF-ийг сайтаас гаралгүй дотор нь нээх (iframe давхарга). Нээгдэхгүй бол "↗" товчоор шинэ tab. */
   /* Ном уншиж байх үедээ үг хайх: HSK + номын үгс (иероглиф / пиньинь / монгол утгаар) */
@@ -2421,7 +2427,8 @@ var DATA=window.DATA;
     try{
       var r=await Promise.all([sb.from('premium').select('until').eq('uid',uid).maybeSingle(),
         sb.from('premium_requests').select('*').eq('uid',uid).order('id',{ascending:false}).limit(5),
-        sb.from('site').select('notice').eq('id','prem').maybeSingle()]);
+        sb.from('site').select('notice').eq('id','prem').maybeSingle(),sb.from('premium_trials').select('uid').eq('uid',uid).maybeSingle()]);
+      PREM.trial=!(r[3]&&r[3].data)&&!(r[0].data);
       PREM.until=(r[0].data&&r[0].data.until)||'';PREM.reqs=r[1].data||[];
       var c={};try{c=JSON.parse((r[2].data&&r[2].data.notice)||'{}')}catch(e){}
       PREM.cfg={on:!!c.on,info:String(c.info||''),terms:String(c.terms||''),prices:Object.assign({'30':'','90':'','365':''},c.prices||{})};
@@ -2434,29 +2441,31 @@ var DATA=window.DATA;
       if(dl>=0&&dl<=5&&lget('hsk-prwarn')!==TODAY){lset('hsk-prwarn',TODAY);setTimeout(function(){toast(T('prSoon',{n:dl}),'think')},3500)}
     }catch(e){}
   }
-  function premLock(){return '<div class="card prlock"><h2>'+esc(T('prLockT'))+'</h2><p>'+esc(T('prLockD'))+'</p><button class="btn" type="button" data-prgo="1">'+esc(T('prOpen'))+'</button></div>'}
+  function premLock(){return '<div class="card prlock"><div class="prgem" aria-hidden="true">💎</div><h2>'+esc(T('prLockT'))+'</h2><p>'+esc(T('prLockD'))+'</p>'+(PREM.trial?'<button class="btn prtrialbtn" type="button" data-prtrial="1">'+esc(T('prTrial'))+'</button><div class="hint">'+esc(T('prTrialNote'))+'</div>':'')+'<button class="btn'+(PREM.trial?' ghost':'')+'" type="button" data-prgo="1">'+esc(T('prOpen'))+'</button></div>'}
   var premPlan='90';
   function premRender(){
     var c=$('premCard');if(!c)return;
     if(!uid||(!PREM.cfg.on&&!isOwner)){c.hidden=true;return}
     c.hidden=false;
     var has=PREM.until&&PREM.until>=TODAY,pr=PREM.cfg.prices;
-    var h='<div class="between"><h2>'+esc(T('prTitle'))+'</h2><span class="badge prb'+(has?' on':'')+'">'+(has?esc(T('prUntil',{d:PREM.until})):'Free')+'</span></div>';
+    var h='<div class="prhead"><span class="prmas" id="prMas" aria-hidden="true"></span><div class="prht"><h2>'+esc(T('prTitle'))+'</h2><div class="hint">'+esc(T('prSub'))+'</div></div><span class="badge prb'+(has?' on':'')+'">'+(has?esc(T('prUntil',{d:PREM.until})):'Free')+'</span></div>';
     if(has){var dl2=Math.round((parseIso(PREM.until)-parseIso(TODAY))/864e5);h+='<div class="hint">'+esc(T('prLeft',{n:dl2}))+(dl2<=5?' · '+esc(T('prSoon',{n:dl2})):'')+'</div>'}
     if(!PREM.cfg.on)h+='<div class="hint">'+esc(T('prOffNote'))+'</div>';
+    if(!has&&PREM.trial&&PREM.cfg.on)h+='<div class="prtrial"><button class="btn prtrialbtn" type="button" data-prtrial="1">'+esc(T('prTrial'))+'</button><div class="hint">'+esc(T('prTrialNote'))+'</div></div>';
     h+='<ul class="prlist">'+T('prPerks').split('|').map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul><div class="prplans">'+
-      ['30','90','365'].map(function(n){return '<button type="button" class="chip" data-prplan="'+n+'" aria-pressed="'+(premPlan===n?'true':'false')+'"><b>'+esc(T('prPlan'+n))+'</b>'+(pr[n]?'<br><small>'+esc(pr[n])+'</small>':'')+'</button>'}).join('')+'</div>';
+      ['30','90','365'].map(function(n){return '<button type="button" class="chip prp" data-prplan="'+n+'" aria-pressed="'+(premPlan===n?'true':'false')+'">'+(n==='90'?'<i class="prtag">'+esc(T('prPop'))+'</i>':n==='365'?'<i class="prtag best">'+esc(T('prBest'))+'</i>':'')+'<b>'+esc(T('prPlan'+n))+'</b>'+(pr[n]?'<span class="prpr">'+esc(pr[n])+'</span>':'')+'</button>'}).join('')+'</div>';
     if(PREM.cfg.info)h+='<div class="label">'+esc(T('prPayHdr'))+'</div><div class="prpay">'+esc(PREM.cfg.info)+'</div>';
     h+='<details class="prterms"><summary>'+esc(T('prTermsH'))+'</summary><div class="prpay">'+esc(PREM.cfg.terms||T('prTermsDef'))+'</div></details>';
     h+='<label class="row" style="gap:8px"><input type="checkbox" id="prAgree"> <span>'+esc(T('prAgree'))+'</span></label>';
     h+='<div class="row"><input type="text" id="prRef" maxlength="160" placeholder="'+esc(T('prRefPh'))+'" style="flex:1;min-width:140px"><button class="btn" type="button" data-prsend="1">'+esc(T('prSend'))+'</button></div>';
     if(PREM.reqs.length)h+='<div class="hint">'+PREM.reqs.map(function(r){return esc(T('prPlan'+r.plan))+' · '+esc(String(r.created_at).slice(0,10))+' · '+esc(T(r.status==='pending'?'prPend':r.status==='approved'?'prOk':'prNo'))}).join('<br>')+'</div>';
-    var keep=$('prRef')&&$('prRef').value,ag=$('prAgree')&&$('prAgree').checked,op=c.querySelector('.prterms')&&c.querySelector('.prterms').open;c.innerHTML=h;if(keep)$('prRef').value=keep;if(ag)$('prAgree').checked=true;if(op)c.querySelector('.prterms').open=true;
+    var keep=$('prRef')&&$('prRef').value,ag=$('prAgree')&&$('prAgree').checked,op=c.querySelector('.prterms')&&c.querySelector('.prterms').open;c.innerHTML=h;try{Hanzi.mount($('prMas'),has?'cheer':'hi')}catch(e){}if(keep)$('prRef').value=keep;if(ag)$('prAgree').checked=true;if(op)c.querySelector('.prterms').open=true;
   }
   document.addEventListener('click',function(e){
-    var t=e.target.closest&&e.target.closest('[data-prplan],[data-prsend],[data-prgo]');if(!t)return;
+    var t=e.target.closest&&e.target.closest('[data-prplan],[data-prsend],[data-prgo],[data-prtrial]');if(!t)return;
+    if(t.dataset.prtrial){if(!sb||!uid)return;t.disabled=true;sb.rpc('claim_premium_trial').then(function(x){if(x.error){toast(T('tSaveErr'),'oops');t.disabled=false;return}toast(T('prTrialOk'),'cheer');return premLoad().then(function(){premRender();renderAll();showTab(document.querySelector('.pane:not([hidden])')&&document.querySelector('.pane:not([hidden])').id.slice(2)||'today')})});return}
     if(t.dataset.prplan){premPlan=t.dataset.prplan;premRender();return}
-    if(t.dataset.prgo){showTab('me');setTimeout(function(){var c=$('premCard');if(c&&!c.hidden)c.scrollIntoView({behavior:'smooth',block:'start'})},60);return}
+    if(t.dataset.prgo){toast(T('prLockD'),'think');showTab('me');setTimeout(function(){var c=$('premCard');if(c&&!c.hidden)c.scrollIntoView({behavior:'smooth',block:'start'})},60);return}
     var ref=($('prRef').value||'').trim();if(!ref){toast(T('prNeedRef'),'oops');return}
     if(!$('prAgree').checked){toast(T('prNeedAgree'),'oops');return}
     if(!sb||!uid)return;t.disabled=true;

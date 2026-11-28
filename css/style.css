@@ -1281,11 +1281,32 @@ body{padding-bottom:96px}
 .pushbox .row{align-items:end}
 
 /* Premium */
-.prem{border:1px solid color-mix(in srgb,var(--accent) 35%,var(--line))}
-.prb{background:var(--soft,rgba(255,255,255,.08))}.prb.on{background:var(--accent);color:#fff}
-.prlist{margin:8px 0 12px;padding-left:20px;display:grid;gap:4px}
-.prplans{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
-.prplans .chip{display:block;text-align:center;padding:10px 6px;line-height:1.3}
-.prpay{white-space:pre-wrap;padding:10px 12px;border-radius:12px;border:1px dashed var(--line);margin:6px 0 12px;font-size:.95rem}
-.prlock{text-align:center;padding:26px 18px}.prlock p{margin:8px 0 16px}
-.prterms{margin:6px 0 10px}.prterms summary{cursor:pointer;font-weight:700;padding:6px 0}
+.prem{position:relative;overflow:hidden;border:1px solid color-mix(in srgb,#E8B74A 45%,var(--line));background:linear-gradient(160deg,color-mix(in srgb,#E8B74A 11%,var(--surface)) 0%,var(--surface) 55%)}
+.prem::before{content:"";position:absolute;right:-60px;top:-60px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,#E8B74A 28%,transparent),transparent 70%);pointer-events:none}
+.prhead{display:flex;align-items:center;gap:10px;margin-bottom:6px;position:relative}
+.prmas{flex:none;width:52px;height:58px}.prmas .hz{width:100%;height:100%}
+.prht{flex:1;min-width:0}.prht h2{margin:0}.prht .hint{margin:2px 0 0}
+.prb{background:var(--accent-soft);color:var(--accent);white-space:nowrap}.prb.on{background:linear-gradient(135deg,#E8B74A,#D9902B);color:#2A1A00;font-weight:800}
+.prlist{list-style:none;margin:10px 0 14px;padding:0;display:grid;gap:7px;position:relative}
+.prlist li{padding-left:26px;position:relative;line-height:1.4}
+.prlist li::before{content:"✓";position:absolute;left:0;top:0;width:18px;height:18px;border-radius:50%;background:var(--accent-soft);color:var(--ok);font-weight:900;font-size:.72rem;display:grid;place-items:center;margin-top:2px}
+.prplans{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0;position:relative}
+.prplans .prp{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;padding:16px 4px 11px;line-height:1.25;border-radius:14px}
+.prplans .prp .prpr{font-size:.82rem;opacity:.85;font-weight:700}
+.prtag{position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-style:normal;font-size:.62rem;font-weight:800;letter-spacing:.03em;padding:2px 8px;border-radius:99px;background:var(--seal);color:#fff;white-space:nowrap}
+.prtag.best{background:linear-gradient(135deg,#E8B74A,#D9902B);color:#2A1A00}
+.prplans .prp[aria-pressed="true"]{box-shadow:0 0 0 2px var(--accent),0 8px 18px -8px var(--accent)}
+.prpay{white-space:pre-wrap;padding:12px 14px;border-radius:12px;border:1px dashed color-mix(in srgb,#E8B74A 55%,var(--line));background:color-mix(in srgb,#E8B74A 7%,transparent);margin:6px 0 12px;font-size:.94rem;line-height:1.5}
+.prterms{margin:8px 0 10px}.prterms summary{cursor:pointer;font-weight:700;padding:6px 0;color:var(--accent)}
+.prtrial{margin:10px 0 4px;padding:12px;border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--seal) 14%,var(--surface)),color-mix(in srgb,#E8B74A 14%,var(--surface)));text-align:center;position:relative}
+.prtrialbtn{background:linear-gradient(135deg,#E5654C,#E8B74A)!important;color:#2A1A00!important;font-weight:800;width:100%;box-shadow:0 8px 18px -8px #E5654C}
+.prtrial .hint,.prlock .hint{margin-top:6px}
+.prlock{text-align:center;padding:30px 18px;border:1px solid color-mix(in srgb,#E8B74A 45%,var(--line));background:linear-gradient(160deg,color-mix(in srgb,#E8B74A 11%,var(--surface)),var(--surface) 60%)}
+.prlock .prgem{font-size:2.6rem;line-height:1;margin-bottom:6px;filter:drop-shadow(0 6px 10px rgba(232,183,74,.4))}
+.prlock p{margin:8px 0 16px;color:var(--muted)}.prlock .btn{width:100%;margin-top:8px}
+@media (max-width:380px){.prplans{gap:6px}.prmas{width:44px;height:50px}}
+.chip.prlk{opacity:.8;border-style:dashed}.prfree{color:var(--ok)}
+.prem input[type=checkbox]{width:20px;height:20px;flex:none;margin:0;accent-color:var(--accent)}
+.prem label.row{align-items:center;flex-wrap:nowrap}
+#premAdmin .row input[type=text]{flex:1 1 90px;min-width:0;width:auto}
+#premAdmin textarea,#premAdmin .row{margin-bottom:8px}
