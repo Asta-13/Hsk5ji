@@ -40,6 +40,20 @@ const MSG = {
     due: (d) => `復習が${d}語たまってるよ。忘れる前においで！🧠`,
   },
 };
+const DONE = {
+  mn: ['Өнөөдрийн даалгавраа хийчихсэн байна, гоё! 👏 Бас 1 удаа давтах уу?', 'Чи өнөөдөр сайн ажиллалаа 💪 Мартахаас өмнө хурдан давтчихъя!', '汉字 багш бахархаж байна 🥹 Нэг л карт нэм!'],
+  en: ['Today\'s goal done, nice! 👏 One more round?', 'Great work today 💪 A quick review before you forget!', 'Teacher Hanzi is proud 🥹 Just one more card!'],
+  ru: ['Цель на сегодня выполнена! 👏 Ещё один круг?', 'Отлично поработал 💪 Быстрое повторение, пока не забыл!', 'Учитель Ханзи гордится 🥹 Ещё одну карточку!'],
+  ja: ['今日の目標達成！👏 もう1回やる？', '今日もえらい 💪 忘れる前にサクッと復習！', 'ハンジ先生は誇らしいよ 🥹 あと1枚だけ！'],
+};
+const hash = (str) => { let h = 2166136261; for (const c of str) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
+// freq>1: 1-р нь сонгосон цагт, үлдсэн нь сонгосон цагаас 22:00 хүртэл санамсаргүй (өдөр бүр өөр) цагт
+function slotsOf(s, day) {
+  const start = s.hour * 60 + (s.minute || 0), f = Math.max(1, s.freq || 1), end = Math.max(start + 60 * f, 22 * 60);
+  const seg = Math.floor((Math.min(end, 23 * 60 + 30) - start) / f), out = [start];
+  for (let i = 1; i < f; i++) out.push(start + i * seg + (hash(`${s.endpoint}${day}${i}`) % Math.max(1, seg - 20)));
+  return out;
+}
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
 
 const iso = (d) => d.toISOString().slice(0, 10);
@@ -74,18 +88,24 @@ let sent = 0, gone = 0;
 for (const s of subs) {
   const local = new Date(Date.now() + s.tzo * 60000);
   const day = iso(local);
-  const nowM = local.getUTCHours() * 60 + local.getUTCMinutes(), tgt = s.hour * 60 + (s.minute || 0);
-  if (nowM < tgt || nowM >= tgt + 150 || s.last_sent === day) continue; // сонгосон цагаас хойш 2.5 цагийн дотор нэг удаа
+  const nowM = local.getUTCHours() * 60 + local.getUTCMinutes();
+  const slots = slotsOf(s, day), n0 = s.last_sent === day ? (s.sent_n || 0) : 0;
+  if (n0 >= slots.length || nowM < slots[n0]) continue;
+  const nextN = n0 + 1;
+  if (nowM >= slots[n0] + 150) { // хоцорсон цонх: алгасаад дараагийнхыг хүлээнэ
+    await rest(`push_subs?endpoint=eq.${encodeURIComponent(s.endpoint)}`, { method: 'PATCH', body: JSON.stringify({ last_sent: day, sent_n: nextN }) });
+    continue;
+  }
   const a = act[s.uid] || {};
-  if (on(a, local)) continue; // өнөөдөр аль хэдийн сурсан
+  const done = on(a, local);
   const n = streakBefore(a, local), m = MSG[s.lang] || MSG.mn;
   try {
     await webpush.sendNotification(
       { endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } },
-      JSON.stringify({ title: NAME[s.lang] || NAME.mn, body: pick(n >= 2 ? m.streak(n) : m.one), icon: `${base}icons/hz-${n >= 2 ? 'cheer' : 'think'}.png`, url: SITE_URL || './' }),
+      JSON.stringify({ title: NAME[s.lang] || NAME.mn, body: done ? pick(DONE[s.lang] || DONE.mn) : pick(n >= 2 ? m.streak(n) : m.one), icon: `${base}icons/hz-${done || n >= 2 ? 'cheer' : 'think'}.png`, url: SITE_URL || './' }),
       { TTL: 6 * 3600 }
     );
-    await rest(`push_subs?endpoint=eq.${encodeURIComponent(s.endpoint)}`, { method: 'PATCH', body: JSON.stringify({ last_sent: day }) });
+    await rest(`push_subs?endpoint=eq.${encodeURIComponent(s.endpoint)}`, { method: 'PATCH', body: JSON.stringify({ last_sent: day, sent_n: nextN }) });
     sent++;
   } catch (e) {
     if (e.statusCode === 404 || e.statusCode === 410) {

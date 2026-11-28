@@ -20,3 +20,4 @@ create policy push_subs_delete_own on public.push_subs for delete to authenticat
 revoke all on public.push_subs from anon;
 
 alter table public.push_subs add column if not exists minute smallint not null default 0 check (minute between 0 and 59);
+alter table public.push_subs add column if not exists freq smallint not null default 1 check (freq between 1 and 6), add column if not exists sent_n smallint not null default 0 check (sent_n between 0 and 12);
