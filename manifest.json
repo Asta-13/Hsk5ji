@@ -10,8 +10,73 @@
   "theme_color": "#1F3F8F",
   "lang": "mn",
   "icons": [
-    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
-    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
-    {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Өнөөдрийн даалгавар",
+      "short_name": "Өнөөдөр",
+      "url": "./index.html#today",
+      "icons": [
+        {
+          "src": "icons/hz-hi.png",
+          "sizes": "256x256",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Флаш карт (давтлага)",
+      "short_name": "Карт",
+      "url": "./index.html#cards",
+      "icons": [
+        {
+          "src": "icons/hz-hi.png",
+          "sizes": "256x256",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Тоглоом",
+      "short_name": "Тоглоом",
+      "url": "./index.html#play",
+      "icons": [
+        {
+          "src": "icons/hz-hi.png",
+          "sizes": "256x256",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Бичлэг · Дуу",
+      "short_name": "Бичлэг",
+      "url": "./index.html#media",
+      "icons": [
+        {
+          "src": "icons/hz-hi.png",
+          "sizes": "256x256",
+          "type": "image/png"
+        }
+      ]
+    }
   ]
 }

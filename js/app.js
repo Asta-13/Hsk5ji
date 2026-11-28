@@ -2252,7 +2252,7 @@ var DATA=window.DATA;
   fillSelect('fL',false,lvOf());fillSelect('cLv',true,0);
   renderTasks();renderAll();startDeck();
   /* зочдод зориулсан шууд холбоос: …/#hsk эсвэл …/#gram (#guest = HSK үгийн сан) */
-  function hashTab(){var h=(location.hash||'').replace('#','');if(h==='hsk'||h==='gram')showTab(h);else if(h==='guest')showTab('hsk')}
+  function hashTab(){var h=(location.hash||'').replace('#','');if(h==='hsk'||h==='gram'||h==='cards'||h==='play'||h==='media'||h==='words')showTab(h);else if(h==='guest')showTab('hsk')}
   hashTab();window.addEventListener('hashchange',hashTab);
 
   /* ---------- Бичлэг · Дуу (media): хадмал дээрх үгийг товшиж сурах ---------- */
