@@ -1253,3 +1253,13 @@ body{padding-bottom:96px}
 .rdrow .h{font-family:var(--font-han);font-size:1.3rem;font-weight:800;min-width:2.6em}
 .rdm{flex:1;font-size:.9rem}.rdm .p{opacity:.7;font-size:.82rem}
 .pdfbar .btn[aria-pressed="true"]{background:var(--accent,#1f3d8f);color:#fff}
+
+/* ---------- Өөрийн текст уншигч ---------- */
+.txcard{display:grid;gap:10px}
+.txin{width:100%;min-height:120px;font-family:var(--font-han);font-size:1.1rem;line-height:1.6}
+.txres{margin-top:12px}
+.txbody{margin-top:10px}
+.txbody p{margin:0 0 .7em}
+.txbody .mfw{color:var(--fg)}
+.txbody ruby rt{color:var(--muted)}
+#txOut #wfCard{position:sticky;bottom:84px;z-index:5;box-shadow:0 8px 28px rgba(0,0,0,.28)}
