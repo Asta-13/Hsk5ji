@@ -2,7 +2,10 @@
 // Хэрэглэгчийн сонгосон орон нутгийн цагт, тэр өдөр сураагүй бол л мэдэгдэл явуулна.
 import webpush from 'web-push';
 
-const { SUPABASE_URL, SUPABASE_SERVICE_KEY, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT, SITE_URL } = process.env;
+// Secret буулгахад тааралдсан зай/мөр шилжилтийг цэвэрлэнэ
+const E = Object.fromEntries(Object.entries(process.env).map(([k, v]) => [k, (v || '').trim()]));
+const SUPABASE_URL = (E.SUPABASE_URL || '').replace(/\/+$/, '');
+const { SUPABASE_SERVICE_KEY, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT, SITE_URL } = E;
 if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY || !VAPID_PUBLIC_KEY || !VAPID_PRIVATE_KEY) {
   console.log('Secrets тохируулаагүй тул алгаслаа.');
   process.exit(0);
@@ -29,8 +32,18 @@ function streakBefore(act, localDay) { // өнөөдрөөс өмнөх таср
   return n;
 }
 
-const subs = await (await rest('push_subs?select=*')).json();
-if (!Array.isArray(subs)) { console.error('subs уншиж чадсангүй', subs); process.exit(1); }
+if (!E.TEST_ALLOW_ANY_URL && !/^https:\/\/[a-z0-9]+\.supabase\.co$/.test(SUPABASE_URL)) {
+  console.error('SUPABASE_URL буруу хэлбэртэй. Жишээ: https://xxxx.supabase.co (зөвхөн хаяг, /rest/v1 нэмэхгүй)');
+  process.exit(1);
+}
+let res;
+try { res = await rest('push_subs?select=*'); } catch (e) { console.error('Supabase руу холбогдож чадсангүй:', e.message); process.exit(1); }
+const subs = await res.json().catch(() => null);
+if (!res.ok || !Array.isArray(subs)) {
+  console.error(`push_subs уншиж чадсангүй: HTTP ${res.status}`, JSON.stringify(subs).slice(0, 300));
+  console.error(res.status === 401 || res.status === 403 ? 'SUPABASE_SERVICE_KEY буруу эсвэл secret түлхүүр биш байна.' : 'SUPABASE_URL болон хүснэгтийг шалгана уу.');
+  process.exit(1);
+}
 console.log(`${subs.length} бүртгэл`);
 if (!subs.length) process.exit(0);
 
