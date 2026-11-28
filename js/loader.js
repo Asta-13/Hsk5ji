@@ -5,7 +5,7 @@
     HSKRAW:'data/hsk-words.json',
     HSKMN_RAW:'data/hsk-mongolian.json', GRAM_RAW:'data/grammar.json',
     LESSONS:'data/course-lessons.json', EXD:'data/examples.json', BKW_RAW:'data/book-words.json',
-    SCN:'data/scenarios.json', RAD:'data/radicals.json'
+    SCN:'data/scenarios.json', RAD:'data/radicals.json', DCP:'data/decomp.json'
   };
   var I18N={
     HSKI18N_RAW:'data/hsk-translations.json',

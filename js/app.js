@@ -1392,12 +1392,18 @@ var DATA=window.DATA;
   /* 🧩 үгийн бүтэц: олон үсэгт үгийг үсэг тус бүрийн утгаар, нэг үсгийг бүрэлдэхүүнээр нь задалж харуулна */
   var RADMAP=null;
   function shortM(h){var m=hM(h);return m?String(m).split(/[,;，；(（]/)[0].trim().slice(0,16):''}
+  /* түгээмэл радикалын утга (HSK үг биш бүрэлдэхүүн хэсгүүдэд) */
+  var RADM={
+    mn:{'亻':'хүн','氵':'ус','扌':'гар','艹':'өвс','讠':'үг хэл','口':'ам','女':'эмэгтэй','木':'мод','日':'нар','月':'сар, мах','心':'зүрх','忄':'зүрх','火':'гал','灬':'гал','土':'шороо','足':'хөл','饣':'хоол','钅':'металл','门':'хаалга','宀':'дээвэр','辶':'алхаа, зам','马':'морь','鸟':'шувуу','虫':'хорхой','雨':'бороо','目':'нүд','耳':'чих','手':'гар','山':'уул','石':'чулуу','禾':'тариа','竹':'хулс','米':'будаа','纟':'утас','车':'тэрэг','刂':'хутга','力':'хүч','田':'талбай','水':'ус','犭':'амьтан','衤':'хувцас','礻':'тахил','贝':'хясаа, мөнгө','攵':'цохих','彳':'алхах','刀':'хутга','工':'ажил','大':'том','小':'жижиг','人':'хүн','子':'хүүхэд','白':'цагаан','立':'зогсох','言':'үг','食':'хоол','金':'алт, металл','风':'салхи','页':'хуудас'},
+    en:{'亻':'person','氵':'water','扌':'hand','艹':'grass','讠':'speech','口':'mouth','女':'woman','木':'tree','日':'sun','月':'moon, flesh','心':'heart','忄':'heart','火':'fire','灬':'fire','土':'earth','足':'foot','饣':'food','钅':'metal','门':'door','宀':'roof','辶':'walk','马':'horse','鸟':'bird','虫':'insect','雨':'rain','目':'eye','耳':'ear','手':'hand','山':'mountain','石':'stone','禾':'grain','竹':'bamboo','米':'rice','纟':'silk','车':'cart','刂':'knife','力':'power','田':'field','水':'water','犭':'animal','衤':'clothes','礻':'altar','贝':'shell, money','攵':'strike','彳':'step','刀':'knife','工':'work','大':'big','小':'small','人':'person','子':'child','白':'white','立':'stand','言':'speech','食':'food','金':'gold, metal','风':'wind','页':'page'}
+  };
+  function radM(x){var t=RADM[lang]||RADM.en;return t[x]||''}
   function partsHint(h){
     var cs=Array.from(String(h||'')),out=[];
     if(cs.length===1){
       if(!RADMAP){RADMAP={};try{if(Array.isArray(DATA.RAD))DATA.RAD.forEach(function(c){if(c&&c[0]&&Array.isArray(c[1]))RADMAP[c[0]]=c[1]})}catch(e){}}
-      var d=RADMAP[h];if(!d)return '';
-      d.forEach(function(x){var snd=x.charAt(0)==='~';x=x.replace(/^~/,'');var m=snd?'🔉':shortM(x);out.push('<span class="wpt"><b lang="zh">'+esc(x)+'</b>'+(m?'<small>'+esc(m)+'</small>':'')+'</span>')});
+      var d=RADMAP[h]||(DATA.DCP&&DATA.DCP[h]);if(!d)return '';
+      d.forEach(function(x){var snd=x.charAt(0)==='~';x=x.replace(/^~/,'');var m=snd?'🔉':(shortM(x)||radM(x));out.push('<span class="wpt"><b lang="zh">'+esc(x)+'</b>'+(m?'<small>'+esc(m)+'</small>':'')+'</span>')});
     }else if(cs.length<=5){
       cs.forEach(function(c){if(!hskLookup(c))return;var m=shortM(c);if(m)out.push('<span class="wpt"><b lang="zh">'+esc(c)+'</b><small>'+esc(m)+'</small></span>')});
       if(out.length<2)return '';

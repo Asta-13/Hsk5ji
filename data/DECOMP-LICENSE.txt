@@ -1,0 +1,4 @@
+decomp.json: character decomposition (semantic + phonetic components) for HSK characters.
+Derived from dictionary.txt of Make Me a Hanzi (https://github.com/skishore/makemeahanzi),
+which is derived from Unihan and CJKlib. Licensed under the GNU Lesser General Public License v3 or later
+(see https://www.gnu.org/licenses/lgpl-3.0.html). A "~" prefix marks a phonetic (sound) component.
