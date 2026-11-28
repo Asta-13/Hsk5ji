@@ -82,6 +82,21 @@ var DATA=window.DATA;
     pushHintIos:["iPhone дээр эхлээд «Share → Add to Home Screen» хийж, тэр дүрсээр нээнэ үү.","On iPhone, first use Share → Add to Home Screen and open from there.","На iPhone сначала «Поделиться → На экран Домой».","iPhoneでは共有→ホーム画面に追加から開いてください。"],
     pushOn:["Сануулга асаах","Turn on","Включить","オンにする"],
     pushOff:["Унтраах","Turn off","Выключить","オフにする"],
+    prTitle:["💎 Premium","💎 Premium","💎 Premium","💎 プレミアム"],
+    prPerks:["Бичлэг · Дуу + текст уншигч|Өдөрт олон удаа сануулга (санамсаргүй цагт)|Дараа нэмэгдэх бүх premium боломж","Videos · songs + text reader|Several reminders per day (random times)|All future premium features","Видео · песни + чтение текста|Несколько напоминаний в день (в случайное время)|Все будущие премиум-функции","動画・歌 + テキストリーダー|1日に複数回のリマインド（ランダム時刻）|今後のプレミアム機能すべて"],
+    prOffNote:["(Одоогоор хаалт унтраалттай: бүх хэрэглэгч үнэгүй ашиглаж байна. Зөвхөн админд харагдана.)","(Gate is OFF: everyone uses everything free. Visible to admin only.)","(Ограничение выключено: все пользуются бесплатно. Видно только админу.)","(制限はオフ：全員無料で利用中。管理者のみ表示)"],
+    prPlan30:["30 хоног","30 days","30 дней","30日"],prPlan90:["90 хоног","90 days","90 дней","90日"],prPlan365:["1 жил","1 year","1 год","1年"],
+    prPayHdr:["Төлбөр хийх заавар","How to pay","Как оплатить","お支払い方法"],
+    prRefPh:["Гүйлгээний утга / сүүлийн 4 орон","Transfer note / last 4 digits","Примечание / последние 4 цифры","振込メモ／下4桁"],
+    prSend:["Төлсөн, хүсэлт илгээх","I paid, send request","Оплатил, отправить","支払い済み・申請"],
+    prNeedRef:["Гүйлгээний утгаа бичнэ үү","Enter the transfer note","Введите примечание","振込メモを入力"],
+    prSent:["Хүсэлт илгээгдлээ. Админ шалгаад нээнэ.","Request sent. Admin will verify and unlock.","Заявка отправлена. Админ проверит.","申請しました。管理者が確認します。"],
+    prPend:["⏳ шалгагдаж байна","⏳ pending","⏳ на проверке","⏳ 確認中"],prOk:["✅ баталгаажсан","✅ approved","✅ подтверждено","✅ 承認済み"],prNo:["❌ татгалзсан","❌ rejected","❌ отклонено","❌ 却下"],
+    prLockT:["💎 Premium боломж","💎 Premium feature","💎 Премиум-функция","💎 プレミアム機能"],
+    prLockD:["Бичлэг · Дуу болон текст уншигч Premium эрхтэй хүнд нээгдэнэ.","Videos, songs and the text reader are for Premium members.","Видео, песни и чтение текста доступны с Premium.","動画・歌・テキストリーダーはプレミアム会員向けです。"],
+    prOpen:["Premium-ийг харах","See Premium","Смотреть Premium","プレミアムを見る"],
+    prNeed:["Олон удаагийн сануулга Premium-д байна 💎","Multiple reminders need Premium 💎","Несколько напоминаний — в Premium 💎","複数回のリマインドはプレミアム限定 💎"],
+    prUntil:["Дуусах: {d}","Until {d}","До {d}","期限 {d}"],
     pushErr:["Сануулга асааж чадсангүй","Could not enable reminders","Не удалось включить","オンにできませんでした"],
     mText:["✍ Өөрийн текст","✍ My text","✍ Мой текст","✍ 自分のテキスト"],
     txHint:["Хятад текст (WeChat, мэдээ, дууны үг) хуулж тавина уу. Үг бүр дээр дарвал утга, нэмэх боломжтой.","Paste any Chinese text (chat, news, lyrics). Tap a word to see its meaning and add it.","Вставьте китайский текст (чат, новости, песня). Нажмите на слово, чтобы увидеть перевод.","中国語のテキストを貼り付けてください。単語をタップすると意味が出ます。"],
@@ -657,6 +672,7 @@ var DATA=window.DATA;
   /* ---------- state ---------- */
   var S={profile:{},words:{},chk:{},act:{}};
   var P={},CFG={notice:'',hidden:{}};
+  var PREM={until:'',cfg:{on:false,info:'',prices:{'30':'','90':'','365':''}},reqs:[],pend:[],act:{}};
   /* ===== SERVER CONFIG: paste your Supabase project URL and anon/publishable key ===== */
   var SBCFG={url:'https://nyrhcrsylkhdkzahtgnl.supabase.co',key:'sb_publishable_nQd1gT78flu0FR9QmVLEAA_0Nb83DKP'};
   var sb=null,uid=null,mode='local',isOwner=false,needAuth=false,authReady=false,loginName='';
@@ -770,7 +786,7 @@ var DATA=window.DATA;
     if(n==='list')renderLs();
     if(n==='play')renderPlay();
     if(n==='group'){renderGroup();refresh()}
-    if(n==='admin'){renderAdmin();refresh();renderMediaAdmin()}
+    if(n==='admin'){renderAdmin();refresh();renderMediaAdmin();premAdminLoad()}
     if(n==='book')renderBook();
     if(n==='media')renderMedia();else mediaStop();
   }
@@ -1683,7 +1699,7 @@ var DATA=window.DATA;
     $('acct').hidden=!(sb&&uid);$('acctName').textContent=T('acctLogin',{n:loginName});$('myId').textContent=uid||'';
     if(document.activeElement!==$('meNick'))$('meNick').value=p.nick||'';
     meLevel=p.level||5;lvChips('meLv',meLevel,false);
-    $('meExam').value=p.exam||'';try{pushRender()}catch(e){}$('meMin').value=String(p.dailyMin||DEFMIN[meLevel]);
+    $('meExam').value=p.exam||'';try{pushRender();premRender()}catch(e){}$('meMin').value=String(p.dailyMin||DEFMIN[meLevel]);
     if(document.activeElement!==$('meS'))$('meS').value=p.s4||'';
     document.querySelectorAll('#goals .chip').forEach(function(c){c.setAttribute('aria-pressed',c.dataset.g===p.goal?'true':'false')});
     advise();
@@ -2308,6 +2324,7 @@ var DATA=window.DATA;
   }
   function renderMedia(){
     var box=$('mBody');if(!box)return;
+    if(!isPrem()){$('mKinds').hidden=true;mediaStop();box.innerHTML=premLock();return}
     mediaLoad().then(function(items){
       var it=MED.cur&&items.filter(function(x){return x.id===MED.cur})[0];
       $('mKinds').hidden=!!it;
@@ -2338,7 +2355,7 @@ var DATA=window.DATA;
   function b64u(b){var p='='.repeat((4-b.length%4)%4),r=(b+p).replace(/-/g,'+').replace(/_/g,'/'),raw=atob(r),o=new Uint8Array(raw.length);for(var i=0;i<raw.length;i++)o[i]=raw.charCodeAt(i);return o}
   function pushTime(){var v=(($('pushHour')&&$('pushHour').value)||'20:00').split(':'),h=parseInt(v[0],10),m=parseInt(v[1],10);return {h:isNaN(h)?20:h,m:isNaN(m)?0:m}}
   function pushHour(){return pushTime().h}
-  function pushFreq(){var v=parseInt($('pushFreq')&&$('pushFreq').value,10);return isNaN(v)?1:Math.max(1,Math.min(6,v))}
+  function pushFreq(){if(!isPrem())return 1;var v=parseInt($('pushFreq')&&$('pushFreq').value,10);return isNaN(v)?1:Math.max(1,Math.min(6,v))}
   function pushTxt(){var t=pushTime();return (t.h<10?'0':'')+t.h+':'+(t.m<10?'0':'')+t.m}
   function pushRow(sub){var j=sub.toJSON(),k=j.keys||{};return {endpoint:sub.endpoint,uid:uid,p256dh:k.p256dh,auth:k.auth,hour:pushHour(),minute:pushTime().m,freq:pushFreq(),tzo:-new Date().getTimezoneOffset(),lang:lang}}
   function pushRender(){
@@ -2346,7 +2363,7 @@ var DATA=window.DATA;
     var ios=/iPhone|iPad|iPod/.test(navigator.userAgent)&&!window.matchMedia('(display-mode: standalone)').matches&&!navigator.standalone;
     if(!VAPID_PUB||!uid||!('serviceWorker' in navigator)){box.hidden=true;return}
     box.hidden=false;
-    var fs=$('pushFreq');if(fs&&!fs.options.length){[1,2,3,4,6].forEach(function(n){var o=document.createElement('option');o.value=n;o.textContent=T('pushFreqN',{n:n});fs.appendChild(o)});try{fs.value=localStorage.getItem('hsk-push-f')||'1'}catch(e){}}
+    var fs=$('pushFreq');if(fs&&!fs.options.length){[1,2,3,4,6].forEach(function(n){var o=document.createElement('option');o.value=n;o.textContent=T('pushFreqN',{n:n})+(PREM.cfg.on&&n>1?' 💎':'');fs.appendChild(o)});try{fs.value=localStorage.getItem('hsk-push-f')||'1'}catch(e){}}
     var hs=$('pushHour');if(hs&&!hs.dataset.init){hs.dataset.init='1';var sv='20:00';try{sv=localStorage.getItem('hsk-push-h')||sv}catch(e){}if(/^\d+$/.test(sv))sv=(sv.length<2?'0':'')+sv+':00';hs.value=sv}
     var btn=$('pushBtn'),hint=$('pushHint');
     if(!('PushManager' in window)||!('Notification' in window)){hint.textContent=ios?T('pushHintIos'):T('pushErr');btn.hidden=true;return}
@@ -2377,10 +2394,97 @@ var DATA=window.DATA;
   document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('#pushBtn'))pushToggle()});
   document.addEventListener('change',function(e){
     if(!e.target||(e.target.id!=='pushHour'&&e.target.id!=='pushFreq'))return;
+    if(e.target.id==='pushFreq'&&!isPrem()&&+e.target.value>1){e.target.value='1';toast(T('prNeed'),'think');return}
     try{localStorage.setItem('hsk-push-h',pushTxt());localStorage.setItem('hsk-push-f',String(pushFreq()))}catch(x){}
     if(!pushOk())return;
     navigator.serviceWorker.ready.then(function(reg){return reg.pushManager.getSubscription()}).then(function(sub){
       if(sub)return sb.from('push_subs').update({hour:pushHour(),minute:pushTime().m,freq:pushFreq(),tzo:-new Date().getTimezoneOffset(),lang:lang}).eq('endpoint',sub.endpoint)}).then(pushRender).catch(function(){});
+  });
+  /* ---------- Premium: эрх · хүсэлт · админ ---------- */
+  function isPrem(){return !PREM.cfg.on||isOwner||!!(PREM.until&&PREM.until>=TODAY)}
+  async function premLoad(){
+    if(!sb||!uid)return;
+    try{
+      var r=await Promise.all([sb.from('premium').select('until').eq('uid',uid).maybeSingle(),
+        sb.from('premium_requests').select('*').eq('uid',uid).order('id',{ascending:false}).limit(5),
+        sb.from('site').select('notice').eq('id','prem').maybeSingle()]);
+      PREM.until=(r[0].data&&r[0].data.until)||'';PREM.reqs=r[1].data||[];
+      var c={};try{c=JSON.parse((r[2].data&&r[2].data.notice)||'{}')}catch(e){}
+      PREM.cfg={on:!!c.on,info:String(c.info||''),prices:Object.assign({'30':'','90':'','365':''},c.prices||{})};
+    }catch(e){}
+  }
+  function premLock(){return '<div class="card prlock"><h2>'+esc(T('prLockT'))+'</h2><p>'+esc(T('prLockD'))+'</p><button class="btn" type="button" data-prgo="1">'+esc(T('prOpen'))+'</button></div>'}
+  var premPlan='90';
+  function premRender(){
+    var c=$('premCard');if(!c)return;
+    if(!uid||(!PREM.cfg.on&&!isOwner)){c.hidden=true;return}
+    c.hidden=false;
+    var has=PREM.until&&PREM.until>=TODAY,pr=PREM.cfg.prices;
+    var h='<div class="between"><h2>'+esc(T('prTitle'))+'</h2><span class="badge prb'+(has?' on':'')+'">'+(has?esc(T('prUntil',{d:PREM.until})):'Free')+'</span></div>';
+    if(!PREM.cfg.on)h+='<div class="hint">'+esc(T('prOffNote'))+'</div>';
+    h+='<ul class="prlist">'+T('prPerks').split('|').map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul><div class="prplans">'+
+      ['30','90','365'].map(function(n){return '<button type="button" class="chip" data-prplan="'+n+'" aria-pressed="'+(premPlan===n?'true':'false')+'"><b>'+esc(T('prPlan'+n))+'</b>'+(pr[n]?'<br><small>'+esc(pr[n])+'</small>':'')+'</button>'}).join('')+'</div>';
+    if(PREM.cfg.info)h+='<div class="label">'+esc(T('prPayHdr'))+'</div><div class="prpay">'+esc(PREM.cfg.info)+'</div>';
+    h+='<div class="row"><input type="text" id="prRef" maxlength="160" placeholder="'+esc(T('prRefPh'))+'" style="flex:1;min-width:140px"><button class="btn" type="button" data-prsend="1">'+esc(T('prSend'))+'</button></div>';
+    if(PREM.reqs.length)h+='<div class="hint">'+PREM.reqs.map(function(r){return esc(T('prPlan'+r.plan))+' · '+esc(String(r.created_at).slice(0,10))+' · '+esc(T(r.status==='pending'?'prPend':r.status==='approved'?'prOk':'prNo'))}).join('<br>')+'</div>';
+    var keep=$('prRef')&&$('prRef').value;c.innerHTML=h;if(keep)$('prRef').value=keep;
+  }
+  document.addEventListener('click',function(e){
+    var t=e.target.closest&&e.target.closest('[data-prplan],[data-prsend],[data-prgo]');if(!t)return;
+    if(t.dataset.prplan){premPlan=t.dataset.prplan;premRender();return}
+    if(t.dataset.prgo){showTab('me');setTimeout(function(){var c=$('premCard');if(c&&!c.hidden)c.scrollIntoView({behavior:'smooth',block:'start'})},60);return}
+    var ref=($('prRef').value||'').trim();if(!ref){toast(T('prNeedRef'),'oops');return}
+    if(!sb||!uid)return;t.disabled=true;
+    sb.from('premium_requests').insert({uid:uid,plan:premPlan,ref:ref.slice(0,160)}).then(function(x){
+      if(x.error){toast(T('tSaveErr'),'oops');t.disabled=false;return}
+      $('prRef').value='';toast(T('prSent'),'cheer');return premLoad().then(premRender)});
+  });
+  function addDaysIso(s,n){var d=parseIso(s);d.setDate(d.getDate()+n);return iso(d)}
+  async function premAdminLoad(){
+    if(!isOwner||!sb)return;var box=$('premAdmin');if(!box)return;
+    try{
+      var r=await Promise.all([sb.from('premium_requests').select('*').eq('status','pending').order('id'),sb.from('premium').select('*')]);
+      PREM.pend=r[0].data||[];PREM.act={};(r[1].data||[]).forEach(function(x){PREM.act[x.uid]=x.until});
+    }catch(e){}
+    premAdminRender();
+  }
+  function nickOf(id){return (P[id]&&P[id].nick)||id.slice(0,8)}
+  function premAdminRender(){
+    var box=$('premAdmin');if(!box||!isOwner)return;
+    var cf=PREM.cfg,pr=cf.prices,focus=document.activeElement&&box.contains(document.activeElement);
+    if(focus&&document.activeElement.id!=='paGrantBtn')return; // бичиж байхад дарж бичихгүй
+    var users=Object.keys(P).sort(function(a,b){return nickOf(a).localeCompare(nickOf(b))});
+    var act=Object.keys(PREM.act).filter(function(k){return PREM.act[k]>=TODAY});
+    box.innerHTML='<h2>💎 Premium удирдлага</h2>'+
+      '<label class="row" style="gap:8px"><input type="checkbox" id="paOn"'+(cf.on?' checked':'')+'> <span>Хаалт идэвхтэй (унтраалттай бол бүгд үнэгүй ашиглана)</span></label>'+
+      '<textarea id="paInfo" rows="4" maxlength="600" placeholder="Төлбөрийн заавар: банк, дансны дугаар, нэр, гүйлгээний утга...">'+esc(cf.info)+'</textarea>'+
+      '<div class="row"><input type="text" id="pa30" maxlength="24" placeholder="30 хоног: үнэ" value="'+esc(pr['30'])+'"><input type="text" id="pa90" maxlength="24" placeholder="90 хоног: үнэ" value="'+esc(pr['90'])+'"><input type="text" id="pa365" maxlength="24" placeholder="1 жил: үнэ" value="'+esc(pr['365'])+'"></div>'+
+      '<button class="btn" type="button" id="paSave">Хадгалах</button>'+
+      '<div class="label" style="margin-top:14px">Хүлээгдэж буй хүсэлт ('+PREM.pend.length+')</div>'+
+      (PREM.pend.length?PREM.pend.map(function(r){return '<div class="adm"><div class="between"><b>'+esc(nickOf(r.uid))+'</b><span class="badge">'+esc(T('prPlan'+r.plan))+'</span></div><div class="hint">'+esc(r.ref)+' · '+esc(String(r.created_at).slice(0,10))+'</div><div class="row"><button class="btn small" type="button" data-paok="'+r.id+'">Зөвшөөрөх</button><button class="btn ghost small" type="button" data-pano="'+r.id+'">Татгалзах</button></div></div>'}).join(''):'<div class="empty">Хүсэлт алга</div>')+
+      '<div class="label" style="margin-top:14px">Гараар олгох</div><div class="row"><select id="paUser">'+users.map(function(k){return '<option value="'+esc(k)+'">'+esc(nickOf(k))+'</option>'}).join('')+'</select><select id="paDays"><option value="30">30 хоног</option><option value="90">90 хоног</option><option value="365">1 жил</option></select><button class="btn small" type="button" id="paGrantBtn">Олгох</button></div>'+
+      '<div class="hint">Идэвхтэй Premium ('+act.length+'): '+esc(act.map(function(k){return nickOf(k)+' → '+PREM.act[k]}).join(', ')||'—')+'</div>';
+  }
+  async function premGrant(id,days,reqId){
+    var base=PREM.act[id]&&PREM.act[id]>=TODAY?PREM.act[id]:TODAY,until=addDaysIso(base,+days);
+    var x=await sb.from('premium').upsert({uid:id,until:until,plan:String(days),updated_at:new Date().toISOString()});if(x.error)throw x.error;
+    if(reqId){x=await sb.from('premium_requests').update({status:'approved'}).eq('id',reqId);if(x.error)throw x.error}
+    PREM.act[id]=until;
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('#premAdmin button');if(!b||!isOwner||!sb)return;
+    var done=function(m){toast(m||'✓','cheer');premAdminLoad()},fail=function(){toast(T('tSaveErr'),'oops')};
+    if(b.id==='paSave'){
+      PREM.cfg={on:$('paOn').checked,info:$('paInfo').value.trim(),prices:{'30':$('pa30').value.trim(),'90':$('pa90').value.trim(),'365':$('pa365').value.trim()}};
+      sb.from('site').upsert({id:'prem',notice:JSON.stringify(PREM.cfg)}).then(function(x){x.error?fail():done()});
+    }else if(b.dataset.paok){
+      var r=PREM.pend.filter(function(x){return String(x.id)===b.dataset.paok})[0];if(!r)return;
+      premGrant(r.uid,r.plan,r.id).then(function(){done()}).catch(fail);
+    }else if(b.dataset.pano){
+      sb.from('premium_requests').update({status:'rejected'}).eq('id',b.dataset.pano).then(function(x){x.error?fail():done()});
+    }else if(b.id==='paGrantBtn'){
+      var u=$('paUser').value;if(u)premGrant(u,$('paDays').value,null).then(function(){done()}).catch(fail);
+    }
   });
   function txGet(){if(MED.tx==null){try{MED.tx=localStorage.getItem('hsk-text')||''}catch(e){MED.tx=''}}return MED.tx}
   function txSet(v){MED.tx=v;try{localStorage.setItem('hsk-text',v)}catch(e){}}
@@ -2826,6 +2930,7 @@ var DATA=window.DATA;
       lset('hsk-v3','');
     }else{S={profile:{},words:{},chk:{},act:{}}}
     isOwner=!!a.data;
+    await premLoad();
     try{refreshApply(res[3])}catch(e){}
     renderTasks();renderAll();
     if(!bg){startDeck();showTab('today')}
