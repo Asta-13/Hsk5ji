@@ -1275,3 +1275,7 @@ body{padding-bottom:96px}
 .txbody .mfw{color:var(--fg)}
 .txbody ruby rt{color:var(--muted)}
 #txOut #wfCard{position:sticky;bottom:84px;z-index:5;box-shadow:0 8px 28px rgba(0,0,0,.28)}
+
+/* ---------- Өдрийн сануулга ---------- */
+.pushbox{display:grid;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.pushbox .row{align-items:end}

@@ -74,6 +74,15 @@ var DATA=window.DATA;
     mSong:["🎵 Дуу","🎵 Songs","🎵 Песни","🎵 歌"],
     mMeta:["{n} мөр · {w} шинэ үг","{n} lines · {w} new words","{n} строк · {w} новых слов","{n}行 · 新しい単語{w}"],
     mAuto:["Автомат хадмал (алдаатай байж болно)","Auto subtitles (may contain errors)","Автосубтитры (возможны ошибки)","自動字幕（誤りあり）"],
+    pushTitle:["🔔 Өдрийн сануулга","🔔 Daily reminder","🔔 Ежедневное напоминание","🔔 毎日のリマインダー"],
+    pushAt:["Цаг","Time","Время","時刻"],
+    pushHintOff:["Өдөр бүр сонгосон цагт сурахыг сануулна. Өнөөдөр сурсан бол явуулахгүй.","A daily nudge at your time. Skipped if you already studied today.","Напомним в выбранное время. Если уже занимались сегодня, не отправим.","選んだ時刻にお知らせします。今日すでに学習済みなら送りません。"],
+    pushHintOn:["Идэвхтэй: өдөр бүр {h}:00 цагт.","On: every day at {h}:00.","Включено: каждый день в {h}:00.","オン: 毎日 {h}:00"],
+    pushHintDenied:["Мэдэгдлийг браузерын тохиргоогоос зөвшөөрнө үү.","Allow notifications in your browser settings.","Разрешите уведомления в настройках браузера.","ブラウザの設定で通知を許可してください。"],
+    pushHintIos:["iPhone дээр эхлээд «Share → Add to Home Screen» хийж, тэр дүрсээр нээнэ үү.","On iPhone, first use Share → Add to Home Screen and open from there.","На iPhone сначала «Поделиться → На экран Домой».","iPhoneでは共有→ホーム画面に追加から開いてください。"],
+    pushOn:["Сануулга асаах","Turn on","Включить","オンにする"],
+    pushOff:["Унтраах","Turn off","Выключить","オフにする"],
+    pushErr:["Сануулга асааж чадсангүй","Could not enable reminders","Не удалось включить","オンにできませんでした"],
     mText:["✍ Өөрийн текст","✍ My text","✍ Мой текст","✍ 自分のテキスト"],
     txHint:["Хятад текст (WeChat, мэдээ, дууны үг) хуулж тавина уу. Үг бүр дээр дарвал утга, нэмэх боломжтой.","Paste any Chinese text (chat, news, lyrics). Tap a word to see its meaning and add it.","Вставьте китайский текст (чат, новости, песня). Нажмите на слово, чтобы увидеть перевод.","中国語のテキストを貼り付けてください。単語をタップすると意味が出ます。"],
     txPh:["在这里粘贴中文…","在这里粘贴中文…","在这里粘贴中文…","在这里粘贴中文…"],
@@ -1674,7 +1683,7 @@ var DATA=window.DATA;
     $('acct').hidden=!(sb&&uid);$('acctName').textContent=T('acctLogin',{n:loginName});$('myId').textContent=uid||'';
     if(document.activeElement!==$('meNick'))$('meNick').value=p.nick||'';
     meLevel=p.level||5;lvChips('meLv',meLevel,false);
-    $('meExam').value=p.exam||'';$('meMin').value=String(p.dailyMin||DEFMIN[meLevel]);
+    $('meExam').value=p.exam||'';try{pushRender()}catch(e){}$('meMin').value=String(p.dailyMin||DEFMIN[meLevel]);
     if(document.activeElement!==$('meS'))$('meS').value=p.s4||'';
     document.querySelectorAll('#goals .chip').forEach(function(c){c.setAttribute('aria-pressed',c.dataset.g===p.goal?'true':'false')});
     advise();
@@ -2323,6 +2332,52 @@ var DATA=window.DATA;
     }).join('')+'</div>':'<div class="empty">'+T('mEmpty')+'</div>';
   }
   /* ---- Өөрийн текст уншигч: хуулсан хятад текстийн үг бүрийг дарж утга харна ---- */
+  /* ---- 🔔 Өдрийн сануулга (Web Push) ---- */
+  var VAPID_PUB='';   /* GitHub Pages дээр ажиллуулахдаа: npx web-push generate-vapid-keys → public key-г энд тавина */
+  function pushOk(){return !!(VAPID_PUB&&'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window&&sb&&uid)}
+  function b64u(b){var p='='.repeat((4-b.length%4)%4),r=(b+p).replace(/-/g,'+').replace(/_/g,'/'),raw=atob(r),o=new Uint8Array(raw.length);for(var i=0;i<raw.length;i++)o[i]=raw.charCodeAt(i);return o}
+  function pushHour(){var v=parseInt($('pushHour')&&$('pushHour').value,10);return isNaN(v)?20:v}
+  function pushRow(sub){var j=sub.toJSON(),k=j.keys||{};return {endpoint:sub.endpoint,uid:uid,p256dh:k.p256dh,auth:k.auth,hour:pushHour(),tzo:-new Date().getTimezoneOffset(),lang:lang}}
+  function pushRender(){
+    var box=$('pushBox');if(!box)return;
+    var ios=/iPhone|iPad|iPod/.test(navigator.userAgent)&&!window.matchMedia('(display-mode: standalone)').matches&&!navigator.standalone;
+    if(!VAPID_PUB||!uid||!('serviceWorker' in navigator)){box.hidden=true;return}
+    box.hidden=false;
+    var hs=$('pushHour');if(hs&&!hs.options.length){for(var h=0;h<24;h++){var o=document.createElement('option');o.value=h;o.textContent=(h<10?'0':'')+h+':00';hs.appendChild(o)}try{hs.value=localStorage.getItem('hsk-push-h')||'20'}catch(e){hs.value='20'}}
+    var btn=$('pushBtn'),hint=$('pushHint');
+    if(!('PushManager' in window)||!('Notification' in window)){hint.textContent=ios?T('pushHintIos'):T('pushErr');btn.hidden=true;return}
+    btn.hidden=false;
+    if(Notification.permission==='denied'){hint.textContent=T('pushHintDenied');btn.hidden=true;return}
+    navigator.serviceWorker.ready.then(function(reg){return reg.pushManager.getSubscription()}).then(function(sub){
+      btn.dataset.on=sub?'1':'';btn.textContent=T(sub?'pushOff':'pushOn');
+      hint.textContent=sub?T('pushHintOn',{h:pushHour()}):T('pushHintOff');
+    }).catch(function(){hint.textContent=T('pushHintOff')});
+  }
+  function pushToggle(){
+    var btn=$('pushBtn');if(!pushOk()){toast(T('pushErr'));return}
+    navigator.serviceWorker.ready.then(function(reg){
+      return reg.pushManager.getSubscription().then(function(sub){
+        if(sub){ /* унтраах */
+          var ep=sub.endpoint;return sub.unsubscribe().then(function(){return sb.from('push_subs').delete().eq('endpoint',ep)});
+        }
+        return Notification.requestPermission().then(function(p){
+          if(p!=='granted')throw new Error('denied');
+          return reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(VAPID_PUB)});
+        }).then(function(ns){
+          try{localStorage.setItem('hsk-push-h',String(pushHour()))}catch(e){}
+          return sb.from('push_subs').upsert(pushRow(ns)).then(function(r){if(r.error)throw r.error});
+        });
+      });
+    }).then(pushRender).catch(function(){toast(T('pushErr'));pushRender()});
+  }
+  document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('#pushBtn'))pushToggle()});
+  document.addEventListener('change',function(e){
+    if(!e.target||e.target.id!=='pushHour')return;
+    try{localStorage.setItem('hsk-push-h',e.target.value)}catch(x){}
+    if(!pushOk())return;
+    navigator.serviceWorker.ready.then(function(reg){return reg.pushManager.getSubscription()}).then(function(sub){
+      if(sub)return sb.from('push_subs').update({hour:pushHour(),tzo:-new Date().getTimezoneOffset(),lang:lang}).eq('endpoint',sub.endpoint)}).then(pushRender).catch(function(){});
+  });
   function txGet(){if(MED.tx==null){try{MED.tx=localStorage.getItem('hsk-text')||''}catch(e){MED.tx=''}}return MED.tx}
   function txSet(v){MED.tx=v;try{localStorage.setItem('hsk-text',v)}catch(e){}}
   function renderTextReader(){
