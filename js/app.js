@@ -2333,7 +2333,7 @@ var DATA=window.DATA;
   }
   /* ---- Өөрийн текст уншигч: хуулсан хятад текстийн үг бүрийг дарж утга харна ---- */
   /* ---- 🔔 Өдрийн сануулга (Web Push) ---- */
-  var VAPID_PUB='';   /* GitHub Pages дээр ажиллуулахдаа: npx web-push generate-vapid-keys → public key-г энд тавина */
+  var VAPID_PUB='BADT9Ve7dvTVMXKVfX1_JzJL_eP-xDNTzcJTbWa_toaXtrFRpW9S64b_J5zNcLNt-Kkf0oJ3BlsrLf1kOYl04ZA';   /* GitHub Pages дээр ажиллуулахдаа: npx web-push generate-vapid-keys → public key-г энд тавина */
   function pushOk(){return !!(VAPID_PUB&&'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window&&sb&&uid)}
   function b64u(b){var p='='.repeat((4-b.length%4)%4),r=(b+p).replace(/-/g,'+').replace(/_/g,'/'),raw=atob(r),o=new Uint8Array(raw.length);for(var i=0;i<raw.length;i++)o[i]=raw.charCodeAt(i);return o}
   function pushHour(){var v=parseInt($('pushHour')&&$('pushHour').value,10);return isNaN(v)?20:v}
