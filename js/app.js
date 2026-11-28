@@ -83,7 +83,7 @@ var DATA=window.DATA;
     pushOn:["Сануулга асаах","Turn on","Включить","オンにする"],
     pushOff:["Унтраах","Turn off","Выключить","オフにする"],
     prTitle:["💎 Premium","💎 Premium","💎 Premium","💎 プレミアム"],
-    prPerks:["Бичлэг · Дуу + текст уншигч|Өдөрт олон удаа сануулга (санамсаргүй цагт)|Дараа нэмэгдэх бүх premium боломж","Videos · songs + text reader|Several reminders per day (random times)|All future premium features","Видео · песни + чтение текста|Несколько напоминаний в день (в случайное время)|Все будущие премиум-функции","動画・歌 + テキストリーダー|1日に複数回のリマインド（ランダム時刻）|今後のプレミアム機能すべて"],
+    prPerks:["Сурах бичгийн бүх хичээл (үнэгүй: 1-р хичээл)|Текст уншигч хязгааргүй (үнэгүй: өдөрт 3 удаа, 300 тэмдэгт хүртэл)|Өдөрт олон удаа сануулга (санамсаргүй цагт)|Дараа нэмэгдэх бүх premium боломж","All textbook lessons (free: lesson 1)|Unlimited text reader (free: 3 per day, up to 300 characters)|Several reminders per day (random times)|All future premium features","Все уроки учебника (бесплатно: урок 1)|Чтение текста без лимита (бесплатно: 3 раза в день, до 300 знаков)|Несколько напоминаний в день|Все будущие премиум-функции","教科書の全レッスン（無料：第1課）|テキストリーダー無制限（無料：1日3回・300字まで）|1日に複数回のリマインド|今後のプレミアム機能すべて"],
     prOffNote:["(Одоогоор хаалт унтраалттай: бүх хэрэглэгч үнэгүй ашиглаж байна. Зөвхөн админд харагдана.)","(Gate is OFF: everyone uses everything free. Visible to admin only.)","(Ограничение выключено: все пользуются бесплатно. Видно только админу.)","(制限はオフ：全員無料で利用中。管理者のみ表示)"],
     prPlan30:["30 хоног","30 days","30 дней","30日"],prPlan90:["90 хоног","90 days","90 дней","90日"],prPlan365:["1 жил","1 year","1 год","1年"],
     prPayHdr:["Төлбөр хийх заавар","How to pay","Как оплатить","お支払い方法"],
@@ -93,7 +93,10 @@ var DATA=window.DATA;
     prSent:["Хүсэлт илгээгдлээ. Админ шалгаад нээнэ.","Request sent. Admin will verify and unlock.","Заявка отправлена. Админ проверит.","申請しました。管理者が確認します。"],
     prPend:["⏳ шалгагдаж байна","⏳ pending","⏳ на проверке","⏳ 確認中"],prOk:["✅ баталгаажсан","✅ approved","✅ подтверждено","✅ 承認済み"],prNo:["❌ татгалзсан","❌ rejected","❌ отклонено","❌ 却下"],
     prLockT:["💎 Premium боломж","💎 Premium feature","💎 Премиум-функция","💎 プレミアム機能"],
-    prLockD:["Бичлэг · Дуу болон текст уншигч Premium эрхтэй хүнд нээгдэнэ.","Videos, songs and the text reader are for Premium members.","Видео, песни и чтение текста доступны с Premium.","動画・歌・テキストリーダーはプレミアム会員向けです。"],
+    prLockD:["Энэ хэсэг Premium эрхтэй хүнд нээгдэнэ. 1-р хичээл үнэгүй.","This part is for Premium members. Lesson 1 is free.","Эта часть доступна с Premium. Урок 1 бесплатный.","この部分はプレミアム会員向けです。第1課は無料です。"],
+    prTxLim:["Үнэгүй хувилбар: {c} тэмдэгт хүртэл, өдөрт {n} удаа. Бүтэн текст Premium-д 💎","Free: up to {c} characters, {n} per day. Full text with Premium 💎","Бесплатно: до {c} знаков, {n} раза в день. Полный текст — в Premium 💎","無料：{c}字まで・1日{n}回。全文はプレミアム 💎"],
+    prTxDone:["Өнөөдрийн үнэгүй {n} удаа дууслаа. Дахин уншуулахад Premium хэрэгтэй 💎","Today's {n} free reads are used up. More needs Premium 💎","Бесплатные {n} раза на сегодня закончились. Дальше — Premium 💎","本日の無料{n}回は終了。続きはプレミアム 💎"],
+    prAddLim:["Үнэгүй: нэг дор {n} үг хүртэл нэмнэ 💎","Free: add up to {n} words at once 💎","Бесплатно: до {n} слов за раз 💎","無料：一度に{n}語まで 💎"],
     prOpen:["Premium-ийг харах","See Premium","Смотреть Premium","プレミアムを見る"],
     prNeed:["Олон удаагийн сануулга Premium-д байна 💎","Multiple reminders need Premium 💎","Несколько напоминаний — в Premium 💎","複数回のリマインドはプレミアム限定 💎"],
     prUntil:["Дуусах: {d}","Until {d}","До {d}","期限 {d}"],
@@ -2097,20 +2100,25 @@ var DATA=window.DATA;
     $('bkBooks').innerHTML=cat.length>1?(lvl.length>1?lvl.map(function(l){return '<button class="chip" type="button" data-blv="'+esc(l)+'" aria-pressed="'+(l===blv)+'">'+esc(libTr(LIB_LV,l))+'</button>'}).join('')+'<span class="bksep" aria-hidden="true"></span>':'')+
       cat.filter(function(b){return !b.level||!blv||b.level===blv}).map(function(b){return '<button class="chip" type="button" data-bk="'+esc(b.id)+'" aria-pressed="'+(b.id===BK.bid)+'">'+esc(lang==='mn'?(b.title_mn||b.title):b.title)+'</button>'}).join(''):'';
     var ls=BK.idx?BK.idx.lessons:[];
+    var freeL=ls.length?Math.min.apply(null,ls.map(function(l){return l.lesson})):0,pm=isPrem();
+    if(!pm&&ls.length&&!BK.les&&!BK.lockAll)BK.les=freeL;
+    var lk=function(n){return !pm&&n!==freeL?' 🔒':''};
     var hasPg=!!(BK.idx&&BK.idx.pages);
     $('bkMode').innerHTML=bkModeChips(hasPg);
     if(BK.mode==='pages'&&hasPg){
       if(!BK.les)BK.les=1;
-      $('bkLes').innerHTML=ls.map(function(l){return '<button class="chip" type="button" data-bl="'+l.lesson+'" aria-pressed="'+(BK.les===l.lesson)+'">'+l.lesson+'</button>'}).join('');
+      $('bkLes').innerHTML=ls.map(function(l){return '<button class="chip" type="button" data-bl="'+l.lesson+'" aria-pressed="'+(BK.les===l.lesson)+'">'+l.lesson+lk(l.lesson)+'</button>'}).join('');
       var cl=ls.filter(function(l){return l.lesson===BK.les})[0];
       $('bkSearch').hidden=true;$('bkAddAll').hidden=true;
+      if(!pm&&BK.les!==freeL){$('bkCnt').textContent='';$('bkList').innerHTML=premLock();return}
       $('bkCnt').textContent=cl?T('bkLesson',{n:cl.lesson})+' · '+(lang==='mn'?(cl.title_mn||'')+' ':'')+cl.title:'';
       BK.pgs=[];if(cl&&cl.pages)for(var i=cl.pages[0];i<=cl.pages[1];i++)BK.pgs.push(i);
       $('bkList').innerHTML='<div class="bkpg">'+BK.pgs.map(function(n,i){return '<button type="button" data-bp="'+i+'" aria-label="'+T('bkPage',{n:n})+'"><img loading="lazy" decoding="async" alt="" src="'+bkImg(n)+'"><b>'+n+'</b></button>'}).join('')+'</div>';
       return;
     }
     $('bkSearch').hidden=false;
-    $('bkLes').innerHTML=(ls.length?'<button class="chip" type="button" data-bl="0" aria-pressed="'+(BK.les===0)+'">'+T('all')+'</button>':'')+ls.map(function(l){return '<button class="chip" type="button" data-bl="'+l.lesson+'" aria-pressed="'+(BK.les===l.lesson)+'">'+l.lesson+'<small>'+l.count+'</small></button>'}).join('');
+    $('bkLes').innerHTML=(ls.length?'<button class="chip" type="button" data-bl="0" aria-pressed="'+(BK.les===0)+'">'+T('all')+lk(-1)+'</button>':'')+ls.map(function(l){return '<button class="chip" type="button" data-bl="'+l.lesson+'" aria-pressed="'+(BK.les===l.lesson)+'">'+l.lesson+lk(l.lesson)+'<small>'+l.count+'</small></button>'}).join('');
+    if(!pm&&ls.length&&BK.les!==freeL){$('bkSearch').hidden=true;$('bkAddAll').hidden=true;$('bkCnt').textContent='';$('bkList').innerHTML=premLock();return}
     var cur=BK.les?ls.filter(function(l){return l.lesson===BK.les})[0]:null,items=bkWords(),have={};
     wordsArr().forEach(function(w){have[w.h]=1});
     var q=BK.q,all=items.length;
@@ -2136,7 +2144,7 @@ var DATA=window.DATA;
     if(e.target.closest('#bkVb')){bkShow(BK.pg+1);return}
     if(e.target.closest('#bkVp')){bkZoom(1.5);return}
     if(e.target.closest('#bkVm')){bkZoom(1/1.5);return}
-    b=e.target.closest('[data-bl]');if(b){BK.les=+b.dataset.bl;BK.err=false;renderBook();return}
+    b=e.target.closest('[data-bl]');if(b){BK.les=+b.dataset.bl;BK.lockAll=(BK.les===0&&!isPrem())?1:0;BK.err=false;renderBook();return}
     b=e.target.closest('[data-ll]');if(b){BK.lv=b.dataset.ll;renderBook();return}
     if(e.target.closest('#bkRetry')){BK.err=false;BK.libErr=false;renderBook();return}
     b=e.target.closest('[data-bkadd]');
@@ -2324,7 +2332,6 @@ var DATA=window.DATA;
   }
   function renderMedia(){
     var box=$('mBody');if(!box)return;
-    if(!isPrem()){$('mKinds').hidden=true;mediaStop();box.innerHTML=premLock();return}
     mediaLoad().then(function(items){
       var it=MED.cur&&items.filter(function(x){return x.id===MED.cur})[0];
       $('mKinds').hidden=!!it;
@@ -2486,6 +2493,8 @@ var DATA=window.DATA;
       var u=$('paUser').value;if(u)premGrant(u,$('paDays').value,null).then(function(){done()}).catch(fail);
     }
   });
+  var TXF={c:300,n:3};
+  function txUse(inc){var k='hsk-txq',d=TODAY,c=0;try{var v=(localStorage.getItem(k)||'').split('|');if(v[0]===d)c=+v[1]||0;if(inc){c++;localStorage.setItem(k,d+'|'+c)}}catch(e){}return c}
   function txGet(){if(MED.tx==null){try{MED.tx=localStorage.getItem('hsk-text')||''}catch(e){MED.tx=''}}return MED.tx}
   function txSet(v){MED.tx=v;try{localStorage.setItem('hsk-text',v)}catch(e){}}
   function renderTextReader(){
@@ -2502,11 +2511,12 @@ var DATA=window.DATA;
     var out=$('txOut');if(!out)return;
     var t=txGet().trim();
     if(!t){out.innerHTML='';return}
+    var cut=false;if(!isPrem()&&t.length>TXF.c){t=t.slice(0,TXF.c);cut=true}
     var hv=haveSet(),nw=mediaWords({lines:[{zh:t}]}).filter(function(w){return !hv[w.h]&&w.m});
     var body=t.split(/\n+/).map(function(l){return '<p>'+zhRuby(l,hv,'mfw')+'</p>'}).join('');
     out.innerHTML='<div class="card txres"><div class="between"><span class="hint">'+esc(nw.length?T('txNew',{n:nw.length}):T('txNone'))+'</span>'+
       (nw.length?'<button class="btn small" type="button" data-txadd>'+esc(T('txAdd'))+'</button>':'')+'</div>'+
-      '<div class="wzh txbody" lang="zh">'+body+'</div></div><div class="card mfcard" id="wfCard" hidden></div>';
+      '<div class="wzh txbody" lang="zh">'+body+'</div>'+(isPrem()?'':'<div class="hint">'+esc(T('prTxLim',{c:TXF.c,n:TXF.n}))+'</div>')+'</div><div class="card mfcard" id="wfCard" hidden></div>';
   }
   function renderMediaItem(it){
     var hv=haveSet(),ws=mediaWords(it),nw=ws.filter(function(w){return !hv[w.h]&&w.m});
@@ -2685,11 +2695,14 @@ var DATA=window.DATA;
     if((b=t.closest('[data-wc]'))){if(MED.kind==='news')WLD.ncat=b.dataset.wc;else WLD.cat=b.dataset.wc;renderWorldFeed();return}
     if((b=t.closest('[data-wsay]'))){var x=wById(b.dataset.wsay);x&&speak(x.zh);return}
     if(t.closest('[data-wnext]')){WLD.off++;worldCardRender();return}
-    if(t.closest('[data-txgo]')){var ti=$('txIn');if(ti)txSet(ti.value);renderTextOut();return}
+    if(t.closest('[data-txgo]')){var ti=$('txIn');if(ti)txSet(ti.value);
+      if(!isPrem()){var u=txUse();if(u>=TXF.n){var o=$('txOut');if(o)o.innerHTML='<div class="card prlock"><p>'+esc(T('prTxDone',{n:TXF.n}))+'</p><button class="btn" type="button" data-prgo="1">'+esc(T('prOpen'))+'</button></div>';return}txUse(1)}
+      renderTextOut();return}
     if(t.closest('[data-txclr]')){txSet('');var tc=$('txIn');if(tc){tc.value='';tc.focus()}renderTextOut();return}
     if(t.closest('[data-txadd]')){
       var hv3=haveSet(),n4=0;
-      mediaWords({lines:[{zh:txGet()}]}).filter(function(w){return !hv3[w.h]&&w.m}).forEach(function(w){if(mediaAdd(w.h))n4++});
+      var lim=isPrem()?1e9:10,nwl=mediaWords({lines:[{zh:txGet()}]}).filter(function(w){return !hv3[w.h]&&w.m});
+      nwl.forEach(function(w){if(n4<lim&&mediaAdd(w.h))n4++});if(nwl.length>lim&&n4>=lim)toast(T('prAddLim',{n:lim}),'think');
       if(n4){syncSummary(TODAY);toast(T('tAddedN',{n:n4}),'cheer');renderAll();renderTextOut()}return}
     if(t.closest('[data-wopen]')){MED.kind='world';MED.userK=1;MED.cur=null;showTab('media');return}
     if((b=t.closest('[data-wadd]'))){
