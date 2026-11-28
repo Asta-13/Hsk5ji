@@ -223,6 +223,7 @@ var DATA=window.DATA;
     plLvAuto:["Авто","Auto","Авто","自動"],
     mcHint:["Иероглиф ба утгыг хос болго","Pair each hanzi with its meaning","Соедини иероглиф со значением","漢字と意味をペアにしよう"],
     mcMoves:["Алхам","Moves","Ходы","手数"],
+    plNext:["Дараагийнх →","Next →","Далее →","次へ →"],
     sbTap:["Доорх хэсгүүдийг дарж өгүүлбэрээ угсар","Tap the pieces below to build the sentence","Нажимайте на части ниже, чтобы составить предложение","下のピースをタップして文を作ろう"],
     lrnTc:["🎨 Тоны өнгө","🎨 Tone colors","🎨 Цвета тонов","🎨 声調の色"],
     lrnPyHide:["👁 Пиньинийг нуух (шалгах)","👁 Hide pinyin (test yourself)","👁 Скрыть пиньинь (проверка)","👁 ピンインを隠す（練習）"],
@@ -3028,6 +3029,7 @@ var DATA=window.DATA;
       if(GM.mode!=='sprint'){$('plScore').textContent=scoreTxt();if(ok&&GM.combo>=3&&GM.combo%3===0)fxTone([784,988])}
       if(GM.mode==='cloze'){$('plBuilt').style.color=ok?'var(--ok)':'var(--bad)';$('plBuilt').textContent=(ok?'✓ ':'✗ ')+GM.q.z;try{speak(GM.q.z)}catch(e){}}
       else if(GM.mode==='mean'||GM.mode==='listen'){$('plBuilt').style.color='';$('plBuilt').innerHTML=revHtml(GM.q)}
+      if(!ok&&GM.mode!=='sprint'){holdNext(GM);return}
       setTimeout(function(g0){return function(){if(GM!==g0)return;GM.lock=0;GM.i++;nextQ()}}(GM),GM.mode==='sprint'?(ok?150:600):GM.mode==='cloze'?(ok?1700:2700):(ok?900:1700));return;
     }
   });
@@ -3174,6 +3176,15 @@ var DATA=window.DATA;
       '<div class="sb-tools"><button class="btn ghost small" type="button" data-sbundo="1" aria-label="↩"'+dis+'>↩</button><button class="btn ghost small" type="button" data-sbreset="1" aria-label="⟲"'+dis+'>⟲</button><button class="btn ghost small" type="button" data-sbhint="1" aria-label="💡"'+dis+'>💡</button></div>';
   }
   function sbText(g){var by={};g.tiles.forEach(function(x){by[x.id]=x});return g.placed.map(function(id){return by[id].t}).join('')}
+  /* Буруу хариулсны дараа автоматаар шилжихгүй: сурагч алдаагаа уншаад «Дараагийнх» дарна */
+  function holdNext(g){
+    var b=document.createElement('button');b.type='button';b.className='btn small';b.id='plNext';
+    b.style.cssText='display:block;margin:10px auto 0;font-family:inherit;font-size:1rem';
+    b.textContent=T('plNext');
+    b.addEventListener('click',function(){if(GM!==g||!g.lock)return;g.lock=0;g.state='';g.i++;nextQ()});
+    $('plBuilt').appendChild(b);
+    try{b.focus({preventScroll:true})}catch(e){}
+  }
   function sbCheck(){
     var g=GM,ok=sbText(g)===g.ans;
     g.lock=1;g.state=ok?'ok':'no';
@@ -3183,7 +3194,12 @@ var DATA=window.DATA;
     $('plBuilt').textContent=(ok?'✓ ':'✗ ')+g.q.z;
     if(ok){fxTone([659,880]);try{speak(g.q.z)}catch(e){}}
     sbRender();
-    setTimeout(function(){if(GM!==g)return;g.lock=0;g.state='';g.i++;nextQ()},ok?1400:2600);
+    if(ok)setTimeout(function(){if(GM!==g)return;g.lock=0;g.state='';g.i++;nextQ()},1600);
+    else{
+      var mm=(g.q.k?gLoc(g.q,'t'):g.q.m)||'';
+      if(mm){var sp=document.createElement('div');sp.style.cssText='font-size:.95rem;color:var(--muted,inherit);font-family:inherit;margin-top:4px';sp.textContent=mm;$('plBuilt').appendChild(sp)}
+      holdNext(g);
+    }
   }
   document.addEventListener('click',function(e){
     var g=GM;if(!g||g.mode!=='build'||g.lock||!e.target.closest)return;
@@ -3341,7 +3357,8 @@ var DATA=window.DATA;
       if(ok){g.ok++;missOk(g.q.h)}else{gMiss(g.q);srsGrade(g.q.h,0)}
       cmb(ok);$('plScore').textContent=scoreTxt();if(ok&&g.combo>=3&&g.combo%3===0)fxTone([784,988]);
       $('plBuilt').style.color='';$('plBuilt').innerHTML=revHtml(g.q);
-      setTimeout(function(){if(GM!==g)return;g.lock=0;g.i++;nextQ()},ok?1100:2000);
+      if(!ok){holdNext(g);return}
+      setTimeout(function(){if(GM!==g)return;g.lock=0;g.i++;nextQ()},1100);
       return;
     }
     /* Хос олох */
